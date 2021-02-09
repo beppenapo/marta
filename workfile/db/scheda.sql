@@ -1,0 +1,14 @@
+BEGIN;
+DROP TABLE scheda CASCADE;
+CREATE TABLE scheda(
+  id serial PRIMARY KEY,
+  inventario INTEGER NOT NULL UNIQUE,
+  suffix CHARACTER VARYING,
+  chiusa BOOLEAN NOT NULL DEFAULT 'f',
+  verificata BOOLEAN NOT NULL DEFAULT 'f',
+  inviata BOOLEAN NOT NULL DEFAULT 'f',
+  validata BOOLEAN NOT NULL DEFAULT 'f',
+  compilatore INTEGER REFERENCES utenti(id) ON DELETE SET NULL,
+  data date NOT NULL DEFAULT now()
+);
+COMMIT;
