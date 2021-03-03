@@ -43,7 +43,7 @@ function login(el,f){
       let classe = data[1] == 1 ? 'text-success' : 'text-danger';
       form.find(".outputMsg").addClass(classe).html(data[0]);
       if (data[1] == 1) {
-        setTimeout(function() { window.location.href = "home.php" }, 5000);
+        setTimeout(function() { window.location.href = "index.php" }, 5000);
         localStorage.setItem('sex', data[2]);
       }
     })

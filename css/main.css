@@ -102,6 +102,7 @@ body>footer .logo > img{height:40px;}
 .open{transform: translate(0,0);}
 .closed{transform: translate(250px,0);}
 .animated{transition: all 0.25s linear;}
+.mainPadding{padding-right:250px;}
 #loadingDiv{
   position: fixed;
   top: 0;
@@ -131,7 +132,7 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  body>main{padding-right:250px;}
+  /* body>main{padding-right:250px;} */
   #toggleMenu{display: none;}
   .ui-autocomplete { max-height: 400px; overflow-y: auto; overflow-x: hidden;}
   /* .toast{width: 50vw;} */
@@ -139,7 +140,7 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  body>main{padding-right:250px;}
+  /* body>main{padding-right:250px;} */
   #toggleMenu{display: none;}
   .ui-autocomplete { max-height: 500px; overflow-y: auto; overflow-x: hidden;}
   /* .toast{width: 40vw;} */

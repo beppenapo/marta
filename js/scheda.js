@@ -1,3 +1,49 @@
+const API = 'api/scheda.php';
+function setCf4(){
+  var cassetti = [];
+  for(let cassaforte4 of "ABCDEFGHIJKLMNOPQRSTU" ){cassetti.push(cassaforte4);}
+  return cassetti;
+}
+
+function setCassetti(n){
+  var cassetti = [];
+  for (var i = 1; i < n+1; i++) { cassetti.push(i) }
+  return cassetti;
+}
+
+function getSale(piano){
+  postData("scheda.php",{trigger:'getSale', piano:piano}, function(data){
+    let options = [];
+    options.push("<option disabled selected>-- sala --</option>")
+    $.each(data, function(index, el) {
+      options.push("<option value='"+el.id+"'>"+el.sala+"</option>");
+    });
+    $("[name=sala]").html(options.join());
+  })
+}
+
+function getContenitore(contenitore, sala, label,piano){
+  postData("scheda.php",{trigger:'getContenitore', contenitore:contenitore, sala:sala}, function(data){
+    console.log(data);
+    let options = [];
+    let c = contenitore == 'vetrine' ? 'vetrina' : 'scaffale';
+    options.push("<option disabled selected>-- "+c+" --</option>")
+    if(data.length == 0){
+      $("#lcContenitoreDiv").hide();
+      $("#noVetrine").fadeIn('fast');
+      return;
+    }
+    $.each(data, function(index, el) {
+      note = !el.note ? '' : el.note;
+      options.push("<option value='"+el.c+"'>"+el.c+" "+note+"</option>");
+    });
+    $("[name=contenitore]").html(options.join());
+    $("#contenitoreLabel").text(label);
+    $("#noVetrine").hide();
+    $("#lcContenitoreDiv").fadeIn('fast');
+  })
+}
+
 $(document).ready(function() {
   // $(".tab").each(function(){ console.log($(this).data('table')+": "+$(this).attr('name')); })
   const listCategorie = {tab:'liste.ra_cls_l1', sel:'cls1'};
@@ -14,8 +60,30 @@ $(document).ready(function() {
   $("[name=misr]").on('click', function(){ $('.misure').prop('disabled', (i, v) => !v); })
   $("#toggleInventarioTipText").click(function () {$(this).text(function(i, text){return text === "mostra guida" ? "nascondi guida" : "mostra guida";})});
 
+  $(".lcSel").hide();
+  $("[name=piano]").on('change', function(){
+    let piano = $(this).val();
+    $("#lcSalaDiv").fadeIn('fast');
+    $("#lcContenitoreDiv, #noVetrine").fadeOut('fast');
+    getSale(piano)
+  })
+  $("[name=sala]").on('change', function(){
+    let piano = $("[name=piano]").val();
+    let sala = $(this).val();
+    let label, contenitore;
+    if (piano > 0) {
+      label = 'Vetrina';
+      contenitore = 'vetrine';
+    }else {
+      label = 'Scaffale';
+      contenitore = 'scaffali';
+    }
+    getContenitore(contenitore,sala,label,piano)
+  })
+
+  // NOTE: materia autocomplete
   $.ajax({
-    url: 'api/scheda.php',
+    url: API,
     type: 'POST',
     dataType: 'json',
     data: {trigger:'vocabolari', tab:'liste.materiale'}
@@ -44,8 +112,9 @@ $(document).ready(function() {
   })
   .fail(function(data) { console.log(data); });
 
+  // NOTE: tecnica autocomplete
   $.ajax({
-    url: 'api/scheda.php',
+    url: API,
     type: 'POST',
     dataType: 'json',
     data: {trigger:'vocabolari', tab:'liste.ra_tecnica'}
@@ -142,7 +211,7 @@ $(document).ready(function() {
   $("body").on('change', '[name=cls2]', function() {
     let v = $(this).val();
     $.ajax({
-      url: 'api/scheda.php',
+      url: API,
       type: 'POST',
       dataType: 'json',
       data: {trigger:'vocabolari', tab:'liste.ra_ogtd', filter:{field:'classe', value:v}}
@@ -249,7 +318,7 @@ $(document).ready(function() {
       dati.cm.cmpn = $("[name=cmpn]").val();
       dati.cm.fur = $("[name=fur]").val();
       $.ajax({
-        url: 'api/scheda.php',
+        url: API,
         type: 'POST',
         dataType: 'json',
         data: {trigger : 'addScheda', dati}
@@ -341,7 +410,7 @@ function reuseOption(v,text){
 function subList(dati){
   dati.sel.html('').prop('disabled',true);
   $("<option/>",{value:'', text:'--seleziona valore--'}).prop('disabled',true).prop('selected',true).appendTo(dati.sel);
-  $.ajax({url: 'api/scheda.php', type: 'POST', dataType: 'json', data: {trigger:'vocabolari', tab:dati.tab, filter:dati.filter}})
+  $.ajax({url: API, type: 'POST', dataType: 'json', data: {trigger:'vocabolari', tab:dati.tab, filter:dati.filter}})
   .done(function(data) {
     if (data.length > 0) {
       data.forEach(function(v,i){

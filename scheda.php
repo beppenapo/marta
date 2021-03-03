@@ -30,6 +30,14 @@ if (isset($_GET['tipo'])) {
             <small class="font-weight-bold d-block">* Obbligatorietà di contesto</small>
           </div>
         </div>
+        <div class="row mb-4">
+          <div class="col">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              Il numero di catalogo ICCD verrà assegnato automaticamente e ti verrà comunicato al momento del salvtaggio della scheda.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+          </div>
+        </div>
         <form id="formScheda" autocomplete="off">
           <input type="hidden" name="tsk" class="tab" data-table="cd" value="<?php echo $_GET['tipo']; ?>">
           <input type="hidden" name="lir" class="tab" data-table="cd" value="2">
@@ -38,8 +46,11 @@ if (isset($_GET['tipo'])) {
               <legend class="w-auto bg-marta text-white border rounded p-1">INVENTARIO MUSEO</legend>
               <div class="form-row">
                 <div class="col-md-6">
-                  <label for="inventario" class="text-danger font-weight-bold">Numero inventario</label>
-                  <input type="text" class="form-control tab" data-table="scheda" id="inventario" name="inventario" value="" required>
+                  <label for="inventario">
+                    <i class="fas fa-info-circle text-muted" data-toggle="tooltip" title="Il numero di inventario, pur non essendo obbligatorio, è di fondamentale importanza per identificare velocemente il reperto all'interno del catalogo; pertanto si consiglia di inserirlo sempre laddove presetnte"></i>
+                    Numero inventario
+                  </label>
+                  <input type="text" class="form-control tab" data-table="scheda" id="inventario" name="inventario" value="">
                 </div>
                 <div class="col-md-2">
                   <label for="suffix"><i class="fas fa-info-circle text-muted" data-toggle="tooltip" title="inserire eventuali specifiche relative al numero di inventario, es.: 'bis', 'A' ecc."></i> Suffisso</label>
@@ -94,6 +105,7 @@ if (isset($_GET['tipo'])) {
               </div>
             </fieldset>
           </div>
+
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
@@ -104,8 +116,40 @@ if (isset($_GET['tipo'])) {
                   <small class="text-muted">Inserire la collocazione specifica all'interno del Museo. La descrizione deve procedere dal generale al particolare, dividendo le varie informazioni con una barra (‘/’) seguita da uno spazio.</small>
                 </div>
               </div>
+
+              <div class="form-row">
+                <div class="col-12 col-lg-2">
+                  <label for="piano" class="text-danger font-weight-bold">Piano</label>
+                  <select class="form-control form-control-sm" id="piano" name="piano" required>
+                    <option selected disabled>-- piano --</option>
+                    <option value="-1">Deposito</option>
+                    <option value="1">Primo piano</option>
+                    <option value="3">Terzo piano</option>
+                  </select>
+                </div>
+                <div class="col-12 col-lg-2">
+                  <div class="lcSel" id="lcSalaDiv">
+                    <label for="sala" class="text-danger font-weight-bold">Sala</label>
+                    <select class="form-control form-control-sm" id="sala" name="sala" required></select>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-2">
+                  <div class="lcSel" id="lcContenitoreDiv">
+                    <label for="contenitore" id="contenitoreLabel" class=""></label>
+                    <select class="form-control form-control-sm" id="contenitore" name="contenitore"></select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row lcSel" id="noVetrine">
+                <div class="col-12">
+                  <div class="alert alert-warning mt-3 mb-0">
+                    <label class="">Non ci sono vetrine per il piano selezionato</label>
+                  </div>
+                </div>
+              </div>
             </fieldset>
           </div>
+
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3" id="laFieldset">
               <legend class="w-auto bg-marta text-white border rounded p-1">LA - ALTRE LOCALIZZAZIONI GEOGRAFICO-AMMINISTRATIVE</legend>

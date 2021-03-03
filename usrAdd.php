@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['id'])){ header("location:login.php");}
-if (isset($_SESSION['id']) && $_SESSION['classe'] == 3){ header("location:home.php");}
+if (isset($_SESSION['id']) && $_SESSION['classe'] == 3){ header("location:index.php");}
 $title = isset($_POST['id']) ? 'Modifica' : 'Aggiungi';
 ?>
 <!DOCTYPE html>

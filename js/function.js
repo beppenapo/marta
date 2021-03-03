@@ -1,10 +1,12 @@
 //NOTE: creazione meta base
 const BASE = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + "/marta/";
 document.head.innerHTML = document.head.innerHTML + "<base href='" +  BASE + "' />";
+///////////////////////////
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
 const toolTipOpt = {container: 'body', boundary: 'viewport', selector: '[data-toggle=tooltip]', html: true}
 //NOTE: gestione menù laterale
 if (screen.width >= 992 ) {
+  parseInt(localStorage.getItem('sex')) ? $("body>main").addClass('mainPadding') : $("body>main").removeClass('mainPadding');
   $("body>nav#mainMenu").addClass('open');
 }else {
   $("body>nav#mainMenu").addClass('closed');
@@ -18,9 +20,7 @@ if (screen.width >= 992 ) {
     event.stopPropagation();
     $("body>nav#mainMenu").toggleClass('open closed').toggleClass('shadow-lg');
   });
-  $("body>nav#mainMenu").on("click", function (event) {
-    event.stopPropagation();
-  });
+  $("body>nav#mainMenu").on("click", function (event) { event.stopPropagation(); });
 }
 
 // aggiungi il seguente blocco nelle pagine che prevedono chiamate ajax:
