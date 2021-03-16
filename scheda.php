@@ -112,8 +112,8 @@ if (isset($_GET['tipo'])) {
               <div class="form-row">
                 <div class="col">
                   <label for="ldcs" class="text-danger font-weight-bold">LDCS - collocazione specifica</label>
-                  <input type="text" class="form-control form-control-sm tab" data-table="lc" id="ldcs" name="ldcs" value="" placeholder="Es.: Piano I/ stanza 5/ scaffale 2/ scatola 26" required>
-                  <small class="text-muted">Inserire la collocazione specifica all'interno del Museo. La descrizione deve procedere dal generale al particolare, dividendo le varie informazioni con una barra (‘/’) seguita da uno spazio.</small>
+                  <!-- <input type="text" class="form-control form-control-sm tab" data-table="lc" id="ldcs" name="ldcs" value="" placeholder="Es.: Piano I/ stanza 5/ scaffale 2/ scatola 26" required>
+                  <small class="text-muted">Inserire la collocazione specifica all'interno del Museo. La descrizione deve procedere dal generale al particolare, dividendo le varie informazioni con una barra (‘/’) seguita da uno spazio.</small> -->
                 </div>
               </div>
 
@@ -133,13 +133,29 @@ if (isset($_GET['tipo'])) {
                     <select class="form-control form-control-sm" id="sala" name="sala" required></select>
                   </div>
                 </div>
+
                 <div class="col-12 col-lg-2">
                   <div class="lcSel" id="lcContenitoreDiv">
                     <label for="contenitore" id="contenitoreLabel" class=""></label>
                     <select class="form-control form-control-sm" id="contenitore" name="contenitore"></select>
                   </div>
                 </div>
+
+                <div class="col-12 col-lg-2">
+                  <div class="lcSel" id="lcColonnaDiv">
+                    <label for="colonna" id="colonnaLabel" class="">Colonna</label>
+                    <select class="form-control form-control-sm" id="colonna" name="colonna"></select>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-2">
+                  <div class="lcSel" id="lcRipianoDiv">
+                    <label for="ripiano" id="ripianoLabel" class=""></label>
+                    <select class="form-control form-control-sm" id="ripiano" name="ripiano"></select>
+                  </div>
+                </div>
               </div>
+
               <div class="form-row lcSel" id="noVetrine">
                 <div class="col-12">
                   <div class="alert alert-warning mt-3 mb-0">

@@ -22,9 +22,9 @@ function getSale(piano){
   })
 }
 
+// NOTE: vetrina o scaffale
 function getContenitore(contenitore, sala, label,piano){
   postData("scheda.php",{trigger:'getContenitore', contenitore:contenitore, sala:sala}, function(data){
-    console.log(data);
     let options = [];
     let c = contenitore == 'vetrine' ? 'vetrina' : 'scaffale';
     options.push("<option disabled selected>-- "+c+" --</option>")
@@ -44,8 +44,27 @@ function getContenitore(contenitore, sala, label,piano){
   })
 }
 
+function getColonna(sala, scaffale){
+  postData("scheda.php",{trigger:'getColonna', sala:sala, scaffale:scaffale}, function(data){
+    let options = [];
+    options.push("<option disabled selected>-- colonna --</option>")
+    $.each(data, function(index, el) {
+      options.push("<option value='"+el.val+"'>"+el.colonna+"</option>");
+    });
+    $("#lcColonnaDiv").fadeIn('fast');
+    $("[name=colonna]").html(options.join());
+  })
+}
+
+// NOTE: colonna, cassetto plateau, la funzione viene chiamata solo per le sale del deposito
+function getRipiano(s,c){
+  console.log([s,c]);
+  if(c==40){ t = setCassetti(10); return false;}
+  t = setCf4()
+  console.log(t);
+}
+
 $(document).ready(function() {
-  // $(".tab").each(function(){ console.log($(this).data('table')+": "+$(this).attr('name')); })
   const listCategorie = {tab:'liste.ra_cls_l1', sel:'cls1'};
   const listProvince ={tab:'liste.province', sel:'prvp'};
   const listTcl ={tab:'liste.la_tcl', sel:'tcl'};
@@ -64,12 +83,14 @@ $(document).ready(function() {
   $("[name=piano]").on('change', function(){
     let piano = $(this).val();
     $("#lcSalaDiv").fadeIn('fast');
-    $("#lcContenitoreDiv, #noVetrine").fadeOut('fast');
+    $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
     getSale(piano)
   })
+
   $("[name=sala]").on('change', function(){
-    let piano = $("[name=piano]").val();
-    let sala = $(this).val();
+    $("#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
+    let piano = parseInt($("[name=piano]").val());
+    let sala =  parseInt($(this).val());
     let label, contenitore;
     if (piano > 0) {
       label = 'Vetrina';
@@ -79,6 +100,50 @@ $(document).ready(function() {
       contenitore = 'scaffali';
     }
     getContenitore(contenitore,sala,label,piano)
+  })
+
+  $("[name=contenitore]").on('change', function(){
+    $("#lcRipianoDiv").fadeOut('fast');
+    let piano = parseInt($("[name=piano]").val());
+    let sala = parseInt($("[name=sala]").val());
+    let contenitore = parseInt($(this).val());
+    if (piano === -1) { getColonna(sala, contenitore) }
+  })
+
+  $("[name=colonna]").on('change', function(){
+    let scaffale = parseInt($("[name=contenitore]").val());
+    let colonna = parseInt($(this).val());
+    let options = [];
+
+    switch (true) {
+      case scaffale == 40:
+        slot = setCassetti(104);
+        label = 'Plateau';
+      break;
+      case scaffale == 41 && colonna == 1:
+        slot = setCassetti(56);
+        label = 'Cassetto';
+      break;
+      case scaffale == 41 && (colonna >= 2 && colonna <= 3):
+        slot = setCassetti(4);
+        label = 'Ripiano';
+      break;
+      case scaffale == 41 && colonna == 4:
+        slot = setCf4();
+        label = 'Cassetto';
+      break;
+      default:
+        slot = setCassetti(10);
+        label = 'Ripiano'
+    }
+    options.push("<option disabled selected>-- "+label+" --</option>")
+    $.each(slot, function(index, val) {
+      options.push("<option value='"+val+"'>"+val+"</option>");
+    });
+    $("#ripianoLabel").text(label);
+    $("[name=ripiano]").html(options.join());
+    $("#lcRipianoDiv").fadeIn('fast');
+    console.log(options);
   })
 
   // NOTE: materia autocomplete

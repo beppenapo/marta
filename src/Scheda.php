@@ -5,15 +5,22 @@ use \Marta\Conn;
 class Scheda extends Conn{
   public $db;
   function __construct(){}
-    public function getSale(int $piano){
-      $sql = "select id, sala from liste.sale where piano = ".$piano." order by sala asc;";
-      return $this->simple($sql);
-    }
-    public function getContenitore(array $dati){
-      $f = $dati['contenitore'] == 'vetrine' ? 'vetrina' : 'scaffale';
-      $sql = "select distinct ".$f." as c, note from liste.".$dati['contenitore']." where sala = ".$dati['sala']." order by 1 asc;";
-      return $this->simple($sql);
-    }
+
+  public function getSale(int $piano){
+    $sql = "select id, sala from liste.sale where piano = ".$piano." order by sala asc;";
+    return $this->simple($sql);
+  }
+  public function getContenitore(array $dati){
+    $f = $dati['contenitore'] == 'vetrine' ? 'vetrina' : 'scaffale';
+    $sql = "select distinct ".$f." as c, note from liste.".$dati['contenitore']." where sala = ".$dati['sala']." order by 1 asc;";
+    return $this->simple($sql);
+  }
+
+  public function getColonna(array $dati){
+    $sql = "select colonna as val, trim(concat(note,' ',colonna)) as colonna from liste.scaffali where sala = ".$dati['sala']." and scaffale = ".$dati['scaffale']." order by 1";
+    return $this->simple($sql);
+  }
+
   public function liste(int $tipo){}
   public function vocabolari(array $dati){
     $where = isset($dati['filter']) ? ' where '.$dati['filter']['field']. ' = '.$dati['filter']['value'] : '';
@@ -69,7 +76,5 @@ class Scheda extends Conn{
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
   }
-
 }
-
 ?>
