@@ -1,15 +1,27 @@
 <?php
 session_start();
 if (!isset($_SESSION['id'])){ header("location:login.php");}
-switch ($_GET['act']) {
+require 'vendor/autoload.php';
+use \Marta\Scheda;
+$scheda_class = new Scheda();
+require_once('funzioni.php');
+$action = filtraGet('act');
+switch ($action) {
   case 'add': $title = 'Aggiungi una nuova scheda '; break;
   case 'edit': $title = 'Modifica scheda '; break;
   case 'view': $title = 'Visualizza scheda '; break;
 }
 if (isset($_GET['tipo'])) {
-  $title .= $_GET['tipo'] == 1 ? 'RA' : 'NU';
+  $tipo = filtraInt($_GET['tipo']);
+  $title .= $tipo == 1 ? 'RA' : 'NU';
 }
-
+$id = 0;
+if (isset($_GET['id'])) {
+	$id = filtraInt($_GET['id']);
+}
+$dati_comp = $scheda_class->getCompilatore($id);
+$compilatore_scheda = 0;
+if (isset($dati_comp[0]['cmpn'])) { $compilatore_scheda = $dati_comp[0]['cmpn']; }
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -23,6 +35,13 @@ if (isset($_GET['tipo'])) {
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
       <div class="container">
+      <?php if (($_SESSION['id'] != $compilatore_scheda) && $_SESSION['classe'] != 1 && $action != 'add') : ?>
+        <div class="row mb-4">
+          <div class="col">
+            <h3 class="border-bottom">Non hai i permessi per accedere a questa scheda</h3>
+          </div>
+        </div>
+      <?php else : ?>
         <div class="row mb-4">
           <div class="col">
             <h3 class="border-bottom"><?php echo $title; ?></h3>
@@ -30,18 +49,31 @@ if (isset($_GET['tipo'])) {
             <small class="font-weight-bold d-block">* Obbligatorietà di contesto</small>
           </div>
         </div>
-        <div class="row mb-4">
+        <!-- <div class="row mb-4">
           <div class="col">
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
               Il numero di catalogo ICCD verrà assegnato automaticamente e ti verrà comunicato al momento del salvtaggio della scheda.
               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
           </div>
-        </div>
+        </div> -->
         <form id="formScheda" autocomplete="off">
           <input type="hidden" name="tsk" class="tab" data-table="cd" value="<?php echo $_GET['tipo']; ?>">
           <input type="hidden" name="lir" class="tab" data-table="cd" value="2">
+          <input type="hidden" name="data_ins" class="tab" data-table="scheda" value="<?php echo date('Y-m-d H:i:s'); ?>">
+          <input type="hidden" name="compilatore" class="tab" data-table="scheda" value="<?php echo $_SESSION['id']; ?>">
           <div class="form-group">
+            <fieldset class="bg-light rounded border p-3">
+              <legend class="w-auto bg-marta text-white border rounded p-1">TITOLO SCHEDA</legend>
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="titolo" class="text-danger font-weight-bold">Denominazione generica</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="scheda" id="titolo" name="titolo" value="" required>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <!--<div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">INVENTARIO MUSEO</legend>
               <div class="form-row">
@@ -71,7 +103,7 @@ if (isset($_GET['tipo'])) {
                 </div>
               </div>
             </fieldset>
-          </div>
+          </div>-->
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">OG - OGGETTO</legend>
@@ -130,28 +162,28 @@ if (isset($_GET['tipo'])) {
                 <div class="col-12 col-lg-2">
                   <div class="lcSel" id="lcSalaDiv">
                     <label for="sala" class="text-danger font-weight-bold">Sala</label>
-                    <select class="form-control form-control-sm" id="sala" name="sala" required></select>
+                    <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required></select>
                   </div>
                 </div>
 
                 <div class="col-12 col-lg-2">
                   <div class="lcSel" id="lcContenitoreDiv">
                     <label for="contenitore" id="contenitoreLabel" class=""></label>
-                    <select class="form-control form-control-sm" id="contenitore" name="contenitore"></select>
+                    <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore"></select>
                   </div>
                 </div>
 
                 <div class="col-12 col-lg-2">
                   <div class="lcSel" id="lcColonnaDiv">
                     <label for="colonna" id="colonnaLabel" class="">Colonna</label>
-                    <select class="form-control form-control-sm" id="colonna" name="colonna"></select>
+                    <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna"></select>
                   </div>
                 </div>
 
                 <div class="col-12 col-lg-2">
                   <div class="lcSel" id="lcRipianoDiv">
                     <label for="ripiano" id="ripianoLabel" class=""></label>
-                    <select class="form-control form-control-sm" id="ripiano" name="ripiano"></select>
+                    <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"></select>
                   </div>
                 </div>
               </div>
@@ -234,7 +266,7 @@ if (isset($_GET['tipo'])) {
               <legend class="w-auto bg-marta text-white border rounded p-1">DT - CRONOLOGIA</legend>
               <div class="form-row">
                 <div class="col-md-4 mb-3">
-                  <h6 class="border-bottom font-weight-bold">DTZ - Cronologia generica</h6>
+                  <h6 class="border-bottom text-danger font-weight-bold">DTZ - Cronologia generica</h6>
                   <label for="dtzg" class="font-weight-bold text-danger">DTZG - Fascia cronologica</label>
                   <input type="text" class="form-control form-control-sm tab" data-table="dtz" id="dtzg" name="dtzg" value="" placeholder="Es.: XX, V-VII, 1400, Bronzo medio ecc." required>
                   <label for="dtzs">DTZS - Frazione cronologica</label>
@@ -256,7 +288,7 @@ if (isset($_GET['tipo'])) {
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <h6 class="border-bottom font-weight-bold">DTM - Motivazione cronologia</h6>
+                  <h6 class="border-bottom text-danger font-weight-bold">DTM - Motivazione cronologia</h6>
                   <small class="d-block m-0 text-danger"><i class="fas fa-info-circle"></i> Campo multiplo obbligatorio, devi inserire almeno un valore. Puoi aggiungere più motivazioni cliccando sui valori presenti in lista.</small>
                   <select class="form-control form-control-sm mb-3" id="dtmSel" name="dtmSel" required>
                     <option value="">--seleziona valore--</option>
@@ -266,22 +298,68 @@ if (isset($_GET['tipo'])) {
               </div>
             </fieldset>
           </div>
+          <?php if ($tipo == 2) : ?>
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
-              <legend class="w-auto bg-marta text-white border rounded p-1">MT - DATI TECNICI</legend>
+              <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="invn">INVN - NUMERO</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="ub" id="invn" name="invn" value="">
+                </div>
+                <div class="col-md-4">
+                  <label for="stis">STIS - STIMA</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="ub" id="stis" name="stis" value="">
+                </div>
+                <div class="col-md-4">
+                  <label for="stid">STID - DATA STIMA</label>
+                  <input type="date" class="form-control form-control-sm tab" data-table="ub" id="stid" name="stid" min="2020-07-01" max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <?php endif; ?>
+          <?php if ($tipo == 2) : ?>
+          <div class="form-group">
+            <fieldset class="bg-light rounded border p-3">
+              <legend class="w-auto bg-marta text-white border rounded p-1">DO - FONTI E DOCUMENTI DI RIFERIMENTO</legend>
+              <div class="row">
+                <div class="col-md-4">
+                  <label for="ftax">FTAX - Genere</label>
+                  <select class="form-control form-control-sm tab" data-table="nu_do" id="ftax" name="ftax">
+                    <option value="0">--seleziona valore--</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="ftap">FTAP - Tipo</label>
+                  <select class="form-control form-control-sm tab" data-table="nu_do" id="ftap" name="ftap">
+                    <option value="0">--seleziona valore--</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="ftan">FTAN - Codice</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="nu_do" id="ftan" name="ftan" value="">
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <?php endif; ?>
+          <div class="form-group">
+            <fieldset class="bg-light rounded border p-3">
+              <legend class="w-auto bg-marta text-white border  rounded p-1">MT - DATI TECNICI</legend>
               <div class="form-row mb-3">
                 <div class="col">
-                  <h6 class="border-bottom font-weight-bold">MTC - Materia e tecnica</h6>
+                  <h6 class="border-bottom text-danger font-weight-bold">MTC - Materia e tecnica</h6>
                   <small class="d-block m-0 text-muted"><i class="fas fa-info-circle"></i> Campo multiplo, dopo aver selezionato la materia aggiungi una o più tecniche selezionandole dalla lista (inizia a digitare il nome della tecnica per visualizzare le opzioni disponibili) e conferma la scelta utilizzando il tasto "+".<br/>Quando il record è completo clicca sul tasto "ok".<br/>Ripeti la sequenza per aggiungere una nuova materia e associarle tecniche specifiche.<br/>Se il materiale non è presente in lista selezionare "Materiale non presente in lista"<br/>Se la tecnica non è presente in lista selezionare "Tecnica non presente in lista"</small>
                 </div>
               </div>
               <div class="form-row mb-3">
                 <div class="col-md-5">
-                  <label for="materia"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="inizia a digitare un termine o scorri la lista per selezionare il valore desiderato"></i> Materia</label>
+                  <label for="materia" class="text-danger"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="inizia a digitare un termine o scorri la lista per selezionare il valore desiderato"></i> Materia</label>
                   <input type="text" class="form-control form-control-sm" id="materia" name="materia" value="" autocomplete="off">
                 </div>
                 <div class="col-md-6">
-                  <label for="tecnica"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="inizia a digitare un termine o scorri la lista per selezionare il valore desiderato"></i> Tecnica</label>
+                  <label for="tecnica" class="text-danger"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="inizia a digitare un termine o scorri la lista per selezionare il valore desiderato"></i> Tecnica</label>
                   <div class="input-group">
                     <input type="text" class="form-control form-control-sm" id="tecnica" name="tecnica" value="" disabled>
                     <div class="input-group-append">
@@ -349,12 +427,65 @@ if (isset($_GET['tipo'])) {
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>
+			  <?php if ($tipo != 2) : ?>
               <div class="form-row">
                 <div class="col">
                   <label for="deso" class="font-weight-bold text-danger">DESO - Indicazioni sull'oggetto</label>
                   <textarea id="deso" name="deso" class="form-control form-control-sm tab" data-table="da" rows="8" required></textarea>
                 </div>
               </div>
+			  <?php else : ?>
+              <div class="form-row mb-3">
+                <div class="col">
+                  <label for="desa">DESA - Dritto</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desa" name="desa" value="">
+                </div>
+                <div class="col">
+                  <label for="desl">DESL - Legenda dritto</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desl" name="desl" value="">
+                </div>
+                <div class="col">
+                  <label for="desn">DESN - Lingua dritto</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desn" name="desn" value="">
+                </div>
+                <div class="col">
+                  <label for="desf">DESF - Alfabeto/scrittura dritto</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desf" name="desf" value="">
+                </div>
+              </div>
+              <div class="form-row mb-3">
+                <div class="col">
+                  <label for="desm">DESM - Rovescio</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desm" name="desm" value="">
+                </div>
+                <div class="col">
+                  <label for="desg">DESG - Legenda rovescio</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desg" name="desg" value="">
+                </div>
+                <div class="col">
+                  <label for="desr">DESR - Lingua rovescio</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desr" name="desr" value="">
+                </div>
+                <div class="col">
+                  <label for="dest">DEST - Alfabeto/scrittura rovescio</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="dest" name="dest" value="">
+                </div>
+              </div>
+              <div class="form-row mb-3">
+                <div class="col">
+                  <label for="desv">DESV - Taglio</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desv" name="desv" value="">
+                </div>
+                <div class="col">
+                  <label for="desu">DESU - Soggetto</label>
+                  <input type="text" class="form-control form-control-sm tab" data-table="da" id="desu" name="desu" value="">
+                </div>
+                <div class="col">
+                  <label for="desd">DESD - Descrizione bene paramonetale</label>
+                  <textarea class="form-control form-control-sm tab" data-table="da" id="desd" name="desd" rows="3"></textarea>
+                </div>
+              </div>
+			  <?php endif; ?>
             </fieldset>
           </div>
           <div class="form-group">
@@ -386,7 +517,7 @@ if (isset($_GET['tipo'])) {
               <legend class="w-auto bg-marta text-white border rounded p-1">AD - ACCESSO AI DATI</legend>
               <div class="row">
                 <div class="col-md-5">
-                  <h6 class="border-bottom font-weight-bold">ADSP - Profilo di accesso</h6>
+                  <h6 class="border-bottom text-danger font-weight-bold">ADSP - Profilo di accesso</h6>
                   <div class="custom-control custom-radio">
                     <input type="radio" id="adsp1" name="adsp" class="custom-control-input tab" data-table="ad" value="1">
                     <label class="custom-control-label" for="adsp1">
@@ -410,7 +541,7 @@ if (isset($_GET['tipo'])) {
                   </div>
                 </div>
                 <div class="col-md-7">
-                  <h6 class="border-bottom font-weight-bold">ADSM - Motivazione</h6>
+                  <h6 class="border-bottom text-danger font-weight-bold">ADSM - Motivazione</h6>
                   <div class="custom-control custom-radio">
                     <input type="radio" id="adsm1" name="adsm" class="custom-control-input tab" data-table="ad" value="1">
                     <label class="custom-control-label" for="adsm1">scheda contenente dati liberamente accessibili</label>
@@ -427,13 +558,29 @@ if (isset($_GET['tipo'])) {
               </div>
             </fieldset>
           </div>
+          <?php if ($action != 'add') : ?>
+          <div class="form-group" id="divbiblio">
+            <fieldset class="bg-light rounded border p-3">
+              <legend class="w-auto bg-marta text-white border rounded p-1">BIBLIOGRAFIA</legend>
+              <div class="row">
+                <div class="col">
+                <a href="scheda_biblio.php?act=add&id_scheda=<?php echo $id; ?>&tipo=<?php echo $tipo; ?>&act_scheda=<?php echo $action; ?>" target="_self" title="Aggiungi bibliografia"><b>Aggiungi un nuovo riferimento bibliografico</b></a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col" id="bliblio_list">
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <?php endif; ?>
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">CM - COMPILAZIONE</legend>
               <div class="row">
                 <div class="col-md-4">
                   <label for="cmpd">CMPD - Data</label>
-                  <input type="date" class="form-control form-control-sm tab" id="cmpd" data-table="cm" name="cmpd" min="2020-07-01" max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>" required>
+                  <input type="date" class="form-control form-control-sm tab" id="cmpd" data-table="cm" name="cmpd" min="2020-07-01" max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>" required<?php if ($action == 'edit') : ?> disabled<?php endif; ?>>
                 </div>
                 <div class="col-md-4">
                   <label for="cmpnString">CMPN - Nome</label>
@@ -442,22 +589,29 @@ if (isset($_GET['tipo'])) {
                 </div>
                 <div class="col-md-4">
                   <label for="fur">FUR - Funzionario <span class="d-none d-lg-inline-block">responsabile</span></label>
-                  <input type="text" class="form-control form-control-sm tab" data-table="cm" id="fur" name="fur" value="Di Franco Luca" required>
+                  <input type="text" class="form-control form-control-sm tab" data-table="cm" id="fur" name="fur" value="Di Franco Luca" required<?php if ($action == 'edit') : ?> disabled<?php endif; ?>>
                 </div>
               </div>
             </fieldset>
           </div>
           <div class="form-group">
             <div class="row">
-              <div class="col">
-                <button type="submit" class="btn btn-sm btn-marta" name="submit">salva dati</button>
+              <div class="col-6">
+                <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit">salva dati</button>
               </div>
+              <?php if ($action!=='add') {?>
+              <div class="col-6 text-right">
+                <button type="submit" class="btn btn-sm btn-danger tastischeda" name="elimina_scheda" id="elimina_scheda">elimina scheda</button>
+              </div>
+            <?php } ?>
             </div>
           </div>
         </form>
+      <?php endif; ?>
       </div>
 
     </main>
+    <script>let id_scheda = <?php echo $id; ?>; let tipoScheda = <?php echo $tipo; ?>; let action = "<?php echo $action; ?>";</script>
     <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>

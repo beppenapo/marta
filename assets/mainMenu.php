@@ -10,10 +10,13 @@
       <p class=''><i class="fas fa-database fa-fw"></i> gestione database</p>
       <ul class="subMenu">
         <li>
-          <a href="scheda.php?act=add&tipo=1" class="animated" data-toggle='tooltip' data-placement='left' title="nuova scheda reperto"><i class="fas fa-chevron-right fa-fw"></i> scheda RA</a>
+          <a href="scheda_lista.php?tipo=1" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede reperto"><i class="fas fa-chevron-right fa-fw"></i> schede RA</a>
         </li>
         <li>
-          <a href="scheda.php?act=add&tipo=2" class="animated" data-toggle='tooltip' data-placement='left' title="nuova scheda numismatica"><i class="fas fa-chevron-right fa-fw"></i> scheda NU</a>
+          <a href="scheda_lista.php?tipo=2" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede numismatica"><i class="fas fa-chevron-right fa-fw"></i> schede NU</a>
+        </li>
+        <li>
+          <a href="scheda_biblio_lista.php" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede bibliografia"><i class="fas fa-chevron-right fa-fw"></i> Bibliografia</a>
         </li>
       </ul>
     </li>

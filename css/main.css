@@ -176,3 +176,24 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 /* .tooltip{position:absolute !important;} */
 .ui-autocomplete { max-height: 150px; overflow-y: auto; overflow-x: hidden;}
 * html .ui-autocomplete { height: 300px; }
+
+
+/* Ale qui */
+.lista_header {
+  border-top:0.5px solid #DDDDDD;
+  padding:6px 0px;
+}
+.lista{
+  padding:4px;
+  background-color:#DDDDDD;
+}
+.lista_even{
+  background-color:#EEEEEE;
+}
+.lista_compilatore{
+  float:right;
+}
+.elimina{
+  color:#FF0000;
+  cursor:pointer;
+}
