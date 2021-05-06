@@ -39,12 +39,10 @@ function login(el,f){
     }
     $.ajax({url: 'api/login.php', type: 'POST', dataType: 'json', data: dati})
     .done(function(data) {
-      console.log(data);
       let classe = data[1] == 1 ? 'text-success' : 'text-danger';
       form.find(".outputMsg").addClass(classe).html(data[0]);
       if (data[1] == 1) {
-        setTimeout(function() { window.location.href = "index.php" }, 5000);
-        localStorage.setItem('sex', data[2]);
+        setTimeout(function() { window.location.href = "dashboard.php" }, 5000);
       }
     })
     .fail(function(data) {

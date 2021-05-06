@@ -1,7 +1,7 @@
 <nav id="mainMenu">
   <ul>
     <li>
-      <a href="index.php" class='d-block m-0 mainLink animated' title="dashboard" data-toggle='tooltip' data-placement='left'><i class="fas fa-home fa-fw"></i> dashboard</a>
+      <a href="dashboard.php" class='d-block m-0 mainLink animated' title="dashboard" data-toggle='tooltip' data-placement='left'><i class="fas fa-home fa-fw"></i> dashboard</a>
     </li>
     <li>
       <a href="#" class='d-block m-0 mainLink animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-clipboard-list fa-fw"></i> archivio schede</a>

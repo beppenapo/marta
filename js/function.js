@@ -1,12 +1,18 @@
 //NOTE: creazione meta base
 const BASE = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + "/marta/";
 document.head.innerHTML = document.head.innerHTML + "<base href='" +  BASE + "' />";
+const TOTRA = 20000;
+const TOTNU = 20000;
+const TOTFOTO = 80000;
+const TOTSTEREO = 5000;
+const TOT3D = 110;
 ///////////////////////////
+let log = $("body>header").data('log');
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
 const toolTipOpt = {container: 'body', boundary: 'viewport', selector: '[data-toggle=tooltip]', html: true}
 //NOTE: gestione menù laterale
 if (screen.width >= 992 ) {
-  parseInt(localStorage.getItem('sex')) ? $("body>main").addClass('mainPadding') : $("body>main").removeClass('mainPadding');
+  log == 'y' ? $("body>main").addClass('mainPadding') : $("body>main").removeClass('mainPadding');
   $("body>nav#mainMenu").addClass('open');
 }else {
   $("body>nav#mainMenu").addClass('closed');
@@ -98,4 +104,33 @@ function postData(url, dati, callback){
     dataType: 'json',
     success: function(data){ return callback(data); }
   });
+}
+
+function stat(){
+  $("#totSchede").text(TOTRA+TOTNU);
+  $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
+  .done(function(data){
+    let raPerc = parseInt(data['ra']*100/TOTRA);
+    let nuPerc = parseInt(data['nu']*100/TOTNU);
+    $("#numschede").text(parseInt(data['ra'])+parseInt(data['nu']));
+    $("#percSchedeOk").text(parseInt(raPerc+nuPerc));
+    $("#raBar").attr('style','width:'+raPerc+'%').attr('aria-valuenow',raPerc);
+    $("#nuBar").attr('style','width:'+nuPerc+'%').attr('aria-valuenow',nuPerc);
+
+    $("#numFoto").text(data['foto']);
+    let fotoPerc = parseInt(data['foto']*100/TOTFOTO);
+    $("#fotoBar").attr('style','width:'+fotoPerc+'%').attr('aria-valuenow',fotoPerc);
+    $("#percFoto").text(fotoPerc);
+
+    $("#numStereo").text(data['stereo']);
+    let stereoPerc = parseInt(data['stereo']*100/TOTSTEREO);
+    $("#stereoBar").attr('style','width:'+stereoPerc+'%').attr('aria-valuenow',stereoPerc);
+    $("#stereoFoto").text(stereoPerc);
+
+    $("#numModelli").text(data['modelli']);
+    let modelliPerc = parseInt(data['modelli']*100/TOT3D);
+    $("#3dBar").attr('style','width:'+modelliPerc+'%').attr('aria-valuenow',modelliPerc);
+    $("#perc3d").text(modelliPerc);
+  })
+  .fail(function(){console.log('error');});
 }

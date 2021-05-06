@@ -1,4 +1,7 @@
-<header class="shadow">
+<?php
+$logged = isset($_SESSION['id']) ? 'y' : 'n';
+?>
+<header class="shadow" data-log="<?php echo $logged; ?>">
   <div class="logo"><img src="img/loghi/logo_completo_nero.png" height="60" alt="logo header"></div>
   <div class="headerMenu">
     <ul>

@@ -27,6 +27,7 @@ class Dashboard extends Conn{
     $sql = "delete from progetto.comunicazioni where id = :id;";
     return $this->prepared($sql, $dati);
   }
+
 }
 
 ?>
