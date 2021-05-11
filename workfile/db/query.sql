@@ -1,7 +1,6 @@
-select b.id, l.value as tipo, b.autore, b.titolo, count(s.*) as schede
-from bibliografia b
-inner join liste.biblio_tipo as l on b.tipo = l.id
-left join biblio_scheda bs on bs.biblio = b.id
-left join scheda s on bs.scheda = s.id
-group by b.id, l.value, b.autore, b.titolo
-order by b.titolo asc;
+select og.scheda, scheda.tipo, ogtd.value as ogtd
+from og
+inner join liste.ogtd as ogtd on og.ogtd = ogtd.id
+inner join scheda on og.scheda = scheda.id
+inner join biblio_scheda bs on scheda.id = bs.scheda
+where bs.biblio = 33;

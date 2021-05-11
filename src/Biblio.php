@@ -33,13 +33,26 @@ class Biblio extends Conn{
     return $this->simple($sql);
   }
 
-#### Ale here #####
   public function getScheda(int $id){
-  $sql = "SELECT bibliografia.id, bibliografia.titolo, bibliografia.tipo, bibliografia.autore, bibliografia.altri_autori, bibliografia.titolo_raccolta, bibliografia.editore, bibliografia.anno, bibliografia.luogo, bibliografia.isbn, bibliografia.url, bibliografia.pagine
-  FROM public.bibliografia
-  WHERE bibliografia.id = ".$id.";";
-    return $this->simple($sql);
+    $out = [];
+    $sql = "SELECT b.id, b.titolo, b.tipo as tipoid, l.value as tipo, b.autore, b.altri_autori, b.titolo_raccolta, b.editore, b.anno, b.luogo, b.isbn, b.url, b.curatore
+    FROM bibliografia b
+    inner join liste.biblio_tipo as l on b.tipo = l.id
+    WHERE b.id = ".$id.";";
+    $res = $this->simple($sql);
+    $out['scheda'] = $res[0];
+
+    $sql =" select og.scheda, scheda.tipo, ogtd.value as ogtd
+    from og
+    inner join liste.ogtd as ogtd on og.ogtd = ogtd.id
+    inner join scheda on og.scheda = scheda.id
+    inner join biblio_scheda bs on scheda.id = bs.scheda
+    where bs.biblio = ".$id." order by ogtd asc;";
+    $res = $this->simple($sql);
+    $out['schede'] = $res;
+    return $out;
   }
+#### Ale here #####
 
 public function insbiblioinscheda(int $id_scheda, int $id_biblio){
 	$this->begin();

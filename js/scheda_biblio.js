@@ -1,7 +1,9 @@
+// NOTE:  file da eliminare quando la bibliografia è sistemata
+
 const API = 'api/scheda_biblio.php';
 
   if (id_scheda > 0) {
-    // NOTE: bibliografia autocomplete
+    //NOTE: bibliografia autocomplete
     $.ajax({
     url: API,
     type: 'POST',

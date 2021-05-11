@@ -8,7 +8,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
     <?php require('assets/meta.html'); ?>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="css/bibliografia.css">
+    <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
     <?php require('assets/headerMenu.php'); ?>
