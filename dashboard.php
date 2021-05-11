@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php
+  session_start();
+  if (!isset($_SESSION['id'])){ header("location:login.php");}
+?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
   <head>
@@ -12,14 +15,6 @@
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main class="bg-light">
-      <div id="countDownWrap" class="mb-5 py-3 bg-white border-top border-bottom">
-        <div class="info text-marta"><h1>IL MUSEO MArTA 3.0</h1></div>
-        <div class="">On line tra ...</div>
-        <div id="countdown"></div>
-        <div class="info">
-          <p>Progetto per la catalogazione, digitalizzazione 2D-3D e realizzazione di un archivio digitale per il patrimonio museale del Museo Archeologico Nazionale di Taranto</p>
-        </div>
-      </div>
       <div class="container-fluid">
         <div class="row mb-3">
           <div class="col-sm-6 col-lg-3 mb-3">
@@ -192,6 +187,5 @@
     <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js" charset="utf-8"></script>
     <script src="js/function.js" charset="utf-8"></script>
     <script src="js/dashboard.js" charset="utf-8"></script>
-    <script src="js/countdown.js" charset="utf-8"></script>
   </body>
 </html>

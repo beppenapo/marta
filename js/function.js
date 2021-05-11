@@ -134,3 +134,22 @@ function stat(){
   })
   .fail(function(){console.log('error');});
 }
+$(".toast").hide();
+function createToast(obj){
+  console.log(obj);
+  obj.titolo='Risultato query';
+  classe = obj.res === true ? 'bg-success' : 'bg-danger';
+  $(".toast").removeClass('[class^="bg-"]').addClass(classe);
+  $("#headerTxt").html('Risultato query');
+  $(".toast>.toast-body>.toast-body-msg").html(obj.msg);
+  $(".toast").toast({delay:3000});
+  $(".toast").show();
+  $(".toast").toast('show');
+  $('.toast').on('hidden.bs.toast', function () {
+    $(".toast").removeClass(classe);
+    if (obj.res === true) {
+      window.setTimeout(function(){window.location.href = obj.url},1000);
+    }
+    $(".toast").hide();
+  })
+}

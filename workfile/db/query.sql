@@ -1,7 +1,7 @@
-SELECT scheda.id, scheda.titolo, cm.cmpd AS data_ins, (utenti.cognome || ' ' || utenti.nome) AS compilatore
-FROM scheda
-JOIN utenti ON utenti.id = cm.cmpn
-JOIN cm ON cm.scheda = scheda.id
-WHERE scheda.tipo = ". $tipo."
-  AND (scheda.titolo ILIKE '%".$search."%' OR TO_CHAR(cm.cmpd, 'YYYY-MM-DD') ILIKE '%".$search."%' OR utenti.cognome ILIKE '%".$search."%' OR utenti.nome ILIKE '%".$search."%')". $filtroUt."
-ORDER BY data_ins DESC;
+select b.id, l.value as tipo, b.autore, b.titolo, count(s.*) as schede
+from bibliografia b
+inner join liste.biblio_tipo as l on b.tipo = l.id
+left join biblio_scheda bs on bs.biblio = b.id
+left join scheda s on bs.scheda = s.id
+group by b.id, l.value, b.autore, b.titolo
+order by b.titolo asc;

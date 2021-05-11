@@ -16,7 +16,7 @@
           <a href="scheda_lista.php?tipo=2" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede numismatica"><i class="fas fa-chevron-right fa-fw"></i> schede NU</a>
         </li>
         <li>
-          <a href="scheda_biblio_lista.php" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede bibliografia"><i class="fas fa-chevron-right fa-fw"></i> Bibliografia</a>
+          <a href="bibliografia.php" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede bibliografia"><i class="fas fa-chevron-right fa-fw"></i> Bibliografia</a>
         </li>
       </ul>
     </li>

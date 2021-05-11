@@ -44,8 +44,10 @@ class Conn {
       $exec = $pdo->prepare($sql);
       $exec->execute($dati);
       return true;
+    } catch (\PDOException $e) {
+      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     } catch (\Exception $e) {
-      return $e->getMessage();
+      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     }
   }
 

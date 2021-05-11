@@ -800,19 +800,19 @@ $(document).ready(function() {
           $(".toast").toast('show');
           $('.toast').on('hidden.bs.toast', function () {
             $(".toast").removeClass('bg-success');
-      if (action == 'add') {
+            if (action == 'add') {
               window.location.href = 'scheda.php?tipo='+tipoScheda+'&act=edit&id='+data.id+'#submit';
-      }else{
+            }else{
               window.location.href = 'scheda.php?tipo='+tipoScheda+'&act=edit&id='+data.id;
-      }
+            }
           });
-      window.setTimeout(function(){
-        if (action == 'add') {
-          window.location.href = 'scheda.php?tipo='+tipoScheda+'&act=edit&id='+data.id+'#submit';
-        }else{
-          window.location.href = 'scheda.php?tipo='+tipoScheda+'&act=edit&id='+data.id;
-        }
-      },3000);
+          window.setTimeout(function(){
+            if (action == 'add') {
+              window.location.href = 'scheda.php?tipo='+tipoScheda+'&act=edit&id='+data.id+'#submit';
+            }else{
+              window.location.href = 'scheda.php?tipo='+tipoScheda+'&act=edit&id='+data.id;
+            }
+          },3000);
         }else {
           $(".toast").removeClass('[class^="bg-"]').addClass('bg-danger');
           $("#headerTxt").html('Errore nella query');
@@ -822,7 +822,7 @@ $(document).ready(function() {
           $('.toast').on('hidden.bs.toast', function () {
             $(".toast").removeClass('bg-danger');
           })
-      $(".tastischeda").show();
+          $(".tastischeda").show();
         }
       })
       .fail(function() {console.log("error"); });

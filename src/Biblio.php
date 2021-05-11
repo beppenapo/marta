@@ -5,20 +5,42 @@ use \Marta\Conn;
 class Biblio extends Conn{
   public $db;
   function __construct(){}
-  
-  public function vocabolarioBiblio(array $dati){
-    $where = isset($dati['filter']) ? ' where '.$dati['filter']['field']. ' = '.$dati['filter']['value'] : '';
-    $sql = "select id, (titolo || ' (' || (CASE WHEN tipo = 1 THEN 'Monografia' WHEN tipo = 2 THEN 'Atti convegno' ELSE 'Articolo in rivista' END) || ') ' || autore) AS value from ". $dati['tab'] . $where. " order by titolo asc;";
+
+  public function listaTipo(){
+    $tipo = $this->simple("select * from liste.biblio_tipo order by 2 asc");
+    return $tipo;
+  }
+  public function listaLivello(){
+    $liv = $this->simple("select * from liste.biblio_livello order by 2 asc");
+    return $liv;
+  }
+
+  public function addBiblio(array $dati){
+    $sql = $this->buildInsert('bibliografia',$dati);
+    $res = $this->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata correttamente inserita");}
+    return $res;
+  }
+
+  public function elencoBiblio(){
+    $sql = "select b.id, l.value as tipo, b.autore, b.titolo, count(s.*) as schede
+    from bibliografia b
+    inner join liste.biblio_tipo as l on b.tipo = l.id
+    left join biblio_scheda bs on bs.biblio = b.id
+    left join scheda s on bs.scheda = s.id
+    group by b.id, l.value, b.autore, b.titolo
+    order by b.titolo asc;";
     return $this->simple($sql);
   }
-  
+
+#### Ale here #####
   public function getScheda(int $id){
   $sql = "SELECT bibliografia.id, bibliografia.titolo, bibliografia.tipo, bibliografia.autore, bibliografia.altri_autori, bibliografia.titolo_raccolta, bibliografia.editore, bibliografia.anno, bibliografia.luogo, bibliografia.isbn, bibliografia.url, bibliografia.pagine
   FROM public.bibliografia
   WHERE bibliografia.id = ".$id.";";
     return $this->simple($sql);
   }
-  
+
 public function insbiblioinscheda(int $id_scheda, int $id_biblio){
 	$this->begin();
     try {
@@ -31,29 +53,9 @@ public function insbiblioinscheda(int $id_scheda, int $id_biblio){
 	  return array("res"=>false, "msg"=>$e->getMessage());
 	}
 }
-  
-  public function addScheda(array $dati){
-    $this->begin();
-    try {
-      $biblioSql = $this->buildInsert('bibliografia',$dati['bibliografia']);
-      $biblioSql = rtrim($biblioSql, ";") . " returning id;";
-      $biblioId = $this->returning($biblioSql,$dati['bibliografia']);
-      if($biblioId['res']==false){ throw new \Exception($biblioId['msg'], 1);  }
-	  if (isset($dati['biblio_scheda']['id_scheda'])){
-		  $id_scheda = (int)$dati['biblio_scheda']['id_scheda'];
-		  if ($id_scheda > 0) {
-			  $this->addSchedaBiblio('biblio_scheda', $id_scheda, (int)$biblioId['field']);
-		  }
-	  }
-      $this->commit();
-      return array("res"=>true, "msg"=>'La scheda bibliografica è stata correttamente inserita');
-      // return array("res"=>true, "msg"=>$out);
-    } catch (\Exception $e) {
-      // $this->rollback();
-      return array("res"=>false, "msg"=>$e->getMessage());
-    }
-  }
-  
+
+
+
   public function editScheda(array $dati){
     $this->begin();
     try {
@@ -86,7 +88,7 @@ public function insbiblioinscheda(int $id_scheda, int $id_biblio){
     return array("res"=>false, "msg"=>$e->getMessage());
     }
   }
-  
+
   protected function addSchedaBiblio(string $tab, int $scheda, int $biblio){
     $dati['scheda'] = $scheda;
     $dati['biblio'] = $biblio;
@@ -94,15 +96,6 @@ public function insbiblioinscheda(int $id_scheda, int $id_biblio){
     $res = $this->prepared($sql,$dati);
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
-  }
-
-  public function listaScheda(string $search){
-    $sql = "
-      SELECT bibliografia.id, bibliografia.titolo, bibliografia.autore, (CASE WHEN bibliografia.tipo = 1 THEN 'Monografia' WHEN bibliografia.tipo = 2 THEN 'Atti convegno' ELSE 'Articolo in rivista' END) AS tipo
-      FROM  bibliografia
-      WHERE (bibliografia.titolo ILIKE '%".$search."%' OR bibliografia.autore ILIKE '%".$search."%' OR (CASE WHEN bibliografia.tipo = 1 THEN 'Monografia' WHEN bibliografia.tipo = 2 THEN 'Atti convegno' ELSE 'Articolo in rivista' END) ILIKE '%".$search."%')
-      ORDER BY bibliografia.titolo ASC;";
-    return $this->simple($sql);
   }
 }
 ?>
