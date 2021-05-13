@@ -8,12 +8,12 @@ $(document).ready(function() {
 function getScheda(id){
   $.ajax({ url: 'api/biblio.php', type: 'POST', dataType: 'json', data: {trigger: 'getScheda', id:id} })
   .done(function(data) {
-    console.log(data);
     let scheda = data['scheda'];
     let schede = data['schede'];
     $("#title").text(scheda['titolo']);
     // for (key in data['scheda']) { $("#"+key+">span:last-child").text(data['scheda'][key]);}
     if (scheda['tipoid'] == 1) { $("#titolo_raccolta, #curatore").remove(); }
+    $("#idScheda>span:last-child").text(scheda['id']);
     $("#tipo>span:last-child").text(scheda['tipo']);
     $("#autore>span:last-child").text(scheda['autore']);
     $("#altri_autori>span:last-child").text(scheda['altri_autori']);
@@ -27,7 +27,7 @@ function getScheda(id){
     let listaSchede = "#schede>ul";
     schede.forEach(function(v,i){
       let tipo = v.tipo == 1 ? 'RA' : 'NU';
-      let testo = 'scheda '+tipo+' num.'+v.scheda+' '+v.ogtd;
+      let testo = 'scheda '+tipo+' num.'+v.scheda+', '+v.ogtd;
       let li = $("<li/>",{class:'list-group-item'}).appendTo(listaSchede);
       $("<a/>",{href:"scheda.php?get="+v.scheda, text: testo}).appendTo(li);
     })

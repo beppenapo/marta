@@ -20,6 +20,10 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
           <div class="col-md-6">
             <div class="card" id="scheda-card">
               <ul class="list-group list-group-flush">
+                <li class="list-group-item" id="idScheda">
+                  <span class="font-weight-bold d-inline-block align-top">Id:</span>
+                  <span class="d-inline-block"></span>
+                </li>
                 <li class="list-group-item" id="tipo">
                   <span class="font-weight-bold d-inline-block align-top">Tipologia:</span>
                   <span class="d-inline-block"></span>
@@ -72,10 +76,12 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
             </div>
           </div>
         </div>
-        <nav class="navbar navbar-expand navbar-light bg-light mb-5">
-          <a class="btn btn-sm btn-marta mr-2" href="biblioMod.php?mod=<?php echo $_GET['get']; ?>">modifica</a>
+        <?php if(isset($_SESSION['id'])){ ?>
+        <nav class="navbar navbar-expand navbar-light bg-white mt-3 pl-0">
+          <a class="btn btn-sm btn-marta mr-2" href="bibliografia_mod.php?mod=<?php echo $_GET['get']; ?>">modifica</a>
           <button type="button" class="btn btn-sm btn-danger" name="biblioDel">elimina</button>
         </nav>
+      <?php } ?>
       </div>
     </main>
     <?php require('assets/footer.html'); ?>
