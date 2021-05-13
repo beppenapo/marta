@@ -1,8 +1,28 @@
+const API = 'api/biblio.php';
 const ID = $("[name=idScheda]").val();
 $(document).ready(function() {
   getScheda(ID);
   $("#scheda-card .list-group-item>span:first-child").css("width","120px");
   $("#scheda-card .list-group-item>span:last-child").css("width","calc(100% - 125px)");
+});
+
+$('[name=biblioDel]').on('click', function () {
+  if (!confirm("Attenzione! Stai per elimnare la scheda bibliografica, procedere?")){
+  return false;
+  }
+
+  $.ajax({
+  url: API,
+  type: 'POST',
+  dataType: 'json',
+  data: {trigger : 'deleteScheda', id:ID}
+  })
+  .done(function(data) {
+    data.url='bibliografia.php';
+    createToast(data);
+  })
+  .fail(function() {console.log("error"); });
+
 });
 
 function getScheda(id){

@@ -84,6 +84,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
       <?php } ?>
       </div>
     </main>
+    <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="js/function.js" charset="utf-8"></script>

@@ -6,7 +6,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
 <html lang="it" dir="ltr">
   <head>
     <?php require('assets/meta.html'); ?>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/scheda.css">
   </head>
   <body>
     <?php require('assets/headerMenu.php'); ?>
@@ -20,7 +20,8 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
             <small class="text-danger font-weight-bold d-block">* Campi obbligatori</small>
           </div>
         </div>
-        <form id="addBiblioForm" autocomplete="off">
+        <form id="modBiblioForm" autocomplete="off">
+          <input type="hidden" name="idScheda" value="<?php echo $_GET['mod']; ?>">
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">SCHEDA BIBLIOGRAFIA</legend>

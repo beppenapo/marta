@@ -1,6 +1,6 @@
 const API = 'api/biblio.php';
+const ID = $("[name=idScheda]").val()
 let y = getData();
-$(".raccoltaWrap").hide();
 $("#anno").prop("max",y['y']);
 $.ajax({ url: 'api/biblio.php', type: 'POST', dataType: 'json', data: {trigger: 'listaTipo'}})
 .done(function(data) {
@@ -10,6 +10,24 @@ $.ajax({ url: 'api/biblio.php', type: 'POST', dataType: 'json', data: {trigger: 
   })
 })
 .fail(function() { console.log("error"); });
+
+$.ajax({ url: 'api/biblio.php', type: 'POST', dataType: 'json', data: {trigger: 'getScheda', id:ID} })
+.done(function(data) {
+  let scheda = data['scheda'];
+  scheda['tipoid'] > 1 ? $(".raccoltaWrap").show() : $(".raccoltaWrap").hide();
+  $("[name=tipo] option[value="+scheda['tipoid']+"]").prop('selected', true);
+  $("[name=titolo_raccolta]").val(scheda['titolo_raccolta']);
+  $("[name=curatore]").val(scheda['curatore']);
+  $("[name=titolo]").val(scheda['titolo']);
+  $("[name=autore").val(scheda['autore']);
+  $("[name=altri_autori").val(scheda['altri_autori']);
+  $("[name=anno").val(scheda['anno']);
+  $("[name=editore").val(scheda['editore']);
+  $("[name=luogo").val(scheda['luogo']);
+  $("[name=isbn").val(scheda['isbn']);
+  $("[name=url").prop("href",scheda['url']).val(scheda['url']);
+})
+.fail(function() {console.log("error");});
 
 $("body").on('change', '[name=tipo]', function(){
   let v = $(this).val();
@@ -23,11 +41,12 @@ $("body").on('change', '[name=tipo]', function(){
 });
 
 $('[name=submit]').on('click', function (e) {
-  form = $("#addBiblioForm");
+  form = $("#modBiblioForm");
   isvalidate = form[0].checkValidity();
   if (isvalidate) {
     e.preventDefault();
     dati = {};
+    dati.id = ID;
     dati.tipo = $("[name=tipo]").val();
     dati.titolo = $("[name=titolo]").val();
     dati.autore = $("[name=autore]").val();
@@ -43,7 +62,7 @@ $('[name=submit]').on('click', function (e) {
       url: API,
       type: 'POST',
       dataType: 'json',
-      data: {trigger : 'addBiblio', dati}
+      data: {trigger : 'editScheda', dati}
     })
     .done(function(data) {
       data.url='bibliografia.php';

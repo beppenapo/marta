@@ -22,6 +22,38 @@ class Biblio extends Conn{
     return $res;
   }
 
+  public function editScheda(array $dati){
+    $filter = ['id'=>$dati['id']];
+    unset($dati['id']);
+    $sql = $this->buildUpdate('bibliografia',$filter,$dati);
+    $res = $this->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata correttamente modificata");}
+    return $res;
+  }
+
+  public function deleteScheda(int $id){
+    $dati = ['id'=>$id];
+    $sql = "delete from bibliografia where id = :id;";
+    $res = $this->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata definitivamente eliminata");}
+    return $res;
+    //
+    // $this->begin();
+    // try {
+    // $filter_scheda = ['biblio'=>$id];
+    // $sqldel = $this->buildDelete('public.biblio_scheda',$filter_scheda);
+    // $filter_scheda = ['id'=>$id];
+    // $sqldel = $this->buildDelete('public.bibliografia',$filter_scheda);
+    // $this->prepared($sqldel);
+    // $this->commit();
+    // return array("res"=>true, "msg"=>'La scheda bibliografica è stata correttamente eliminata');
+    // // return array("res"=>true, "msg"=>$out);
+    // } catch (\Exception $e) {
+    // // $this->rollback();
+    // return array("res"=>false, "msg"=>$e->getMessage());
+    // }
+  }
+
   public function elencoBiblio(){
     $sql = "select b.id, l.value as tipo, b.autore, b.titolo, count(s.*) as schede
     from bibliografia b
@@ -52,6 +84,7 @@ class Biblio extends Conn{
     $out['schede'] = $res;
     return $out;
   }
+
 #### Ale here #####
 
 public function insbiblioinscheda(int $id_scheda, int $id_biblio){
@@ -68,39 +101,6 @@ public function insbiblioinscheda(int $id_scheda, int $id_biblio){
 }
 
 
-
-  public function editScheda(array $dati){
-    $this->begin();
-    try {
-    $id_scheda = (int)$dati['bibliografia']['id'];
-      if($id_scheda<1){ throw new \Exception($schedaId['msg'], 1);  }
-    $filter_scheda = ['id'=>$id_scheda];
-      $schedaSql = $this->buildUpdate('bibliografia',$filter_scheda,$dati['bibliografia']);
-    $this->prepared($schedaSql,$dati['bibliografia']);
-      $this->commit();
-      return array("res"=>true, "msg"=>'La scheda bibliografica è stata correttamente modificata');
-      // return array("res"=>true, "msg"=>$out);
-    } catch (\Exception $e) {
-      // $this->rollback();
-      return array("res"=>false, "msg"=>$e->getMessage());
-    }
-  }
-  public function deleteScheda(int $id){
-    $this->begin();
-    try {
-    $filter_scheda = ['biblio'=>$id];
-    $sqldel = $this->buildDelete('public.biblio_scheda',$filter_scheda);
-    $filter_scheda = ['id'=>$id];
-    $sqldel = $this->buildDelete('public.bibliografia',$filter_scheda);
-    $this->prepared($sqldel);
-    $this->commit();
-    return array("res"=>true, "msg"=>'La scheda bibliografica è stata correttamente eliminata');
-    // return array("res"=>true, "msg"=>$out);
-    } catch (\Exception $e) {
-    // $this->rollback();
-    return array("res"=>false, "msg"=>$e->getMessage());
-    }
-  }
 
   protected function addSchedaBiblio(string $tab, int $scheda, int $biblio){
     $dati['scheda'] = $scheda;
