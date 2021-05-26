@@ -15,7 +15,7 @@ require("api/php/scheda.php");
       <div class="container">
         <div class="row mb-4">
           <div class="col">
-            <h3 class="border-bottom"><?php echo $title; ?></h3>
+            <h3 class="border-bottom">Stai inserendo una nuova scheda Numismatica (NU)</h3>
             <small class="text-danger font-weight-bold d-block">* Campo obbligatorio</small>
             <small class="font-weight-bold d-block">* Obbligatorietà di contesto</small>
             <small class="d-block">Campo facoltativo</small>
