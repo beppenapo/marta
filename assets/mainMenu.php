@@ -4,25 +4,33 @@
       <a href="dashboard.php" class='d-block m-0 mainLink animated' title="dashboard" data-toggle='tooltip' data-placement='left'><i class="fas fa-home fa-fw"></i> dashboard</a>
     </li>
     <li>
-      <a href="#" class='d-block m-0 mainLink animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-clipboard-list fa-fw"></i> archivio schede</a>
-    </li>
-    <li>
-      <p class=''><i class="fas fa-database fa-fw"></i> gestione database</p>
+      <p class='text-primary'><i class="fas fa-archive fa-fw"></i> archivi</p>
       <ul class="subMenu">
         <li>
-          <a href="scheda_lista.php?tipo=1" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede reperto"><i class="fas fa-chevron-right fa-fw"></i> schede RA</a>
+          <a href="#" class='d-block m-0 animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> archivio schede</a>
         </li>
         <li>
-          <a href="scheda_lista.php?tipo=2" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede numismatica"><i class="fas fa-chevron-right fa-fw"></i> schede NU</a>
+          <a href="bibliografia.php" class='d-block m-0 animated' title="archivio record bibliografici" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> archivio bibliografia</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p class='text-success'><i class="fas fa-database fa-fw"></i> aggiungi record</p>
+      <ul class="subMenu">
+        <li>
+          <a href="scheda-ra.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova scheda RA"><i class="fas fa-chevron-right fa-fw"></i> scheda RA</a>
         </li>
         <li>
-          <a href="bibliografia.php" class="animated" data-toggle='tooltip' data-placement='left' title="lista schede bibliografia"><i class="fas fa-chevron-right fa-fw"></i> Bibliografia</a>
+          <a href="scheda-nu.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova scheda NU"><i class="fas fa-chevron-right fa-fw"></i> scheda NU</a>
+        </li>
+        <li>
+          <a href="bibliografia_add.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci un nuovo record bibliografico"><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
         </li>
       </ul>
     </li>
     <?php if ($_SESSION['classe'] == 1) {?>
     <li>
-      <p class=''><i class="fas fa-cogs fa-fw"></i> gestione sistema</p>
+      <p class='text-warning'><i class="fas fa-cogs fa-fw"></i> gestione sistema</p>
       <ul class="subMenu">
         <li>
           <a href="usr.php" class="animated" data-toggle='tooltip' data-placement='left' title="gestisci utenti di sistema"><i class="fas fa-chevron-right fa-fw"></i> utenti</a>
@@ -34,7 +42,7 @@
     <?php } ?>
     </li>
     <li>
-      <p class=''><i class="fas fa-user fa-fw"></i> Account</p>
+      <p class='text-danger'><i class="fas fa-user fa-fw"></i> Account</p>
       <ul class="subMenu">
         <li>
           <a href="myAccount.php" class="animated" data-toggle='tooltip' data-placement='left' title="modifica i tuoi dati personali"><i class="fas fa-chevron-right fa-fw"></i> dati personali</a>

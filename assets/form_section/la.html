@@ -1,0 +1,31 @@
+<div class="form-group">
+  <fieldset class="bg-light rounded border p-3" id="laFieldset">
+    <legend class="w-auto bg-marta text-white border rounded p-1">LA - ALTRE LOCALIZZAZIONI GEOGRAFICO-AMMINISTRATIVE</legend>
+    <div class="form-row mb-3">
+      <div class="col">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="toggleLA" name="toggleSection" data-fieldset="laFieldset">
+          <label class="custom-control-label" for="toggleLA">Compila paragrafo</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-5">
+        <label for="tcl" class="font-weight-bold">TCL - Tipo di localizzazione</label>
+        <select class="form-control form-control-sm tab" data-table="la" id="tcl" name="tcl" disabled>
+          <option value="">--seleziona tipologia --</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="prvp" class="font-weight-bold">PRVP - Provincia</label>
+        <select class="form-control form-control-sm tab" data-table="la" id="prvp" name="prvp" disabled>
+          <option value="">--seleziona provincia --</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="prvc" class="font-weight-bold">PRVC - Comune</label>
+        <select class="form-control form-control-sm tab" data-table="la" id="prvc" name="prvc" disabled></select>
+      </div>
+    </div>
+  </fieldset>
+</div>

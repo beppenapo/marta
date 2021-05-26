@@ -1,0 +1,55 @@
+<div class="form-group">
+  <fieldset class="bg-light rounded border p-3">
+    <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
+    <fieldset id="lcFieldset" class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom">LDCS - collocazione specifica</legend>
+      <div class="form-row">
+        <div class="col-md-3">
+          <label for="piano" class="text-danger font-weight-bold">Piano</label>
+          <select class="form-control form-control-sm" id="piano" name="piano" required>
+            <option selected disabled>-- piano --</option>
+            <option value="-1">Deposito</option>
+            <option value="0">Piano terra</option>
+            <option value="1">Primo piano</option>
+            <option value="3">Terzo piano</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <div class="lcSel" id="lcSalaDiv">
+            <label for="sala" class="text-danger font-weight-bold">Sala</label>
+            <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required></select>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="lcSel" id="lcContenitoreDiv">
+            <label for="contenitore" id="contenitoreLabel" class=""></label>
+            <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore"></select>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="lcSel" id="lcColonnaDiv">
+            <label for="colonna" id="colonnaLabel" class="">Colonna</label>
+            <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna"></select>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="lcSel" id="lcRipianoDiv">
+            <label for="ripiano" id="ripianoLabel" class=""></label>
+            <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row lcSel" id="noVetrine">
+        <div class="col-12">
+          <div class="alert alert-warning mt-3 mb-0">
+            <label class="">Non ci sono vetrine per il piano selezionato</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </fieldset>
+</div>

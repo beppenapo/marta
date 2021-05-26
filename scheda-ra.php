@@ -616,6 +616,6 @@ if (isset($dati_comp[0]['cmpn'])) { $compilatore_scheda = $dati_comp[0]['cmpn'];
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="js/function.js" charset="utf-8"></script>
-    <script src="js/scheda.js" charset="utf-8"></script>
+    <script src="js/scheda-ra.js" charset="utf-8"></script>
   </body>
 </html>

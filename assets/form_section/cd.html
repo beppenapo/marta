@@ -1,0 +1,46 @@
+<div class="form-group">
+  <fieldset class="bg-light rounded border p-3" id="cdFieldset">
+    <legend class="w-auto bg-marta text-white border rounded p-1">cd - codici</legend>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="">
+          <label class="text-danger font-weight-bold">TSK - Tipo scheda</label>
+          <p id="tskTxt"></p>
+          <input type="hidden" class="form-control form-control-sm tab" data-table="scheda" id="tsk" name="tsk" value="" required>
+        </div>
+        <div class="">
+          <label class="text-danger font-weight-bold">LIR - Livello ricerca</label>
+          <p id="lirTxt">P - Precatalogo</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="">
+          <label class="text-danger font-weight-bold">NCTR - Codice Regione</label>
+          <p>16 [Puglia]</p>
+        </div>
+        <div class="">
+          <label class="text-danger font-weight-bold">ESC - Ente schedatore</label>
+          <p>M325</p>
+        </div>
+        <div class="">
+          <label class="text-danger font-weight-bold">ECP - Ente competente</label>
+          <p>M325</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="">
+          <label class="text-danger font-weight-bold">CMPN - Compilatore</label>
+          <p><?php echo $_SESSION['utente']; ?></p>
+        </div>
+        <div class="">
+          <label class="text-danger font-weight-bold">CMPD - Data</label>
+          <p><?php echo date('Y-m-d'); ?></p>
+        </div>
+        <div class="">
+          <label class="text-danger font-weight-bold">FUR - Funzionario resopnsabile</label>
+          <p>Di Franco Luca</p>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

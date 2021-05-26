@@ -1,0 +1,73 @@
+<div class="form-group">
+  <fieldset class="bg-light rounded border p-3">
+    <legend class="w-auto bg-marta text-white border rounded p-1">TU - CONDIZIONE GIURIDICA E VINCOLI</legend>
+    <fieldset id="acqFieldset" class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom mb-3">acq - acquisizione</legend>
+      <div class="form-row">
+        <div class="col">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="toggleACQ" name="toggleSection" data-fieldset="acqFieldset">
+            <label class="custom-control-label" for="toggleACQ">Compila dati acquisizione</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row mt-3">
+        <div class="col-md-4">
+          <label for="acqt" class="font-weight-bold obbligatorio">ACQT - Tipo acquisizione</label>
+          <select class="form-control form-control-sm tab obbligatorio" id="acqt" name="acqt" data-table="tu" disabled>
+            <option value="" selected disabled>--seleziona valore--</option>
+            <?php echo join("",$liste['acqt']); ?>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="acqn">ACQN - Nome</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" disabled>
+        </div>
+        <div class="col-md-2">
+          <label for="acqd" class="font-weight-bold obbligatorio">ACQD - Data</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="tu" id="acqd" name="acqd" value="" disabled>
+        </div>
+        <div class="col-md-3">
+          <label for="acqn">ACQL - Luogo</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" disabled>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset id="cdgFieldset" class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom mb-3">cdg - condizione giuridica</legend>
+      <div class="form-row">
+        <div class="col-md-6">
+          <label for="cdgg" class="font-weight-bold text-danger">CDGG - Indicazione giuridica</label>
+          <select class="form-control form-control-sm tab" id="cdgg" name="cdgg" data-table="tu" required>
+            <option value="" selected disabled>--seleziona valore--</option>
+            <?php echo join("",$liste['cdgg']); ?>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset id="nvcFieldset" class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom mb-3">nvc - provvedimenti di tutela</legend>
+      <div class="form-row mb-3">
+        <div class="col">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="toggleNVC" name="toggleSection" data-fieldset="nvcFieldset">
+            <label class="custom-control-label" for="toggleNVC">Compila provvedimenti tutela</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <label for="nvct" class="font-weight-bold obbligatorio">NVCT - Tipo provvedimento</label>
+          <select class="form-control form-control-sm tab obbligatorio" id="nvct" name="nvct" data-table="tu" disabled>
+            <option value="" selected disabled>--seleziona valore--</option>
+            <?php echo join("",$liste['nvct']); ?>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="acqn"><i class="far fa-question-circle" data-toggle="tooltip" title="Indicare la data di emissione del provvedimento amministrativo nella forma 'anno/mese/giorno' (aaaa/mm/gg)."></i> NVCE - Estrem provvedimento</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" disabled>
+        </div>
+      </div>
+    </fieldset>
+  </fieldset>
+</div>

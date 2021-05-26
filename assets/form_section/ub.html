@@ -1,0 +1,34 @@
+<div class="form-group">
+  <fieldset class="bg-light rounded border p-3" id="ubFieldset">
+    <legend class="w-auto bg-marta text-white border rounded p-1">ub - dati patrimoniali</legend>
+    <div class="form-row mb-3">
+      <div class="col">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="toggleLA" name="toggleSection" data-fieldset="ubFieldset">
+          <label class="custom-control-label" for="toggleLA">Compila dati patrimoniali</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-3">
+        <label for="invn" class="font-weight-bold obbligatorio">INVN - Inventario</label>
+        <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="invn" name="invn" value="" disabled>
+      </div>
+      <div class="col-md-3">
+        <label for="stis" class="font-weight-bold obbligatorio">STIS - Stima</label>
+        <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stis" name="stis" value="" disabled>
+      </div>
+      <div class="col-md-3">
+        <label for="stid" class="font-weight-bold obbligatorio">STID - Anno stima</label>
+        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stid" name="stid" min="1945" max="<?php echo date('Y'); ?>" step="1" value=""  disabled>
+      </div>
+      <div class="col-md-3">
+        <label for="stim">STIM - Motivo stima</label>
+        <select class="form-control form-control-sm tab" name="stim" id="stim" data-table="ub" disabled>
+          <option value="" selected disabled>-- motivo stima --</option>
+          <?php echo join("",$liste['stim']); ?>
+        </select>
+      </div>
+    </div>
+  </fieldset>
+</div>

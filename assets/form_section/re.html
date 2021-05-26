@@ -1,0 +1,104 @@
+<div class="form-group">
+  <fieldset class="bg-light rounded border p-3">
+    <legend class="w-auto bg-marta text-white border rounded p-1">re- modalità di reperimento</legend>
+    <fieldset id="rcgFieldset" class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom">rcg - ricognizioni</legend>
+      <div class="form-row my-3">
+        <div class="col">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="toggleRCG" name="toggleSection" data-fieldset="rcgFieldset">
+            <label class="custom-control-label" for="toggleRCG">Compila dati ricognizione</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-3">
+          <label for="nucn">NUCN - Codice ICCD</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="rcg" id="nucn" name="nucn" value="" disabled>
+        </div>
+        <div class="col-md-6">
+          <label for="rcga">RCGA - Responsabile scientifico</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="rcg" id="rcga" name="rcga" value="" disabled>
+        </div>
+        <div class="col-md-3">
+          <label for="rcgd" class="font-weight-bold obbligatorio">RCGD - Data</label>
+          <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="rcg" id="rcgd" name="rcgd" min="1945" max="<?php echo date('Y'); ?>" step="1" value="" disabled>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <label for="rcgz">RCGZ - Specifiche</label>
+          <textarea class="form-control form-control-sm tab" data-table="rcg" id="rcgz" name="rcgz" rows="4" disabled></textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="dscFieldset">
+      <legend class="text-marta font-weight-bold border-bottom">dsc - dati di scavo</legend>
+      <div class="form-row my-3">
+        <div class="col">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="toggleDSC" name="toggleSection" data-fieldset="dscFieldset">
+            <label class="custom-control-label" for="toggleDSC">Compila dati scavo</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-6 col-lg-3">
+          <label for="nucn">NUCN - Codice ICCD</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="dsc" id="nucn" name="nucn" value="" disabled>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <label for="scan" class="font-weight-bold obbligatorio">SCAN - Denominazione dello scavo</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="dsc" id="scan" name="scan" value="" disabled>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <label for="dsca">DSCA - Responsabile scientifico</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="dsc" id="dsca" name="dsca" value="" disabled>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <label for="dscd" class="font-weight-bold obbligatorio">DSCD - Data</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="re" id="dscd" name="dscd" value="" disabled>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <label for="dscn">DSCN - Specifiche</label>
+          <textarea class="form-control form-control-sm tab" data-table="dsc" id="dscn" name="dscn" rows="4" disabled></textarea>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset id="ainFieldset" class="mt-3">
+      <legend class="text-marta font-weight-bold border-bottom">ain - altre indagini</legend>
+      <div class="form-row my-3">
+        <div class="col">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="toggleAIN" name="toggleSection" data-fieldset="ainFieldset">
+            <label class="custom-control-label" for="toggleAIN">Compila altre indagini</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-4">
+          <label for="ain" class="font-weight-bold obbligatorio">AINT - Tipo</label>
+          <select class="form-control form-control-sm tab obbligatorio" data-table="ain" id="aint" name="aint" disabled>
+            <option value="" selected disabled>-- tipo --</option>
+            <?php echo join("",$liste['aint']); ?>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="aind" class="font-weight-bold obbligatorio">AIND - Data</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ain" id="aind" name="aind" value="" disabled>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col">
+          <label for="ains">AINS - Note</label>
+          <textarea class="form-control form-control-sm tab" data-table="ain" id="ains" name="ains" rows="4" disabled></textarea>
+        </div>
+      </div>
+    </fieldset>
+  </fieldset>
+
+</div>

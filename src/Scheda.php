@@ -6,13 +6,114 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function mtc(array $dati){
+    $out['mtc']=$this->simple("select * from liste.materia where tsk != ".$dati['filter']." order by 2 asc;");
+    $out['tcn']=$this->simple("select * from liste.tecnica where tsk != ".$dati['filter']." order by 2 asc;");
+    return $out;
+  }
+  public function setCrono(array $dati){
+    $default =$this->simple("select max(dtsi) dtsi, min(dtsf) dtsf from liste.dts where dtzg = ".$dati['dtzg'].";");
+    if (isset($dati['dtzs'])) {
+      $complete = $this->simple("select dtsi, dtsf from liste.dts where dtzg = ".$dati['dtzg']." and dtzs = ".$dati['dtzs'].";");
+    }
+    if(empty($complete[0])){ return $default; }
+    return $complete;
+  }
+  public function listeNu(){
+    $opt=[];
+    $ogtd=array("tab"=>"liste.ogtd","filter"=>array("field"=>'tipo',"value"=>2));
+    $ogtdArr=$this->vocabolari($ogtd);
+    $opt['ogtd']=$this->buildSel($ogtdArr);
+
+    $ogr=array("tab"=>'liste.ogr');
+    $ogrArr=$this->vocabolari($ogr);
+    $opt['ogr']=$this->buildSel($ogrArr);
+
+    $ogto=array("tab"=>'liste.ogto');
+    $ogtoArr=$this->vocabolari($ogto);
+    $opt['ogto']=$this->buildSel($ogtoArr);
+
+    $ogts=array("tab"=>'liste.ogts');
+    $ogtsArr=$this->vocabolari($ogts);
+    $opt['ogts']=$this->buildSel($ogtsArr);
+
+    $ogtr=array("tab"=>'liste.ogtr');
+    $ogtrArr=$this->vocabolari($ogtr);
+    $opt['ogtr']=$this->buildSel($ogtrArr);
+
+    $stim=array("tab"=>'liste.stim');
+    $stimArr=$this->vocabolari($stim);
+    $opt['stim']=$this->buildSel($stimArr);
+
+    $gpl=array("tab"=>'liste.gpl');
+    $gplArr=$this->vocabolari($gpl);
+    $opt['gpl']=$this->buildSel($gplArr);
+
+    $gpm=array("tab"=>'liste.gpm');
+    $gpmArr=$this->vocabolari($gpm);
+    $opt['gpm']=$this->buildSel($gpmArr);
+
+    $gpt=array("tab"=>'liste.gpt');
+    $gptArr=$this->vocabolari($gpt);
+    $opt['gpt']=$this->buildSel($gptArr);
+
+    $gpp=array("tab"=>'liste.gpp');
+    $gppArr=$this->vocabolari($gpp);
+    $opt['gpp']=$this->buildSel($gppArr);
+
+    $aint=array("tab"=>'liste.aint');
+    $aintArr=$this->vocabolari($aint);
+    $opt['aint']=$this->buildSel($aintArr);
+
+    $dtzg=array("tab"=>'liste.dtzg');
+    $dtzgArr=$this->vocabolari($dtzg);
+    $opt['dtzg']=$this->buildSel($dtzgArr);
+
+    $dtzs=array("tab"=>'liste.dtzs');
+    $dtzsArr=$this->vocabolari($dtzs);
+    $opt['dtzs']=$this->buildSel($dtzsArr);
+
+    $dtm=array("tab"=>'liste.dtm');
+    $dtmArr=$this->vocabolari($dtm);
+    $opt['dtm']=$this->buildSel($dtmArr);
+
+    $stcc=array("tab"=>'liste.stcc');
+    $stccArr=$this->vocabolari($stcc);
+    $opt['stcc']=$this->buildSel($stccArr);
+
+    $stcl=array("tab"=>'liste.stcl');
+    $stclArr=$this->vocabolari($stcl);
+    $opt['stcl']=$this->buildSel($stclArr);
+
+    $cdgg=array("tab"=>'liste.cdgg');
+    $cdggArr=$this->vocabolari($cdgg);
+    $opt['cdgg']=$this->buildSel($cdggArr);
+
+    $acqt=array("tab"=>'liste.acqt');
+    $acqtArr=$this->vocabolari($acqt);
+    $opt['acqt']=$this->buildSel($acqtArr);
+
+    $nvct=array("tab"=>'liste.nvct');
+    $nvctArr=$this->vocabolari($nvct);
+    $opt['nvct']=$this->buildSel($nvctArr);
+    return $opt;
+  }
+
+  private function buildSel(array $dati){
+    $res=[];
+    foreach ($dati as $v) {
+      array_push($res,"<option value='".$v['id']."'>".$v['value']."</option>");
+    }
+    return $res;
+  }
+
   public function getCompilatore(int $id){
     $sql = "select cmpn from public.cm where scheda = ".$id.";";
     return $this->simple($sql);
   }
 
   public function getSale(int $piano){
-    $sql = "select id, sala from liste.sale where piano = ".$piano." order by sala asc;";
+    $sql = "select id, sala, descrizione from liste.sale where piano = ".$piano." order by sala asc;";
     return $this->simple($sql);
   }
 
@@ -27,10 +128,11 @@ class Scheda extends Conn{
     return $this->simple($sql);
   }
 
-  public function liste(int $tipo){}
+  // public function liste(int $tipo){}
+
   public function vocabolari(array $dati){
-    $where = isset($dati['filter']) ? ' where '.$dati['filter']['field']. ' = '.$dati['filter']['value'] : '';
-    $sql = "select * from ". $dati['tab'] . $where. " order by value asc;";
+    $where = isset($dati['filter']) ? ' where '. $dati['filter']['field'] . "=" . $dati['filter']['value'] : '';
+    $sql = "select * from ". $dati['tab'] . $where. " order by 2 asc;";
     return $this->simple($sql);
   }
   public function autocomplete(array $dati){
@@ -227,7 +329,7 @@ class Scheda extends Conn{
     return array("res"=>false, "msg"=>$e->getMessage());
     }
   }
-  
+
   public function delbiblioref(int $id_scheda, int $id_biblio){
     $this->begin();
     try {
