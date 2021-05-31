@@ -5,8 +5,8 @@
       <div class="col-md-4">
         <div class="">
           <label class="text-danger font-weight-bold">TSK - Tipo scheda</label>
+          <input type="hidden" class="tab" data-table="scheda" id="tsk" name="tsk" value="">
           <p id="tskTxt"></p>
-          <input type="hidden" class="form-control form-control-sm tab" data-table="scheda" id="tsk" name="tsk" value="" required>
         </div>
         <div class="">
           <label class="text-danger font-weight-bold">LIR - Livello ricerca</label>
@@ -31,6 +31,7 @@
         <div class="">
           <label class="text-danger font-weight-bold">CMPN - Compilatore</label>
           <p><?php echo $_SESSION['utente']; ?></p>
+          <input type="hidden" class="tab" data-table="scheda" id="cmpn" name="cmpn" value="<?php echo $_SESSION['id']; ?>">
         </div>
         <div class="">
           <label class="text-danger font-weight-bold">CMPD - Data</label>

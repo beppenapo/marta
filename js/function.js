@@ -106,6 +106,11 @@ $("body").on('click', '[name=toggleSection]', function() {
   $("#"+fieldset+" .tab.obbligatorio").prop('required',(i,v)=>!v);
 });
 
+//Sblocca Misure
+$("[name=misr]").on('click', function(event) {
+  $(".misure").prop('disabled',(i,v)=>!v);
+})
+
 $("body").on('change', '[name=prvp]', function(el) {
   const dati = {
     el:el,
@@ -180,7 +185,12 @@ $('body').on('click', '[name=addTecnica]', function(event) {
   if (!tecnicaItem.val()) {
     tecnicaItem.val(v)
   }else {
-    tecnicaItem.val(tecnicaItem.val()+','+ v);
+    let l = tecnicaItem.val().split(', ');
+    if (l.includes(v)===true) {
+      alert('La tecnica "'+v+'" è già stata selezionata!');
+      return false;
+    }
+    tecnicaItem.val(tecnicaItem.val()+', '+ v);
   }
   tecnicaInput.val('');
 });
@@ -239,7 +249,7 @@ $.extend({
 function nl2br(str){return str.replace(/(?:\r\n|\r|\n)/g, '<br>');}
 function getList(obj){
   Object.keys(obj).forEach(function (key){
-    postData("scheda.php", {trigger:'vocabolari', tab:obj[key]['tab'], filter:obj[key]['filter']}, function(data){
+    postData("scheda.php", {trigger:'vocabolari', tab:obj[key]['tab'], filter:obj[key]['filter']}, function(data){verniciatura
       buildList(data,obj[key]['sel']);
     })
   });
@@ -336,7 +346,7 @@ function getSale(piano, value = null){
     let options = [];
     let selected = "";
     if (value == null) { selected = " selected"; }
-    options.push("<option disabled"+selected+">-- sala --</option>")
+    options.push("<option value='' disabled"+selected+">-- sala --</option>")
     $.each(data, function(index, el) {
       selected = el.id == value ? 'selected' : '';
       let opt = !el.descrizione ? el.sala : el.descrizione;
@@ -434,6 +444,7 @@ function mtcWrap(item, tecnica_value = null){
     return false
   }
   $("[name=materia]").autocomplete('disable');
+  $("[name=materia]").prop('disabled', true);
   var row = $("<div/>",{class:'form-row mb-3', id:label+'Row'}).appendTo(wrap);
   var col1 = $("<div/>",{class:'col-md-5'}).appendTo(row);
   var col2 = $("<div/>",{class:'col-md-6'}).appendTo(row);
@@ -447,6 +458,7 @@ function mtcWrap(item, tecnica_value = null){
     $( "[name=tecnica]" ).val('').prop('disabled', true);
     $( "[name=addTecnica], [name=addMtc]" ).prop('disabled', true);
     $("[name=materia]").autocomplete('enable');
+    $("[name=materia]").prop('disabled', false);
   });
 }
 
@@ -475,7 +487,7 @@ function reuseOption(v,text){
   options.detach().sort(function(a,b) {
     var at = $(a).text();
     var bt = $(b).text();
-    return (at > bt)?1:((at < bt)?-1:0);
+    return (at > bt)?1:((at < bt)?-1:0);verniciatura
   });
   options.appendTo("[name=dtm]");
 }
@@ -534,7 +546,77 @@ function listaScheda(tiposcheda){
       let classoodeven = ""; if (x%2 != 0) { classoodeven = " lista_even"; }
       newdata += "<div class='row lista"+classoodeven+"'><div class='col'><a href='scheda.php?tipo="+tiposcheda+"&act=edit&id="+id+"' target='_self' title='Visualizza / Modifica scheda'>"+titolo+"  -  "+data_ins+"<span class='lista_compilatore'>"+compilatore+"</span></a></div></div>";
     }
-    $('#divListaScheda').html(newdata);
+    $('#divLisNutaScheda').html(newdata);
   })
   .fail(function(data) { console.log(data); });
+}
+
+////////////////////////////////////////////
+$("#errorDiv").hide();
+function salvaScheda(e){
+  let isvalidate = $("#formScheda")[0].checkValidity()
+  if (isvalidate) {
+    let dati={}
+    let tab=[]
+    let field = []
+    let val = []
+    let mtcVal = []
+    let errori = []
+    e.preventDefault();
+    $("[data-table]").each(function(){
+      if ($(this).is("input:text") || $(this).is("input[type=number]") || $(this).is("input:hidden") || $(this).is("select") || $(this).is("textarea") || $(this).is(":radio:checked") || $(this).is(":checkbox:checked")) {
+        if (!$(this).is(':disabled')) {
+          if ($(this).val()) {
+            tab.push($(this).data('table'));
+            field.push({tab:$(this).data('table'),field:$(this).attr('name')});
+            val.push({tab:$(this).data('table'),field:$(this).attr('name'),val:$(this).val()});
+          }
+        }
+      }
+    });
+    tab = tab.filter((v, p) => tab.indexOf(v) == p);
+    $.each(tab,function(i,v){ dati[v]={} })
+    $.each(field,function(i,v){ dati[v.tab][v.field]={} })
+    $.each(val,function(i,v){ dati[v.tab][v.field]=v.val })
+
+    if (dtm.length == 0) {
+      errori.push("Il campo DTM - 'Motivazione cronologia' è obbligatorio! Devi scegliere almeno un valore dalla lista.");
+    }else {
+      dati.dtm=dtm;
+    }
+
+    $("#mtcWrap>div").each(function(){
+      label = $(this).find("[name=materiaLabel]").val();
+      materia = $(this).find("[name=materiaItem]").val();
+      materia = parseInt(materia);
+      tecnica = $(this).find("[name=tecnicaItem]").val();
+      if (tecnica) {
+        mtcVal.push({materia,tecnica});
+      }else {
+        errori.push("La materia '"+label+"' non ha nessuna tecnica associata. Seleziona uno o più valori dalla lista delle tecniche e clicca sul tasto ok per confermare la scelta.");
+      }
+    });
+    if (mtcVal.length == 0) {
+      errori.push("Devi selezionare almeno una materia e una tecnica! Segui le istruzioni presenti nella sezione specifica per una corretta compilazione dei campi.");
+    }else {
+      dati.mtc=mtcVal;
+    }
+
+    let countMis = 0;
+    $(".misure").each(function(){ if($(this).val()){countMis ++;} })
+    if (!$("[name=misr]").is(':checked') && countMis == 0) {
+      errori.push("Devi inserire almeno una misura o cliccare su 'misure non rilevabili'");
+    }
+
+    if(errori.length>0){
+      $("#errorDiv").fadeIn('fast')
+      $("#errorDiv>ul").html('');
+      errori.forEach((errore, i) => {
+        $("<li/>",{class:'list-group-item'}).text(errore).appendTo('#errorDiv>ul')
+      });
+      return false;
+    }
+    
+    console.log(dati);
+  }
 }

@@ -25,7 +25,7 @@ $(document).ready(function() {
   $("[name=piano]").on('change', function(){
     let piano = $(this).val();
     $("#lcSalaDiv").fadeIn('fast');
-    $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
+    $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,dtm#lcRipianoDiv").fadeOut('fast');
     getSale(piano)
   })
 
@@ -87,7 +87,7 @@ $(document).ready(function() {
     $("#lcRipianoDiv").fadeIn('fast');
   })
 
-  // NOTE: materia autocomplete
+  // NOTE: materia autocompletedtm
   $.ajax({
     url: API,
     type: 'POST',
@@ -181,7 +181,7 @@ $(document).ready(function() {
       data: {trigger:'vocabolari', tab:'liste.ra_ogtd', filter:{field:'classe', value:cls2}}
     })
     .done(autocomp)
-    .fail(function(data) { console.log(data); });
+    .fail(function(data)dtm { console.log(data); });
 
     let piano = data[0].piano;
     $("[name=piano]").val(piano);
@@ -523,27 +523,27 @@ $(document).ready(function() {
       data: {trigger : trigger, id:id_scheda}
       })
       .done(function(data) {
-      if (data.res === true || data.msg == 'There is no active transaction') {
-        $(".toast").addClass('bg-success');
-        $(".toast-body").html('La scheda è stata correttamente eliminata');
-        $(".toast").toast({delay:3000});
-        $(".toast").toast('show');
-        $('.toast').on('hidden.bs.toast', function () {
-        $(".toast").removeClass('bg-success');
-        window.location.href = 'scheda_lista.php?tipo='+tipoScheda;
-        })
-        window.setTimeout(function(){ window.location.href = 'scheda_lista.php?tipo='+tipoScheda; },3000);
-      }else {
-        $(".toast").removeClass('[class^="bg-"]').addClass('bg-danger');
-        $("#headerTxt").html('Errore nella query');
-        $(".toast>.toast-body").html(data.msg);
-        $(".toast").toast({delay:3000});
-        $(".toast").toast('show');
-        $('.toast').on('hidden.bs.toast', function () {
-        $(".toast").removeClass('bg-danger');
-        })
-        $(".tastischeda").show();
-      }
+        if (data.res === true || data.msg == 'There is no active transaction') {
+          $(".toast").addClass('bg-success');
+          $(".toast-body").html('La scheda è stata correttamente eliminata');
+          $(".toast").toast({delay:3000});
+          $(".toast").toast('show');
+          $('.toast').on('hidden.bs.toast', function () {
+          $(".toast").removeClass('bg-success');
+          window.location.href = 'scheda_lista.php?tipo='+tipoScheda;
+          })
+          window.setTimeout(function(){ window.location.href = 'scheda_lista.php?tipo='+tipoScheda; },3000);
+        }else {
+          $(".toast").removeClass('[class^="bg-"]').addClass('bg-danger');
+          $("#headerTxt").html('Errore nella query');
+          $(".toast>.toast-body").html(data.msg);
+          $(".toast").toast({delay:3000});
+          $(".toast").toast('show');
+          $('.toast').on('hidden.bs.toast', function () {
+          $(".toast").removeClass('bg-danger');
+          })
+          $(".tastischeda").show();
+        }
       })
       .fail(function() {console.log("error"); });
     }
@@ -619,6 +619,7 @@ $(document).ready(function() {
         tecnica = $(this).find("[name=tecnicaItem]").val();
         mtcVal.push({materia,tecnica});
       });
+
       if (mtcVal.length == 0) {
         alert("Attenzione, devi selezionare almeno una materia e una tecnica!");
         return false;

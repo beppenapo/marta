@@ -63,3 +63,7 @@ $(document).ready(function() {
   })
   .fail(function(data) { console.log(data); });
 });
+
+$("[name=submit]").on('click',function(e){
+  salvaScheda(e);
+});

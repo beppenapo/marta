@@ -18,7 +18,7 @@ require("api/php/scheda.php");
             <h3 class="border-bottom">Stai inserendo una nuova scheda Numismatica (NU)</h3>
             <small class="text-danger font-weight-bold d-block">* Campo obbligatorio</small>
             <small class="font-weight-bold d-block">* Obbligatorietà di contesto</small>
-            <small class="d-block">Campo facoltativo</small>
+            <small class="d-block">* Campo facoltativo</small>
           </div>
         </div>
         <form id="formScheda" autocomplete="off">
@@ -93,6 +93,7 @@ require("api/php/scheda.php");
             require_once($formFolder.'mt.html');
           ?>
 
+
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>
@@ -163,8 +164,15 @@ require("api/php/scheda.php");
           ?>
           <div class="form-group">
             <div class="row">
-              <div class="col-6">
+              <div class="col-md-4 col-lg-3">
                 <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit">salva dati</button>
+                <a href="dashboard.php" class="btn btn-sm btn-outline-secondary">annulla</a>
+              </div>
+              <div class="col-md-8 col-lg-9">
+                <div id="errorDiv">
+                  <h6 class="text-danger font-weight-bold" >Prima di salvare correggi i seguenti errori</h6>
+                  <ul class="list-group list-group-flush"></ul>
+                </div>
               </div>
             </div>
           </div>

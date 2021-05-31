@@ -3,9 +3,8 @@
     <legend class="w-auto bg-marta text-white border  rounded p-1">MT - DATI TECNICI</legend>
     <fieldset id="mtcFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom">mtc - materia e tecnica</legend>
-      <div class="form-row mb-3">
+      <div class="form-row my-3">
         <div class="col">
-          <h6 class="border-bottom text-danger font-weight-bold">MTC - Materia e tecnica</h6>
           <small class="d-block m-0 text-muted"><i class="fas fa-info-circle"></i> Campo multiplo, dopo aver selezionato la materia aggiungi una o più tecniche selezionandole dalla lista (inizia a digitare il nome della tecnica per visualizzare le opzioni disponibili) e conferma la scelta utilizzando il tasto "+".<br/>Quando il record è completo clicca sul tasto "ok".<br/>Ripeti la sequenza per aggiungere una nuova materia e associarle tecniche specifiche.<br/>Se il materiale non è presente in lista selezionare "Materiale non presente in lista"<br/>Se la tecnica non è presente in lista selezionare "Tecnica non presente in lista"</small>
         </div>
       </div>
@@ -39,7 +38,7 @@
       <div class="form-row mb-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input tab" id="misr" name="misr" value="MNR" data-table="mis">
+            <input type="checkbox" class="custom-control-input tab" id="misr" name="misr" value="MNR" data-table="mis" checked>
             <label class="custom-control-label" for="misr">Misure non rilevabili</label>
           </div>
         </div>
@@ -47,37 +46,37 @@
       <div class="form-row mb-3">
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misa">Altezza</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misa" name="misa" value="" data-table="mis">
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misa" name="misa" value="" data-table="mis" disabled>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misl">Larghezza</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="misl" value="" data-table="mis">
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="misl" value="" data-table="mis" disabled>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misp">Profondità</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misp" name="misp" value="" data-table="mis">
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misp" name="misp" value="" data-table="mis" disabled>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misd">Diametro</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misd" name="misd" value="" data-table="mis">
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misd" name="misd" value="" data-table="mis" disabled>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misn">Lunghezza</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misn" name="misn" value="" data-table="mis">
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misn" name="misn" value="" data-table="mis" disabled>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="miss">Spessore</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="miss" value="" data-table="mis">
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="miss" value="" data-table="mis" disabled>
         </div>
       </div>
       <div class="form-row mb-3">
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misg">Peso</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misg" name="misg" value="" data-table="mis">
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misg" name="misg" value="" data-table="mis" disabled>
         </div>
         <div class="col">
           <label for="misv">Misure varie</label>
-          <textarea class="form-control form-control-sm tab misure" id="misv" name="misv" value="" rows="4" placeholder="indicare altre misure utili, specificando sia il tipo di misura, sia la parte presa in esame, sia l'unità di misura" data-table="mis"></textarea>
+          <textarea class="form-control form-control-sm tab misure" id="misv" name="misv" value="" rows="4" placeholder="indicare altre misure utili, specificando sia il tipo di misura, sia la parte presa in esame, sia l'unità di misura" data-table="mis" disabled></textarea>
         </div>
       </div>
     </fieldset>
