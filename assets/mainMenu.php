@@ -15,6 +15,20 @@
       </ul>
     </li>
     <li>
+      <p class='text-info'><i class="fas fa-folder-open fa-fw"></i> aggiungi authority file</p>
+      <ul class="subMenu">
+        <li>
+          <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova ricognizione"><i class="fas fa-chevron-right fa-fw"></i> ricognizione</a>
+        </li>
+        <li>
+          <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova scheda sito"><i class="fas fa-chevron-right fa-fw"></i> scheda sito</a>
+        </li>
+        <li>
+          <a href="bibliografia_add.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci un nuovo record bibliografico"><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
+        </li>
+      </ul>
+    </li>
+    <li>
       <p class='text-success'><i class="fas fa-database fa-fw"></i> aggiungi record</p>
       <ul class="subMenu">
         <li>
@@ -22,9 +36,6 @@
         </li>
         <li>
           <a href="scheda-nu.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova scheda NU"><i class="fas fa-chevron-right fa-fw"></i> scheda NU</a>
-        </li>
-        <li>
-          <a href="bibliografia_add.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci un nuovo record bibliografico"><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
         </li>
       </ul>
     </li>

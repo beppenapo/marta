@@ -256,7 +256,6 @@ function getList(obj){
 }
 
 function buildList(data, sel){
-  console.log(data);
   let el = $("[name="+sel+"]");
   $("<option/>", {value:'', text:'--seleziona valore--'}).prop('selected', true).prop('disabled', false).appendTo(el);
   $.each(data,function(i, v){
@@ -310,7 +309,6 @@ function stat(){
 }
 $(".toast").hide();
 function createToast(obj){
-  console.log(obj);
   obj.titolo='Risultato query';
   classe = obj.res === true ? 'bg-success' : 'bg-danger';
   $(".toast").removeClass('[class^="bg-"]').addClass(classe);
@@ -434,7 +432,7 @@ function delbiblioref(id_biblio){
 }
 
 function mtcWrap(item, tecnica_value = null){
-  var label = item.label.replace(/\s+/g, '-');
+  var label = item.label.replace(/\s+|'/g, '-');
   const wrap = $("#mtcWrap");
   if ($("#"+label+"Row").length > 0) {
     $("[name=materia]").val('');
@@ -554,6 +552,8 @@ function listaScheda(tiposcheda){
 ////////////////////////////////////////////
 $("#errorDiv").hide();
 function salvaScheda(e){
+  $("#errorDiv").hide()
+  $("#errorDiv>ul").html('');
   let isvalidate = $("#formScheda")[0].checkValidity()
   if (isvalidate) {
     let dati={}
@@ -616,7 +616,18 @@ function salvaScheda(e){
       });
       return false;
     }
-    
     console.log(dati);
+    $.ajax({
+      url: 'api/scheda.php',
+      type: "POST",
+      dataType: 'json',
+      data: {trigger : 'addScheda',  dati}
+    })
+    .done(function(data){
+      data.url='schedaView.php?sk='+data.scheda;
+      createToast(data);
+    })
+    .fail(function(){console.log("error");});
+
   }
 }

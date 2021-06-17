@@ -3,18 +3,6 @@ $(document).ready(function() {
   $("#tskTxt").text('NU - Numismatica');
   $("[name=tsk]").val(2);
 
-  $('[name=submit]').on('click', function (e) {
-    isvalidate = $("#formScheda")[0].checkValidity();
-    if (isvalidate) {
-      e.preventDefault();
-      dati = {};
-      tab = [];
-      $("[data-table]").each(function(){tab.push($(this).data('table'));})
-      tab = tab.filter((v, p) => tab.indexOf(v) == p);
-      console.log(tab);
-    }
-  });
-
   // NOTE: materia autocomplete
   $.ajax({
     url: "api/scheda.php",
@@ -64,6 +52,4 @@ $(document).ready(function() {
   .fail(function(data) { console.log(data); });
 });
 
-$("[name=submit]").on('click',function(e){
-  salvaScheda(e);
-});
+$("[name=submit]").on('click',function(e){ salvaScheda(e); });

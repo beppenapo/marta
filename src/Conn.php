@@ -33,8 +33,10 @@ class Conn {
       $exec = $pdo->prepare($sql);
       $exec->execute();
       return $exec->fetchAll(PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     } catch (\Exception $e) {
-      return $e->getMessage();
+      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     }
   }
 
@@ -58,8 +60,10 @@ class Conn {
       $exec->execute($dati);
       $returning = $exec->fetchAll();
       return array('res' => true, 'field'=>$returning[0][0] );
+    } catch (\PDOException $e) {
+      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     } catch (\Exception $e) {
-      return array('res'=>false, 'msg'=>$e->getMessage());
+      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     }
   }
   public function buildInsert(string $tab, array $dati){

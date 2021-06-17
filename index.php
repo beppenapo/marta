@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php
+require("api/php/home.php");
+?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
   <head>
@@ -10,7 +12,7 @@
   <body>
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
-    <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
+    <!-- <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div> -->
     <main class="bg-light">
       <div id="countDownWrap" class="mb-5 py-3 bg-white border-top border-bottom">
         <div class="info text-marta"><h1>IL MUSEO MArTA 3.0</h1></div>
@@ -32,15 +34,15 @@
                 <div class="display-4 text-success text-center" id="numschede"></div>
                 <div class="d-flex justify-content-between">
                   <div class="progress w-50 mr-1">
-                    <div class="progress-bar bg-success"  id="raBar" role="progressbar" aria-valuemin="0" aria-valuemax="100">RA</div>
+                    <div class="progress-bar bg-success"  id="raBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->raPerc; ?>%">RA</div>
                   </div>
                   <div class="progress w-50">
-                    <div class="progress-bar" id="nuBar" role="progressbar" aria-valuemin="0" aria-valuemax="100">NU</div>
+                    <div class="progress-bar" id="nuBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->nuPerc; ?>%">NU</div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <small>tot.: <span id="totSchede"></span></small>
-                  <small><span id="percSchedeOk"></span>% completate</small>
+                  <small>tot.: <?php echo (int)$obj->ra+(int)$obj->nu; ?></small>
+                  <small><?php echo (int)$obj->raPerc+(int)$obj->nuPerc; ?>% completate</small>
                 </div>
               </div>
             </div>
@@ -54,11 +56,11 @@
                 </div>
                 <div class="display-4 text-danger text-center" id="numFoto"></div>
                 <div class="progress">
-                  <div class="progress-bar bg-danger" id="fotoBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-danger" id="fotoBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->fotoPerc; ?>%"></div>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <small>tot.: 80000</small>
-                  <small><span id="percFoto"></span>% completate</small>
+                  <small>tot.: <?php echo (int)$obj->totfoto; ?></small>
+                  <small><?php echo (int)$obj->fotoPerc; ?>% completate</small>
                 </div>
                 <div>
                 </div>
@@ -74,11 +76,11 @@
                 </div>
                 <div class="display-4 text-primary text-center" id="numStereo"></div>
                 <div class="progress">
-                  <div class="progress-bar bg-primary" role="progressbar" id="stereoBar" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-primary" role="progressbar" id="stereoBar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->stereoPerc; ?>%"></div>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <small>tot.: 5000</small>
-                  <small><span id="stereoPerc"></span>% completate</small>
+                  <small>tot.: <?php echo (int)$obj->totstereo; ?></small>
+                  <small><?php echo (int)$obj->stereoPerc; ?>% completate</small>
                 </div>
                 <div>
                 </div>
@@ -94,11 +96,11 @@
                 </div>
                 <div class="display-4 text-warning text-center" id="numModelli"></div>
                 <div class="progress">
-                  <div class="progress-bar bg-warning" id="3dBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-warning" id="3dBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->modelliPerc; ?>%"></div>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <small>tot.: 110</small>
-                  <small><span id="perc3d"></span>% completati</small>
+                  <small>tot.: <?php echo (int)$obj->tot3d; ?></small>
+                  <small><?php echo (int)$obj->modelliPerc; ?>% completati</small>
                 </div>
                 <div>
                 </div>
@@ -106,9 +108,11 @@
             </div>
           </div>
         </div>
-        <?php if (isset($_SESSION['id'])) { ?>
-
-        <?php } ?>
+      </div>
+      <div class="fotoWrap">
+        <?php
+        
+        ?>
       </div>
     </main>
     <?php require('assets/footer.html'); ?>
