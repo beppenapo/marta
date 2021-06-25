@@ -244,7 +244,7 @@ class Scheda extends Conn{
       $res = $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
       $this->commit();
       if ($res==true) {
-        $schedaId = array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Stai per essere reindirizzato verso la pagina di visualizzazione ella scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente',"scheda"=>$schedaId['field'],"nctn"=>$nctn['nctn']);
+        $schedaId = array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente',"scheda"=>$schedaId['field'],"nctn"=>$nctn['nctn']);
       }
     }
       return $schedaId;

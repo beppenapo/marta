@@ -317,13 +317,19 @@ function createToast(obj){
   $(".toast").toast({delay:3000});
   $(".toast").show();
   $(".toast").toast('show');
-  $('.toast').on('hidden.bs.toast', function () {
-    $(".toast").removeClass(classe);
-    if (obj.res === true) {
-      window.setTimeout(function(){window.location.href = obj.url},1000);
-    }
-    $(".toast").hide();
-  })
+  $("[name='continua']").on('click', function(){window.location.reload(true);})
+
+  if (obj.res === true) {
+    $("[name='continua']").show();
+    $("[name='viewRec']").text('visualizza record').on('click', function(){window.location.href = obj.url});
+  }else {
+    $("[name='viewRec']").text('ok, chiudi alert');
+    $("[name='continua']").hide();
+    $('.toast').on('hidden.bs.toast', function () {
+      $(".toast").removeClass(classe);
+      $(".toast").hide();
+    })
+  }
 }
 
 // NOTE: funzioni gestione schede ///
