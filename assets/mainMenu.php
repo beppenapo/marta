@@ -7,7 +7,7 @@
       <p class='text-primary'><i class="fas fa-archive fa-fw"></i> archivi</p>
       <ul class="subMenu">
         <li>
-          <a href="#" class='d-block m-0 animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> archivio schede</a>
+          <a href="schede.php" class='d-block m-0 animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> archivio schede</a>
         </li>
         <li>
           <a href="bibliografia.php" class='d-block m-0 animated' title="archivio record bibliografici" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> archivio bibliografia</a>
