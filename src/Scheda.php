@@ -364,29 +364,44 @@ class Scheda extends Conn{
 
   protected function editSection(string $tab, int $scheda, array $dati, int $prim){
     $dati['scheda'] = $scheda;
-  if ($prim == 1) {
-    $filter_scheda = ['scheda'=>$scheda];
-    $sqldel = $this->buildDelete($tab,$filter_scheda);
-    $resdel = $this->prepared($sqldel);
-    if (!$resdel) { throw new \Exception($resdel, 1);}
-  }
+    if ($prim == 1) {
+      $filter_scheda = ['scheda'=>$scheda];
+      $sqldel = $this->buildDelete($tab,$filter_scheda);
+      $resdel = $this->prepared($sqldel);
+      if (!$resdel) { throw new \Exception($resdel, 1);}
+    }
     $sql = $this->buildInsert($tab,$dati);
     $res = $this->prepared($sql,$dati);
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
   }
 
-  public function listaScheda(int $tipo, string $search){
-    $filtroUt = " AND cm.compilatore = ".$_SESSION['id'];
-    if (isset($_SESSION['classe']) && $_SESSION['classe'] == 1) { $filtroUt = ""; }
-    $sql = "
-      SELECT scheda.id, scheda.titolo, cm.cmpd AS data_ins, (utenti.cognome || ' ' || utenti.nome) AS compilatore
-      FROM scheda
-      JOIN cm ON cm.scheda = scheda.id
-      JOIN utenti ON utenti.id = cm.cmpn
-      WHERE scheda.tipo = ". $tipo."
-        AND (scheda.titolo ILIKE '%".$search."%' OR TO_CHAR(cm.cmpd, 'YYYY-MM-DD') ILIKE '%".$search."%' OR utenti.cognome ILIKE '%".$search."%' OR utenti.nome ILIKE '%".$search."%')". $filtroUt."
-      ORDER BY data_ins DESC;";
+  public function listaSchede(array $dati = null){
+    $where = '';
+    $filter = [];
+    if($dati){
+      if(isset($dati['tipo'])){array_push($filter,' s.tsk = '.$dati['tipo']);}
+      if(isset($dati['usr'])){array_push($filter,' s.cmpn = '.$dati['usr']);}
+      $where = ' where '.join(" and ",$filter);
+    }
+
+    $sql="SELECT s.id, nctn.nctn, s.titolo, s.tsk, tsk.value as tipo, ogtd.value as ogtd, array_agg(m.value order by materia asc) as materia,concat (dtzg.value,' ', dtzs.value) as cronologia, lc.piano, concat(loc.sala,' ', loc.descrizione) as sala
+    from scheda s
+    INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
+    INNER JOIN nctn on nctn_scheda.nctn = nctn.id
+    INNER JOIN liste.tsk as tsk on s.tsk = tsk.id
+    INNER JOIN og on og.scheda = s.id
+    INNER JOIN liste.ogtd as ogtd on og.ogtd = ogtd.id
+    INNER JOIN mtc on mtc.scheda = s.id
+    INNER JOIN liste.materia as m on mtc.materia = m.id
+    INNER JOIN dt on dt.scheda = s.id
+    INNER JOIN liste.dtzg on dt.dtzg = dtzg.id
+    INNER JOIN liste.dtzs on dt.dtzs = dtzs.id
+    INNER JOIN lc on lc.scheda = s.id
+    INNER JOIN liste.sale as loc on lc.sala = loc.id
+    INNER JOIN utenti u on s.cmpn = u.id
+    ".$where."
+    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, ogtd.value, dtzg.value, dtzs.value, lc.piano, loc.sala, loc.descrizione";
     return $this->simple($sql);
   }
 }
