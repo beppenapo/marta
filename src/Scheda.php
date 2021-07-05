@@ -397,7 +397,7 @@ class Scheda extends Conn{
     $sql="SELECT s.id, nctn.nctn, s.titolo, s.tsk, tsk.value as tipo, ogtd.value as ogtd, array_agg(m.value order by materia asc) as materia,concat (dtzg.value,' ', dtzs.value) as cronologia, lc.piano, concat(loc.sala,' ', loc.descrizione) as sala
     from scheda s
     INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
-    INNER JOIN nctn on nctn_scheda.nctn = nctn.id
+    INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
     INNER JOIN liste.tsk as tsk on s.tsk = tsk.id
     INNER JOIN og on og.scheda = s.id
     INNER JOIN liste.ogtd as ogtd on og.ogtd = ogtd.id
