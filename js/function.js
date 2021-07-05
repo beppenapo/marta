@@ -35,6 +35,13 @@ if (screen.width >= 992 ) {
   $("body>nav#mainMenu").on("click", function (event) { event.stopPropagation(); });
 }
 
+// toggle nctn
+$("[name=toggleNctn]").on('click', function(){
+  $('[name=nctn]')
+    .prop('disabled', function(i, v) { return !v; })
+    .prop('required', function(i, v) { return !v; });
+})
+
 // funzioni per select dinamiche sezione LC
 $(".lcSel").hide();
 $("[name=piano]").on('change', function(){
@@ -561,6 +568,7 @@ function salvaScheda(e){
   $("#errorDiv").hide()
   $("#errorDiv>ul").html('');
   let isvalidate = $("#formScheda")[0].checkValidity()
+  // let isvalidate = true
   if (isvalidate) {
     let dati={}
     let tab=[]

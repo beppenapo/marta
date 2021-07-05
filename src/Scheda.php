@@ -6,12 +6,14 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function nctnList(){ return $this->simple("select nctn from nctn where libero = true order by nctn asc;"); }
+
   private function getNctn(){
-    $res = $this->simple("select min(id) nctn from nctn where libero = true;");
+    $res = $this->simple("select min(nctn) nctn from nctn where libero = true;");
     return $res[0];
   }
   private function setNctn(array $dati){
-    $filter = ["id"=>$dati['nctn']];
+    $filter = ["nctn"=>$dati['nctn']];
     unset($dati['nctn']);
     $sql = $this->buildUpdate('nctn',$filter,$dati);
     return $this->prepared($sql,$dati);
@@ -226,28 +228,35 @@ class Scheda extends Conn{
       $res= $this->addSection('lc', $schedaId['field'], $dati['lc']);
       $res= $this->addSection('mis', $schedaId['field'], $dati['mis']);
       $res= $this->addSection('og', $schedaId['field'], $dati['og']);
-      $res= $this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);
       $res= $this->addSection('tu', $schedaId['field'], $dati['tu']);
-      foreach ($dati['dtm'] as $value) {$res= $this->addSection('dtm',$schedaId['field'],array("dtm"=>(int)$value));} // MOTIVAZIONE CRONOLOGIA
+      foreach ($dati['dtm'] as $value) {$res= $this->addSection('dtm',$schedaId['field'],array("dtm"=>(int)$value));}
       foreach ($dati['mtc'] as $val) {
         $datiMtc = array('materia'=>$val['materia'], 'tecnica'=>$val['tecnica']);
         $res= $this->addSection('mtc', $schedaId['field'], $datiMtc);
       }
+      if (isset($dati['og_nu'])) {$res= $this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
       if (isset($dati['ub'])) {$res= $this->addSection('ub', $schedaId['field'], $dati['ub']);}
       if (isset($dati['gp'])) {$res= $this->addSection('gp', $schedaId['field'], $dati['gp']);}
       if (isset($dati['rcg'])) {$res= $this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
       if (isset($dati['dsc'])) {$res= $this->addSection('dsc', $schedaId['field'], $dati['dsc']);}
       if (isset($dati['ain'])) {$res= $this->addSection('ain', $schedaId['field'], $dati['ain']);}
       if (isset($dati['an'])) {$res= $this->addSection('an', $schedaId['field'], $dati['an']);}
-      $nctn = $this->getNctn();
-      $res = $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
-      $res = $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
+
+      // $nctn = isset($dati['nctn_scheda']) ? $dati['nctn_scheda'] : $this->getNctn();
+      if (isset($dati['nctn_scheda'])) {
+        $res= $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
+        $res = $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
+      }else {
+        $nctn = $this->getNctn();
+        $res = $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
+        $res = $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
+      }
       $this->commit();
       if ($res==true) {
-        $schedaId = array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente',"scheda"=>$schedaId['field'],"nctn"=>$nctn['nctn']);
+        $schedaId = array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente', "scheda"=>$schedaId['field'], "nctn"=>$nctn['nctn']);
       }
     }
-      return $schedaId;
+    return $schedaId;
   }
 
   public function editScheda(array $dati){
