@@ -36,14 +36,14 @@ require("api/php/scheda.php");
                   <label for="ogtd" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="scorri la lista per selezionare il valore desiderato"></i> OGTD - Definizione</label>
                   <select class="form-control form-control-sm tab" data-table="og_nu" id="ogtd" name="ogtd" required>
                     <option value="" selected disabled>-- definizione --</option>
-                    <?php echo join("",$liste['ogtd']); ?>
+                    <?php echo join("",$listeNU['ogtd']); ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="ogr" class="text-danger font-weight-bold">OGR - Disponibilità</label>
                   <select class="form-control form-control-sm tab" data-table="og_nu" id="ogr" name="ogr" required>
                     <option value="" selected disabled>-- disponibilità --</option>
-                    <?php echo join("",$liste['ogr']); ?>
+                    <?php echo join("",$listeNU['ogr']); ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
@@ -62,21 +62,21 @@ require("api/php/scheda.php");
                   <label for="ogto">OGTO - Nominale</label>
                   <select class="form-control form-control-sm tab" data-table="og_nu" id="ogto" name="ogto">
                     <option value="" selected disabled>-- nominale --</option>
-                    <?php echo join("",$liste['ogto']); ?>
+                    <?php echo join("",$listeNU['ogto']); ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="ogts">OGTS - Specifiche</label>
                   <select class="form-control form-control-sm tab" data-table="og_nu" id="ogts" name="ogts">
                     <option value="" selected disabled>-- specifiche --</option>
-                    <?php echo join("",$liste['ogts']); ?>
+                    <?php echo join("",$listeNU['ogts']); ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="ogtr">OGTR - Serie</label>
                   <select class="form-control form-control-sm tab" data-table="og_nu" id="ogtr" name="ogtr">
                     <option value="" selected disabled>-- serie --</option>
-                    <?php echo join("",$liste['ogtr']); ?>
+                    <?php echo join("",$listeNU['ogtr']); ?>
                   </select>
                 </div>
               </div>

@@ -8,14 +8,14 @@
           <label for="dtzg" class="text-danger font-weight-bold">DTZG - Fascia cronologica</label>
           <select class="form-control form-control-sm tab" data-table="dt" id="dtzg" name="dtzg" required>
             <option value="" selected disabled>-- fascia --</option>
-            <?php echo join("",$liste['dtzg']); ?>
+            <?php echo join("",$listeNU['dtzg']); ?>
           </select>
         </div>
         <div class="mt-3">
           <label for="dtzs" class="text-danger font-weight-bold">DTZS - Frazione cronologica</label>
           <select class="form-control form-control-sm tab" data-table="dt" id="dtzs" name="dtzs" required>
             <option value="" selected disabled>--frazione--</option>
-            <?php echo join("",$liste['dtzs']); ?>
+            <?php echo join("",$listeNU['dtzs']); ?>
           </select>
         </div>
       </fieldset>
@@ -36,7 +36,7 @@
           <small class="d-block m-0 text-danger"><i class="fas fa-info-circle"></i> Campo multiplo obbligatorio, devi inserire almeno un valore. Puoi aggiungere più motivazioni cliccando sui valori presenti in lista.</small>
           <select class="form-control form-control-sm" id="dtm" name="dtm" required>
             <option value="" selected disabled>--motivazione--</option>
-            <?php echo join("",$liste['dtm']); ?>
+            <?php echo join("",$listeNU['dtm']); ?>
           </select>
           <div id="dtmWrap"></div>
         </div>

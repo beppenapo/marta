@@ -16,7 +16,7 @@
           <label for="acqt" class="font-weight-bold obbligatorio">ACQT - Tipo acquisizione</label>
           <select class="form-control form-control-sm tab obbligatorio" id="acqt" name="acqt" data-table="tu" disabled>
             <option value="" selected disabled>--seleziona valore--</option>
-            <?php echo join("",$liste['acqt']); ?>
+            <?php echo join("",$listeNU['acqt']); ?>
           </select>
         </div>
         <div class="col-md-3">
@@ -40,7 +40,7 @@
           <label for="cdgg" class="font-weight-bold text-danger">CDGG - Indicazione giuridica</label>
           <select class="form-control form-control-sm tab" id="cdgg" name="cdgg" data-table="tu" required>
             <option value="" selected disabled>--seleziona valore--</option>
-            <?php echo join("",$liste['cdgg']); ?>
+            <?php echo join("",$listeNU['cdgg']); ?>
           </select>
         </div>
       </div>
@@ -60,7 +60,7 @@
           <label for="nvct" class="font-weight-bold obbligatorio">NVCT - Tipo provvedimento</label>
           <select class="form-control form-control-sm tab obbligatorio" id="nvct" name="nvct" data-table="tu" disabled>
             <option value="" selected disabled>--seleziona valore--</option>
-            <?php echo join("",$liste['nvct']); ?>
+            <?php echo join("",$listeNU['nvct']); ?>
           </select>
         </div>
         <div class="col-md-6">

@@ -34,9 +34,13 @@ class Scheda extends Conn{
   }
   public function listeRA(){
     $opt=[];
-    $ogtd=array("tab"=>"liste.ogtd","filter"=>array("field"=>'tipo',"value"=>1), "order"=>3);
+    $ogtd=array("tab"=>"liste.ra_cls_l4", "order"=>3);
     $ogtdArr=$this->vocabolari($ogtd);
     $opt['ogtd']=$this->buildSel($ogtdArr);
+
+    $l3=array("tab"=>"liste.ra_cls_l3", "order"=>3);
+    $l3Arr=$this->vocabolari($l3);
+    $opt['l3']=$this->buildSel($l3Arr);
 
     return $opt;
   }

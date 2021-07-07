@@ -33,45 +33,29 @@ require("api/php/scheda.php");
 
               <div class="form-row">
                 <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="ogtd" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine o locuzione che individua il bene oggetto della scheda in base alla connotazione funzionale e morfologica."></i> OGTD - Definizione</label>
-                  <select class="form-control form-control-sm tab" data-table="og" id="ogtd" name="ogtd" required>
+                  <label for="l3" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Categoria - livello III"></i> CLS - Categoria</label>
+                  <select class="form-control form-control-sm tab" data-table="og-ra" id="l3" name="l3" required>
                     <option value="" selected disabled>-- definizione --</option>
-                    <?php echo join("",$listeRA['ogtd']); ?>
+                    <?php echo join("",$listeRA['l3']); ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="ogtt"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Specifiche relative alla tipologia del bene catalogato.<br>Esempio<br>OGTD: Anfora<br>OGTT: Dressel 20"></i> OGTT - Classificazione tipologica</label>
+                  <label for="l4" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine o locuzione che individua il bene oggetto della scheda in base alla connotazione funzionale e morfologica."></i> OGTD - Definizione</label>
+                  <select class="form-control form-control-sm tab" data-table="og-ra" id="l4" name="l4" required>
+                    <option value="" selected disabled>-- definizione --</option>
+                  </select>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                  <label for="l5" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine che specifica forma, funzione, parte o produzione (se si tratta di ceramica)."></i> OGTD - specifiche</label>
+                  <select class="form-control form-control-sm tab" data-table="og-ra" id="l5" name="l5">
+                    <option value="" selected disabled>-- definizione --</option>
+                  </select>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                  <label for="ogtt"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Specifiche relative alla tipologia del bene catalogato.<br>Esempio<br>OGTD: Anfora<br>OGTT: Dressel 20"></i> OGTT - Tipologia</label>
                   <input type="text" class="form-control form-control-sm tab" data-table="og_nu" name="ogtt" id="ogtt" value="">
                 </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="ogth">OGTH - Classificazione funzionale</label>
-                  <input type="text" class="form-control form-control-sm tab" data-table="og_nu" name="ogth" id="ogth" value="">
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="ogtl">OGTL - Legenda tipo</label>
-                  <input type="text" class="form-control form-control-sm tab" data-table="og_nu" name="ogtl" id="ogth" value="">
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="ogto">OGTO - Nominale</label>
-                  <select class="form-control form-control-sm tab" data-table="og_nu" id="ogto" name="ogto">
-                    <option value="" selected disabled>-- nominale --</option>
-                    <?php echo join("",$liste['ogto']); ?>
-                  </select>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="ogts">OGTS - Specifiche</label>
-                  <select class="form-control form-control-sm tab" data-table="og_nu" id="ogts" name="ogts">
-                    <option value="" selected disabled>-- specifiche --</option>
-                    <?php echo join("",$liste['ogts']); ?>
-                  </select>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="ogtr">OGTR - Serie</label>
-                  <select class="form-control form-control-sm tab" data-table="og_nu" id="ogtr" name="ogtr">
-                    <option value="" selected disabled>-- serie --</option>
-                    <?php echo join("",$liste['ogtr']); ?>
-                  </select>
-                </div>
+
               </div>
             </fieldset>
           </div>
