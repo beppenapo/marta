@@ -32,6 +32,14 @@ class Scheda extends Conn{
     if(empty($complete[0])){ return $default; }
     return $complete;
   }
+  public function listeRA(){
+    $opt=[];
+    $ogtd=array("tab"=>"liste.ogtd","filter"=>array("field"=>'tipo',"value"=>1), "order"=>3);
+    $ogtdArr=$this->vocabolari($ogtd);
+    $opt['ogtd']=$this->buildSel($ogtdArr);
+
+    return $opt;
+  }
   public function listeNu(){
     $opt=[];
     $ogtd=array("tab"=>"liste.ogtd","filter"=>array("field"=>'tipo',"value"=>2));
@@ -145,7 +153,8 @@ class Scheda extends Conn{
 
   public function vocabolari(array $dati){
     $where = isset($dati['filter']) ? ' where '. $dati['filter']['field'] . "=" . $dati['filter']['value'] : '';
-    $sql = "select * from ". $dati['tab'] . $where. " order by 2 asc;";
+    $order = isset($dati['order']) ? $dati['order'] : '2';
+    $sql = "select * from ". $dati['tab'] . $where. " order by ".$order." asc;";
     return $this->simple($sql);
   }
   public function autocomplete(array $dati){

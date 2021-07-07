@@ -7,6 +7,7 @@ require 'vendor/autoload.php';
 use \Marta\Scheda;
 $obj = new Scheda();
 $liste = $obj->listeNu();
+$listeRA = $obj->listeRA();
 $nctnList = $obj->nctnList();
 
 ?>
