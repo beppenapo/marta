@@ -34,7 +34,7 @@ require("api/php/scheda.php");
               <div class="form-row">
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="ogtd" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="scorri la lista per selezionare il valore desiderato"></i> OGTD - Definizione</label>
-                  <select class="form-control form-control-sm tab" data-table="og" id="ogtd" name="ogtd" required>
+                  <select class="form-control form-control-sm tab" data-table="og_nu" id="ogtd" name="ogtd" required>
                     <option value="" selected disabled>-- definizione --</option>
                     <?php echo join("",$liste['ogtd']); ?>
                   </select>

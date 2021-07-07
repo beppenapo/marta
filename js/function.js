@@ -473,24 +473,24 @@ function mtcWrap(item, tecnica_value = null){
   });
 }
 
-function autocomp(data){
-  ogtdVal=[];
-  data.forEach(function(item,idx){ ogtdVal.push({value:item.id,label:item.value}) });
-  $("[name=resetOgtd]").prop('disabled',false);
-  $( "[name=ogtdLabel]" ).prop('disabled',false).autocomplete({
-    minLength: 0,
-    source: ogtdVal,
-    change: function(event,ui){if(!ui.item){$("#ogtdAlert").fadeIn("fast");}},
-    select: function(event,ui){
-      $( "[name=ogtdLabel]" ).val( ui.item.label );
-      $( "[name=ogtd]" ).val( ui.item.value );
-      $("#ogtdAlert").fadeOut("fast");
-      return false;
-    }
-  }).focus(function() {
-    $(this).autocomplete('search', $(this).val())
-  });
-}
+// function autocomp(data){
+//   ogtdVal=[];
+//   data.forEach(function(item,idx){ ogtdVal.push({value:item.id,label:item.value}) });
+//   $("[name=resetOgtd]").prop('disabled',false);
+//   $( "[name=ogtdLabel]" ).prop('disabled',false).autocomplete({
+//     minLength: 0,
+//     source: ogtdVal,
+//     change: function(event,ui){if(!ui.item){$("#ogtdAlert").fadeIn("fast");}},
+//     select: function(event,ui){
+//       $( "[name=ogtdLabel]" ).val( ui.item.label );
+//       $( "[name=ogtd]" ).val( ui.item.value );
+//       $("#ogtdAlert").fadeOut("fast");
+//       return false;
+//     }
+//   }).focus(function() {
+//     $(this).autocomplete('search', $(this).val())
+//   });
+// }
 
 function reuseOption(v,text){
   $("<option/>").val(v).text(text).appendTo('[name=dtm]');

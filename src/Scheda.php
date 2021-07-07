@@ -225,47 +225,45 @@ class Scheda extends Conn{
   }
 
   public function addScheda(array $dati){
-    $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
-    $schedaSql = rtrim($schedaSql, ";") . " returning id;";
-    $schedaId = $this->returning($schedaSql,$dati['scheda']);
-    if ($schedaId['res']==true) {
+    try {
       $this->begin();
-      $res= $this->addSection('ad', $schedaId['field'], $dati['ad']);
-      $res= $this->addSection('co', $schedaId['field'], $dati['co']);
-      $res= $this->addSection('da', $schedaId['field'], $dati['da']);
-      $res= $this->addSection('dt', $schedaId['field'], $dati['dt']);
-      $res= $this->addSection('lc', $schedaId['field'], $dati['lc']);
-      $res= $this->addSection('mis', $schedaId['field'], $dati['mis']);
-      $res= $this->addSection('og', $schedaId['field'], $dati['og']);
-      $res= $this->addSection('tu', $schedaId['field'], $dati['tu']);
-      foreach ($dati['dtm'] as $value) {$res= $this->addSection('dtm',$schedaId['field'],array("dtm"=>(int)$value));}
+      $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
+      $schedaSql = rtrim($schedaSql, ";") . " returning id;";
+      $schedaId = $this->returning($schedaSql,$dati['scheda']);
+      $this->addSection('ad', $schedaId['field'], $dati['ad']);
+      $this->addSection('co', $schedaId['field'], $dati['co']);
+      $this->addSection('da', $schedaId['field'], $dati['da']);
+      $this->addSection('dt', $schedaId['field'], $dati['dt']);
+      $this->addSection('lc', $schedaId['field'], $dati['lc']);
+      $this->addSection('mis', $schedaId['field'], $dati['mis']);
+      $this->addSection('tu', $schedaId['field'], $dati['tu']);
+      foreach ($dati['dtm'] as $value) {$this->addSection('dtm',$schedaId['field'],array("dtm"=>(int)$value));}
       foreach ($dati['mtc'] as $val) {
         $datiMtc = array('materia'=>$val['materia'], 'tecnica'=>$val['tecnica']);
-        $res= $this->addSection('mtc', $schedaId['field'], $datiMtc);
+        $this->addSection('mtc', $schedaId['field'], $datiMtc);
       }
-      if (isset($dati['og_nu'])) {$res= $this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
-      if (isset($dati['ub'])) {$res= $this->addSection('ub', $schedaId['field'], $dati['ub']);}
-      if (isset($dati['gp'])) {$res= $this->addSection('gp', $schedaId['field'], $dati['gp']);}
-      if (isset($dati['rcg'])) {$res= $this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
-      if (isset($dati['dsc'])) {$res= $this->addSection('dsc', $schedaId['field'], $dati['dsc']);}
-      if (isset($dati['ain'])) {$res= $this->addSection('ain', $schedaId['field'], $dati['ain']);}
-      if (isset($dati['an'])) {$res= $this->addSection('an', $schedaId['field'], $dati['an']);}
-
-      // $nctn = isset($dati['nctn_scheda']) ? $dati['nctn_scheda'] : $this->getNctn();
+      if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
+      if (isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
+      if (isset($dati['ub'])) {$this->addSection('ub', $schedaId['field'], $dati['ub']);}
+      if (isset($dati['gp'])) {$this->addSection('gp', $schedaId['field'], $dati['gp']);}
+      if (isset($dati['rcg'])) {$this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
+      if (isset($dati['dsc'])) {$this->addSection('dsc', $schedaId['field'], $dati['dsc']);}
+      if (isset($dati['ain'])) {$this->addSection('ain', $schedaId['field'], $dati['ain']);}
+      if (isset($dati['an'])) {$this->addSection('an', $schedaId['field'], $dati['an']);}
       if (isset($dati['nctn_scheda'])) {
-        $res= $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
-        $res = $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
+        $nctn = $dati['nctn_scheda'];
+        $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
+        $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
       }else {
         $nctn = $this->getNctn();
-        $res = $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
-        $res = $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
+        $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
+        $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
       }
       $this->commit();
-      if ($res==true) {
-        $schedaId = array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente', "scheda"=>$schedaId['field'], "nctn"=>$nctn['nctn']);
-      }
+      return array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente', "scheda"=>$schedaId['field'], "nctn"=>$nctn['nctn']);
+    } catch (\Exception $e) {
+      return array("res"=>false,"msg"=>$e->getMessage());
     }
-    return $schedaId;
   }
 
   public function editScheda(array $dati){
