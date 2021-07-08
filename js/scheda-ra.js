@@ -17,12 +17,16 @@ $(document).ready(function() {
     ogtdSel(data)
   })
 
+  $("[name=deso]").keyup(function(){
+    $("#countDesoChar").text(1000 - $(this).val().length);
+});
+
   // NOTE: materia autocomplete
   $.ajax({
     url: "api/scheda.php",
     type: 'POST',
     dataType: 'json',
-    data: {trigger:'mtc', filter:1}
+    data: {trigger:'mtc', filter:2}
   })
   .done(function(data){
     $( "[name=materia]" ).autocomplete({

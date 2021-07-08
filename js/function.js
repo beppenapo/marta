@@ -204,7 +204,7 @@ $('body').on('click', '[name=addTecnica]', function(event) {
 
 $('body').on('click', '[name=addMtc]', function(event) {
   var materiaVal = $("[name=materia]").val();
-  materiaVal = materiaVal.replace(/\s+/g, '-');
+  materiaVal = materiaVal.replace(/[\s']+/g, '-');
   var t = $("#"+materiaVal+"Row").find('[name=tecnicaItem]').val();
   if(t.length == 0){
     alert("Devi selezionare almeno una tecnica e/o confermare la scelta cliccando sul tasto +");

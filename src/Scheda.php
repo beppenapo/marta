@@ -23,8 +23,8 @@ class Scheda extends Conn{
   }
 
   public function mtc(array $dati){
-    $out['mtc']=$this->simple("select * from liste.materia where tsk != ".$dati['filter']." order by 2 asc;");
-    $out['tcn']=$this->simple("select * from liste.tecnica where tsk != ".$dati['filter']." order by 2 asc;");
+    $out['mtc']=$this->simple("select * from liste.materia where tsk != ".$dati['filter']." order by 3 asc;");
+    $out['tcn']=$this->simple("select * from liste.tecnica where tsk != ".$dati['filter']." order by 3 asc;");
     return $out;
   }
   public function setCrono(array $dati){
@@ -34,6 +34,20 @@ class Scheda extends Conn{
     }
     if(empty($complete[0])){ return $default; }
     return $complete;
+  }
+
+  //sezione liste
+  public function listeComuni(){
+    $opt=[];
+    $tcl=array("tab"=>"liste.la_tcl", "order"=>2);
+    $tclArr=$this->vocabolari($tcl);
+    $opt['tcl']=$this->buildSel($tclArr);
+
+    $stim=array("tab"=>'liste.stim');
+    $stimArr=$this->vocabolari($stim);
+    $opt['stim']=$this->buildSel($stimArr);
+
+    return $opt;
   }
   public function listeRA(){
     $opt=[];
@@ -68,10 +82,6 @@ class Scheda extends Conn{
     $ogtr=array("tab"=>'liste.ogtr');
     $ogtrArr=$this->vocabolari($ogtr);
     $opt['ogtr']=$this->buildSel($ogtrArr);
-
-    $stim=array("tab"=>'liste.stim');
-    $stimArr=$this->vocabolari($stim);
-    $opt['stim']=$this->buildSel($stimArr);
 
     $gpl=array("tab"=>'liste.gpl');
     $gplArr=$this->vocabolari($gpl);

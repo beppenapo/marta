@@ -136,6 +136,10 @@ require("api/php/scheda.php");
                     <label for="dest" class="text-danger font-weight-bold">DEST - Alfabeto/scrittura rovescio</label>
                     <input type="text" class="form-control form-control-sm tab" data-table="da" id="dest" name="dest" value="" required>
                   </div>
+                  <div class="col-md-4">
+                    <label for="deso" class="text-danger font-weight-bold">DESO - Taglio</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="deso" name="deso" value="" required>
+                  </div>
                 </div>
                 <div class="form-row mb-3">
                   <div class="col-md-4">
