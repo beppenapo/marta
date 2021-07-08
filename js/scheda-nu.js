@@ -1,5 +1,6 @@
 const API = 'api/scheda.php';
 $(document).ready(function() {
+  $("#munsellFieldset").remove();
   $("#tskTxt").text('NU - Numismatica');
   $("[name=tsk]").val(2);
 

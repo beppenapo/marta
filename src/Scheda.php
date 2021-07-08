@@ -7,6 +7,7 @@ class Scheda extends Conn{
   function __construct(){}
 
   public function nctnList(){ return $this->simple("select nctn from nctn where libero = true order by nctn asc;"); }
+  public function munsellList(){ return $this->simple("select code from liste.munsell order by code asc;"); }
   public function ogtdSel(array $dati){
     return $this->simple("select * from liste.".$dati['tab']." where ".$dati['field']." = ".$dati['val']." order by value asc;");
   }

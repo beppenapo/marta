@@ -28,6 +28,7 @@
       </div>
       <div id="mtcWrap"></div>
     </fieldset>
+
     <fieldset id="misFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom">mis - misure</legend>
       <div class="form-row mb-3">
@@ -80,6 +81,21 @@
         </div>
       </div>
     </fieldset>
-
+    <fieldset id="munsellFieldset" class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom">Munsell</legend>
+      <div class="form-row mb-3">
+        <div class="col-sm-4 col-md-3 col-lg-2">
+          <label for="munsell">Codice</label>
+          <input type="text" placeholder="seleziona codice" class="form-control form-control-sm tab" id="munsell" name="munsell" value="" data-table="munsell" list="munsellList">
+          <datalist id="munsellList">
+            <?php
+            foreach($munsellList as $munsellEl){
+              echo "<option value='".$munsellEl['code']."'></option>";
+            }
+            ?>
+          </datalist>
+        </div>
+      </div>
+    </fieldset>
   </fieldset>
 </div>

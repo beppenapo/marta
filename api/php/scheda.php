@@ -10,5 +10,6 @@ $listeComuni = $obj->listeComuni();
 $listeNU = $obj->listeNu();
 $listeRA = $obj->listeRA();
 $nctnList = $obj->nctnList();
+$munsellList = $obj->munsellList();
 
 ?>
