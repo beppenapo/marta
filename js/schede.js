@@ -7,7 +7,7 @@ function buildTable(){
     url: 'api/scheda.php',
     type: 'POST',
     dataType: 'json',
-    data: { trigger: 'listaSchede' }
+    data: { trigger: 'listaSchede'}
   })
   .done(function(data) {
     data.forEach(function(v,i){
