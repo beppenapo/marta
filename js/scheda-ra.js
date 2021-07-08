@@ -2,6 +2,20 @@ const API = 'api/scheda.php';
 $(document).ready(function() {
   $("#tskTxt").text('RA - Reperto Archeologico');
   $("[name=tsk]").val(1);
+  $("[name=l3]").on('change',function(){
+    let l3 = $(this).val();
+    $("[name=l4]").prop('disabled', false);
+    $("[name=l5]").prop('disabled', true);
+    let data = {tab:'ra_cls_l4',field:'l3',val:l3,sel:'l4'}
+    ogtdSel(data)
+  })
+
+  $("[name=l4]").on('change',function(){
+    let l4 = $(this).val();
+    $("[name=l5]").prop('disabled', false);
+    let data = {tab:'ra_cls_l5',field:'l4',val:l4,sel:'l5'}
+    ogtdSel(data)
+  })
 
   // NOTE: materia autocomplete
   $.ajax({
@@ -50,6 +64,34 @@ $(document).ready(function() {
     });
   })
   .fail(function(data) { console.log(data); });
+  $("[name=submit]").on('click',function(e){ salvaScheda(e); });
 });
 
-$("[name=submit]").on('click',function(e){ salvaScheda(e); });
+function ogtdSel(dati){
+  sel = $("[name="+dati.sel+"]");
+  $.ajax({
+    url: "api/scheda.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger:'ogtdSel', dati:dati}
+  })
+  .done(function(data){
+    console.log(data.length);
+    let opts = [];
+    let firstOpt = "<option value='' selected disabled>-- definizione --</option>";
+    let noOpt = "<option value=''>-- nessuna specifica presente --</option>";
+    if (data.length == 0) {
+      opts.push(noOpt);
+    } else {
+      opts.push(firstOpt);
+      data.forEach((item, i) => {
+        let opt = "<option value='"+item.id+"'>"+item.value+"</option>";
+        opts.push(opt);
+      });
+    }
+    sel.html(opts.join(''));
+  })
+  .fail(function (jqXHR, textStatus, error) {
+    console.log("Post error: " + error);
+  });
+}

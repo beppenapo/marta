@@ -15,6 +15,7 @@ function setCrono($obj){return json_encode($obj->setCrono($_POST));}
 function mtc($obj){return json_encode($obj->mtc($_POST));}
 function addScheda($obj){return json_encode($obj->addScheda($_POST['dati']));}
 function listaSchede($obj){return json_encode($obj->listaSchede($_POST['dati']));}
+function ogtdSel($obj){return json_encode($obj->ogtdSel($_POST['dati']));}
 
 //TODO: controlla se queste funzioni sono ancora usate, eventualmente cancella
 function vocabolari($obj){return json_encode($obj->vocabolari($_POST));}

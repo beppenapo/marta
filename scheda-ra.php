@@ -41,13 +41,13 @@ require("api/php/scheda.php");
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="l4" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine o locuzione che individua il bene oggetto della scheda in base alla connotazione funzionale e morfologica."></i> OGTD - Definizione</label>
-                  <select class="form-control form-control-sm tab" data-table="og-ra" id="l4" name="l4" required>
+                  <select class="form-control form-control-sm tab" data-table="og-ra" id="l4" name="l4" required disabled>
                     <option value="" selected disabled>-- definizione --</option>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
-                  <label for="l5" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine che specifica forma, funzione, parte o produzione (se si tratta di ceramica)."></i> OGTD - specifiche</label>
-                  <select class="form-control form-control-sm tab" data-table="og-ra" id="l5" name="l5">
+                  <label for="l5"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine che specifica forma, funzione, parte o produzione (se si tratta di ceramica)."></i> OGTD - specifiche</label>
+                  <select class="form-control form-control-sm tab" data-table="og-ra" id="l5" name="l5" disabled>
                     <option value="" selected disabled>-- definizione --</option>
                   </select>
                 </div>
