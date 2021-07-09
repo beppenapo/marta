@@ -43,28 +43,44 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-4">
-        <label for="titolo" class="text-danger font-weight-bold">NCTN - Numero Catalogo</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <div class="input-group-text">
-              <input type="checkbox" aria-label="Checkbox for following text input" name="toggleNctn">
+    <fieldset class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom mb-3">NCT - Codice univoco</legend>
+      <div class="form-row">
+        <div class="col-md-4">
+          <label for="titolo" class="text-danger font-weight-bold">NCTN - Numero Catalogo</label>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <input type="checkbox" aria-label="Checkbox for following text input" name="toggleNctn">
+              </div>
             </div>
+            <input type="number" min="314852" max="334518" step="1" class="form-control" aria-label="Text input with checkbox" data-table="nctn_scheda" name="nctn" id="nctn" list="nctnList" disabled>
+            <datalist id="nctnList">
+              <?php foreach($nctnList as $nctnEl){ echo "<option value='".$nctnEl['nctn']."'></option>"; } ?>
+            </datalist>
           </div>
-          <input type="number" min="314852" max="334518" step="1" class="form-control" aria-label="Text input with checkbox" data-table="nctn_scheda" name="nctn" id="nctn" list="nctnList" disabled>
-          <datalist id="nctnList">
-            <?php
-            foreach($nctnList as $nctnEl){
-              echo "<option value='".$nctnEl['nctn']."'></option>";
-            }
-            ?>
-          </datalist>
+        </div>
+        <div class="col-md-8">
+          <small class="text-muted"><i class="fas fa-info-circle"></i> Se si conosce il Numero di Catalogo inserirlo manualmente abilitando la casella di input (click sulla checkbox), altrimenti lasciarlo disabilitato.<br>Il codice deve essere un numero compreso tra 314852 e 334518, inizia a digitare il codice, comparirà una lista valori con i numeri disponibili</small>
         </div>
       </div>
-      <div class="col-md-8">
-        <small class="text-muted"><i class="fas fa-info-circle"></i> Se si conosce il Numero di Catalogo inserirlo manualmente abilitando la casella di input (click sulla checkbox), altrimenti lasciarlo disabilitato.<br>Il codice deve essere un numero compreso tra 314852 e 334518, inizia a digitare il codice, comparirà una lista valori con i numeri disponibili</small>
+    </fieldset>
+    <fieldset class="mb-3">
+      <legend class="text-marta font-weight-bold border-bottom mb-3">Num. Inventario MArTA</legend>
+      <div class="form-row">
+        <div class="col-md-2">
+          <label for="prefisso">Prefisso</label>
+          <input type="text" name="prefisso" id="prefisso" class="form-control form-control-sm" data-table="inventario" value="">
+        </div>
+        <div class="col-md-4">
+          <label for="inventario">Prefisso</label>
+          <input type="text" name="inventario" id="inventario" class="form-control form-control-sm" data-table="inventario" value="">
+        </div>
+        <div class="col-md-2">
+          <label for="suffisso">Suffisso</label>
+          <input type="text" name="suffisso" id="suffisso" class="form-control form-control-sm" data-table="inventario" value="">
+        </div>
       </div>
-    </div>
+    </fieldset>
   </fieldset>
 </div>
