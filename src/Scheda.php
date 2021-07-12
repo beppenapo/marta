@@ -248,6 +248,7 @@ class Scheda extends Conn{
       $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
       $schedaSql = rtrim($schedaSql, ";") . " returning id;";
       $schedaId = $this->returning($schedaSql,$dati['scheda']);
+      $this->prepared("insert into stato_scheda(scheda) values (:scheda);", array("scheda"=>$schedaId['field']));
       if (isset($dati['inventario'])) {
         $invSql = $this->buildInsert('inventario',$dati['inventario']);
         $invSql = rtrim($invSql, ";") . " returning id;";

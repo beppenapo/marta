@@ -102,6 +102,7 @@
                 </div>
               </div>
             </div>
+            <?php if ($_SESSION['classe']!==3) { ?>
             <div class="col-lg-8">
               <div class="card" id="utenti">
                 <div class="card-header bg-white font-weight-bold">
@@ -127,6 +128,7 @@
                 </div>
               </div>
             </div>
+          <?php } ?>
           </div>
         <?php } ?>
       </div>
@@ -151,16 +153,6 @@
             </div>
           </div>
         </form>
-      </div>
-    </div>
-
-    <div id="elDiv" class="modal fade" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body bg-success text-white">
-            <h1 class="d-5">Ciao patatina!<br>Sei stata bravissima!!!!</h1>
-          </div>
-        </div>
       </div>
     </div>
 

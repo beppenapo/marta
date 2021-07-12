@@ -41,6 +41,10 @@ class Conn {
   }
 
   public function prepared($sql, $dati=array()){
+    // $pdo = $this->pdo();
+    // $exec = $pdo->prepare($sql);
+    // $res = $exec->execute($dati);
+    // if (!$res) { throw new \Exception(false, $res);}
     try {
       $pdo = $this->pdo();
       $exec = $pdo->prepare($sql);
