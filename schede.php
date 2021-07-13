@@ -13,16 +13,17 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
   <body>
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
-    <!-- <?php require("assets/loading.html"); ?> -->
+    <?php require("assets/loading.html"); ?>
     <main class="">
       <div class="container-fluid">
         <h3 class="border-bottom border-dark mb-3">Archivio schede</h3>
         <div class="row">
           <div class="col mb-5">
             <table id="dataTable" class="table table-sm table-striped table-bordered display compact" style="width:100%">
+              <caption>La tabella mostra le schede chiuse</caption>
               <thead>
                 <tr>
-                  <th class="no-sort">NCTN</th>
+                  <th>NCTN</th>
                   <th>Tipo</th>
                   <th>Titolo</th>
                   <th>OGTD</th>

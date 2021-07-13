@@ -423,11 +423,11 @@ class Scheda extends Conn{
     $where = '';
     $filter = [];
     if($dati && !empty($dati)){
+      if(isset($dati['stato'])){array_push($filter, "stato_scheda.".$dati['stato']['field']." = '".$dati['stato']['value']."'");}
       if(isset($dati['tipo'])){array_push($filter, "s.tsk = ".$dati['tipo']);}
       if(isset($dati['usr'])){array_push($filter,' s.cmpn = '.$dati['usr']);}
       $where = ' where '.join(" and ",$filter);
     }
-
     $sql="SELECT
       s.id
       , nctn.nctn
@@ -440,6 +440,7 @@ class Scheda extends Conn{
       , lc.piano
       , concat(loc.sala,' ', loc.descrizione) as sala
     from scheda s
+    INNER JOIN stato_scheda on stato_scheda.scheda = s.id
     INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
     INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
     INNER JOIN liste.tsk as tsk on s.tsk = tsk.id
@@ -470,6 +471,7 @@ class Scheda extends Conn{
       , lc.piano
       , concat(loc.sala,' ', loc.descrizione) as sala
     from scheda s
+    INNER JOIN stato_scheda on stato_scheda.scheda = s.id
     INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
     INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
     INNER JOIN liste.tsk as tsk on s.tsk = tsk.id
@@ -487,7 +489,6 @@ class Scheda extends Conn{
     GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, l4.value, dtzg.value, dtzs.value, lc.piano, loc.sala, loc.descrizione
     order by nctn asc;";
     return $this->simple($sql);
-    // return $dati;
   }
 }
 ?>

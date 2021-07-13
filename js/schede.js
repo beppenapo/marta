@@ -8,6 +8,7 @@ function buildTable(){
     type: 'POST',
     dataType: 'json',
     data: { trigger: 'listaSchede'}
+    // data: { trigger: 'listaSchede', dati:{tipo:1,stato:{field:'chiusa', value:'f'}}}
   })
   .done(function(data) {
     data.forEach(function(v,i){
