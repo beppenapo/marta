@@ -6,6 +6,12 @@ $logged = isset($_SESSION['id']) ? 'y' : 'n';
   <div class="headerMenu">
     <ul>
       <li><a href="index.php" class="animated" data-toggle='tooltip' data-placement="bottom" title="torna alla pagina principale">home</a></li>
+      <li>
+        <a class="dropdown-toggle animated" href="#" role="button" id="headerMenuLinkArchivi" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">archivi</a>
+        <div class="dropdown-menu" aria-labelledby="headerMenuLinkArchivi">
+          <a class="dropdown-item" href="schede.php">archivio schede</a>
+        </div>
+      </li>
       <li><a href="board.php" class="animated" data-toggle='tooltip' data-placement="bottom" title="leggi le informazioni relative al progetto">project</a></li>
       <li><a href="#" class="animated" data-toggle='tooltip' data-placement="bottom" title="conosci il gruppo di lavoro">team</a></li>
       <li><a href="#" class="animated" data-toggle='tooltip' data-placement="bottom" title="contattaci per suggerimenti o per dirci cosa ne pensi">contacts</a></li>

@@ -1,5 +1,5 @@
 <?php
-require("api/php/scheda.php");
+require("api/php/schedaView.php");
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -13,9 +13,10 @@ require("api/php/scheda.php");
   </head>
   <body>
     <?php require('assets/headerMenu.php'); ?>
-    <?php require('assets/mainMenu.php'); ?>
+    <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
+      <?php if (isset($_SESSION['id'])) { ?>
       <div id="menuScheda" class="bg-dark px-3">
         <div class="btn-group" role="group">
           <div class="btn-group" role="group">
@@ -35,12 +36,24 @@ require("api/php/scheda.php");
           <button id="elimina" name="elimina" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
         </div>
       </div>
-
+    <?php } ?>
+    <div class="container-fluid mt-5">
+      <div class="row">
+        <div class="col">
+          <h3 class="border-bottom border-dark mb-3"><?php echo $scheda['scheda']['titolo']; ?></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <?php print_r($scheda); ?>
+        </div>
+      </div>
+    </div>
     </main>
     <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="js/function.js" charset="utf-8"></script>
-    <!-- <script src="js/scheda-ra.js" charset="utf-8"></script> -->
+    <script src="js/schedaView.js" charset="utf-8"></script>
   </body>
 </html>

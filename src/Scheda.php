@@ -6,6 +6,66 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function getScheda(int $id){
+    $out=[];
+    $sql = "select scheda.titolo from scheda where scheda.id = ".$id.";";
+    $scheda = $this->simple($sql);
+    $out['scheda'] = $scheda[0];
+
+    return $out;
+  }
+
+  public function addScheda(array $dati){
+    try {
+      $this->begin();
+      $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
+      $schedaSql = rtrim($schedaSql, ";") . " returning id;";
+      $schedaId = $this->returning($schedaSql,$dati['scheda']);
+      $this->prepared("insert into stato_scheda(scheda) values (:scheda);", array("scheda"=>$schedaId['field']));
+      if (isset($dati['inventario'])) {
+        $invSql = $this->buildInsert('inventario',$dati['inventario']);
+        $invSql = rtrim($invSql, ";") . " returning id;";
+        $invId = $this->returning($invSql,$dati['inventario']);
+        $inv_scheda = array("scheda"=>$schedaId['field'], "inventario"=>$invId['field']);
+        $sql = $this->buildInsert("inventario_scheda",$inv_scheda);
+        $this->prepared($sql,$inv_scheda);
+      }
+      $this->addSection('ad', $schedaId['field'], $dati['ad']);
+      $this->addSection('co', $schedaId['field'], $dati['co']);
+      $this->addSection('da', $schedaId['field'], $dati['da']);
+      $this->addSection('dt', $schedaId['field'], $dati['dt']);
+      $this->addSection('lc', $schedaId['field'], $dati['lc']);
+      $this->addSection('mis', $schedaId['field'], $dati['mis']);
+      $this->addSection('tu', $schedaId['field'], $dati['tu']);
+      foreach ($dati['dtm'] as $value) {$this->addSection('dtm',$schedaId['field'],array("dtm"=>(int)$value));}
+      foreach ($dati['mtc'] as $val) {
+        $datiMtc = array('materia'=>$val['materia'], 'tecnica'=>$val['tecnica']);
+        $this->addSection('mtc', $schedaId['field'], $datiMtc);
+      }
+      if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
+      if (isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
+      if (isset($dati['ub'])) {$this->addSection('ub', $schedaId['field'], $dati['ub']);}
+      if (isset($dati['gp'])) {$this->addSection('gp', $schedaId['field'], $dati['gp']);}
+      if (isset($dati['rcg'])) {$this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
+      if (isset($dati['dsc'])) {$this->addSection('dsc', $schedaId['field'], $dati['dsc']);}
+      if (isset($dati['ain'])) {$this->addSection('ain', $schedaId['field'], $dati['ain']);}
+      if (isset($dati['an'])) {$this->addSection('an', $schedaId['field'], $dati['an']);}
+      if (isset($dati['nctn_scheda'])) {
+        $nctn = $dati['nctn_scheda'];
+        $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
+        $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
+      }else {
+        $nctn = $this->getNctn();
+        $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
+        $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
+      }
+      $this->commit();
+      return array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente', "scheda"=>$schedaId['field'], "nctn"=>$nctn['nctn']);
+    } catch (\Exception $e) {
+      return array("res"=>false,"msg"=>$e->getMessage());
+    }
+  }
+
   public function nctnList(){ return $this->simple("select nctn from nctn where libero = true order by nctn asc;"); }
   public function munsellList(){ return $this->simple("select code from liste.munsell order by code asc;"); }
   public function ogtdSel(array $dati){
@@ -179,119 +239,6 @@ class Scheda extends Conn{
     $sql = "select * from ". $dati['tab'] . " where ".$dati['field']." ilike '&".$dati['val']."&' order by value asc;";
     return $this->simple($sql);
   }
-  public function getScheda(int $id,int $tipo){
-  $sql = "SELECT scheda.inventario, scheda.suffix, scheda.chiusa, scheda.verificata, scheda.inviata, scheda.validata, scheda.nctn, scheda.titolo
-  , ra_cls_l1.id AS cls1, ra_cls_l2.id AS cls2, og.ogtd, ra_ogtd .value AS ogtd_value
-  , lc.piano, lc.stanza, lc.contenitore, lc.colonna, lc.ripiano
-  , la.tcl, la.prvc, comuni.provincia AS prvp
-  , re.scan, re.dsca, re.dscd
-  , dtz.dtzg, dtz.dtzs, dts.dtsi, dts.dtsf, ARRAY_AGG(DISTINCT dtm.dtm) AS dtm, ARRAY_AGG(DISTINCT dtm_m_c.value) AS dtm_testo
-  , ARRAY_AGG(DISTINCT mtc.materia ||'-'|| mtc.tecnica) AS materia, ARRAY_AGG(DISTINCT materiale.id ||'-'|| materiale.value) AS materia_label
-  , mis.misa, mis.misl, mis.misp, mis.misd, mis.misn, mis.miss, mis.misg, mis.misv, mis.misr
-  , da.deso, da.desa, da.desl, da.desn, da.desf, da.desm, da.desg, da.desr, da.dest, da.desv, da.desu, da.desd
-  , co.stcc
-  , tu.cdgg
-  , ad.adsp, ad.adsm
-  , ARRAY_AGG(DISTINCT bibliografia.id ||'||'|| (bibliografia.titolo ||' ('|| (CASE WHEN bibliografia.tipo = 1 THEN 'Monografia' WHEN bibliografia.tipo = 2 THEN 'Atti convegno' ELSE 'Articolo in rivista' END) ||') - '|| bibliografia.autore)) AS biblio
-  , cm.cmpd AS data_ins, cm.cmpn AS compilatore, cm.fur
-  , (utenti.cognome || ' ' || utenti.nome) AS compilatore_nome
-  , ub.invn, ub.stis, ub.stid
-  , nu_do.ftax, nu_do.ftap, nu_do.ftan
-  FROM public.scheda
-  JOIN public.og ON og.scheda = scheda.id
-  LEFT JOIN liste.ra_ogtd ON ra_ogtd.id = og.ogtd
-  LEFT JOIN liste.ra_cls_l2 ON ra_cls_l2.id = ra_ogtd.classe
-  LEFT JOIN liste.ra_cls_l1 ON ra_cls_l1.id = ra_cls_l2.l1
-  LEFT JOIN public.lc ON lc.scheda = scheda.id
-  LEFT JOIN public.la ON la.scheda = scheda.id
-  LEFT JOIN liste.comuni ON comuni.codice = la.prvc
-  LEFT JOIN public.re ON re.scheda = scheda.id
-  LEFT JOIN public.dtz ON dtz.scheda = scheda.id
-  LEFT JOIN public.dts ON dts.scheda = scheda.id
-  LEFT JOIN public.dtm ON dtm.scheda = scheda.id
-  JOIN liste.dtm_motivazione_cronologia AS dtm_m_c ON dtm_m_c.id = dtm.dtm
-  LEFT JOIN public.mtc ON mtc.scheda = scheda.id
-  JOIN liste.materiale ON materiale.id = mtc.materia
-  LEFT JOIN public.mis ON mis.scheda = scheda.id
-  LEFT JOIN public.da ON da.scheda = scheda.id
-  LEFT JOIN public.co ON co.scheda = scheda.id
-  LEFT JOIN public.tu ON tu.scheda = scheda.id
-  LEFT JOIN public.ad ON ad.scheda = scheda.id
-  LEFT JOIN public.biblio_scheda ON biblio_scheda.scheda = scheda.id
-  LEFT JOIN public.bibliografia ON bibliografia.id = biblio_scheda.biblio
-  LEFT JOIN public.cm ON cm.scheda = scheda.id
-  JOIN public.utenti ON utenti.id = cm.cmpn
-  LEFT JOIN public.ub ON ub.scheda = scheda.id
-  LEFT JOIN public.nu_do ON nu_do.scheda = scheda.id
-  WHERE scheda.id = ".$id." AND scheda.tipo = ".$tipo."
-  GROUP BY scheda.inventario, scheda.suffix, scheda.chiusa, scheda.verificata, scheda.inviata, scheda.validata, scheda.nctn, scheda.titolo
-  , ra_cls_l1.id, ra_cls_l2.id, og.ogtd, ra_ogtd .value
-  , lc.piano, lc.stanza, lc.contenitore, lc.colonna, lc.ripiano
-  , la.tcl, la.prvc, comuni.provincia
-  , re.scan, re.dsca, re.dscd
-  , dtz.dtzg, dtz.dtzs, dts.dtsi, dts.dtsf
-  , mis.misa, mis.misl, mis.misp, mis.misd, mis.misn, mis.miss, mis.misg, mis.misv, mis.misr
-  , da.deso, da.desa, da.desl, da.desn, da.desf, da.desm, da.desg, da.desr, da.dest, da.desv, da.desu, da.desd
-  , co.stcc
-  , tu.cdgg
-  , ad.adsp, ad.adsm
-  , cm.cmpd, cm.cmpn, cm.fur
-  , compilatore_nome
-  , ub.invn, ub.stis, ub.stid
-  , nu_do.ftax, nu_do.ftap, nu_do.ftan;";
-    return $this->simple($sql);
-  }
-
-  public function addScheda(array $dati){
-    try {
-      $this->begin();
-      $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
-      $schedaSql = rtrim($schedaSql, ";") . " returning id;";
-      $schedaId = $this->returning($schedaSql,$dati['scheda']);
-      $this->prepared("insert into stato_scheda(scheda) values (:scheda);", array("scheda"=>$schedaId['field']));
-      if (isset($dati['inventario'])) {
-        $invSql = $this->buildInsert('inventario',$dati['inventario']);
-        $invSql = rtrim($invSql, ";") . " returning id;";
-        $invId = $this->returning($invSql,$dati['inventario']);
-        $inv_scheda = array("scheda"=>$schedaId['field'], "inventario"=>$invId['field']);
-        $sql = $this->buildInsert("inventario_scheda",$inv_scheda);
-        $this->prepared($sql,$inv_scheda);
-      }
-      $this->addSection('ad', $schedaId['field'], $dati['ad']);
-      $this->addSection('co', $schedaId['field'], $dati['co']);
-      $this->addSection('da', $schedaId['field'], $dati['da']);
-      $this->addSection('dt', $schedaId['field'], $dati['dt']);
-      $this->addSection('lc', $schedaId['field'], $dati['lc']);
-      $this->addSection('mis', $schedaId['field'], $dati['mis']);
-      $this->addSection('tu', $schedaId['field'], $dati['tu']);
-      foreach ($dati['dtm'] as $value) {$this->addSection('dtm',$schedaId['field'],array("dtm"=>(int)$value));}
-      foreach ($dati['mtc'] as $val) {
-        $datiMtc = array('materia'=>$val['materia'], 'tecnica'=>$val['tecnica']);
-        $this->addSection('mtc', $schedaId['field'], $datiMtc);
-      }
-      if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
-      if (isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
-      if (isset($dati['ub'])) {$this->addSection('ub', $schedaId['field'], $dati['ub']);}
-      if (isset($dati['gp'])) {$this->addSection('gp', $schedaId['field'], $dati['gp']);}
-      if (isset($dati['rcg'])) {$this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
-      if (isset($dati['dsc'])) {$this->addSection('dsc', $schedaId['field'], $dati['dsc']);}
-      if (isset($dati['ain'])) {$this->addSection('ain', $schedaId['field'], $dati['ain']);}
-      if (isset($dati['an'])) {$this->addSection('an', $schedaId['field'], $dati['an']);}
-      if (isset($dati['nctn_scheda'])) {
-        $nctn = $dati['nctn_scheda'];
-        $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
-        $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
-      }else {
-        $nctn = $this->getNctn();
-        $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
-        $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
-      }
-      $this->commit();
-      return array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente', "scheda"=>$schedaId['field'], "nctn"=>$nctn['nctn']);
-    } catch (\Exception $e) {
-      return array("res"=>false,"msg"=>$e->getMessage());
-    }
-  }
 
   public function editScheda(array $dati){
     $this->begin();
@@ -334,53 +281,7 @@ class Scheda extends Conn{
       return array("res"=>false, "msg"=>$e->getMessage());
     }
   }
-  public function deleteScheda(int $id){
-    $this->begin();
-    try {
-    $filter_scheda = ['scheda'=>$id];
-    $sqldel = $this->buildDelete('public.ad',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.tu',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.co',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.da',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.mis',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.mtc',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.dtm',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.dts',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.dtz',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.re',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.la',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.lc',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.og',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.ub',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.nu_do',$filter_scheda);
-    $this->prepared($sqldel);
-    $sqldel = $this->buildDelete('public.biblio_scheda',$filter_scheda);
-    $this->prepared($sqldel);
-    $filter_scheda = ['id'=>$id];
-    $sqldel = $this->buildDelete('public.scheda',$filter_scheda);
-    $this->prepared($sqldel);
-    $this->commit();
-    return array("res"=>true, "msg"=>'La scheda è stata correttamente eliminata');
-    // return array("res"=>true, "msg"=>$out);
-    } catch (\Exception $e) {
-    // $this->rollback();
-    return array("res"=>false, "msg"=>$e->getMessage());
-    }
-  }
+  public function deleteScheda(int $id){}
 
   public function delbiblioref(int $id_scheda, int $id_biblio){
     $this->begin();
@@ -403,6 +304,10 @@ class Scheda extends Conn{
     $res = $this->prepared($sql,$dati);
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
+  }
+
+  protected function getSection(int $scheda, string $section){
+
   }
 
   protected function editSection(string $tab, int $scheda, array $dati, int $prim){

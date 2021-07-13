@@ -29,9 +29,9 @@ require("api/php/home.php");
               <div class="card-body">
                 <div class="border-bottom d-flex justify-content-between">
                   <span>schede RA/NU</span>
-                  <a href=""><i class="fas fa-arrow-right fa-fw" aria-hidden="true"></i></a>
+                  <a href="schede.php" title="visualizza archivio completo" data-toggle="tooltip" data-placement="top"><i class="fas fa-arrow-right fa-fw" aria-hidden="true"></i></a>
                 </div>
-                <div class="display-4 text-success text-center" id="numschede"></div>
+                <div class="display-4 text-success text-center" id="numschede"><?php echo (int)$stat['ra']+(int)$stat['nu']; ?></div>
                 <div class="d-flex justify-content-between">
                   <div class="progress w-50 mr-1">
                     <div class="progress-bar bg-success"  id="raBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->raPerc; ?>%">RA</div>
@@ -41,7 +41,7 @@ require("api/php/home.php");
                   </div>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <small>tot.: <?php echo (int)$obj->ra+(int)$obj->nu; ?></small>
+                  <small>tot.: <?php echo (int)$obj->totra+(int)$obj->totnu; ?></small>
                   <small><?php echo (int)$obj->raPerc+(int)$obj->nuPerc; ?>% completate</small>
                 </div>
               </div>
@@ -111,7 +111,7 @@ require("api/php/home.php");
       </div>
       <div class="fotoWrap">
         <?php
-        
+
         ?>
       </div>
     </main>
