@@ -32,6 +32,12 @@ require("api/php/schedaView.php");
               <a class="dropdown-item" href="#" title="aggiungi modelli 3d" data-toggle="tooltip" data-placement="right">3d</a>
             </div>
           </div>
+          <div class="btn-group" role="group">
+            <button id="modifica" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-edit"></i> modifica</button>
+            <div class="dropdown-menu" aria-labelledby="modifica">
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right">titolo e codici</a>
+            </div>
+          </div>
           <button id="duplica" name="duplica" type="button" class="btn btn-dark"><i class="fas fa-copy"></i> duplica</button>
           <button id="chiudi" name="chiudi" type="button" class="btn btn-dark"><i class="fas fa-clipboard-check"></i> chiudi</button>
           <button id="elimina" name="elimina" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
