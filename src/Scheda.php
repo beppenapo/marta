@@ -8,7 +8,7 @@ class Scheda extends Conn{
 
   public function getScheda(int $id){
     $out=[];
-    $sql = "select scheda.titolo from scheda where scheda.id = ".$id.";";
+    $sql = "select s.titolo, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, s.cmpd, s.fur, nctn.nctn from scheda s, liste.tsk, liste.lir, utenti u, nctn, nctn_scheda ns where s.tsk = tsk.id and s.lir = lir.id and s.cmpn = u.id and ns.scheda = s.id and ns.nctn = nctn.nctn and s.id = ".$id.";";
     $scheda = $this->simple($sql);
     $out['scheda'] = $scheda[0];
 

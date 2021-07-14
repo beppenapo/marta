@@ -9,6 +9,7 @@ require("api/php/schedaView.php");
     <style media="screen">
       body>main{padding-top: 60px !important;}
       #menuScheda button{padding: 0.63rem .75rem;}
+      .list-group-item{background: none !important;}
     </style>
   </head>
   <body>
@@ -40,12 +41,64 @@ require("api/php/schedaView.php");
     <div class="container-fluid mt-5">
       <div class="row">
         <div class="col">
-          <h3 class="border-bottom border-dark mb-3"><?php echo $scheda['scheda']['titolo']; ?></h3>
+          <h3 class="border-bottom border-dark mb-3"><?php echo $scheda['scheda']['nctn']. " - ". $scheda['scheda']['titolo']; ?></h3>
         </div>
       </div>
       <div class="row">
-        <div class="col">
-          <?php print_r($scheda); ?>
+        <div class="col-md-6">
+          <fieldset class="bg-light rounded border p-3 mb-3" id="cdFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">cd - codici</legend>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">NCTN - Numero catalogo: <span class="font-weight-bold"><?php echo $scheda['scheda']['nctn']; ?></span></li>
+              <li class="list-group-item">TSK - Tipo scheda: <span class="font-weight-bold"><?php echo $scheda['scheda']['tsk']; ?></span></li>
+              <li class="list-group-item">LIR - Livello ricerca: <span class="font-weight-bold"><?php echo $scheda['scheda']['lir']; ?></span></li>
+              <li class="list-group-item">NCTR - Codice Regione: <span class="font-weight-bold">16 [Puglia]</span></li>
+              <li class="list-group-item">ESC - Ente schedatore: <span class="font-weight-bold">M325</span></li>
+              <li class="list-group-item">ECP - Ente competente: <span class="font-weight-bold">M325</span></li>
+              <li class="list-group-item">CMPN - Compilatore: <span class="font-weight-bold"><?php echo $scheda['scheda']['cmpn']; ?></span></li>
+              <li class="list-group-item">CMPD - Data: <span class="font-weight-bold"><?php echo $scheda['scheda']['cmpd']; ?></span></li>
+              <li class="list-group-item">FUR - Funzionario responsabile: <span class="font-weight-bold"><?php echo $scheda['scheda']['fur']; ?></span></li>
+            </ul>
+            <?php print_r($scheda); ?>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="ogFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">og - oggetto</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="gpFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">GP - GEOREFERENZIAZIONE TRAMITE PUNTO</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="reFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">RE- MODALITÀ DI REPERIMENTO</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="dtFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">DT - CRONOLOGIA</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="mtFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">MT - DATI TECNICI</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="daFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="coFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">CO - CONSERVAZIONE</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="adFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">AD - ACCESSO AI DATI</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="anFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">AN - ANNOTAZIONI</legend>
+          </fieldset>
+        </div>
+        <div class="col-md-6">
+          <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">immagini - documenti - multimedia</legend>
+          </fieldset>
         </div>
       </div>
     </div>
