@@ -8,9 +8,41 @@ class Scheda extends Conn{
 
   public function getScheda(int $id){
     $out=[];
-    $sql = "select s.titolo, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, s.cmpd, s.fur, nctn.nctn from scheda s, liste.tsk, liste.lir, utenti u, nctn, nctn_scheda ns where s.tsk = tsk.id and s.lir = lir.id and s.cmpn = u.id and ns.scheda = s.id and ns.nctn = nctn.nctn and s.id = ".$id.";";
+    $sql = "
+      select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, s.cmpd,  concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv
+      from scheda s
+      inner join liste.tsk on s.tsk = tsk.id
+      inner join liste.lir on s.lir = lir.id
+      inner join utenti u on s.cmpn = u.id
+      inner join utenti fur on s.fur = fur.id
+      inner join nctn_scheda ns on ns.scheda = s.id
+      inner join nctn on ns.nctn = nctn.nctn
+      left join inventario_scheda isc on isc.scheda = s.id
+      left join inventario i on isc.inventario = i.id
+      where s.id = ".$id.";";
     $scheda = $this->simple($sql);
     $out['scheda'] = $scheda[0];
+
+    if($out['scheda']['tskid']==1){
+      $sql = "select
+      l1.value as cls1
+      , l2.value as cls2
+      , l3.value as cls3
+      , l4.value as cls4
+      , coalesce(l5.value,'dato non inserito') as cls5
+      , coalesce(ogtt, 'dato non inserito') as ogtt
+      from og_ra og
+      inner join liste.ra_cls_l4 l4 on og.l4 = l4.id
+      inner join liste.ra_cls_l3 l3 on og.l3 = l3.id
+      inner join liste.ra_cls_l2 l2 on l3.l2 = l2.id
+      inner join liste.ra_cls_l1 l1 on l2.l1 = l1.id
+      left join liste.ra_cls_l5 l5 on og.l5 = l5.id
+      where og.scheda = ".$id.";";
+    }else {
+      $out['og'] = 'og_nu';
+    }
+    $og = $this->simple($sql);
+    $out['og'] = $og[0];
 
     return $out;
   }
@@ -67,6 +99,7 @@ class Scheda extends Conn{
   }
 
   public function nctnList(){ return $this->simple("select nctn from nctn where libero = true order by nctn asc;"); }
+  public function furList(){ return $this->simple("select id, concat(cognome,' ',nome) fur from utenti where classe = 4 order by 2 asc;"); }
   public function munsellList(){ return $this->simple("select code from liste.munsell order by code asc;"); }
   public function ogtdSel(array $dati){
     return $this->simple("select * from liste.".$dati['tab']." where ".$dati['field']." = ".$dati['val']." order by value asc;");

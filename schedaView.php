@@ -36,6 +36,7 @@ require("api/php/schedaView.php");
             <button id="modifica" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-edit"></i> modifica</button>
             <div class="dropdown-menu" aria-labelledby="modifica">
               <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right">titolo e codici</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right">og - oggetto</a>
             </div>
           </div>
           <button id="duplica" name="duplica" type="button" class="btn btn-dark"><i class="fas fa-copy"></i> duplica</button>
@@ -56,6 +57,7 @@ require("api/php/schedaView.php");
             <legend class="w-auto bg-marta text-white border rounded p-1">cd - codici</legend>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">NCTN - Numero catalogo: <span class="font-weight-bold"><?php echo $scheda['scheda']['nctn']; ?></span></li>
+              <li class="list-group-item">Num.Inv. MarTA: <span class="font-weight-bold"><?php echo $scheda['scheda']['inv']; ?></span></li>
               <li class="list-group-item">TSK - Tipo scheda: <span class="font-weight-bold"><?php echo $scheda['scheda']['tsk']; ?></span></li>
               <li class="list-group-item">LIR - Livello ricerca: <span class="font-weight-bold"><?php echo $scheda['scheda']['lir']; ?></span></li>
               <li class="list-group-item">NCTR - Codice Regione: <span class="font-weight-bold">16 [Puglia]</span></li>
@@ -65,10 +67,22 @@ require("api/php/schedaView.php");
               <li class="list-group-item">CMPD - Data: <span class="font-weight-bold"><?php echo $scheda['scheda']['cmpd']; ?></span></li>
               <li class="list-group-item">FUR - Funzionario responsabile: <span class="font-weight-bold"><?php echo $scheda['scheda']['fur']; ?></span></li>
             </ul>
-            <?php print_r($scheda); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ogFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">og - oggetto</legend>
+            <ul class="list-group list-group-flush">
+            <?php if ($scheda['scheda']['tskid']==1) { ?>
+                <li class="list-group-item">CLS - Categoria liv.1: <span class="font-weight-bold"><?php echo $scheda['og']['cls1']; ?></span></li>
+                <li class="list-group-item">CLS - Categoria liv.2: <span class="font-weight-bold"><?php echo $scheda['og']['cls2']; ?></span></li>
+                <li class="list-group-item">CLS - Categoria liv.3: <span class="font-weight-bold"><?php echo $scheda['og']['cls3']; ?></span></li>
+                <li class="list-group-item">OGTD - Definizione: <span class="font-weight-bold"><?php echo $scheda['og']['cls4']; ?></span></li>
+                <li class="list-group-item">OGTD - Specifiche: <span class="font-weight-bold"><?php echo $scheda['og']['cls5']; ?></span></li>
+                <li class="list-group-item">OGTT - Tipologia: <span class="font-weight-bold"><?php echo $scheda['og']['ogtt']; ?></span></li>
+            <?php }else { ?>
+            <?php } ?>
+            </ul>
+
+            <?php print_r($scheda['og']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>

@@ -9,6 +9,7 @@ $listeComuni = $obj->listeComuni();
 $listeNU = $obj->listeNu();
 $listeRA = $obj->listeRA();
 $nctnList = $obj->nctnList();
+$furList = $obj->furList();
 $munsellList = $obj->munsellList();
 
 ?>

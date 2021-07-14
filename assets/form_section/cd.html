@@ -38,8 +38,15 @@
           <p><?php echo date('Y-m-d'); ?></p>
         </div>
         <div class="">
-          <label class="text-danger font-weight-bold">FUR - Funzionario responsabile</label>
-          <p>Di Franco Luca</p>
+          <label for="fur" class="text-danger font-weight-bold">FUR - Funzionario responsabile</label>
+          <select class="form-control form-control-sm tab" data-table="scheda" id="fur" name="fur" required>
+            <?php
+              foreach($furList as $fur){
+                $selected = $fur['id'] == 39 ? 'selected' : '';
+                echo "<option value='".$fur['id']."' ".$selected.">".$fur['fur']."</option>";
+              }
+            ?>
+          </select>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 <?php
 require("api/php/scheda.php");
+if (!isset($_SESSION['id'])){ header("location:login.php");}
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
