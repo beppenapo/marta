@@ -1,10 +1,9 @@
-<?php
-require("api/php/schedaView.php");
-?>
+<?php require("api/php/schedaView.php"); ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
   <head>
     <?php require('assets/meta.html'); ?>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <link rel="stylesheet" href="css/schedaView.css">
   </head>
   <body>
@@ -87,14 +86,29 @@ require("api/php/schedaView.php");
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
-
-            <?php print_r($scheda['og']); ?>
+            <?php print_r($scheda['gp']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="gpFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">GP - GEOREFERENZIAZIONE TRAMITE PUNTO</legend>
+            <input type="hidden" name="mapInit" value="<?php echo count($scheda['gp']); ?>">
+            <?php if(count($scheda['gp'])==0){echo $noData;}else{ ?>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><span>GPL - Tipo di localizzazione:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpl']; ?></span></li>
+              <li class="list-group-item"><span>GPP - Sistema di riferimento:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpp']." (EPSG:".$scheda['gp']['epsg'].")"; ?></span></li>
+              <li class="list-group-item"><span>GPDPX - Coordinata X:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpdpx']; ?></span></li>
+              <li class="list-group-item"><span>GPDPY - Coordinata Y:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpdpy']; ?></span></li>
+              <li class="list-group-item"><span>GPM - Metodo:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpm']; ?></span></li>
+              <li class="list-group-item"><span>GPT - Tecnica:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpt']; ?></span></li>
+              <li class="list-group-item"><span>GPBT - Data:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpbt']; ?></span></li>
+              <li class="list-group-item"><span>GPBB - Descrizione sintetica:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpbb']; ?></span></li>
+            </ul>
+            <input type="hidden" name="gpdpx" value="<?php echo $scheda['gp']['gpdpx'] ?>">
+            <input type="hidden" name="gpdpy" value="<?php echo $scheda['gp']['gpdpy'] ?>">
+            <input type="hidden" name="epsg" value="<?php echo $scheda['gp']['epsg'] ?>">
+          <?php } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="reFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">RE- MODALITÀ DI REPERIMENTO</legend>
@@ -121,6 +135,7 @@ require("api/php/schedaView.php");
         <div class="col-md-6">
           <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">immagini - documenti - multimedia</legend>
+            <div id="mappa" class="bg-marta"></div>
           </fieldset>
         </div>
       </div>
@@ -129,6 +144,7 @@ require("api/php/schedaView.php");
     <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <script src="js/function.js" charset="utf-8"></script>
     <script src="js/schedaView.js" charset="utf-8"></script>
   </body>
