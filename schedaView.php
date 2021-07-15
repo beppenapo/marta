@@ -5,12 +5,7 @@ require("api/php/schedaView.php");
 <html lang="it" dir="ltr">
   <head>
     <?php require('assets/meta.html'); ?>
-    <link rel="stylesheet" href="css/scheda.css">
-    <style media="screen">
-      body>main{padding-top: 60px !important;}
-      #menuScheda button{padding: 0.63rem .75rem;}
-      .list-group-item{background: none !important;}
-    </style>
+    <link rel="stylesheet" href="css/schedaView.css">
   </head>
   <body>
     <?php require('assets/headerMenu.php'); ?>
@@ -56,36 +51,44 @@ require("api/php/schedaView.php");
           <fieldset class="bg-light rounded border p-3 mb-3" id="cdFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">cd - codici</legend>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">NCTN - Numero catalogo: <span class="font-weight-bold"><?php echo $scheda['scheda']['nctn']; ?></span></li>
-              <li class="list-group-item">Num.Inv. MarTA: <span class="font-weight-bold"><?php echo $scheda['scheda']['inv']; ?></span></li>
-              <li class="list-group-item">TSK - Tipo scheda: <span class="font-weight-bold"><?php echo $scheda['scheda']['tsk']; ?></span></li>
-              <li class="list-group-item">LIR - Livello ricerca: <span class="font-weight-bold"><?php echo $scheda['scheda']['lir']; ?></span></li>
-              <li class="list-group-item">NCTR - Codice Regione: <span class="font-weight-bold">16 [Puglia]</span></li>
-              <li class="list-group-item">ESC - Ente schedatore: <span class="font-weight-bold">M325</span></li>
-              <li class="list-group-item">ECP - Ente competente: <span class="font-weight-bold">M325</span></li>
-              <li class="list-group-item">CMPN - Compilatore: <span class="font-weight-bold"><?php echo $scheda['scheda']['cmpn']; ?></span></li>
-              <li class="list-group-item">CMPD - Data: <span class="font-weight-bold"><?php echo $scheda['scheda']['cmpd']; ?></span></li>
-              <li class="list-group-item">FUR - Funzionario responsabile: <span class="font-weight-bold"><?php echo $scheda['scheda']['fur']; ?></span></li>
+              <li class="list-group-item"><span>NCTN - Numero catalogo:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['nctn']; ?></span></li>
+              <li class="list-group-item"><span>Num.Inv. MarTA:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['inv']; ?></span></li>
+              <li class="list-group-item"><span>TSK - Tipo scheda:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['tsk']; ?></span></li>
+              <li class="list-group-item"><span>LIR - Livello ricerca:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['lir']; ?></span></li>
+              <li class="list-group-item"><span>NCTR - Codice Regione:</span><span class="font-weight-bold">16 [Puglia]</span></li>
+              <li class="list-group-item"><span>ESC - Ente schedatore:</span><span class="font-weight-bold">M325</span></li>
+              <li class="list-group-item"><span>ECP - Ente competente:</span><span class="font-weight-bold">M325</span></li>
+              <li class="list-group-item"><span>CMPN - Compilatore:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['cmpn']; ?></span></li>
+              <li class="list-group-item"><span>CMPD - Data:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['cmpd']; ?></span></li>
+              <li class="list-group-item"><span>FUR - Funzionario:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['fur']; ?></span></li>
             </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ogFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">og - oggetto</legend>
             <ul class="list-group list-group-flush">
             <?php if ($scheda['scheda']['tskid']==1) { ?>
-                <li class="list-group-item">CLS - Categoria liv.1: <span class="font-weight-bold"><?php echo $scheda['og']['cls1']; ?></span></li>
-                <li class="list-group-item">CLS - Categoria liv.2: <span class="font-weight-bold"><?php echo $scheda['og']['cls2']; ?></span></li>
-                <li class="list-group-item">CLS - Categoria liv.3: <span class="font-weight-bold"><?php echo $scheda['og']['cls3']; ?></span></li>
-                <li class="list-group-item">OGTD - Definizione: <span class="font-weight-bold"><?php echo $scheda['og']['cls4']; ?></span></li>
-                <li class="list-group-item">OGTD - Specifiche: <span class="font-weight-bold"><?php echo $scheda['og']['cls5']; ?></span></li>
-                <li class="list-group-item">OGTT - Tipologia: <span class="font-weight-bold"><?php echo $scheda['og']['ogtt']; ?></span></li>
+              <li class="list-group-item"><span>CLS - Categoria liv.1:</span><span class="font-weight-bold"><?php echo $scheda['og']['cls1']; ?></span></li>
+              <li class="list-group-item"><span>CLS - Categoria liv.2:</span><span class="font-weight-bold"><?php echo $scheda['og']['cls2']; ?></span></li>
+              <li class="list-group-item"><span>CLS - Categoria liv.3:</span><span class="font-weight-bold"><?php echo $scheda['og']['cls3']; ?></span></li>
+              <li class="list-group-item"><span>OGTD - Definizione:</span><span class="font-weight-bold"><?php echo $scheda['og']['cls4']; ?></span></li>
+              <li class="list-group-item"><span>OGTD - Specifiche:</span><span class="font-weight-bold"><?php echo $scheda['og']['cls5']; ?></span></li>
+              <li class="list-group-item"><span>OGTT - Tipologia:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogtt']; ?></span></li>
             <?php }else { ?>
+              <li class="list-group-item"><span>OGTD - Definizione:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogtd']; ?></span></li>
+              <li class="list-group-item"><span>OGR - Disponibilità</span><span class="font-weight-bold"><?php echo $scheda['og']['ogr']; ?></span></li>
+              <li class="list-group-item"><span>OGTT - Tipologia:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogtt']; ?></span></li>
+              <li class="list-group-item"><span>OGTH - Funzione:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogth']; ?></span></li>
+              <li class="list-group-item"><span>OGTL - Legenda tipo:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogtl']; ?></span></li>
+              <li class="list-group-item"><span>OGTO - Nominale:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogto']; ?></span></li>
+              <li class="list-group-item"><span>OGTS - Specifiche:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogts']; ?></span></li>
+              <li class="list-group-item"><span>OGTR - Serie:</span><span class="font-weight-bold"><?php echo $scheda['og']['ogtr']; ?></span></li>
             <?php } ?>
             </ul>
-
-            <?php print_r($scheda['og']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
+
+            <?php print_r($scheda['og']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
