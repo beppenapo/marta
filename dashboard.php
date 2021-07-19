@@ -11,55 +11,82 @@
     <link rel="stylesheet" href="css/dashboard.css">
   </head>
   <body>
+    <input type="hidden" name="classe" value="<?php echo $_SESSION['classe']; ?>">
+    <input type="hidden" name="utente" value="<?php echo $_SESSION['id']; ?>">
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main class="bg-light">
       <div class="container-fluid">
-        <?php require("assets/stat.html"); ?>
+        <!-- <?php require("assets/stat.html"); ?> -->
       </div>
       <div class="container-fluid">
-        <?php if (isset($_SESSION['id'])) { ?>
-          <div class="row mb-3">
-            <div class="col-lg-4">
-              <div class="card" id="comunicazioni">
-                <div class="card-header bg-white font-weight-bold">
-                  <p class="card-title m-0">Comunicazioni progetto</p>
-                </div>
-                <div class="list-group liste"></div>
-                <div class="card-footer">
-                  <button type="button" class="btn btn-sm btn-outline-marta" name="addComunicazioneBtn">aggiungi comunicazione</button>
-                </div>
+        <div class="row mb-3">
+          <div class="col-lg-4">
+            <div class="card" id="comunicazioni">
+              <div class="card-header bg-white font-weight-bold">
+                <p class="card-title m-0">Comunicazioni progetto</p>
+              </div>
+              <div class="list-group liste"></div>
+              <div class="card-footer">
+                <button type="button" class="btn btn-sm btn-outline-marta" name="addComunicazioneBtn">aggiungi comunicazione</button>
               </div>
             </div>
-            <?php if ($_SESSION['classe']!==3) { ?>
-            <div class="col-lg-8">
-              <div class="card" id="utenti">
-                <div class="card-header bg-white font-weight-bold">
-                  <p class="card-title m-0">Utenti</p>
-                </div>
-                <div class="card-body">
-                  <table id="dataTable" class="table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Utente</th>
-                        <th>Email</th>
-                        <th class="no-sort">Telefono</th>
-                        <th class="no-sort"></th>
-                        <th class="no-sort"></th>
-                        <th class="no-sort"></th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-                <div class="card-footer">
-                  <a href="usrAdd.php" class="btn btn-sm btn-outline-marta"><i class="fas fa-plus"></i> nuovo utente</a>
-                </div>
-              </div>
-            </div>
-          <?php } ?>
           </div>
+          <div class="col-lg-8">
+            <div class="card" id="schede">
+              <div class="card-header bg-white font-weight-bold">
+                <p class="card-title m-0">Stato schede</p>
+              </div>
+              <div class="card-body">
+                <table id="dataTableScheda" class="dataTable table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>NCTN</th>
+                      <th>Titolo</th>
+                      <th class="no-sort">Chiusa</th>
+                      <th class="no-sort">Verificata</th>
+                      <th class="no-sort">Inviata</th>
+                      <th class="no-sort">Accettata</th>
+                      <th class="no-sort">Data</th>
+                      <?php if($_SESSION['classe'] !==3){ echo "<th>Compilatore</th>"; } ?>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php if ($_SESSION['classe']!==3) { ?>
+        <div class="row mb-3">
+          <div class="col-lg-8">
+            <div class="card" id="utenti">
+              <div class="card-header bg-white font-weight-bold">
+                <p class="card-title m-0">Utenti</p>
+              </div>
+              <div class="card-body">
+                <table id="dataTable" class="dataTable table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Utente</th>
+                      <th>Email</th>
+                      <th class="no-sort">Telefono</th>
+                      <th class="no-sort"></th>
+                      <th class="no-sort"></th>
+                      <th class="no-sort"></th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="card-footer">
+                <a href="usrAdd.php" class="btn btn-sm btn-outline-marta"><i class="fas fa-plus"></i> nuovo utente</a>
+              </div>
+            </div>
+          </div>
+        </div>
         <?php } ?>
       </div>
     </main>

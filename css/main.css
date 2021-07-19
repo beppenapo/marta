@@ -177,7 +177,7 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 .ui-autocomplete { max-height: 150px; overflow-y: auto; overflow-x: hidden;}
 * html .ui-autocomplete { height: 300px; }
 
-#dataTable{font-size:13px;}
+.dataTable{font-size:13px;}
 
 /* Ale qui */
 .lista_header {

@@ -2,10 +2,14 @@ $(document)
 .ajaxStart(function(){console.log('...loading');})
 .ajaxStop(function(){$("#loadingDiv").remove();});
 
-stat();
+const userClass = parseInt($("[name=classe]").val());
+const utente = parseInt($("[name=utente]").val());
 
+stat();
 initComunicazioni();
-buildTable();
+buildSchedeTable();
+buildUserTable();
+
 $("[name=addComunicazioneBtn]").on('click', function(){
   $("[name=testo]").val('');
   $("[name=idComunicazione]").val('');
@@ -77,7 +81,7 @@ function initComunicazioni(){
   .fail(function() {console.log("error"); });
 }
 
-function buildTable(){
+function buildUserTable(){
   $.ajax({ url: 'api/usr.php', type: 'POST', dataType: 'json', data: {trigger: 'getUser'} })
   .done(function(data) {
     data.forEach(function(v,i){
@@ -92,44 +96,49 @@ function buildTable(){
       $("<td/>",{html:act, class:'text-center'}).appendTo(tr);
       $("<td/>",{html:btnUpdate, class:'text-center'}).appendTo(tr);
     })
-    $('#dataTable').DataTable({
-      order: [],
-      columnDefs: [{targets  : 'no-sort', orderable: false }],
-      destroy:true,
-      retrieve:true,
-      responsive: true,
-      html:true,
-      language: { url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Italian.json' }
-    });
+    initDataTab('#dataTable')
   })
   .fail(function() {console.log("error");});
 }
 
-function stat(){
-  $("#totSchede").text(TOTRA+TOTNU);
-  $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
-  .done(function(data){
-    let raPerc = parseInt(data['ra']*100/TOTRA);
-    let nuPerc = parseInt(data['nu']*100/TOTNU);
-    $("#numschede").text(parseInt(data['ra'])+parseInt(data['nu']));
-    $("#percSchedeOk").text(parseInt(raPerc+nuPerc));
-    $("#raBar").attr('style','width:'+raPerc+'%').attr('aria-valuenow',raPerc);
-    $("#nuBar").attr('style','width:'+nuPerc+'%').attr('aria-valuenow',nuPerc);
-
-    $("#numFoto").text(data['foto']);
-    let fotoPerc = parseInt(data['foto']*100/TOTFOTO);
-    $("#fotoBar").attr('style','width:'+fotoPerc+'%').attr('aria-valuenow',fotoPerc);
-    $("#percFoto").text(fotoPerc);
-
-    $("#numStereo").text(data['stereo']);
-    let stereoPerc = parseInt(data['stereo']*100/TOTSTEREO);
-    $("#stereoBar").attr('style','width:'+stereoPerc+'%').attr('aria-valuenow',stereoPerc);
-    $("#stereoFoto").text(stereoPerc);
-
-    $("#numModelli").text(data['modelli']);
-    let modelliPerc = parseInt(data['modelli']*100/TOT3D);
-    $("#3dBar").attr('style','width:'+modelliPerc+'%').attr('aria-valuenow',modelliPerc);
-    $("#perc3d").text(modelliPerc);
+function buildSchedeTable(){
+  let dati = {trigger:'statoSchede'}
+  if (userClass == 3) {dati.cmpn = utente;}
+  let opt={ url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: dati }
+  $.ajax(opt)
+  .done(function(data) {
+    console.log(data);
+    data.forEach(function(v,i){
+      let vero = "<i class='fas fa-check-circle text-success'></i>";
+      let falso = "<i class='fas fa-times-circle text-danger'></i>";
+      let link = $("<a/>", {href:'schedaView.php?get='+v.scheda}).html("<i class='fas fa-arrow-right'></i>");
+      tr = $("<tr/>").appendTo('#dataTableScheda');
+      $("<td/>",{text:v.nctn}).appendTo(tr);
+      $("<td/>",{text:v.titolo}).appendTo(tr);
+      $("<td/>",{class:'text-center'}).html(v.chiusa == true ? vero : falso).appendTo(tr);
+      $("<td/>",{class:'text-center'}).html(v.verificata == true ? vero : falso).appendTo(tr);
+      $("<td/>",{class:'text-center'}).html(v.inviata == true ? vero : falso).appendTo(tr);
+      $("<td/>",{class:'text-center'}).html(v.accettata == true ? vero : falso).appendTo(tr);
+      $("<td/>",{text:v.cmpd}).appendTo(tr);
+      if(userClass !==3){$("<td/>",{text:v.cmpn}).appendTo(tr);}
+      $("<td/>",{class:'text-center',html:link}).appendTo(tr);
+    })
+    initDataTab('#dataTableScheda')
   })
-  .fail(function(){console.log('error');});
+  .fail(function(xhr, ajaxOptions, thrownError) {
+    console.log([xhr, ajaxOptions, thrownError]);
+  });
+}
+
+function initDataTab(tab){
+  let tableOpt = {
+    order: [],
+    columnDefs: [{targets  : 'no-sort', orderable: false }],
+    destroy:true,
+    retrieve:true,
+    responsive: true,
+    html:true,
+    language: { url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Italian.json' }
+  };
+  $(tab).DataTable(tableOpt);
 }

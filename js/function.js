@@ -314,6 +314,7 @@ function stat(){
   })
   .fail(function(){console.log('error');});
 }
+
 $(".toast").hide();
 function createToast(obj){
   obj.titolo='Risultato query';
