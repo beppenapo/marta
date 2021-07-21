@@ -188,7 +188,6 @@
                 } ?>
               </ul>
             </fieldset>
-            <?php print_r($scheda['dt']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="mtFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">MT - DATI TECNICI</legend>
