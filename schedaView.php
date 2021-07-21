@@ -86,10 +86,28 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
-            <?php print_r($scheda['gp']); ?>
+            <?php if(count($scheda['lc'])==0){echo $noData;}else{ ?>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><span>PVCC - Comune:</span><span class="font-weight-bold"><?php echo $scheda['lc']['pvcc']; ?></span></li>
+              <li class="list-group-item"><span>LDCN - Collocazione specifica (Denominazione):</span><span class="font-weight-bold"><?php echo $scheda['lc']['ldcn']; ?></span></li>
+              <li class="list-group-item"><span>PIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['piano']; ?></span></li>
+              <li class="list-group-item"><span>SALA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['sala']; ?></span></li>
+              <li class="list-group-item"><span>CONTENITORE:</span><span class="font-weight-bold"><?php echo $scheda['lc']['contenitore']; ?></span></li>
+              <li class="list-group-item"><span>COLONNA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['colonna']; ?></span></li>
+              <li class="list-group-item"><span>RIPIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['ripiano']; ?></span></li>
+            </ul>
+            <?php } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
+            <?php if(count($scheda['ub'])==0){echo $noData;}else{ ?>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><span>INVN - Inventario:</span><span class="font-weight-bold"><?php echo $scheda['ub']['invn']; ?></span></li>
+              <li class="list-group-item"><span>STIS - Stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stis']; ?></span></li>
+              <li class="list-group-item"><span>STID - Anno stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stid']; ?></span></li>
+              <li class="list-group-item"><span>STIM - Motivo stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stim']; ?></span></li>
+            </ul>
+            <?php } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="gpFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">GP - GEOREFERENZIAZIONE TRAMITE PUNTO</legend>
@@ -112,24 +130,85 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="reFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">RE- MODALITÀ DI REPERIMENTO</legend>
+            <fieldset id="rcgFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">rcg - ricognizioni</legend>
+              <?php if(count($scheda['re']['rcg'])==0){echo $noData;}else{ ?>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>NUCN - Codice ICCD:</span><span class="font-weight-bold"><?php echo $scheda['re']['rcg']['nucn']; ?></span></li>
+                <li class="list-group-item"><span>RCGA - Responsabile scientifico:</span><span class="font-weight-bold"><?php echo $scheda['re']['rcg']['rcga']; ?></span></li>
+                <li class="list-group-item"><span>RCGD - Data:</span><span class="font-weight-bold"><?php echo $scheda['re']['rcg']['rcgd']; ?></span></li>
+                <li class="list-group-item"><span>RCGZ - Specifiche:</span><span class="font-weight-bold"><?php echo $scheda['re']['rcg']['rcgz']; ?></span></li>
+              </ul>
+              <?php } ?>
+            </fieldset>
+            <fieldset id="dscFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">dsc - dati scavo</legend>
+              <?php if(count($scheda['re']['dsc'])==0){echo $noData;}else{ ?>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>NUCN - Codice ICCD:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['nucn']; ?></span></li>
+                <li class="list-group-item"><span>SCAN - Denominazione dello scavo:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['rcga']; ?></span></li>
+                <li class="list-group-item"><span>DSCA - Responsabile scientifico:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['dsca']; ?></span></li>
+                <li class="list-group-item"><span>DSCD - Data:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['dscd']; ?></span></li>
+                <li class="list-group-item"><span>DSCN - Specifiche:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['dscn']; ?></span></li>
+              </ul>
+              <?php } ?>
+            </fieldset>
+            <fieldset id="ainFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">ain - altre indagini</legend>
+              <?php if(count($scheda['re']['ain'])==0){echo $noData;}else{ ?>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>AINT - Tipo:</span><span class="font-weight-bold"><?php echo $scheda['re']['ain']['aint']; ?></span></li>
+                <li class="list-group-item"><span>AIND - Data:</span><span class="font-weight-bold"><?php echo $scheda['re']['ain']['aind']; ?></span></li>
+                <li class="list-group-item"><span>AINS - Note:</span><span class="font-weight-bold"><?php echo $scheda['re']['ain']['ains']; ?></span></li>
+              </ul>
+              <?php } ?>
+            </fieldset>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="dtFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">DT - CRONOLOGIA</legend>
+            <fieldset id="dtzFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">DTZ - Cronologia generica</legend>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>DTZG - Fascia cronologica:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtzg']; ?></span></li>
+                <li class="list-group-item"><span>DTZS - Frazione cronologica:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtzs']; ?></span></li>
+              </ul>
+            </fieldset>
+            <fieldset id="dtsFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">DTS - Cronologia specifica</legend>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>DTSI - Da:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtsi']; ?></span></li>
+                <li class="list-group-item"><span>DTSF - A:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtsf']; ?></span></li>
+              </ul>
+            </fieldset>
+            <fieldset id="dtmFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">DTM - Motivazione cronologia</legend>
+              <ul class="list-group list-group-flush">
+                <?php foreach ($scheda['dt']['dtm'] as $dtm) {
+                  echo '<li class="list-group-item"><span>Motivazione:</span><span class="font-weight-bold">'.$dtm['dtm'].'</span></li>';
+                } ?>
+              </ul>
+            </fieldset>
+            <?php print_r($scheda['dt']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="mtFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">MT - DATI TECNICI</legend>
+            <?php print_r($scheda['mt']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="daFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>
+            <?php print_r($scheda['da']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="coFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">CO - CONSERVAZIONE</legend>
+            <?php print_r($scheda['co']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="adFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">AD - ACCESSO AI DATI</legend>
+            <?php print_r($scheda['ad']); ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="anFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">AN - ANNOTAZIONI</legend>
+            <?php print_r($scheda['an']); ?>
           </fieldset>
         </div>
         <div class="col-md-6">

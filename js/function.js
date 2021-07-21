@@ -639,7 +639,7 @@ function salvaScheda(e){
       data: {trigger : 'addScheda',  dati}
     })
     .done(function(data){
-      data.url='schedaView.php?sk='+data.scheda;
+      data.url='schedaView.php?get='+data.scheda;
       createToast(data);
     })
     .fail(function(){console.log("error");});

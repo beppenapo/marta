@@ -1,1 +1,1 @@
-\copy  (select l1.id, l1.value categoria_l1, l2.value categoria_l2, l3.value categoria_l3, l4.value ogtd_l4, l5.value ogtd_specifiche_l5 from liste.ra_cls_l1 l1 LEFT JOIN liste.ra_cls_l2 l2 on l2.l1 = l1.id LEFT JOIN liste.ra_cls_l3 l3 on l3.l2 = l2.id LEFT JOIN liste.ra_cls_l4 l4 on l4.l3 = l3.id LEFT JOIN liste.ra_cls_l5 l5 on l5.l4 = l4.id order by l1.id, l2.value, l3.value, l4.value, l5.value asc) to 'ra_categorie.csv' with csv header
+SELECT val.value dtm from dtm inner join liste.dtm val on dtm.dtm = val.id where dtm.scheda = 286 order by dtm asc;

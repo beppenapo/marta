@@ -8,75 +8,49 @@ class Scheda extends Conn{
 
   public function getScheda(int $id){
     $out=[];
-    $sql = "
-      select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, s.cmpd,  concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv
-      from scheda s
-      inner join liste.tsk on s.tsk = tsk.id
-      inner join liste.lir on s.lir = lir.id
-      inner join utenti u on s.cmpn = u.id
-      inner join utenti fur on s.fur = fur.id
-      inner join nctn_scheda ns on ns.scheda = s.id
-      inner join nctn on ns.nctn = nctn.nctn
-      left join inventario_scheda isc on isc.scheda = s.id
-      left join inventario i on isc.inventario = i.id
-      where s.id = ".$id.";";
+    $sql = "select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, s.cmpd,  concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv
+      from scheda s inner join liste.tsk on s.tsk = tsk.id inner join liste.lir on s.lir = lir.id inner join utenti u on s.cmpn = u.id inner join utenti fur on s.fur = fur.id inner join nctn_scheda ns on ns.scheda = s.id inner join nctn on ns.nctn = nctn.nctn left join inventario_scheda isc on isc.scheda = s.id left join inventario i on isc.inventario = i.id where s.id = ".$id.";";
     $scheda = $this->simple($sql);
     $out['scheda'] = $scheda[0];
 
     if($out['scheda']['tskid']==1){
-      $sql = "select
-      l1.value as cls1
-      , l2.value as cls2
-      , l3.value as cls3
-      , l4.value as cls4
-      , coalesce(l5.value,'dato non inserito') as cls5
-      , coalesce(ogtt, 'dato non inserito') as ogtt
-      from og_ra og
-      inner join liste.ra_cls_l4 l4 on og.l4 = l4.id
-      inner join liste.ra_cls_l3 l3 on og.l3 = l3.id
-      inner join liste.ra_cls_l2 l2 on l3.l2 = l2.id
-      inner join liste.ra_cls_l1 l1 on l2.l1 = l1.id
-      left join liste.ra_cls_l5 l5 on og.l5 = l5.id
-      where og.scheda = ".$id.";";
+      $sql = "select l1.value as cls1, l2.value as cls2, l3.value as cls3, l4.value as cls4, coalesce(l5.value,'dato non inserito') as cls5, coalesce(ogtt, 'dato non inserito') as ogtt from og_ra og inner join liste.ra_cls_l4 l4 on og.l4 = l4.id inner join liste.ra_cls_l3 l3 on og.l3 = l3.id inner join liste.ra_cls_l2 l2 on l3.l2 = l2.id inner join liste.ra_cls_l1 l1 on l2.l1 = l1.id left join liste.ra_cls_l5 l5 on og.l5 = l5.id where og.scheda = ".$id.";";
     }else {
-      $sql = "select
-      ogr.value as ogr
-      , coalesce(og.ogtt,'dato non inserito') as ogtt
-      , coalesce(og.ogth, 'dato non inserito') as ogth
-      , coalesce(og.ogtl, 'dato non inserito') as ogtl
-      , coalesce(ogto.value, 'dato non inserito') as ogto
-      , coalesce(ogts.value, 'dato non inserito') as ogts
-      , coalesce(ogtr.value, 'dato non inserito') as ogtr
-      , ogtd.value as ogtd
-      from og_nu og
-      inner join liste.ogr on og.ogr = ogr.id
-      inner join liste.ogtd on og.ogtd = ogtd.id
-      left join liste.ogto on og.ogto = ogto.id
-      left join liste.ogts on og.ogts = ogts.id
-      left join liste.ogtr on og.ogtr = ogtr.id
-      where og.scheda = ".$id.";";
+      $sql = "select ogr.value as ogr, coalesce(og.ogtt,'dato non inserito') as ogtt, coalesce(og.ogth, 'dato non inserito') as ogth, coalesce(og.ogtl, 'dato non inserito') as ogtl, coalesce(ogto.value, 'dato non inserito') as ogto, coalesce(ogts.value, 'dato non inserito') as ogts, coalesce(ogtr.value, 'dato non inserito') as ogtr, ogtd.value as ogtd from og_nu og inner join liste.ogr on og.ogr = ogr.id inner join liste.ogtd on og.ogtd = ogtd.id left join liste.ogto on og.ogto = ogto.id left join liste.ogts on og.ogts = ogts.id left join liste.ogtr on og.ogtr = ogtr.id where og.scheda = ".$id.";";
     }
     $og = $this->simple($sql);
     $out['og'] = $og[0];
 
-    $sql ="select
-    gpl.value as gpl
-    , gp.gpdpx
-    , gp.gpdpy
-    , gpm.value as gpm
-    , gpt.value as gpt
-    , gpp.value as gpp
-    , gpp.epsg
-    , gp.gpbb
-    , gp.gpbt
-    from gp
-    inner join liste.gpl on gp.gpl = gpl.id
-    inner join liste.gpm on gp.gpm = gpm.id
-    inner join liste.gpt on gp.gpt = gpt.id
-    inner join liste.gpp on gp.gpp = gpp.id
-    where gp.scheda = ".$id.";";
+    $sql ="select gpl.value as gpl, gp.gpdpx, gp.gpdpy, gpm.value as gpm, gpt.value as gpt, gpp.value as gpp, gpp.epsg, gp.gpbb, gp.gpbt from gp inner join liste.gpl on gp.gpl = gpl.id inner join liste.gpm on gp.gpm = gpm.id inner join liste.gpt on gp.gpt = gpt.id inner join liste.gpp on gp.gpp = gpp.id where gp.scheda = ".$id.";";
     $gp = $this->simple($sql);
     $out['gp'] = $gp[0];
+
+    $sql ="select comune.pvcc, ldc.ldcn, lc.piano, lc.sala, coalesce(lc.contenitore, 'dato non inserito o assente') as contenitore, coalesce(lc.colonna::varchar, 'dato non inserito o assente') as colonna, coalesce(lc.ripiano, 'dato non inserito o assente') as ripiano from lc INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = ".$id.";";
+    $lc = $this->simple($sql);
+    $out['lc'] = $lc[0];
+
+    $sql ="select ub.invn, coalesce(ub.stis,'dato non inserito') stis, coalesce(ub.stid::varchar,'dato non inserito') stid, coalesce(stim.value,'dato non inserito') stim
+    from ub inner join liste.stim on ub.stim = stim.id where ub.scheda = ".$id.";";
+    $ub = $this->simple($sql);
+    $out['ub'] = $ub[0];
+
+    $sql ="select coalesce(nucn, 'dato non inserito') nucn, coalesce(rcga, 'dato non inserito') rcga, rcgd, coalesce(rcgz, 'dato non inserito') rcgz from rcg where rcg.scheda = ".$id.";";
+    $rcg = $this->simple($sql);
+    $out['re']['rcg'] = $rcg[0];
+
+    $sql ="select coalesce(nucn, 'dato non inserito') nucn, scan, COALESCE(dscf, 'dato non inserito') dscf, COALESCE(dsca, 'dato non inserito') dsca, dscd, COALESCE(dscn, 'dato non inserito') dscn from dsc where dsc.scheda = ".$id.";";
+    $dsc = $this->simple($sql);
+    $out['re']['dsc'] = $dsc[0];
+
+    $sql ="SELECT aint.value aint, ain.aind, COALESCE(ain.ains, 'dato non inserito') ains from ain inner join liste.aint on ain.aint = aint.id where ain.scheda = ".$id.";";
+    $ain = $this->simple($sql);
+    $out['re']['ain'] = $ain[0];
+
+    $sql = "SELECT dtzg.value dtzg, dtzs.value dtzs, dt.dtsi, dt.dtsf from dt inner join liste.dtzg on dt.dtzg = dtzg.id inner join liste.dtzs on dt.dtzs = dtzs.id where dt.scheda = ".$id.";";
+    $dt = $this->simple($sql);
+    $out['dt']['dt'] = $dt[0];
+    $sql = "SELECT val.value dtm from dtm inner join liste.dtm val on dtm.dtm = val.id where dtm.scheda = ".$id." order by dtm asc;";
+    $out['dt']['dtm'] = $this->simple($sql);
 
     return $out;
   }
