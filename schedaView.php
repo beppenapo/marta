@@ -272,7 +272,9 @@
         <div class="col-md-6">
           <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">immagini - documenti - multimedia</legend>
+            <?php if(count($scheda['gp'])>0){ ?>
             <div id="mappa" class="bg-marta"></div>
+          <?php } ?>
           </fieldset>
         </div>
       </div>

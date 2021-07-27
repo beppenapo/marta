@@ -15,7 +15,5 @@ function elencoBiblio($obj){return json_encode($obj->elencoBiblio());}
 function getScheda($obj){return json_encode($obj->getScheda($_POST['id']));}
 function editScheda($obj){return json_encode($obj->editScheda($_POST['dati']));}
 function deleteScheda($obj){return json_encode($obj->deleteScheda($_POST['id']));}
-
-### Ale here ###
-function insbiblioinscheda($obj){return json_encode($obj->insbiblioinscheda(filtraInt($_POST['id_scheda']),filtraInt($_POST['id_biblio'])));}
+function biblioScheda($obj){return json_encode($obj->biblioScheda($_POST['dati']));}
 ?>

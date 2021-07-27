@@ -16,10 +16,30 @@ class Biblio extends Conn{
   }
 
   public function addBiblio(array $dati){
-    $sql = $this->buildInsert('bibliografia',$dati);
-    $res = $this->prepared($sql, $dati);
-    if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata correttamente inserita");}
-    return $res;
+    try {
+      if (isset($dati['bs'])) {
+        $bs = $dati['bs'];
+        unset($dati['bs']);
+        $msg = 'Il record bibliografico è stato creato ed associato alla scheda reperto';
+      }else {
+        $msg = 'La scheda bibliografica è stata correttamente inserita';
+      }
+      $this->begin();
+      $sql = $this->buildInsert('bibliografia',$dati);
+      $sql = rtrim($sql, ";") . " returning id;";
+      $biblioId = $this->returning($sql,$dati);
+      if(isset($bs['scheda'])){
+        $bs['biblio'] = $biblioId['field'];
+        $sql = $this->buildInsert('biblio_scheda',$bs);
+        $this->prepared($sql,$bs);
+      }
+      $this->commit();
+      return array("res"=>true,"msg"=>$msg, "id"=>$biblioId['field']);
+    } catch (\PDOException $e) {
+      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
+    }catch (\Exception $e) {
+      return array("res"=>false,"msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
+    }
   }
 
   public function editScheda(array $dati){
@@ -69,30 +89,12 @@ class Biblio extends Conn{
     return $out;
   }
 
-#### Ale here #####
-
-public function insbiblioinscheda(int $id_scheda, int $id_biblio){
-	$this->begin();
-    try {
-	  $this->addSchedaBiblio('biblio_scheda', $id_scheda, $id_biblio);
-	  $this->commit();
-	  return array("res"=>true, "msg"=>'Associazione con la scheda bibliografica effettuata correttamente.');
-	  // return array("res"=>true, "msg"=>$out);
-	} catch (\Exception $e) {
-	  // $this->rollback();
-	  return array("res"=>false, "msg"=>$e->getMessage());
-	}
-}
-
-
-
-  protected function addSchedaBiblio(string $tab, int $scheda, int $biblio){
-    $dati['scheda'] = $scheda;
-    $dati['biblio'] = $biblio;
-    $sql = $this->buildInsert($tab,$dati);
-    $res = $this->prepared($sql,$dati);
-    if (!$res) { throw new \Exception($res, 1);}
+  public function biblioScheda(array $dati){
+    $sql = $this->buildInsert('biblio_scheda',$dati);
+    $res = $this->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "Il record bibliografico è stato correttamente associato alla scheda reperto");}
     return $res;
   }
+
 }
 ?>

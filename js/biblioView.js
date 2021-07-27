@@ -56,7 +56,7 @@ function getScheda(id){
         let tipo = v.tsk == 1 ? 'RA' : 'NU';
         let testo = v.nctn+' - '+tipo+' - '+v.titolo;
         let li = $("<li/>",{class:'list-group-item'}).appendTo(listaSchede);
-        $("<a/>",{href:"scheda.php?get="+v.scheda, text: testo}).appendTo(li);
+        $("<a/>",{href:"schedaView.php?get="+v.scheda, text: testo}).appendTo(li);
       })
     }
   })

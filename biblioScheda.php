@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="css/scheda.css">
   </head>
   <body>
-    <input type="hidden" name="idScheda" value="<?php echo $_GET['sk']; ?>">
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <!-- <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div> -->
@@ -15,6 +14,7 @@
         <h3 id="title" class="border-bottom border-dark">Aggiungi bibliografia alla scheda "<?php echo $scheda['scheda']['titolo']; ?>"</h3>
         <small class="text-danger font-weight-bold d-block mb-5">* Campi obbligatori</small>
         <form>
+          <input type="hidden" name="scheda" value="<?php echo $_GET['sk']; ?>">
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">Aggiungi bibliografia alla scheda</legend>
@@ -29,19 +29,19 @@
               </div>
               <div class="form-row">
                 <div class="col-md-4">
+                  <label for="livello" class="font-weight-bold text-danger">Seleziona il tipo di bibliografia</label>
+                  <select class="form-control form-control-sm" name="livello" id="livello" required>
+                    <option value="">-- seleziona record --</option>
+                    <?php foreach ($biblio->listaLivello() as $item) { echo "<option value='".$item['id']."'>".$item['value']."</option>"; } ?>
+                  </select>
+                </div>
+                <div class="col-md-4">
                   <label for="pagine">Inserisci le pagine di riferimento</label>
                   <input type="text" class="form-control form-control-sm" id="pagine" name="pagine" value="" placeholder="es. 1-5, 8, 9 ecc.">
                 </div>
                 <div class="col-md-4">
                   <label for="figure">Inserisci le figure o le tavole di riferimento</label>
                   <input type="text" class="form-control form-control-sm" id="figure" name="figure" value="" placeholder="es. 1-5, 8, 9 ecc.">
-                </div>
-                <div class="col-md-4">
-                  <label for="livello">Seleziona il tipo di bibliografia</label>
-                  <select class="form-control form-control-sm" name="livello" id="livello">
-                    <option value="">-- seleziona record --</option>
-                    <?php foreach ($biblio->listaLivello() as $item) { echo "<option value='".$item['id']."'>".$item['value']."</option>"; } ?>
-                  </select>
                 </div>
               </div>
             </fieldset>
@@ -63,8 +63,21 @@
           </div>
         </div>
       </div>
+
+      <div role="alert alert-dismissible fade show" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+        <div class="toast-header">
+          <span id="headerTxt" class="mr-auto">Risultato query</span>
+          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="toast-body text-white text-center">
+          <div class="toast-body-msg mb-5"></div>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-light btn-sm" name="continua">aggiungi ancora</button>
+            <button type="button" class="btn btn-light btn-sm" data-dismiss="toast" name="viewRec"></button>
+          </div>
+        </div>
+      </div>
     </main>
-    <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="js/function.js" charset="utf-8"></script>
