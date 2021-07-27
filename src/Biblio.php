@@ -37,30 +37,15 @@ class Biblio extends Conn{
     $res = $this->prepared($sql, $dati);
     if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata definitivamente eliminata");}
     return $res;
-    //
-    // $this->begin();
-    // try {
-    // $filter_scheda = ['biblio'=>$id];
-    // $sqldel = $this->buildDelete('public.biblio_scheda',$filter_scheda);
-    // $filter_scheda = ['id'=>$id];
-    // $sqldel = $this->buildDelete('public.bibliografia',$filter_scheda);
-    // $this->prepared($sqldel);
-    // $this->commit();
-    // return array("res"=>true, "msg"=>'La scheda bibliografica è stata correttamente eliminata');
-    // // return array("res"=>true, "msg"=>$out);
-    // } catch (\Exception $e) {
-    // // $this->rollback();
-    // return array("res"=>false, "msg"=>$e->getMessage());
-    // }
   }
 
   public function elencoBiblio(){
-    $sql = "select b.id, l.value as tipo, b.autore, b.titolo, count(s.*) as schede
+    $sql = "select b.id, l.value as tipo, b.autore, b.titolo, b.anno, count(s.*) as schede
     from bibliografia b
     inner join liste.biblio_tipo as l on b.tipo = l.id
     left join biblio_scheda bs on bs.biblio = b.id
     left join scheda s on bs.scheda = s.id
-    group by b.id, l.value, b.autore, b.titolo
+    group by b.id, l.value, b.autore, b.titolo, b.anno
     order by b.titolo asc;";
     return $this->simple($sql);
   }
@@ -74,12 +59,11 @@ class Biblio extends Conn{
     $res = $this->simple($sql);
     $out['scheda'] = $res[0];
 
-    $sql =" select og.scheda, scheda.tipo, ogtd.value as ogtd
-    from og
-    inner join liste.ogtd as ogtd on og.ogtd = ogtd.id
-    inner join scheda on og.scheda = scheda.id
-    inner join biblio_scheda bs on scheda.id = bs.scheda
-    where bs.biblio = ".$id." order by ogtd asc;";
+    $sql =" select bs.scheda, nctn.nctn, scheda.tsk, scheda.titolo
+    from biblio_scheda bs
+    inner JOIN nctn_scheda nctn on nctn.scheda = bs.scheda
+    inner join scheda on bs.scheda = scheda.id
+    where bs.biblio = ".$id." order by nctn asc;";
     $res = $this->simple($sql);
     $out['schede'] = $res;
     return $out;

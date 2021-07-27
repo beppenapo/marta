@@ -8,7 +8,7 @@ function buildTable(){
     data.forEach(function(v,i){
       console.log(v);
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip');
-      let link = $("<a/>",{href:'biblioScheda.php?get='+v.id, html:linkIco});
+      let link = $("<a/>",{href:'biblioView.php?get='+v.id, html:linkIco});
       tr = $("<tr/>").appendTo('#dataTable');
       $("<td/>",{text:v.id}).appendTo(tr);
       $("<td/>",{text:v.tipo}).appendTo(tr);

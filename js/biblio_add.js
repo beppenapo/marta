@@ -2,14 +2,6 @@ const API = 'api/biblio.php';
 let y = getData();
 $(".raccoltaWrap").hide();
 $("#anno").prop("max",y['y']);
-$.ajax({ url: 'api/biblio.php', type: 'POST', dataType: 'json', data: {trigger: 'listaTipo'}})
-.done(function(data) {
-  $("<option/>",{text:'-- seleziona tipologia --', value:'', selected:true, disabled:true}).appendTo('select[name=tipo]');
-  data.forEach(function(v,i){
-    $("<option/>",{text:v.value, value:v.id}).appendTo('select[name=tipo]');
-  })
-})
-.fail(function() { console.log("error"); });
 
 $("body").on('change', '[name=tipo]', function(){
   let v = $(this).val();
@@ -39,6 +31,13 @@ $('[name=submit]').on('click', function (e) {
     if ($("[name=luogo]").val()) {dati.luogo = $("[name=luogo]").val();}
     if ($("[name=isbn]").val()) {dati.isbn = $("[name=isbn]").val();}
     if ($("[name=url]").val()) {dati.url = $("[name=url]").val();}
+    if ($("[name=scheda]").val()) {
+      dati.scheda = $("[name=scheda]").val();
+      dati.livello = $("[name=livello]").val();
+      if (true) {
+
+      }
+    }
     $.ajax({
       url: API,
       type: 'POST',

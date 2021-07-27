@@ -1,6 +1,9 @@
 <?php
 session_start();
 if (!isset($_SESSION['id'])){ header("location:login.php");}
+require 'vendor/autoload.php';
+use \Marta\Biblio;
+$biblio = new Biblio();
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -24,10 +27,13 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">SCHEDA BIBLIOGRAFIA</legend>
-              <div class="row mb-3">
+              <div class="form-row mb-3">
                 <div class="col-md-3">
                   <label for="tipo" class="text-danger font-weight-bold">Tipo pubblicazione</label>
-                  <select class="form-control form-control-sm" id="tipo" name="tipo" required ></select>
+                  <select class="form-control form-control-sm" id="tipo" name="tipo" required >
+                    <option value="">-- seleziona tipologia --</option>
+                    <?php foreach ($biblio->listaTipo() as $item) { echo "<option value='".$item['id']."'>".$item['value']."</option>"; } ?>
+                  </select>
                 </div>
                 <div class="col-md-5 raccoltaWrap">
                   <label for="titolo_raccolta" class="text-danger font-weight-bold">Titolo raccolta</label>
@@ -38,15 +44,13 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                   <input type="text" class="form-control form-control-sm tab" id="curatore" name="curatore" value="">
                 </div>
               </div>
-              <div class="row mb-3">
+              <div class="form-row mb-3">
                 <div class="col">
                   <label for="titolo" class="text-danger font-weight-bold">Titolo</label>
                   <input type="text" class="form-control form-control-sm tab" id="titolo" name="titolo" value="" placeholder="Inserisci titolo" required>
                 </div>
-
               </div>
-
-              <div class="row mb-3">
+              <div class="form-row mb-3">
                 <div class="col-md-5">
                   <label for="autore" class="text-danger font-weight-bold">Autore principale</label>
                   <input type="text" class="form-control form-control-sm tab" id="autore" name="autore" value="" placeholder="Cognome Nome" required>
@@ -56,8 +60,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                   <input type="text" class="form-control form-control-sm tab" id="altri_autori" name="altri_autori" placeholder="Cognome Nome, Cognome Nome, ..." value="">
                 </div>
               </div>
-
-              <div class="row mb-3">
+              <div class="form-row mb-3">
                 <div class="col-md-5">
                   <label for="editore">Editore</label>
                   <input type="text" class="form-control form-control-sm tab" id="editore" name="editore" value="">
@@ -71,7 +74,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                   <input type="text" class="form-control form-control-sm tab" id="luogo" name="luogo" value="">
                 </div>
               </div>
-              <div class="row">
+              <div class="form-row mb-3">
                 <div class="col-md-6">
                   <label for="isbn">ISBN</label>
                   <input type="text" class="form-control form-control-sm tab" id="isbn" name="isbn" value="">
@@ -81,10 +84,31 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                   <input type="url" class="form-control form-control-sm tab" id="url" name="url" value="" placeholder="inserire link completo, es: http://www.sito.com">
                 </div>
               </div>
+              <?php if(isset($_GET['sk'])){ ?>
+              <legend class="text-marta font-weight-bold border-bottom mb-3">Dati reperto</legend>
+              <div class="form-row">
+                <input type="hidden" name="scheda" value="<?php echo $_GET['sk']; ?>">
+                <div class="col-md-4">
+                  <label for="pagine">Inserisci le pagine di riferimento</label>
+                  <input type="text" class="form-control form-control-sm" id="pagine" name="pagine" value="" placeholder="es. 1-5, 8, 9 ecc.">
+                </div>
+                <div class="col-md-4">
+                  <label for="figure">Inserisci le figure o le tavole di riferimento</label>
+                  <input type="text" class="form-control form-control-sm" id="figure" name="figure" value="" placeholder="es. 1-5, 8, 9 ecc.">
+                </div>
+                <div class="col-md-4">
+                  <label for="livello" class="font-weight-bold text-danger">Seleziona il tipo di bibliografia</label>
+                  <select class="form-control form-control-sm" name="livello" id="livello" required>
+                    <option value="">-- seleziona record --</option>
+                    <?php foreach ($biblio->listaLivello() as $item) { echo "<option value='".$item['id']."'>".$item['value']."</option>"; } ?>
+                  </select>
+                </div>
+              </div>
+              <?php } ?>
             </fieldset>
           </div>
           <div class="form-group">
-            <div class="row">
+            <div class="form-row">
               <div class="col-6">
                 <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit">salva dati</button>
               </div>

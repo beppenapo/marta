@@ -16,7 +16,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
       <div class="container">
         <div class="row mb-4">
           <div class="col">
-            <h3 class="border-bottom">Inserisci un nuovo record bibliografico</h3>
+            <h3 class="border-bottom">Modifica record bibliografico</h3>
             <small class="text-danger font-weight-bold d-block">* Campi obbligatori</small>
           </div>
         </div>
@@ -88,6 +88,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
             <div class="row">
               <div class="col-6">
                 <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit">salva dati</button>
+                <a href="biblioView.php?get=<?php echo $_GET['mod']; ?>" class="btn btn-sm btn-outline-secondary">annulla modifica</a>
               </div>
             </div>
           </div>

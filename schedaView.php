@@ -17,7 +17,7 @@
           <div class="btn-group" role="group">
             <button id="aggiungi" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> aggiungi</button>
             <div class="dropdown-menu" aria-labelledby="aggiungi">
-              <a class="dropdown-item" href="#" title="aggiungi fonte bibliografica<br><br>Ricorda che per chiudere la scheda devi aggiungere almeno 1 riferimento bibliografico" data-toggle="tooltip" data-placement="right">bibliografia</a>
+              <a class="dropdown-item" href="biblioScheda.php?sk=<?php echo $_GET['get']; ?>" title="aggiungi fonte bibliografica<br><br>Ricorda che per chiudere la scheda devi aggiungere almeno 1 riferimento bibliografico" data-toggle="tooltip" data-placement="right">bibliografia</a>
               <a class="dropdown-item" href="#" title="aggiungi fotografia<br><br>Ricorda che per chiudere la scheda devi aggiungere almeno 2 foto" data-toggle="tooltip" data-placement="right">foto</a>
               <a class="dropdown-item" href="#" title="aggiungi documentazione grafica come tavole, disegni ecc." data-toggle="tooltip" data-placement="right">grafica</a>
               <a class="dropdown-item" href="#" title="aggiungi fonte video" data-toggle="tooltip" data-placement="right">video</a>
@@ -146,7 +146,7 @@
               <?php if(count($scheda['re']['dsc'])==0){echo $noData;}else{ ?>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>NUCN - Codice ICCD:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['nucn']; ?></span></li>
-                <li class="list-group-item"><span>SCAN - Denominazione dello scavo:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['rcga']; ?></span></li>
+                <li class="list-group-item"><span>SCAN - Denominazione dello scavo:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['scan']; ?></span></li>
                 <li class="list-group-item"><span>DSCA - Responsabile scientifico:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['dsca']; ?></span></li>
                 <li class="list-group-item"><span>DSCD - Data:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['dscd']; ?></span></li>
                 <li class="list-group-item"><span>DSCN - Specifiche:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['dscn']; ?></span></li>
@@ -191,23 +191,82 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="mtFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">MT - DATI TECNICI</legend>
-            <?php print_r($scheda['mt']); ?>
+            <ul class="list-group list-group-flush">
+              <?php foreach ($scheda['mt'] as $mtc) {
+                echo '<li class="list-group-item"><span>Materia/Tecnica:</span><span class="font-weight-bold">'.$mtc['materia'].'/'.$mtc['tecnica'].'</span></li>';
+              } ?>
+            </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="daFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>
-            <?php print_r($scheda['da']); ?>
+            <ul class="list-group list-group-flush">
+              <?php
+              if($scheda['scheda']['tskid']==1){
+                echo '<li class="list-group-item"><span>DESO - Indicazioni sull\'oggetto:</span><span class="font-weight-bold">'.$scheda['da']['deso'].'</span></li>';
+              }else{
+              ?>
+              <li class="list-group-item"><span>DESA - Dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desa']; ?></span></li>
+              <li class="list-group-item"><span>DESM - Rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desm']; ?></span></li>
+              <li class="list-group-item"><span>DESV - Taglio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desv']; ?></span></li>
+              <li class="list-group-item"><span>DESL - Legenda dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desl']; ?></span></li>
+              <li class="list-group-item"><span>DESG - Legenda rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desg']; ?></span></li>
+              <li class="list-group-item"><span>DESU - Soggetto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desu']; ?></span></li>
+              <li class="list-group-item"><span>DESF - Alfabeto/scrittura dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desf']; ?></span></li>
+              <li class="list-group-item"><span>DEST - Alfabeto/scrittura rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['dest']; ?></span></li>
+              <li class="list-group-item"><span>DESO - Taglio:</span><span class="font-weight-bold"><?php echo $scheda['da']['deso']; ?></span></li>
+              <li class="list-group-item"><span>DESN - Lingua dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desn']; ?></span></li>
+              <li class="list-group-item"><span>DESR - Lingua rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desr']; ?></span></li>
+              <li class="list-group-item"><span>DESD - Descrizione bene paramonetale:</span><span class="font-weight-bold"><?php echo $scheda['da']['desd']; ?></span></li>
+              <?php } ?>
+            </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="coFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">CO - CONSERVAZIONE</legend>
-            <?php print_r($scheda['co']); ?>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><span>STCC - Stato di conservazione:</span><span class="font-weight-bold"><?php echo $scheda['co']['stcc']; ?></span></li>
+              <li class="list-group-item"><span>STCL - Leggibilità:</span><span class="font-weight-bold"><?php echo $scheda['co']['stcl']; ?></span></li>
+            </ul>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="tuFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">TU - CONDIZIONE GIURIDICA E VINCOLI</legend>
+            <?php if(count($scheda['tu']['acq'])==0){echo $noData;}else{ ?>
+            <fieldset id="acqFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">ACQ - ACQUISIZIONE</legend>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>ACQT - Tipo acquisizione:</span><span class="font-weight-bold"><?php echo $scheda['tu']['acq']['acqt']; ?></span></li>
+                <li class="list-group-item"><span>ACQN - Nome:</span><span class="font-weight-bold"><?php echo $scheda['tu']['acq']['acqn']; ?></span></li>
+                <li class="list-group-item"><span>ACQD - Data:</span><span class="font-weight-bold"><?php echo $scheda['tu']['acq']['acqd']; ?></span></li>
+                <li class="list-group-item"><span>ACQL - Luogo:</span><span class="font-weight-bold"><?php echo $scheda['tu']['acq']['acql']; ?></span></li>
+              </ul>
+            </fieldset>
+            <?php } ?>
+            <fieldset id="cdgFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">CDG - CONDIZIONE GIURIDICA</legend>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>CDGG - Indicazione giuridica: </span><span class="font-weight-bold"><?php echo $scheda['tu']['cdg']['cdgg']; ?></span></li>
+              </ul>
+            </fieldset>
+            <fieldset id="nvcFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">NVC - PROVVEDIMENTI DI TUTELA</legend>
+              <?php if(count($scheda['tu']['nvc'])==0){echo $noData;}else{ ?>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span></span><span class="font-weight-bold"><?php echo $scheda['tu']['cdg']['cdgg']; ?></span></li>
+              </ul>
+              <?php } ?>
+            </fieldset>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="adFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">AD - ACCESSO AI DATI</legend>
-            <?php print_r($scheda['ad']); ?>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><span>ADSP - Profilo di accesso: </span><span class="font-weight-bold"><?php echo $scheda['ad']['adsp']; ?></span></li>
+              <li class="list-group-item"><span>ADSM - Motivazione: </span><span class="font-weight-bold"><?php echo $scheda['ad']['adsm']; ?></span></li>
+            </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="anFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">AN - ANNOTAZIONI</legend>
-            <?php print_r($scheda['an']); ?>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><span>OSS - Osservazioni: </span><span class="font-weight-bold"><?php echo $scheda['an']['oss'] ? $scheda['an']['oss'] : 'dato non inserito'; ?></span></li>
+            </ul>
           </fieldset>
         </div>
         <div class="col-md-6">

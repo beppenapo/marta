@@ -52,6 +52,38 @@ class Scheda extends Conn{
     $sql = "SELECT val.value dtm from dtm inner join liste.dtm val on dtm.dtm = val.id where dtm.scheda = ".$id." order by dtm asc;";
     $out['dt']['dtm'] = $this->simple($sql);
 
+    $sql ="select materia.value as materia, mtc.tecnica from mtc inner join liste.materia on mtc.materia = materia.id where mtc.scheda = ".$id.";";
+    $out['mt'] = $this->simple($sql);
+
+    $sql ="select * from da where da.scheda = ".$id.";";
+    $da = $this->simple($sql);
+    $out['da'] = $da[0];
+
+    $sql ="SELECT stcc.value stcc, stcl.value stcl from co INNER JOIN liste.stcc on co.stcc = stcc.id INNER JOIN liste.stcl on co.stcc = stcl.id where co.scheda = ".$id.";";
+    $co = $this->simple($sql);
+    $out['co'] = $co[0];
+
+    $sql ="select acqt.value acqt, coalesce(acqn, 'dato non inserito') acqn, acqd, coalesce(acql, 'dato non inserito') acql from tu inner join liste.acqt on tu.acqt = acqt.id where tu.scheda = ".$id.";";
+    $acq = $this->simple($sql);
+    $out['tu']['acq'] = $acq[0];
+    $sql ="select cdgg.value cdgg from tu inner join liste.cdgg on tu.cdgg = cdgg.id where tu.scheda = ".$id.";";
+    $cdg = $this->simple($sql);
+    $out['tu']['cdg'] = $cdg[0];
+    $sql ="select nvct.value nvct, nvce from tu inner join liste.nvct on tu.nvct = nvct.id where tu.scheda = ".$id.";";
+    $nvc = $this->simple($sql);
+    $out['tu']['nvc'] = $nvc[0];
+
+    $sql ="select adsp.value adsp, adsm.value adsm from ad inner join liste.adsp on ad.adsp = adsp.id inner join liste.adsm on ad.adsm = adsm.id where ad.scheda = ".$id.";";
+    $ad = $this->simple($sql);
+    $out['ad'] = $ad[0];
+
+    $sql ="select adsp.value adsp, adsm.value adsm from ad inner join liste.adsp on ad.adsp = adsp.id inner join liste.adsm on ad.adsm = adsm.id where ad.scheda = ".$id.";";
+    $ad = $this->simple($sql);
+    $out['ad'] = $ad[0];
+
+    $sql ="select coalesce(oss,'dato non inserito') oss from an where an.scheda = ".$id.";";
+    $an = $this->simple($sql);
+    $out['an'] = $an[0];
     return $out;
   }
 
