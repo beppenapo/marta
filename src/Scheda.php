@@ -6,6 +6,14 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function getBiblioScheda(int $id){
+    $sql = "select b.id, b.titolo, b.anno, b.autore
+    from bibliografia b
+    INNER JOIN biblio_scheda bs on bs.biblio = b.id
+    WHERE bs.scheda = ".$id."
+    ORDER BY anno, autore, titolo asc;";
+    return $this->simple($sql);
+  }
   public function getScheda(int $id){
     $out=[];
     $sql = "select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, s.cmpd,  concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv

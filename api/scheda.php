@@ -16,12 +16,4 @@ function mtc($obj){return json_encode($obj->mtc($_POST));}
 function addScheda($obj){return json_encode($obj->addScheda($_POST['dati']));}
 function listaSchede($obj){return json_encode($obj->listaSchede($_POST['dati']));}
 function ogtdSel($obj){return json_encode($obj->ogtdSel($_POST['dati']));}
-
-//TODO: controlla se queste funzioni sono ancora usate, eventualmente cancella
-function vocabolari($obj){return json_encode($obj->vocabolari($_POST));}
-function autocomplete($obj){return json_encode($obj->autocomplete($_POST));}
-function getScheda($obj){return json_encode($obj->getScheda($_POST['id'],$_POST['tipo']));}
-function editScheda($obj){return json_encode($obj->editScheda($_POST['dati']));}
-function deleteScheda($obj){return json_encode($obj->deleteScheda($_POST['id']));}
-function delbiblioref($obj){return json_encode($obj->delbiblioref($_POST['id_scheda'],$_POST['id_biblio']));}
 ?>

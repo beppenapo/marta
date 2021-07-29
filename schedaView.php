@@ -274,7 +274,20 @@
             <legend class="w-auto bg-marta text-white border rounded p-1">immagini - documenti - multimedia</legend>
             <?php if(count($scheda['gp'])>0){ ?>
             <div id="mappa" class="bg-marta"></div>
-          <?php } ?>
+            <?php } ?>
+            <?php if(count($bibScheda) > 0){ ?>
+            <legend class="text-marta font-weight-bold border-bottom">Bibliografia correlata</legend>
+            <ul class="list-group list-group-flush" id="biblioList">
+              <?php foreach ($bibScheda as $i) {
+                echo "<li class='list-group-item'>
+                  <button type='button' class='btn btn-sm btn-danger mr-3' name='delBiblioScheda' data-scheda='".$_GET['get']."' data-biblio='".$i['id']."'>
+                    <i class='fas fa-times'></i>
+                  </button>
+                  <a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ".$i['anno'].", ".$i['titolo']."</a>
+                </li>";
+              } ?>
+            </ul>
+            <?php } ?>
           </fieldset>
         </div>
       </div>
