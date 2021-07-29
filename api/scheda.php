@@ -16,4 +16,5 @@ function mtc($obj){return json_encode($obj->mtc($_POST));}
 function addScheda($obj){return json_encode($obj->addScheda($_POST['dati']));}
 function listaSchede($obj){return json_encode($obj->listaSchede($_POST['dati']));}
 function ogtdSel($obj){return json_encode($obj->ogtdSel($_POST['dati']));}
+function delBiblioScheda($obj){return json_encode($obj->delBiblioScheda($_POST['dati']));}
 ?>

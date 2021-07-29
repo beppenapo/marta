@@ -27,20 +27,12 @@ function delBiblioScheda(dati){
     data: {trigger:'delBiblioScheda', dati:dati}
   })
   .done(function(data){
-    console.log(data.length);
-    let opts = [];
-    let firstOpt = "<option value='' selected disabled>-- definizione --</option>";
-    let noOpt = "<option value=''>-- nessuna specifica presente --</option>";
-    if (data.length == 0) {
-      opts.push(noOpt);
-    } else {
-      opts.push(firstOpt);
-      data.forEach((item, i) => {
-        let opt = "<option value='"+item.id+"'>"+item.value+"</option>";
-        opts.push(opt);
-      });
-    }
-    sel.html(opts.join(''));
+    obj={}
+    obj.titolo='Risultato query';
+    obj.res = data
+    obj.msg = 'il riferimento bibliografico è stato eliminato';
+    obj.classe = obj.res === true ? 'bg-success' : 'bg-danger';
+    viewMsgToast(obj);
   })
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);
@@ -52,4 +44,15 @@ function mapInit(){
   let y = parseFloat($("[name=gpdpy]").val()).toFixed(4)
   let epsg = parseInt($("[name=epsg]").val())
   console.log([x,y,epsg]);
+}
+
+function viewMsgToast(obj){
+  $(".toast").removeClass('[class^="bg-"]').addClass(obj.classe);
+  $("#headerTxt").html(obj.titolo);
+  $(".toast>.toast-body>.toast-body-msg").html(obj.msg);
+  $(".toast").toast({delay:3000});
+  $(".toast").show();
+  $(".toast").toast('show');
+  $("[name='continua']").hide();
+  $("[name='viewRec']").text('ok').on('click', function(){location.reload();});
 }

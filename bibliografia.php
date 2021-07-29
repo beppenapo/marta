@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['id'])){ header("location:login.php");}
+// if (!isset($_SESSION['id'])){ header("location:login.php");}
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -17,9 +17,11 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
     <main class="">
       <div class="container-fluid">
         <h3 class="border-bottom border-dark mb-3">Elenco risorse bibliografiche</h3>
+        <?php if (isset($_SESSION['id'])) { ?>
         <nav class="nav mb-5">
           <a class="nav-link btn btn-sm btn-marta" href="bibliografia_add.php">Nuova scheda bibliografica</a>
         </nav>
+        <?php } ?>
         <div class="row">
           <div class="col mb-5">
             <table id="dataTable" class="table table-sm table-striped table-bordered display compact" style="width:100%">

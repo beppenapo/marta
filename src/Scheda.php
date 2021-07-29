@@ -364,19 +364,11 @@ class Scheda extends Conn{
   }
   public function deleteScheda(int $id){}
 
-  public function delbiblioref(int $id_scheda, int $id_biblio){
-    $this->begin();
-    try {
-    $filter_scheda = ['scheda'=>$id_scheda, 'biblio'=>$id_biblio];
-    $sqldel = $this->buildDelete('public.biblio_scheda',$filter_scheda);
-    $this->prepared($sqldel);
-    $this->commit();
-    return array("res"=>true, "msg"=>'Il riferimento alla scheda bibliografica è stata correttamente eliminato');
-    // return array("res"=>true, "msg"=>$out);
-    } catch (\Exception $e) {
-    // $this->rollback();
-    return array("res"=>false, "msg"=>$e->getMessage());
-    }
+  public function delBiblioScheda(array $dati){
+    $sql = $this->buildDelete('biblio_scheda',$dati);
+    $res = $this->prepared($sql);
+    if (!$res) { throw new \Exception($res, 1);}
+    return $res;
   }
 
   protected function addSection(string $tab, int $scheda, array $dati){
