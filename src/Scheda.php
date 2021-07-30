@@ -362,7 +362,14 @@ class Scheda extends Conn{
       return array("res"=>false, "msg"=>$e->getMessage());
     }
   }
-  public function deleteScheda(int $id){}
+  public function delScheda(int $id){
+    $sql = $this->buildDelete('scheda',array("id"=>$id));
+    $this->begin();
+    $res = $this->prepared($sql);
+    if (!$res) { throw new \Exception($res, 1);}
+    $this->commit();
+    return $res;
+  }
 
   public function delBiblioScheda(array $dati){
     $sql = $this->buildDelete('biblio_scheda',$dati);

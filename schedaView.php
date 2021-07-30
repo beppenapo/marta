@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/schedaView.css">
   </head>
   <body>
+    <input type="hidden" name="schedaId" value="<?php echo $_GET['get']; ?>">
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
@@ -33,9 +34,9 @@
               <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right">og - oggetto</a>
             </div>
           </div>
-          <button id="duplica" name="duplica" type="button" class="btn btn-dark"><i class="fas fa-copy"></i> duplica</button>
-          <button id="chiudi" name="chiudi" type="button" class="btn btn-dark"><i class="fas fa-clipboard-check"></i> chiudi</button>
-          <button id="elimina" name="elimina" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
+          <button id="duplicaScheda" name="duplicaScheda" type="button" class="btn btn-dark"><i class="fas fa-copy"></i> duplica</button>
+          <button id="chiudiScheda" name="chiudiScheda" type="button" class="btn btn-dark"><i class="fas fa-clipboard-check"></i> chiudi</button>
+          <button id="eliminaScheda" name="eliminaScheda" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
         </div>
       </div>
     <?php } ?>

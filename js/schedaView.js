@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  const scheda = $("[name=schedaId]").val();
   $(".list-group-item > span").each(function(){
     if ($(this).text()=='dato non inserito') {
       $(this).removeClass('font-weight-bold').addClass('text-secondary')
@@ -17,7 +18,33 @@ $(document).ready(function() {
       delBiblioScheda(dati);
     }
   });
+  $("[name=eliminaScheda]").on('click', function(event) {
+    if (window.confirm("Eliminando la scheda eliminerai anche tutti i dati collegati come file, immagini ecc.\nSei sicuro di voler procedere con l'eliminazione?")) {
+      delScheda(scheda);
+    }
+  })
 });
+
+function delScheda(scheda){
+  $.ajax({
+    url: "api/scheda.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger:'delScheda', id:scheda}
+  })
+  .done(function(data){
+    obj={}
+    obj.titolo='Risultato query';
+    obj.res = data
+    obj.msg = 'La scheda e tutti gli oggetti collegati sono stati eliminati.';
+    obj.classe = obj.res === true ? 'bg-success' : 'bg-danger';
+    obj.url = 'dashboard.php';
+    viewMsgToast(obj);
+  })
+  .fail(function (jqXHR, textStatus, error) {
+    console.log("Post error: " + error);
+  });
+}
 
 function delBiblioScheda(dati){
   $.ajax({
@@ -54,5 +81,11 @@ function viewMsgToast(obj){
   $(".toast").show();
   $(".toast").toast('show');
   $("[name='continua']").hide();
-  $("[name='viewRec']").text('ok').on('click', function(){location.reload();});
+  $("[name='viewRec']").text('ok').on('click', function(){
+    if(obj.url){
+      window.location.href=obj.url;
+    }else {
+      window.location.reload();
+    }
+  });
 }
