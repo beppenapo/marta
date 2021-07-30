@@ -34,7 +34,6 @@ function delScheda(scheda){
   })
   .done(function(data){
     obj={}
-    obj.titolo='Risultato query';
     obj.res = data
     obj.msg = 'La scheda e tutti gli oggetti collegati sono stati eliminati.';
     obj.classe = obj.res === true ? 'bg-success' : 'bg-danger';
@@ -55,7 +54,6 @@ function delBiblioScheda(dati){
   })
   .done(function(data){
     obj={}
-    obj.titolo='Risultato query';
     obj.res = data
     obj.msg = 'il riferimento bibliografico è stato eliminato';
     obj.classe = obj.res === true ? 'bg-success' : 'bg-danger';
@@ -75,7 +73,7 @@ function mapInit(){
 
 function viewMsgToast(obj){
   $(".toast").removeClass('[class^="bg-"]').addClass(obj.classe);
-  $("#headerTxt").html(obj.titolo);
+  $("#headerTxt").html('Risultato query');
   $(".toast>.toast-body>.toast-body-msg").html(obj.msg);
   $(".toast").toast({delay:3000});
   $(".toast").show();
