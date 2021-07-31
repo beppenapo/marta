@@ -1,6 +1,6 @@
 $(document).ready(function() {
-  const scheda = $("[name=schedaId]").val();
-  const nctn = $("[name=nctn]").val();
+  const scheda = parseInt($("[name=schedaId]").val());
+  const nctn = parseInt($("[name=nctnId]").val());
   $(".list-group-item > span").each(function(){
     if ($(this).text()=='dato non inserito') {
       $(this).removeClass('font-weight-bold').addClass('text-secondary')
@@ -21,8 +21,8 @@ $(document).ready(function() {
   });
   $("[name=eliminaScheda]").on('click', function(event) {
     dati = {}
-    dati.id = scheda;
-    dati.nctn = nctn;
+    dati.id = parseInt(scheda);
+    dati.nctn = parseInt(nctn);
     if (window.confirm("Eliminando la scheda eliminerai anche tutti i dati collegati come file, immagini ecc.\nSei sicuro di voler procedere con l'eliminazione?")) {
       delScheda(dati);
     }
@@ -37,11 +37,11 @@ function delScheda(dati){
     data: {trigger:'delScheda', dati:dati}
   })
   .done(function(data){
+    console.log(data);
     obj={}
-    obj.res = data
-    obj.msg = 'La scheda e tutti gli oggetti collegati sono stati eliminati.';
-    obj.classe = obj.res === true ? 'bg-success' : 'bg-danger';
-    obj.url = 'dashboard.php';
+    obj.msg = data === true ? 'La scheda e tutti gli oggetti collegati sono stati eliminati.' : data.msg;
+    obj.classe = data === true ? 'bg-success' : 'bg-danger';
+    if(data === true){obj.url = 'dashboard.php';}
     viewMsgToast(obj);
   })
   .fail(function (jqXHR, textStatus, error) {
@@ -58,9 +58,8 @@ function delBiblioScheda(dati){
   })
   .done(function(data){
     obj={}
-    obj.res = data
-    obj.msg = 'il riferimento bibliografico è stato eliminato';
-    obj.classe = obj.res === true ? 'bg-success' : 'bg-danger';
+    obj.msg = data === true ? 'il riferimento bibliografico è stato eliminato' : 'Errore nella query: '+data.msg;
+    obj.classe = data === true ? 'bg-success' : 'bg-danger';
     viewMsgToast(obj);
   })
   .fail(function (jqXHR, textStatus, error) {

@@ -361,11 +361,23 @@ class Scheda extends Conn{
     }
   }
   public function delScheda(array $dati){
-    $filter = ['libero'=>'f'];
-    $update = $this->buildUpdate('nctn',array("nctn"=>$dati['id']));
-    $delete = $this->buildDelete('scheda',array("id"=>$dati['id']));
+    // $up = $dati;
+    // $del = $dati;
+    // unset($up['id']);
+    // unset($del['nctn']);
+    // $up['libero'] = true;
+    $updateDati = array('libero' => true, 'nctn' => $dati['nctn']);
+    $deleteDati = array('id' => $dati['id']);
+    $field = array('libero' => true);
+    $filter = array('nctn' => $dati['nctn']);
+    // $update = $this->buildUpdate('nctn', $filter, $field);
+    // $delete = $this->buildDelete('scheda',array("id"=>$dati['id']));
+    $updateSql = "update nctn set libero = :libero where nctn = :nctn;";
+    $deleteSql = "delete from scheda where id = :id;";
     $this->begin();
-    $res = $this->prepared($sql);
+    $res = $this->prepared($updateSql, $updateDati);
+    if (!$res) { throw new \Exception($res, 1);}
+    $res = $this->prepared($deleteSql,$deleteDati);
     if (!$res) { throw new \Exception($res, 1);}
     $this->commit();
     return $res;

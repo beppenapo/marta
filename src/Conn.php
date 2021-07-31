@@ -40,7 +40,7 @@ class Conn {
     }
   }
 
-  public function prepared($sql, $dati=array()){
+  public function prepared(string $sql, array $dati){
     // $pdo = $this->pdo();
     // $exec = $pdo->prepare($sql);
     // $res = $exec->execute($dati);
@@ -55,9 +55,10 @@ class Conn {
     } catch (\Exception $e) {
       return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     }
+    // return [$sql, $dati];
   }
 
-  public function returning($sql, $dati=array()){
+  public function returning(string $sql, array $dati){
     try {
       $pdo = $this->pdo();
       $exec = $pdo->prepare($sql);
