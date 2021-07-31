@@ -1,5 +1,6 @@
 $(document).ready(function() {
   const scheda = $("[name=schedaId]").val();
+  const nctn = $("[name=nctn]").val();
   $(".list-group-item > span").each(function(){
     if ($(this).text()=='dato non inserito') {
       $(this).removeClass('font-weight-bold').addClass('text-secondary')
@@ -19,18 +20,21 @@ $(document).ready(function() {
     }
   });
   $("[name=eliminaScheda]").on('click', function(event) {
+    dati = {}
+    dati.id = scheda;
+    dati.nctn = nctn;
     if (window.confirm("Eliminando la scheda eliminerai anche tutti i dati collegati come file, immagini ecc.\nSei sicuro di voler procedere con l'eliminazione?")) {
-      delScheda(scheda);
+      delScheda(dati);
     }
   })
 });
 
-function delScheda(scheda){
+function delScheda(dati){
   $.ajax({
     url: "api/scheda.php",
     type: 'POST',
     dataType: 'json',
-    data: {trigger:'delScheda', id:scheda}
+    data: {trigger:'delScheda', dati:dati}
   })
   .done(function(data){
     obj={}

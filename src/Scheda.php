@@ -356,14 +356,14 @@ class Scheda extends Conn{
 	  }
       $this->commit();
       return array("res"=>true, "msg"=>'La scheda è stata correttamente modificata', "id"=>$id_scheda);
-      // return array("res"=>true, "msg"=>$out);
     } catch (\Exception $e) {
-      // $this->rollback();
       return array("res"=>false, "msg"=>$e->getMessage());
     }
   }
-  public function delScheda(int $id){
-    $sql = $this->buildDelete('scheda',array("id"=>$id));
+  public function delScheda(array $dati){
+    $filter = ['libero'=>'f'];
+    $update = $this->buildUpdate('nctn',array("nctn"=>$dati['id']));
+    $delete = $this->buildDelete('scheda',array("id"=>$dati['id']));
     $this->begin();
     $res = $this->prepared($sql);
     if (!$res) { throw new \Exception($res, 1);}

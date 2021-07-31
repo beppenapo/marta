@@ -9,7 +9,7 @@ if(isset($funzione) && function_exists($funzione)) {
   echo $trigger;
 }
 function addScheda($obj){return json_encode($obj->addScheda($_POST['dati']));}
-function delScheda($obj){return json_encode($obj->delScheda($_POST['id']));}
+function delScheda($obj){return json_encode($obj->delScheda($_POST['dati']));}
 function getSale($obj){return json_encode($obj->getSale($_POST['piano']));}
 function getContenitore($obj){return json_encode($obj->getContenitore($_POST));}
 function getColonna($obj){return json_encode($obj->getColonna($_POST));}

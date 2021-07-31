@@ -8,6 +8,7 @@
   </head>
   <body>
     <input type="hidden" name="schedaId" value="<?php echo $_GET['get']; ?>">
+    <input type="hidden" name="nctnId" value="<?php echo $scheda['scheda']['nctn']; ?>">
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
