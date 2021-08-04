@@ -66,7 +66,7 @@ function getScheda(id){
       $("#contributi .card-body").remove();
       contributi.forEach(function(v,i){
         let li = $("<li/>",{class:'list-group-item'}).appendTo(listaContrib);
-        $("<a/>",{href:"#?"+v.id, text: v.autore+', '+v.titolo}).appendTo(li);
+        $("<a/>",{href:"contribView.php?get="+v.id, text: v.autore+', '+v.titolo}).appendTo(li);
       })
     }
   })
