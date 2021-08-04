@@ -72,7 +72,7 @@ class Biblio extends Conn{
 
   public function getScheda(int $id){
     $out = [];
-    $sql = "SELECT b.id, b.titolo, b.tipo as tipoid, l.value as tipo, b.autore, b.altri_autori, b.titolo_raccolta, b.editore, b.anno, b.luogo, b.isbn, b.url, b.curatore
+    $sql = "SELECT b.id, b.titolo, b.tipo as tipoid, l.value as tipo, b.autore, b.altri_autori, b.editore, b.anno, b.luogo, b.isbn, b.url, b.curatore
     FROM bibliografia b
     inner join liste.biblio_tipo as l on b.tipo = l.id
     WHERE b.id = ".$id.";";
@@ -86,6 +86,10 @@ class Biblio extends Conn{
     where bs.biblio = ".$id." order by nctn asc;";
     $res = $this->simple($sql);
     $out['schede'] = $res;
+
+    $sql = "select * from contributo where raccolta = ".$id." order by titolo asc;";
+    $out['contributi'] = $this->simple($sql);
+    
     return $out;
   }
 

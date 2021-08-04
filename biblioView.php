@@ -12,11 +12,20 @@ session_start();
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
-    <main class="">
-      <div class="container">
+    <main>
+      <?php if (isset($_SESSION['id'])) { ?>
+      <div id="menuScheda" class="bg-dark px-3">
+        <div class="btn-group" role="group">
+          <button id="aggiungi" type="button" class="btn btn-dark"aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> aggiungi contributo</button>
+          <a id="modifica" class="btn btn-dark" href="bibliografia_mod.php?mod=<?php echo $_GET['get']; ?>"><i class="fas fa-edit"></i> modifica</a>
+          <button id="eliminaScheda" name="biblioDel" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
+        </div>
+      </div>
+    <?php } ?>
+      <div class="container-fluid mt-5">
         <h3 id="title" class="border-bottom border-dark mb-5"></h3>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6 mb-3">
             <div class="card" id="scheda-card">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item" id="idScheda">
@@ -33,10 +42,6 @@ session_start();
                 </li>
                 <li class="list-group-item" id="altri_autori">
                   <span class="font-weight-bold d-inline-block align-top">Altri autori:</span>
-                  <span class="d-inline-block"></span>
-                </li>
-                <li class="list-group-item" id="titolo_raccolta">
-                  <span class="font-weight-bold d-inline-block align-top">Presente in:</span>
                   <span class="d-inline-block"></span>
                 </li>
                 <li class="list-group-item" id="curatore">
@@ -67,6 +72,13 @@ session_start();
             </div>
           </div>
           <div class="col-md-6">
+            <div class="card mb-3" id="contributi">
+              <div class="card-header bg-white">
+                <h6 class="font-weight-bold">articoli correlati<span class="badge badge-warning float-right" id="totContrib"></span></h6>
+              </div>
+              <div class="card-body"></div>
+              <ul class="list-group list-group-flush"></ul>
+            </div>
             <div class="card" id="schede">
               <div class="card-header bg-white">
                 <h6 class="font-weight-bold">schede correlate <span class="badge badge-warning float-right" id="totSchede"></span></h6>
@@ -76,12 +88,6 @@ session_start();
             </div>
           </div>
         </div>
-        <?php if(isset($_SESSION['id'])){ ?>
-        <nav class="navbar navbar-expand navbar-light bg-white mt-3 pl-0">
-          <a class="btn btn-sm btn-marta mr-2" href="bibliografia_mod.php?mod=<?php echo $_GET['get']; ?>">modifica</a>
-          <button type="button" class="btn btn-sm btn-danger" name="biblioDel">elimina</button>
-        </nav>
-      <?php } ?>
       </div>
     </main>
     <?php require('assets/toast.html'); ?>

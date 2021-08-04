@@ -31,14 +31,12 @@ function getScheda(id){
     console.log(data);
     let scheda = data['scheda'];
     let schede = data['schede'];
+    let contributi = data['contributi'];
     $("#title").text(scheda['titolo']);
-    // for (key in data['scheda']) { $("#"+key+">span:last-child").text(data['scheda'][key]);}
-    if (scheda['tipoid'] == 1) { $("#titolo_raccolta, #curatore").remove(); }
     $("#idScheda>span:last-child").text(scheda['id']);
     $("#tipo>span:last-child").text(scheda['tipo']);
     $("#autore>span:last-child").text(scheda['autore']);
     $("#altri_autori>span:last-child").text(scheda['altri_autori']);
-    $("#titolo_raccolta>span:last-child").text(scheda['titolo_raccolta']);
     $("#curatore>span:last-child").text(scheda['curatore']);
     $("#anno>span:last-child").text(scheda['anno']);
     $("#editore>span:last-child").text(scheda['editore']);
@@ -48,7 +46,7 @@ function getScheda(id){
     let listaSchede = "#schede>ul";
     if(schede.length==0){
       $("#schede .card-body").html('<p>Non sono presenti schede correlate</p>')
-      $("#schede us").remove();
+      $("#schede ul").remove();
     }else {
       $("#totSchede").text(schede.length)
       $("#schede .card-body").remove();
@@ -57,6 +55,18 @@ function getScheda(id){
         let testo = v.nctn+' - '+tipo+' - '+v.titolo;
         let li = $("<li/>",{class:'list-group-item'}).appendTo(listaSchede);
         $("<a/>",{href:"schedaView.php?get="+v.scheda, text: testo}).appendTo(li);
+      })
+    }
+    let listaContrib = "#contributi>ul";
+    if (contributi.length==0) {
+      $("#contributi .card-body").html('<p>Non sono presenti contributi correlati</p>')
+      $("#contributi ul").remove();
+    }else {
+      $("#totContrib").text(contributi.length)
+      $("#contributi .card-body").remove();
+      contributi.forEach(function(v,i){
+        let li = $("<li/>",{class:'list-group-item'}).appendTo(listaContrib);
+        $("<a/>",{href:"#?"+v.id, text: v.autore+', '+v.titolo}).appendTo(li);
       })
     }
   })

@@ -35,29 +35,23 @@ $biblio = new Biblio();
                     <?php foreach ($biblio->listaTipo() as $item) { echo "<option value='".$item['id']."'>".$item['value']."</option>"; } ?>
                   </select>
                 </div>
-                <div class="col-md-5 raccoltaWrap">
-                  <label for="titolo_raccolta" class="text-danger font-weight-bold">Titolo raccolta</label>
-                  <input type="text" class="form-control form-control-sm tab" id="titolo_raccolta" name="titolo_raccolta" title="specificare il titolo degli atti del convegno o della raccolta" value="">
-                </div>
-                <div class="col-md-4 raccoltaWrap">
-                  <label for="curatore">A cura di</label>
-                  <input type="text" class="form-control form-control-sm tab" id="curatore" name="curatore" value="">
-                </div>
-              </div>
-              <div class="form-row mb-3">
-                <div class="col">
+                <div class="col-md-9">
                   <label for="titolo" class="text-danger font-weight-bold">Titolo</label>
                   <input type="text" class="form-control form-control-sm tab" id="titolo" name="titolo" value="" placeholder="Inserisci titolo" required>
                 </div>
               </div>
               <div class="form-row mb-3">
-                <div class="col-md-5">
-                  <label for="autore" class="text-danger font-weight-bold">Autore principale</label>
+                <div class="col-md-4">
+                  <label for="autore" class="text-danger font-weight-bold">Autore</label>
                   <input type="text" class="form-control form-control-sm tab" id="autore" name="autore" value="" placeholder="Cognome Nome" required>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-4">
                   <label for="altri_autori">Altri autori</label>
                   <input type="text" class="form-control form-control-sm tab" id="altri_autori" name="altri_autori" placeholder="Cognome Nome, Cognome Nome, ..." value="">
+                </div>
+                <div class="col-md-4">
+                  <label for="curatore">A cura di</label>
+                  <input type="text" class="form-control form-control-sm tab" id="curatore" name="curatore" value="">
                 </div>
               </div>
               <div class="form-row mb-3">
