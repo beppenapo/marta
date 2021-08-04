@@ -60,12 +60,12 @@ class Biblio extends Conn{
   }
 
   public function elencoBiblio(){
-    $sql = "select b.id, l.value as tipo, b.autore, b.titolo, b.anno, count(s.*) as schede
+    $sql = "select b.id, l.id as tipo_id, l.value as tipo, b.autore, b.titolo, b.anno, count(s.*) as schede
     from bibliografia b
     inner join liste.biblio_tipo as l on b.tipo = l.id
     left join biblio_scheda bs on bs.biblio = b.id
     left join scheda s on bs.scheda = s.id
-    group by b.id, l.value, b.autore, b.titolo, b.anno
+    group by b.id, l.id, l.value, b.autore, b.titolo, b.anno
     order by b.titolo asc;";
     return $this->simple($sql);
   }
@@ -79,17 +79,9 @@ class Biblio extends Conn{
     $res = $this->simple($sql);
     $out['scheda'] = $res[0];
 
-    $sql =" select bs.scheda, nctn.nctn, scheda.tsk, scheda.titolo
-    from biblio_scheda bs
-    inner JOIN nctn_scheda nctn on nctn.scheda = bs.scheda
-    inner join scheda on bs.scheda = scheda.id
-    where bs.biblio = ".$id." order by nctn asc;";
-    $res = $this->simple($sql);
-    $out['schede'] = $res;
+    $out['schede'] = $this->getSchedeList($id);
+    $out['contributi'] = $this->getContribList($id);
 
-    $sql = "select * from contributo where raccolta = ".$id." order by titolo asc;";
-    $out['contributi'] = $this->simple($sql);
-    
     return $out;
   }
 
@@ -98,6 +90,37 @@ class Biblio extends Conn{
     $res = $this->prepared($sql, $dati);
     if($res === true){$res = array('res'=>true, 'msg'=> "Il record bibliografico è stato correttamente associato alla scheda reperto");}
     return $res;
+  }
+
+  public function getContribList(int $id = null){
+    $where = $id !== null ? "where raccolta = ".$id : "";
+    $sql = "select * from contributo ".$where." order by titolo asc;";
+    return $this->simple($sql);
+  }
+  public function getContrib(int $id){
+    $sql = "select c.id as contrib_id, c.titolo as contrib_tit, c.autore as contrib_aut, c.altri_autori as contrib_alt, c.pag as contrib_pagine, b.id, b.titolo, b.autore, b.anno
+    from contributo c left join bibliografia b on c.raccolta = b.id
+    where c.id = ".$id.";";
+    $res = $this->simple($sql);
+    return $res[0];
+  }
+
+  public function getSchedeList(int $id = null){
+    $where = $id !== null ? "where bs.biblio = ".$id : "";
+    $sql =" select bs.scheda, nctn.nctn, scheda.tsk, scheda.titolo
+    from biblio_scheda bs
+    inner JOIN nctn_scheda nctn on nctn.scheda = bs.scheda
+    inner join scheda on bs.scheda = scheda.id
+    ".$where." order by nctn asc;";
+    return $this->simple($sql);
+  }
+  public function getSchedeContrib(int $id){
+    $sql =" select bs.scheda, nctn.nctn, scheda.tsk, scheda.titolo
+    from biblio_scheda bs
+    inner JOIN nctn_scheda nctn on nctn.scheda = bs.scheda
+    inner join scheda on bs.scheda = scheda.id
+    where bs.contributo = ".$id." order by nctn asc;";
+    return $this->simple($sql);
   }
 
 }

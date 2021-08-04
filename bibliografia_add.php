@@ -29,42 +29,42 @@ $biblio = new Biblio();
               <legend class="w-auto bg-marta text-white border rounded p-1">SCHEDA BIBLIOGRAFIA</legend>
               <div class="form-row mb-3">
                 <div class="col-md-3">
-                  <label for="tipo" class="text-danger font-weight-bold">Tipo pubblicazione</label>
+                  <label for="tipo" class="text-danger font-weight-bold">BIBF - Tipo pubblicazione</label>
                   <select class="form-control form-control-sm" id="tipo" name="tipo" required >
                     <option value="">-- seleziona tipologia --</option>
                     <?php foreach ($biblio->listaTipo() as $item) { echo "<option value='".$item['id']."'>".$item['value']."</option>"; } ?>
                   </select>
                 </div>
                 <div class="col-md-9">
-                  <label for="titolo" class="text-danger font-weight-bold">Titolo</label>
+                  <label for="titolo" class="text-danger font-weight-bold">BIBG - Titolo</label>
                   <input type="text" class="form-control form-control-sm tab" id="titolo" name="titolo" value="" placeholder="Inserisci titolo" required>
                 </div>
               </div>
               <div class="form-row mb-3">
                 <div class="col-md-4">
-                  <label for="autore" class="text-danger font-weight-bold">Autore</label>
+                  <label for="autore" class="text-danger font-weight-bold">BIBA - Autore</label>
                   <input type="text" class="form-control form-control-sm tab" id="autore" name="autore" value="" placeholder="Cognome Nome" required>
                 </div>
                 <div class="col-md-4">
-                  <label for="altri_autori">Altri autori</label>
+                  <label for="altri_autori">BIBA - Altri autori</label>
                   <input type="text" class="form-control form-control-sm tab" id="altri_autori" name="altri_autori" placeholder="Cognome Nome, Cognome Nome, ..." value="">
                 </div>
                 <div class="col-md-4">
-                  <label for="curatore">A cura di</label>
+                  <label for="curatore">BIBC - Curatore</label>
                   <input type="text" class="form-control form-control-sm tab" id="curatore" name="curatore" value="">
                 </div>
               </div>
               <div class="form-row mb-3">
-                <div class="col-md-5">
-                  <label for="editore">Editore</label>
+                <div class="col-md-4">
+                  <label for="editore">BIBZ - Editore</label>
                   <input type="text" class="form-control form-control-sm tab" id="editore" name="editore" value="">
                 </div>
-                <div class="col-md-2">
-                  <label for="anno">Anno</label>
+                <div class="col-md-3">
+                  <label for="anno">BIBD - Anno di edizione</label>
                   <input type="number" step="1" min="1400" class="form-control form-control-sm tab" id="anno" name="anno" value="">
                 </div>
                 <div class="col-md-5">
-                  <label for="luogo">Luogo</label>
+                  <label for="luogo">BIBL - Luogo di edizione</label>
                   <input type="text" class="form-control form-control-sm tab" id="luogo" name="luogo" value="">
                 </div>
               </div>
@@ -74,7 +74,7 @@ $biblio = new Biblio();
                   <input type="text" class="form-control form-control-sm tab" id="isbn" name="isbn" value="">
                 </div>
                 <div class="col-md-6">
-                  <label for="url" data-toggle="tooltip" title="se il record bibliografico è disponibile on-line, indicare il link alla risorsa. Per evitare errori di battitura si consiglia di copiare il link direttametne dalla pagina della risorsa e incollarla nel campo sottostante"><i class="fas fa-info-circle"></i> Url</label>
+                  <label for="url" data-toggle="tooltip" title="se il record bibliografico è disponibile on-line, indicare il link alla risorsa. Per evitare errori di battitura si consiglia di copiare il link direttametne dalla pagina della risorsa e incollarla nel campo sottostante"><i class="fas fa-info-circle"></i> BIBW - Indirizzo web (Url)</label>
                   <input type="url" class="form-control form-control-sm tab" id="url" name="url" value="" placeholder="inserire link completo, es: http://www.sito.com">
                 </div>
               </div>

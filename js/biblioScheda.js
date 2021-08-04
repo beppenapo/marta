@@ -1,5 +1,7 @@
 const API = 'api/biblio.php';
 $(document).ready(function() {
+  $("#contribList, #noContribList").hide();
+  $("[name=biblio]").on('change', function(){ getContribList($(this).val()); })
   $("[name=submit]").on('click', (e) => {
     const form = $("form");
     if(form[0].checkValidity()){
@@ -8,6 +10,7 @@ $(document).ready(function() {
       dati.scheda = $("[name=scheda]").val()
       dati.biblio = $("[name=biblio]").val()
       dati.livello = $("[name=livello]").val()
+      if($("[name=contributo]").val()){dati.contributo = $("[name=contributo]").val()}
       if($("[name=pagine]").val()){dati.pagine = $("[name=pagine]").val()}
       if($("[name=figure]").val()){dati.figure = $("[name=figure]").val()}
       $.ajax({
@@ -44,3 +47,32 @@ $(document).ready(function() {
     }
   })
 });
+
+
+function getContribList(i){
+  $.ajax({
+    url: API,
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger : 'getContribList', bib:i}
+  })
+  .done(function(data) {
+    if(data.length == 0){
+      $("#noContribList").show();
+      $("#contribList").hide();
+    }else {
+      $("#noContribList").hide();
+      let opt = [];
+      opt.push("<option value=''>-- seleziona contributo --</option>");
+      data.forEach((item, i) => {
+        opt.push("<option value='"+item.id+"'>"+item.autore+", "+item.titolo+"</option>");
+        $("[name = contributo]").html(opt.join(''));
+        console.log(item.titolo);
+      });
+
+      $("#contribList").show();
+    }
+    console.log(data);
+  })
+  .fail(function(){console.log("error");});
+}

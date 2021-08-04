@@ -6,6 +6,9 @@ session_start();
   <head>
     <?php require('assets/meta.html'); ?>
     <link rel="stylesheet" href="css/main.css">
+    <style media="screen">
+    body>main {padding-top: 60px !important;}
+    </style>
   </head>
   <body>
     <input type="hidden" name="idScheda" value="<?php echo $_GET['get']; ?>">
@@ -74,7 +77,7 @@ session_start();
           <div class="col-md-6">
             <div class="card mb-3" id="contributi">
               <div class="card-header bg-white">
-                <h6 class="font-weight-bold">articoli correlati<span class="badge badge-warning float-right" id="totContrib"></span></h6>
+                <h6 class="font-weight-bold">contributi correlati<span class="badge badge-warning float-right" id="totContrib"></span></h6>
               </div>
               <div class="card-body"></div>
               <ul class="list-group list-group-flush"></ul>

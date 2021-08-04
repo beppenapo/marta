@@ -7,9 +7,10 @@ class Scheda extends Conn{
   function __construct(){}
 
   public function getBiblioScheda(int $id){
-    $sql = "select b.id, b.titolo, b.anno, b.autore
+    $sql = "select b.id, b.titolo, b.anno, b.autore,c.id as contrib_id, c.titolo as contrib_tit, c.autore as contrib_aut
     from bibliografia b
     INNER JOIN biblio_scheda bs on bs.biblio = b.id
+    left join contributo c on bs.contributo = c.id
     WHERE bs.scheda = ".$id."
     ORDER BY anno, autore, titolo asc;";
     return $this->simple($sql);
@@ -361,17 +362,10 @@ class Scheda extends Conn{
     }
   }
   public function delScheda(array $dati){
-    // $up = $dati;
-    // $del = $dati;
-    // unset($up['id']);
-    // unset($del['nctn']);
-    // $up['libero'] = true;
     $updateDati = array('libero' => true, 'nctn' => $dati['nctn']);
     $deleteDati = array('id' => $dati['id']);
     $field = array('libero' => true);
     $filter = array('nctn' => $dati['nctn']);
-    // $update = $this->buildUpdate('nctn', $filter, $field);
-    // $delete = $this->buildDelete('scheda',array("id"=>$dati['id']));
     $updateSql = "update nctn set libero = :libero where nctn = :nctn;";
     $deleteSql = "delete from scheda where id = :id;";
     $this->begin();
@@ -384,8 +378,8 @@ class Scheda extends Conn{
   }
 
   public function delBiblioScheda(array $dati){
-    $sql = $this->buildDelete('biblio_scheda',$dati);
-    $res = $this->prepared($sql);
+    $sql = "delete from biblio_scheda where biblio = :biblio and scheda = :scheda;";
+    $res = $this->prepared($sql, $dati);
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
   }

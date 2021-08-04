@@ -281,14 +281,20 @@
             <legend class="text-marta font-weight-bold border-bottom">Bibliografia correlata</legend>
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
+                $authority = "<a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ".$i['anno'].", ".$i['titolo']."</a>";
                 echo "<li class='list-group-item'>";
                 if(isset($_SESSION['id'])){
                   echo "<button type='button' class='btn btn-sm btn-danger mr-3' name='delBiblioScheda' data-scheda='".$_GET['get']."' data-biblio='".$i['id']."'>
                   <i class='fas fa-times'></i>
                   </button>";
                 }
-                echo "<a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ".$i['anno'].", ".$i['titolo']."</a>
-                </li>";
+                echo "<span>";
+                if ($i['contrib_id'] !== null) {
+                  echo "<a href='contribView.php?get=".$i['contrib_id']."'>".$i['contrib_aut'].", ".$i['contrib_tit']."</a> presente in: ".$authority;
+                }else {
+                  echo $authority;
+                }
+                echo "</span></li>";
               } ?>
             </ul>
             <?php } ?>

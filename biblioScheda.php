@@ -8,7 +8,6 @@
   <body>
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
-    <!-- <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div> -->
     <main class="">
       <div class="container">
         <h3 id="title" class="border-bottom border-dark">Aggiungi bibliografia alla scheda "<?php echo $scheda['scheda']['titolo']; ?>"</h3>
@@ -19,12 +18,24 @@
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">Aggiungi bibliografia alla scheda</legend>
               <div class="form-row mb-3">
-                <div class="col-12">
-                  <label for="biblio" class="font-weight-bold text-danger">Seleziona un record bibliografico tra quelli presenti in lista</label>
+                <div class="col-md-6">
+                  <label for="biblio" class="font-weight-bold text-danger">Seleziona authority file</label>
                   <select class="form-control form-control-sm" name="biblio" id="biblio" required>
                     <option value="" selected disabled>-- seleziona record --</option>
-                    <?php foreach ($biblioList as $item) { echo "<option value='".$item['id']."'>".$item['autore']. ", ".$item['anno']. ", ".$item['titolo']."</option>"; } ?>
+                    <?php foreach ($biblioList as $item) { echo "<option value='".$item['id']."' data-tipo='".$item['tipo_id']."'>".$item['autore']. ", ".$item['anno']. ", ".$item['titolo']."</option>"; } ?>
                   </select>
+                </div>
+                <div class="col-md-6">
+                  <div id="contribList">
+                    <label for="contributo">Seleziona contributo raccolta</label>
+                    <select class="form-control form-control-sm" name="contributo" id="contributo">
+                      <option value="">-- seleziona record --</option>
+                      <?php foreach ($contribList as $item) { echo "<option value='".$item['id']."'>".$item['autore']. ", ".$item['titolo']."</option>"; } ?>
+                    </select>
+                  </div>
+                  <div id="noContribList" class="text-danger text-center">
+                    <p>Il record bibliografico selezionato non presenta contributi associati!</p>
+                  </div>
                 </div>
               </div>
               <div class="form-row">
@@ -58,8 +69,7 @@
         <div class="row">
           <div class="col text-center">
             <hr>
-            <p class="font-weight-bold"><i class="fas fa-info-circle"></i> Se il record bibliografico non è presente in lista, utilizza il pulsante per associare un nuovo authority file alla scheda</p>
-            <a href="bibliografia_add.php?sk=<?php echo $_GET['sk'] ?>" class="btn btn-sm btn-primary">aggiungi bibliografia</a>
+            <p class="font-weight-bold"><i class="fas fa-info-circle"></i> Se il record bibliografico non è presente in lista <a href="bibliografia_add.php">aggiungi un nuovo authority file</a>, o seleziona una raccolta già presente nell'<a href="bibliografia.php">archivio bibliografico</a> per aggiungere un nuovo contributo</p>
           </div>
         </div>
       </div>
