@@ -1,5 +1,1 @@
-select bs.scheda, nctn.nctn, scheda.tsk, scheda.titolo
-from biblio_scheda bs
-inner JOIN nctn_scheda nctn on nctn.scheda = bs.scheda
-inner join scheda on bs.scheda = scheda.id
-where bs.contributo = 3 order by nctn asc;
+selectb.id,l.id as tipo_id,l.value as tipo,b.titolo,b.autore,count(s.*) as schede,'biblioView.php?get=' as link from bibliografia binner join liste.biblio_tipo l on b.tipo = l.idleft join biblio_scheda bs on bs.biblio = b.idleft join scheda s on bs.scheda = s.id group by b.id, l.id, l.value, b.autore, b.titolo UNION selectc.id, 0,'contributo in raccolta' as tipo,c.titolo,c.autore,count(s.*) as schede,'contributoView.php?get=' as link from contributo c left join biblio_scheda bs on bs.contributo = c.id left join scheda s on bs.scheda = s.id group by c.id, c.autore, c.titolo order by titolo, autore ASC
