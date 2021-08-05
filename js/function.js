@@ -340,6 +340,28 @@ function createToast(obj){
     })
   }
 }
+function toast(obj){
+  console.log(obj);
+  let btnDiv = $("#toastBtnDiv");
+  btnDiv.html('');
+  classe = obj.res === true ? 'bg-success' : 'bg-danger';
+  $(".toast").removeClass('[class^="bg-"]').addClass(classe);
+  $(".toast>.toast-body>.toast-body-msg>h5").html(obj.msg);
+  $(".toast").toast({delay:3000});
+  $(".toast").show();
+  $(".toast").toast('show');
+
+  if (obj.res === true) {
+    btnDiv.html(obj.btn.join(''))
+    $("[name=continua]").on('click', function(){ window.location.reload(true); })
+  }else {
+    btnDiv.html("<button type='button' class='btn btn-sm btn-light' name='dismiss' data-dismiss='toast'>ok, chiudi alert</button>")
+    $('.toast').on('hidden.bs.toast', function () {
+      $(".toast").removeClass(classe);
+      $(".toast").hide();
+    })
+  }
+}
 
 // NOTE: funzioni gestione schede ///
 function setCf4(){
