@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import "font.css";
 html, body{
   position:relative;
@@ -198,3 +199,182 @@ No media query since this is the default in Bootstrap because it is "mobile firs
   color:#FF0000;
   cursor:pointer;
 }
+=======
+@import "font.css";
+html, body{
+  position:relative;
+  font-family: 'GothamRounded-Book', sans-serif;
+}
+ul {list-style-type: none; margin: 0; padding: 0; overflow: hidden;}
+body>header{
+  position:fixed;
+  left:0;
+  top:0;
+  height:60px;
+  background: #fff;
+  z-index:1000;
+}
+body>header, body > footer{
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+body>main{
+  position:relative;
+  padding: 80px 0 20px;
+  min-height:calc(100vh - 60px);
+  z-index:1;
+}
+body>nav#mainMenu{
+  position:fixed;
+  top:60px;
+  right:0;
+  bottom:0;
+  background:#2d2d2d;
+  width:250px;
+  z-index:100;
+  -webkit-transition: .5s ease-in-out;
+  -moz-transition: .5s ease-in-out;
+  -ms-transition: .5s ease-in-out;
+  -o-transition: .5s ease-in-out;
+  transition: .5s ease-in-out;
+  overflow-y: auto;
+}
+body>nav#mainMenu a.mainLink, body>nav#mainMenu p{
+  padding:10px 15px;
+  color:#9e9e9e;
+  text-decoration: none;
+  border-top: 1px solid #343a40;
+  border-bottom: 1px solid #1f1f1f;
+}
+body>nav#mainMenu a.mainLink:hover{
+  background:#343a40;
+  color:#fff;
+}
+body>nav#mainMenu p{margin:0;}
+
+body>nav#mainMenu ul.subMenu a{
+  position:relative;
+  display:block;
+  font-size: .85rem;
+  padding:5px 15px 5px 20px;
+  color:#ddd;
+  text-decoration: none;
+}
+body>nav#mainMenu ul.subMenu a:hover{
+  padding-left:30px;
+  color:#fff;
+}
+body>nav#mainMenu ul.subMenu li:last-child a{border-bottom: 1px solid #1f1f1f;}
+body>footer{
+  position: relative;
+  background:#343a40;
+  color:#fff;
+  min-height: 60px;
+}
+.headerMenu > ul {display:flex;}
+.headerMenu > ul > li{float: left;}
+.headerMenu > ul > li > a {
+    color: #000;
+    display: block;
+    height: 60px;
+    text-align: center;
+    padding: 15px;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 30px;
+    margin: 0;
+}
+.headerMenu > ul > li > a:hover {
+  background: rgb(198,156,85);
+  color:#fff;
+}
+header .logo{ display:none; padding: 10px;}
+header .logo>img{ height:40px;}
+header .headerMenu{margin: 0 auto;}
+
+body>footer .copyright{padding:0 10px;font-size:.7rem;}
+body>footer .logo > img{height:40px;}
+
+/*div da usare come contenitore per elementi centrati sia verticalmente che orizzontalmente. ricordati di aggiungere le dimensioni del div .parent */
+.flexDiv {display: flex;justify-content: center;align-items: center;}
+/***********************/
+.open{transform: translate(0,0);}
+.closed{transform: translate(250px,0);}
+.animated{transition: all 0.25s linear;}
+#loadingDiv{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,.2);
+  z-index: 2000;
+}
+.toast{position: fixed; top:160px; left:0; right:0; margin-left: auto; margin-right: auto; z-index: 8; width:80vw;}
+/*Extra small devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap because it is "mobile first"
+*/
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .toast{width: 80vw;}
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+  header .logo{display:block;}
+  footer .logo{display:none;}
+  header .headerMenu{margin: 0;}
+  .ui-autocomplete { max-height: 300px; overflow-y: auto; overflow-x: hidden;}
+  .toast{width: 60vw;}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  body>main{padding-right:250px;}
+  #toggleMenu{display: none;}
+  .ui-autocomplete { max-height: 400px; overflow-y: auto; overflow-x: hidden;}
+  /* .toast{width: 50vw;} */
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  body>main{padding-right:250px;}
+  #toggleMenu{display: none;}
+  .ui-autocomplete { max-height: 500px; overflow-y: auto; overflow-x: hidden;}
+  /* .toast{width: 40vw;} */
+}
+
+/* pantone progetto */
+.bg-marta,.btn-marta{background: rgb(198,156,85);}
+.btn-outline-marta{color: rgb(198,156,85); border-color:rgb(198,156,85);}
+.btn-outline-marta:hover{color: rgb(255,255,255); background:rgb(198,156,85);}
+.text-marta{color: rgb(198,156,85);}
+.btn-marta:hover{background: rgb(172,122,38);}
+
+.bg-gradient-info {
+  background: #1ebccd;
+  background: linear-gradient(45deg, #1ebccd, #3a55b1) !important;
+  background: -webkit-bg-linear-gradient(45deg, #1ebccd, #3a55b1) !important;
+}
+.bg-gradient-success {
+  background: #22af47;
+  background: linear-gradient(45deg, #22af47, #d0d962) !important;
+  background: -webkit-bg-linear-gradient(45deg, #22af47, #d0d962) !important;
+}
+.bg-gradient-warning {
+  background: #ffbf36;
+  background: linear-gradient(45deg, #ffbf36, #ff6028) !important;
+  background: -webkit-bg-linear-gradient(45deg, #ffbf36, #ff6028) !important;
+}
+.bg-gradient-danger {
+  background: #f83f37;
+  background: linear-gradient(45deg, #f83f37, #ab26aa) !important;
+  background: -webkit-bg-linear-gradient(45deg, #f83f37, #ab26aa) !important;
+}
+/* .tooltip{position:absolute !important;} */
+.ui-autocomplete { max-height: 150px; overflow-y: auto; overflow-x: hidden;}
+* html .ui-autocomplete { height: 300px; }
+>>>>>>> first commit

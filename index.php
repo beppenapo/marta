@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 require("api/php/home.php");
 ?>
 <!DOCTYPE html>
@@ -125,3 +126,7 @@ require("api/php/home.php");
     <script src="js/countdown.js" charset="utf-8"></script>
   </body>
 </html>
+=======
+header("location:countdown.php");
+?>
+>>>>>>> first commit
