@@ -9,7 +9,7 @@
     </style>
   </head>
   <body>
-    <input type="hidden" name="idScheda" value="<?php echo $_GET['get']; ?>">
+    <input type="hidden" name="idContrib" value="<?php echo $_GET['get']; ?>">
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <main>
@@ -79,6 +79,6 @@
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="js/function.js" charset="utf-8"></script>
-    <!-- <script src="js/biblioView.js" charset="utf-8"></script> -->
+    <script src="js/contribView.js" charset="utf-8"></script>
   </body>
 </html>

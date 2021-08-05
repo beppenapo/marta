@@ -6,7 +6,6 @@ function buildTable(){
   $.ajax({ url: 'api/biblio.php', type: 'POST', dataType: 'json', data: {trigger: 'elencoBiblio'} })
   .done(function(data) {
     data.forEach(function(v,i){
-      console.log(v);
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip');
       let link = $("<a/>",{href:v.link+v.id, html:linkIco});
       tr = $("<tr/>").appendTo('#dataTable');

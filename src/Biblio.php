@@ -16,30 +16,17 @@ class Biblio extends Conn{
   }
 
   public function addBiblio(array $dati){
-    try {
-      if (isset($dati['bs'])) {
-        $bs = $dati['bs'];
-        unset($dati['bs']);
-        $msg = 'Il record bibliografico è stato creato ed associato alla scheda reperto';
-      }else {
-        $msg = 'La scheda bibliografica è stata correttamente inserita';
-      }
       $this->begin();
+      $msg = 'La scheda bibliografica è stata correttamente inserita';
       $sql = $this->buildInsert('bibliografia',$dati);
       $sql = rtrim($sql, ";") . " returning id;";
       $biblioId = $this->returning($sql,$dati);
-      if(isset($bs['scheda'])){
-        $bs['biblio'] = $biblioId['field'];
-        $sql = $this->buildInsert('biblio_scheda',$bs);
-        $this->prepared($sql,$bs);
-      }
       $this->commit();
-      return array("res"=>true,"msg"=>$msg, "id"=>$biblioId['field']);
-    } catch (\PDOException $e) {
-      return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-    }catch (\Exception $e) {
-      return array("res"=>false,"msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-    }
+      if ($biblioId['res']===false) {
+        return array("res"=>false,"msg"=>$biblioId['msg']);
+      }else {
+        return array("res"=>true,"msg"=>$msg, "id"=>$biblioId['field']);
+      }
   }
   public function addContrib(array $dati){
     $this->begin();
@@ -71,9 +58,16 @@ class Biblio extends Conn{
     if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata definitivamente eliminata");}
     return $res;
   }
+  public function deleteContrib(int $id){
+    $dati = ['id'=>$id];
+    $sql = "delete from contributo where id = :id;";
+    $res = $this->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata definitivamente eliminata");}
+    return $res;
+  }
 
   public function elencoBiblio(){
-    $sql = "select b.id,l.id as tipo_id,l.value as tipo,b.titolo,b.autore,count(s.*) as schede,'biblioView.php?get=' as link from bibliografia b inner join liste.biblio_tipo l on b.tipo = l.id left join biblio_scheda bs on bs.biblio = b.id left join scheda s on bs.scheda = s.id group by b.id, l.id, l.value, b.autore, b.titolo UNION select c.id, 0,'contributo in raccolta' as tipo,c.titolo,c.autore,count(s.*) as schede,'contributoView.php?get=' as link from contributo c left join biblio_scheda bs on bs.contributo = c.id left join scheda s on bs.scheda = s.id group by c.id, c.autore, c.titolo order by titolo, autore ASC";
+    $sql = "select b.id,l.id as tipo_id,l.value as tipo,b.titolo,b.autore,count(s.*) as schede,'biblioView.php?get=' as link from bibliografia b inner join liste.biblio_tipo l on b.tipo = l.id left join biblio_scheda bs on bs.biblio = b.id left join scheda s on bs.scheda = s.id group by b.id, l.id, l.value, b.autore, b.titolo UNION select c.id, 0,'contributo in raccolta' as tipo,c.titolo,c.autore,count(s.*) as schede,'contribView.php?get=' as link from contributo c left join biblio_scheda bs on bs.contributo = c.id left join scheda s on bs.scheda = s.id group by c.id, c.autore, c.titolo order by titolo, autore ASC";
     return $this->simple($sql);
   }
 
