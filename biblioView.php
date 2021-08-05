@@ -6,9 +6,7 @@ session_start();
   <head>
     <?php require('assets/meta.html'); ?>
     <link rel="stylesheet" href="css/main.css">
-    <style media="screen">
-    body>main {padding-top: 60px !important;}
-    </style>
+    <style media="screen"> body>main {padding-top: 60px !important;} </style>
   </head>
   <body>
     <input type="hidden" name="idScheda" value="<?php echo $_GET['get']; ?>">
@@ -19,8 +17,8 @@ session_start();
       <?php if (isset($_SESSION['id'])) { ?>
       <div id="menuScheda" class="bg-dark px-3">
         <div class="btn-group" role="group">
-          <button id="aggiungi" type="button" class="btn btn-dark"aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> aggiungi contributo</button>
-          <a id="modifica" class="btn btn-dark" href="bibliografia_mod.php?mod=<?php echo $_GET['get']; ?>"><i class="fas fa-edit"></i> modifica</a>
+          <a href="contributo_add.php?auth=<?php echo $_GET['get']; ?>" class="btn btn-dark"><i class="fas fa-file-alt"></i> aggiungi contributo</a>
+          <a class="btn btn-dark" href="bibliografia_mod.php?mod=<?php echo $_GET['get']; ?>"><i class="fas fa-edit"></i> modifica</a>
           <button id="eliminaScheda" name="biblioDel" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
         </div>
       </div>

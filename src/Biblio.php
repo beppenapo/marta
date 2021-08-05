@@ -41,6 +41,19 @@ class Biblio extends Conn{
       return array("res"=>false,"msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
     }
   }
+  public function addContrib(array $dati){
+    $this->begin();
+    $msg = 'Il contributo è stato correttamente inserito';
+    $sql = $this->buildInsert('contributo',$dati);
+    $sql = rtrim($sql, ";") . " returning id;";
+    $contribId = $this->returning($sql,$dati);
+    $this->commit();
+    if ($contribId['res']===false) {
+      return array("res"=>false,"msg"=>$contribId['msg']);
+    }else {
+      return array("res"=>true,"msg"=>$msg, "id"=>$contribId['field']);
+    }
+  }
 
   public function editScheda(array $dati){
     $filter = ['id'=>$dati['id']];
@@ -115,6 +128,10 @@ class Biblio extends Conn{
     inner join scheda on bs.scheda = scheda.id
     where bs.contributo = ".$id." order by nctn asc;";
     return $this->simple($sql);
+  }
+
+  public function listaAuth(){
+    return $this->simple("select id, titolo, autore, anno from bibliografia order by titolo asc;");
   }
 
 }
