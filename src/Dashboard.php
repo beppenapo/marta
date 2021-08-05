@@ -27,8 +27,6 @@ class Dashboard extends Conn{
     $sql = "delete from progetto.comunicazioni where id = :id;";
     return $this->prepared($sql, $dati);
   }
-<<<<<<< HEAD
-
   public function statoSchede(array $dati = null){
     $where = '';
     if($dati && !empty($dati)){ $where = ' where s.cmpn = '.$dati['cmpn']; }
@@ -43,8 +41,6 @@ class Dashboard extends Conn{
     return $this->simple($sql);
   }
 
-=======
->>>>>>> first commit
 }
 
 ?>

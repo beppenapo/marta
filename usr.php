@@ -1,11 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['id'])){ header("location:login.php");}
-<<<<<<< HEAD
 if (isset($_SESSION['id']) && $_SESSION['classe'] == 3){ header("location:index.php");}
-=======
-if (isset($_SESSION['id']) && $_SESSION['classe'] == 3){ header("location:home.php");}
->>>>>>> first commit
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">

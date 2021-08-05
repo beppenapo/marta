@@ -17,7 +17,6 @@ $('[name=submit]').on('click', function (e) {
       data: {trigger : 'addContrib', dati}
     })
     .done(function(data) {
-      console.log(data);
       data.url='contribView.php?get='+data.id;
       data.btn = [];
       data.btn.push("<button type='button' class='btn btn-light btn-sm' name='continua'>continua inserimento</button>");

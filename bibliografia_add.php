@@ -77,27 +77,6 @@ $biblio = new Biblio();
                   <input type="url" class="form-control form-control-sm tab" id="url" name="url" value="" placeholder="inserire link completo, es: http://www.sito.com">
                 </div>
               </div>
-              <?php if(isset($_GET['sk'])){ ?>
-              <legend class="text-marta font-weight-bold border-bottom mb-3">Dati reperto</legend>
-              <div class="form-row">
-                <input type="hidden" name="scheda" value="<?php echo $_GET['sk']; ?>">
-                <div class="col-md-4">
-                  <label for="pagine">Inserisci le pagine di riferimento</label>
-                  <input type="text" class="form-control form-control-sm" id="pagine" name="pagine" value="" placeholder="es. 1-5, 8, 9 ecc.">
-                </div>
-                <div class="col-md-4">
-                  <label for="figure">Inserisci le figure o le tavole di riferimento</label>
-                  <input type="text" class="form-control form-control-sm" id="figure" name="figure" value="" placeholder="es. 1-5, 8, 9 ecc.">
-                </div>
-                <div class="col-md-4">
-                  <label for="livello" class="font-weight-bold text-danger">Seleziona il tipo di bibliografia</label>
-                  <select class="form-control form-control-sm" name="livello" id="livello" required>
-                    <option value="">-- seleziona record --</option>
-                    <?php foreach ($biblio->listaLivello() as $item) { echo "<option value='".$item['id']."'>".$item['value']."</option>"; } ?>
-                  </select>
-                </div>
-              </div>
-              <?php } ?>
             </fieldset>
           </div>
           <div class="form-group">

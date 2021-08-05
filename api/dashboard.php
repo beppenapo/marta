@@ -13,8 +13,5 @@ function addComunicazione($obj){ return json_encode($obj->addComunicazione($_POS
 function editComunicazione($obj){ return json_encode($obj->editComunicazione($_POST['id'], $_POST['testo'])); }
 function delComunicazione($obj){ return json_encode($obj->delComunicazione($_POST['id'])); }
 function comunicazioni($obj){ return json_encode($obj->comunicazioni()); }
-<<<<<<< HEAD
 function statoSchede($obj){ return json_encode($obj->statoSchede($_POST)); }
-=======
->>>>>>> first commit
 ?>
