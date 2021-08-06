@@ -3,10 +3,8 @@ session_start();
 if (!isset($_SESSION['id'])){ header("location:login.php");}
 require 'vendor/autoload.php';
 use \Marta\Biblio;
-$biblio = new Biblio();
-if (isset($_GET['auth'])) {
-  $auth = $biblio->getScheda($_GET['auth']);
-}
+$obj = new Biblio();
+$contributo = $obj->getContrib($_GET['mod']);
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -21,14 +19,15 @@ if (isset($_GET['auth'])) {
       <div class="container">
         <div class="row mb-4">
           <div class="col">
-            <h3 class="border-bottom">Aggiungi un nuovo contributo ad un volume esistente</h3>
+            <h3 class="border-bottom">Modifica contributo</h3>
             <small class="text-danger font-weight-bold d-block">* Campi obbligatori</small>
+            <?php print_r($contributo); ?>
           </div>
         </div>
           <form id="addBiblioForm" autocomplete="off">
-            <?php if(isset($_GET['auth'])){
-              echo "<input type='hidden' name='raccolta' value='".$_GET['auth']."'>";
-            } ?>
+            <?php
+              echo "<input type='hidden' name='contributo' value='".$_GET['mod']."'>";
+             ?>
           <div class="form-group">
             <fieldset class="bg-light rounded border p-3">
               <legend class="w-auto bg-marta text-white border rounded p-1">SCHEDA ARTICOLO</legend>

@@ -7,7 +7,5 @@ use \Marta\Biblio;
 $sk = new Scheda();
 $biblio = new Biblio();
 $scheda = $sk->getScheda($_GET['sk']);
-$biblioList = $biblio->elencoBiblio();
-
 
 ?>

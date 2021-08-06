@@ -173,28 +173,18 @@ No media query since this is the default in Bootstrap because it is "mobile firs
   background: linear-gradient(45deg, #f83f37, #ab26aa) !important;
   background: -webkit-bg-linear-gradient(45deg, #f83f37, #ab26aa) !important;
 }
-/* .tooltip{position:absolute !important;} */
 .ui-autocomplete { max-height: 150px; overflow-y: auto; overflow-x: hidden;}
 * html .ui-autocomplete { height: 300px; }
 
 .dataTable{font-size:13px;}
 
+/* BOOTSTRAP */
+.badge{font-size: 100% !important;}
+
+
 /* Ale qui */
-.lista_header {
-  border-top:0.5px solid #DDDDDD;
-  padding:6px 0px;
-}
-.lista{
-  padding:4px;
-  background-color:#DDDDDD;
-}
-.lista_even{
-  background-color:#EEEEEE;
-}
-.lista_compilatore{
-  float:right;
-}
-.elimina{
-  color:#FF0000;
-  cursor:pointer;
-}
+.lista_header { border-top:0.5px solid #DDDDDD; padding:6px 0px;}
+.lista{ padding:4px; background-color:#DDDDDD;}
+.lista_even{ background-color:#EEEEEE;}
+.lista_compilatore{ float:right;}
+.elimina{ color:#FF0000; cursor:pointer;}

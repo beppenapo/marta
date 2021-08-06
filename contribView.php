@@ -16,7 +16,7 @@
       <?php if (isset($_SESSION['id'])) { ?>
       <div id="menuScheda" class="bg-dark px-3">
         <div class="btn-group" role="group">
-          <a id="modifica" class="btn btn-dark" href="bibliografia_mod.php?mod=<?php echo $_GET['get']; ?>"><i class="fas fa-edit"></i> modifica</a>
+          <a id="modifica" class="btn btn-dark" href="contributo_mod.php?mod=<?php echo $_GET['get']; ?>"><i class="fas fa-edit"></i> modifica</a>
           <button id="eliminaScheda" name="biblioDel" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
         </div>
       </div>
@@ -26,6 +26,9 @@
         <div class="row">
           <div class="col-md-6 mb-3">
             <div class="card" id="scheda-card">
+              <div class="card-header bg-marta">
+                <h6 class="font-weight-bold">Dati principali</h6>
+              </div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <span class="font-weight-bold d-inline-block align-top">Id:</span>
@@ -52,7 +55,7 @@
           </div>
           <div class="col-md-6">
             <div class="card mb-3" id="contributi">
-              <div class="card-header bg-white">
+              <div class="card-header bg-marta">
                 <h6 class="font-weight-bold">Presente nel volume</h6>
               </div>
               <div class="card-body">
@@ -60,14 +63,14 @@
               </div>
             </div>
             <div class="card" id="schede">
-              <div class="card-header bg-white">
-                <h6 class="font-weight-bold">schede correlate <span class="badge badge-warning float-right"><?php echo count($schede); ?></span></h6>
+              <div class="card-header bg-marta">
+                <h6 class="font-weight-bold">schede correlate <span class="badge badge-light float-right"><?php echo count($schede); ?></span></h6>
               </div>
               <ul class="list-group list-group-flush">
                 <?php foreach ($schede as $scheda) {
                   $tipo = $scheda['tsk'] == 1 ? 'RA' : 'NU';
                   $testo = $scheda['nctn'].' - '.$tipo.' - '.$scheda['titolo'];
-                  echo "<li class='list-group-item'><a href='schedaView.php?get=".$scheda['id']."'>".$testo."</a></li>";
+                  echo "<li class='list-group-item'><a href='schedaView.php?get=".$scheda['scheda']."'>".$testo."</a></li>";
                 } ?>
               </ul>
             </div>

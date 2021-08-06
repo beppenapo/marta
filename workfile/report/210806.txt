@@ -1,0 +1,41 @@
+Bibliografia
+Per essere più aderenti alle linee guida dell'ICCD, il record bibliografico è stato diviso in due sezioni:
+1. Bibliografia, che corrisponde alla scheda di Authority File BIB (V.3)
+La tabella scheda il volume "principale", che può essere una monografia o una generica raccolta di articoli, in tutti i suoi dati (titolo, autore, curatore, editore, luogo di pubblicazione, anno, isbn, ecc.)
+
+2. Contributi
+La scheda non è presente in ICCD ma risulta indispensabile ai fini di una migliore gestione dell'archivio bibliografico.
+La tabella "contributi" tiene traccia del singolo articolo (o contributo) presente, ad esempio, negli atti di un convegno, di un catalogo o di tutte quelle "monografie" appartenenti a serie letterarie.
+Oltre ai dati principali (titolo e autore), la scheda comprende anche le pagine dell'articolo all'interno del volume (authority file).
+
+Archivio bibliografico
+L'archivio è stato modificato in modo da rendere visibili, e ricercabili, oltre agli authority anche i contributi
+L'ultima colonna della tabella è un link per accedere alla pagina specifica del record, dalla quale sarà possibile effettuare tutte le operazioni previste per la gestione del record.
+E' stato aggiunto un menù verticale dal quale è possibile creare un nuovo authority o un nuovo contributo
+
+Creazione nuovo authority
+Il form di compilazione è stato leggermente modificato, è stato eliminato il campo "titolo raccolta", non più necessario in seguito all'aggiunta della tabella contributi.
+Al salvataggio, se non ci sono errori segnalati da un messaggio specifico, comparirà una finestra in cui si potrà scegliere se creare un nuovo record, accedere alla pagina del record appena creato o tornare all'archivio bibliografico.
+
+Scheda authority
+La scheda specifica del singolo authority file è suddivisa in 4 sezioni principali:
+1. Dati principali: la sezione riporta i dati del record
+2. Contributi correlati: la sezione riporta la lista dei contributi schedati per lo specifico authority file. Ogni elemento della lista è un link alla scheda specifica del contributo.
+3. Schede correlate: la sezione riporta la lista delle schede alle quali è stato associato il volume, sia direttamente che attraverso un contributo presente nel volume. Anche in questo caso ogni elemento è un link per accedere direttamente alla pagina della scheda.
+4. menù contestuale dal quale è possibile aggiungere un contributo al volume, modificare i dati del volume, eliminare la scheda bibliografica (eliminando la scheda verranno eliminati anche tutti i contributi ad essa associati)
+
+Creazione nuovo contributo
+Per creare un nuovo contributo e associarlo ad un authority file si può procedere in 2 modi:
+1. cliccando sul pulsante "aggiungi contributo" presente nella pagina dell'archivio bibliografico
+2. cliccando sul pulsante "aggiungi contributo" presente nella pagina dello specifico authority file
+In entrambi i casi si accede al form di compilazione.
+Nel primo caso sarà necessario scegliere da una lista valori l'authority al quale associare il contributo, mentre nel secondo caso il sistema riconosce automaticamente il volume principale al quale associare il nuovo contributo.
+Oltre ai campi principali (titolo, autore) verrà chiesto di inserire (non obbligatoriamente) le pagine del volume nel quale è presente il contributo che si sta schedando.
+Al salvataggio, se non ci sono errori segnalati da un messaggio specifico, comparirà una finestra in cui si potrà scegliere se creare un nuovo contributo, accedere alla pagina del record appena creato o tornare all'archivio bibliografico.
+
+Scheda contributo
+Per assicurare omogeneità grafica, la scheda contributo è simile a quella dell'authority file, sono state mantenute le stesse 4 sezioni:
+1. dati principali
+2. al posto della lista dei contributi, la sezione riporta il titolo dell'authority di appartenenza
+3. schede correlate
+4. menù contestuale dal quale è possibile modificare i dati del volume o eliminare la scheda contributo

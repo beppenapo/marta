@@ -16,17 +16,17 @@ class Biblio extends Conn{
   }
 
   public function addBiblio(array $dati){
-      $this->begin();
-      $msg = 'La scheda bibliografica è stata correttamente inserita';
-      $sql = $this->buildInsert('bibliografia',$dati);
-      $sql = rtrim($sql, ";") . " returning id;";
-      $biblioId = $this->returning($sql,$dati);
-      $this->commit();
-      if ($biblioId['res']===false) {
-        return array("res"=>false,"msg"=>$biblioId['msg']);
-      }else {
-        return array("res"=>true,"msg"=>$msg, "id"=>$biblioId['field']);
-      }
+    $this->begin();
+    $msg = 'La scheda bibliografica è stata correttamente inserita';
+    $sql = $this->buildInsert('bibliografia',$dati);
+    $sql = rtrim($sql, ";") . " returning id;";
+    $biblioId = $this->returning($sql,$dati);
+    $this->commit();
+    if ($biblioId['res']===false) {
+      return array("res"=>false,"msg"=>$biblioId['msg']);
+    }else {
+      return array("res"=>true,"msg"=>$msg, "id"=>$biblioId['field']);
+    }
   }
   public function addContrib(array $dati){
     $this->begin();

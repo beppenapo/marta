@@ -18,13 +18,6 @@ $('[name=submit]').on('click', function (e) {
     if ($("[name=luogo]").val()) {dati.luogo = $("[name=luogo]").val();}
     if ($("[name=isbn]").val()) {dati.isbn = $("[name=isbn]").val();}
     if ($("[name=url]").val()) {dati.url = $("[name=url]").val();}
-    if ($("[name=scheda]").val()) {
-      dati.bs = {}
-      dati.bs.scheda = $("[name=scheda]").val();
-      dati.bs.livello = $("[name=livello]").val();
-      if($("[name=pagine]").val()){dati.bs.pagine = $("[name=pagine]").val()}
-      if($("[name=figure]").val()){dati.bs.figure = $("[name=figure]").val()}
-    }
     $.ajax({
       url: API,
       type: 'POST',
@@ -33,7 +26,11 @@ $('[name=submit]').on('click', function (e) {
     })
     .done(function(data) {
       data.url='biblioView.php?get='+data.id;
-      createToast(data);
+      data.btn = [];
+      data.btn.push("<button type='button' class='btn btn-light btn-sm' name='continua'>continua inserimento</button>");
+      data.btn.push("<a href='"+data.url+"' class='btn btn-light btn-sm'>visualizza scheda</a>");
+      data.btn.push("<a href='bibliografia.php' class='btn btn-light btn-sm'>termina inserimento</a>");
+      toast(data);
     })
     .fail(function(){console.log("error");});
   }

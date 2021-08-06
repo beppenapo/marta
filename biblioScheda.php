@@ -22,7 +22,7 @@
                   <label for="biblio" class="font-weight-bold text-danger">Seleziona authority file</label>
                   <select class="form-control form-control-sm" name="biblio" id="biblio" required>
                     <option value="" selected disabled>-- seleziona record --</option>
-                    <?php foreach ($biblioList as $item) { echo "<option value='".$item['id']."' data-tipo='".$item['tipo_id']."'>".$item['autore']. ", ".$item['anno']. ", ".$item['titolo']."</option>"; } ?>
+                    <?php foreach ($biblio->listaAuth() as $item) { echo "<option value='".$item['id']."'>".$item['titolo'].", ".$item['autore']." (".$item['anno'].")</option>"; } ?>
                   </select>
                 </div>
                 <div class="col-md-6">
