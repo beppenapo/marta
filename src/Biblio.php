@@ -50,6 +50,14 @@ class Biblio extends Conn{
     if($res === true){$res = array('res'=>true, 'msg'=> "La scheda bibliografica è stata correttamente modificata");}
     return $res;
   }
+  public function editContributo(array $dati){
+    $filter = ['id'=>$dati['id']];
+    unset($dati['id']);
+    $sql = $this->buildUpdate('contributo',$filter,$dati);
+    $res = $this->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "La scheda contributo è stata correttamente modificata");}
+    return $res;
+  }
 
   public function deleteScheda(int $id){
     $dati = ['id'=>$id];

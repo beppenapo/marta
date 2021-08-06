@@ -48,7 +48,7 @@
                 </li>
                 <li class="list-group-item">
                   <span class="font-weight-bold d-inline-block align-top">Pagine contributo:</span>
-                  <span class="d-inline-block"><?php echo $contributo['contrib_pag']; ?></span>
+                  <span class="d-inline-block"><?php echo $contributo['contrib_pagine']; ?></span>
                 </li>
               </ul>
             </div>

@@ -39,3 +39,8 @@ Per assicurare omogeneità grafica, la scheda contributo è simile a quella dell
 2. al posto della lista dei contributi, la sezione riporta il titolo dell'authority di appartenenza
 3. schede correlate
 4. menù contestuale dal quale è possibile modificare i dati del volume o eliminare la scheda contributo
+
+Associazione di un record bibliografico ad una scheda
+La separazione tra authority file e contributi ha reso necessario una risistemazione della modalità di associazione tra un record bibliografico ed una scheda.
+Il form è raggiungibile, come prima, attraverso il pulsante aggiungi -> bibliografia, presente nel menù contestuale della scheda reperto.
+Nel nuovo form l'utente deve obbligatoriamente scegliere un authority file selezionandolo dall'apposita lista valori. Se il volume ha dei contributi associati, questi compariranno in una seconda lista, a questo punto l'utente può scegliere o meno (campo on obbligatorio) uno dei contributi presenti in lista.
