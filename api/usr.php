@@ -16,4 +16,8 @@ function classList($obj){ return json_encode($obj->classList()); }
 function aggiungiUsr($obj){ return json_encode($obj->aggiungiUsr($_POST)); }
 function modificaUsr($obj){ return json_encode($obj->modificaUsr($_POST)); }
 function modificaPassword($obj){return json_encode($obj->modificaPassword($_POST));}
+function addReport($obj){return json_encode($obj->addReport($_POST['dati']));}
+function editReport($obj){return json_encode($obj->editReport($_POST['dati']));}
+function listaReport($obj){return json_encode($obj->listaReport());}
+function deleteReport($obj){return json_encode($obj->deleteReport($_POST['id']));}
 ?>

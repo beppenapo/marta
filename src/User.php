@@ -5,6 +5,7 @@ use \Marta\Conn;
 use \PHPMailer\PHPMailer\PHPMailer;
 use \PHPMailer\PHPMailer\SMTP;
 use \PHPMailer\PHPMailer\Exception;
+
 class User{
   public $db;
   public $mail;
@@ -12,6 +13,41 @@ class User{
     $this->db = new Conn;
     $this->mail = new PHPMailer(true);
   }
+  public function listaReport(int $id=null){
+    $filter = $id !== null ? 'and r.id = '.$id : '';
+    return $this->db->simple("select r.id,r.data, r.report, r.utente usr, concat(u.nome,' ',u.cognome) utente from progetto.report r, utenti u where r.utente = u.id ".$filter." order by r.data desc, utente asc;");
+  }
+  public function addReport(array $dati){
+    $this->db->begin();
+    $msg = 'Il report è stato correttamente inserito';
+    $sql = $this->db->buildInsert('progetto.report',$dati);
+    $sql = rtrim($sql, ";") . " returning id;";
+    $reportId = $this->db->returning($sql,$dati);
+    $this->db->commit();
+    if ($reportId['res']===false) {
+      return array("res"=>false,"msg"=>$reportId['msg']);
+    }else {
+      return array("res"=>true,"msg"=>$msg, "id"=>$reportId['field']);
+    }
+  }
+
+  public function editReport(array $dati){
+    $filter = ['id'=>$dati['id']];
+    unset($dati['id']);
+    $sql = $this->db->buildUpdate('progetto.report',$filter,$dati);
+    $res = $this->db->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "Il report è stato correttamente modificato");}
+    return $res;
+  }
+
+  public function deleteReport(int $id){
+    $dati = ['id'=>$id];
+    $sql = "delete from progetto.report where id = :id;";
+    $res = $this->db->prepared($sql, $dati);
+    if($res === true){$res = array('res'=>true, 'msg'=> "Il report è stato definitivamente eliminato");}
+    return $res;
+  }
+
   public function getUser(int $id=null){
     $filter = $id !== null ? "where u.id = ".$id : "";
     $sql = "select u.id, u.cognome, u.nome, u.email, u.cellulare, u.classe as idclasse, c.classe, c.ico, u.attivo from utenti u join liste.userclass c on u.classe = c.id ".$filter." order by 6,2 asc;";

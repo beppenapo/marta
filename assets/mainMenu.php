@@ -49,6 +49,9 @@
         <li>
           <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="modifica le liste valori"><i class="fas fa-chevron-right fa-fw"></i> liste valori</a>
         </li>
+        <li>
+          <a href="report.php" class="animated" data-toggle='tooltip' data-placement='left' title="gestisci report personali"><i class="fas fa-chevron-right fa-fw"></i> report</a>
+        </li>
       </ul>
     <?php } ?>
     </li>

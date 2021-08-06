@@ -41,7 +41,7 @@ $biblio = new Biblio();
               </div>
               <div class="form-row mb-3">
                 <div class="col-md-4">
-                  <label for="autore" class="text-danger font-weight-bold">BIBA - Autori principali</label>
+                  <label for="autore" class="text-danger font-weight-bold">BIBA - Autore</label>
                   <input type="text" class="form-control form-control-sm tab" id="autore" name="autore" value="" placeholder="Cognome Nome, Cognome Nome ..." required>
                 </div>
                 <div class="col-md-4">

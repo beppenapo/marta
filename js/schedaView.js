@@ -39,10 +39,13 @@ function delScheda(dati){
   .done(function(data){
     console.log(data);
     obj={}
+    obj.res=data
     obj.msg = data === true ? 'La scheda e tutti gli oggetti collegati sono stati eliminati.' : data.msg;
     obj.classe = data === true ? 'bg-success' : 'bg-danger';
-    if(data === true){obj.url = 'dashboard.php';}
-    viewMsgToast(obj);
+    obj.url='schede.php';
+    obj.btn = [];
+    obj.btn.push("<a href='"+obj.url+"' class='btn btn-light btn-sm'>ok</a>");
+    toast(obj);
   })
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);
@@ -58,9 +61,12 @@ function delBiblioScheda(dati){
   })
   .done(function(data){
     obj={}
+    obj.res=data
     obj.msg = data === true ? 'il riferimento bibliografico è stato eliminato' : 'Errore nella query: '+data.msg;
-    obj.classe = data === true ? 'bg-success' : 'bg-danger';
-    viewMsgToast(obj);
+    obj.url = 'schedaView.php?get='+$("[name=schedaId]").val();
+    obj.btn = [];
+    obj.btn.push("<a href='"+obj.url+"' class='btn btn-light btn-sm'>ok</a>");
+    toast(obj);
   })
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);
@@ -72,21 +78,4 @@ function mapInit(){
   let y = parseFloat($("[name=gpdpy]").val()).toFixed(4)
   let epsg = parseInt($("[name=epsg]").val())
   console.log([x,y,epsg]);
-}
-
-function viewMsgToast(obj){
-  $(".toast").removeClass('[class^="bg-"]').addClass(obj.classe);
-  $("#headerTxt").html('Risultato query');
-  $(".toast>.toast-body>.toast-body-msg").html(obj.msg);
-  $(".toast").toast({delay:3000});
-  $(".toast").show();
-  $(".toast").toast('show');
-  $("[name='continua']").hide();
-  $("[name='viewRec']").text('ok').on('click', function(){
-    if(obj.url){
-      window.location.href=obj.url;
-    }else {
-      window.location.reload();
-    }
-  });
 }

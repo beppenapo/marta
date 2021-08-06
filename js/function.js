@@ -254,6 +254,9 @@ $.extend({
   }
 });
 function nl2br(str){return str.replace(/(?:\r\n|\r|\n)/g, '<br>');}
+function cutString(str,length){
+  return str.replace(/^(.{11}[^\s]*).*/, "$1");
+}
 function getList(obj){
   Object.keys(obj).forEach(function (key){
     postData("scheda.php", {trigger:'vocabolari', tab:obj[key]['tab'], filter:obj[key]['filter']}, function(data){verniciatura
@@ -316,29 +319,29 @@ function stat(){
 }
 
 $(".toast").hide();
-function createToast(obj){
-  obj.titolo='Risultato query';
-  classe = obj.res === true ? 'bg-success' : 'bg-danger';
-  $(".toast").removeClass('[class^="bg-"]').addClass(classe);
-  $("#headerTxt").html('Risultato query');
-  $(".toast>.toast-body>.toast-body-msg").html(obj.msg);
-  $(".toast").toast({delay:3000});
-  $(".toast").show();
-  $(".toast").toast('show');
-  $("[name='continua']").on('click', function(){window.location.reload(true);})
-
-  if (obj.res === true) {
-    $("[name='continua']").show();
-    $("[name='viewRec']").text('visualizza record').on('click', function(){window.location.href = obj.url});
-  }else {
-    $("[name='viewRec']").text('ok, chiudi alert');
-    $("[name='continua']").hide();
-    $('.toast').on('hidden.bs.toast', function () {
-      $(".toast").removeClass(classe);
-      $(".toast").hide();
-    })
-  }
-}
+// function createToast(obj){
+//   obj.titolo='Risultato query';
+//   classe = obj.res === true ? 'bg-success' : 'bg-danger';
+//   $(".toast").removeClass('[class^="bg-"]').addClass(classe);
+//   $("#headerTxt").html('Risultato query');
+//   $(".toast>.toast-body>.toast-body-msg").html(obj.msg);
+//   $(".toast").toast({delay:3000});
+//   $(".toast").show();
+//   $(".toast").toast('show');
+//   $("[name='continua']").on('click', function(){window.location.reload(true);})
+//
+//   if (obj.res === true) {
+//     $("[name='continua']").show();
+//     $("[name='viewRec']").text('visualizza record').on('click', function(){window.location.href = obj.url});
+//   }else {
+//     $("[name='viewRec']").text('ok, chiudi alert');
+//     $("[name='continua']").hide();
+//     $('.toast').on('hidden.bs.toast', function () {
+//       $(".toast").removeClass(classe);
+//       $(".toast").hide();
+//     })
+//   }
+// }
 function toast(obj){
   console.log(obj);
   let btnDiv = $("#toastBtnDiv");
@@ -662,7 +665,11 @@ function salvaScheda(e){
     })
     .done(function(data){
       data.url='schedaView.php?get='+data.scheda;
-      createToast(data);
+      data.btn = [];
+      data.btn.push("<button type='button' class='btn btn-light btn-sm' name='continua'>continua inserimento</button>");
+      data.btn.push("<a href='"+data.url+"' class='btn btn-light btn-sm'>visualizza scheda</a>");
+      data.btn.push("<a href='schede.php' class='btn btn-light btn-sm'>termina inserimento</a>");
+      toast(data);
     })
     .fail(function(){console.log("error");});
 
