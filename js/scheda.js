@@ -189,7 +189,8 @@ $(document).ready(function() {
         delete dati['re'];
       }
 
-      dati.dtz.dtzg = $("[name=dtzg]").val();
+      dati.dtz.dtzgi = $("[name=dtzgi]").val();
+      dati.dtz.dtzgf = $("[name=dtzgf]").val();
       if($("[name=dtzs]").val()){dati.dtz.dtzs = $("[name=dtzs]").val();}
 
       if ($("#toggleDTS").is(':checked')) {

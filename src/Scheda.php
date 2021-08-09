@@ -55,7 +55,7 @@ class Scheda extends Conn{
     $ain = $this->simple($sql);
     $out['re']['ain'] = $ain[0];
 
-    $sql = "SELECT dtzg.value dtzg, dtzs.value dtzs, dt.dtsi, dt.dtsf from dt inner join liste.dtzg on dt.dtzg = dtzg.id inner join liste.dtzs on dt.dtzs = dtzs.id where dt.scheda = ".$id.";";
+    $sql = "SELECT ci.id as ciid, ci.value as ci, cf.id as cfid, cf.value as cf, dtzs.value dtzs, dt.dtsi, dt.dtsf from dt inner join liste.cronologia ci on dt.dtzgi = ci.id inner join liste.cronologia cf on dt.dtzgf = cf.id left join liste.dtzs on dt.dtzs = dtzs.id where dt.scheda = ".$id.";";
     $dt = $this->simple($sql);
     $out['dt']['dt'] = $dt[0];
     $sql = "SELECT val.value dtm from dtm inner join liste.dtm val on dtm.dtm = val.id where dtm.scheda = ".$id." order by dtm asc;";
@@ -170,13 +170,8 @@ class Scheda extends Conn{
     $out['tcn']=$this->simple("select * from liste.tecnica where tsk != ".$dati['filter']." order by 3 asc;");
     return $out;
   }
-  public function setCrono(array $dati){
-    $default =$this->simple("select max(dtsi) dtsi, min(dtsf) dtsf from liste.dts where dtzg = ".$dati['dtzg'].";");
-    if (isset($dati['dtzs'])) {
-      $complete = $this->simple("select dtsi, dtsf from liste.dts where dtzg = ".$dati['dtzg']." and dtzs = ".$dati['dtzs'].";");
-    }
-    if(empty($complete[0])){ return $default; }
-    return $complete;
+  public function setDtzgf(array $dati){
+    return $this->simple("select * from liste.cronologia where id >= ".$dati['dtzgi']." order by id asc;");
   }
 
   //sezione liste
@@ -189,6 +184,18 @@ class Scheda extends Conn{
     $stim=array("tab"=>'liste.stim');
     $stimArr=$this->vocabolari($stim);
     $opt['stim']=$this->buildSel($stimArr);
+
+    $dtzg=array("tab"=>'liste.cronologia', "order"=>1);
+    $dtzgArr=$this->vocabolari($dtzg);
+    $opt['dtzg']=$this->buildSel($dtzgArr);
+
+    $dtzs=array("tab"=>'liste.dtzs');
+    $dtzsArr=$this->vocabolari($dtzs);
+    $opt['dtzs']=$this->buildSel($dtzsArr);
+
+    $dtm=array("tab"=>'liste.dtm');
+    $dtmArr=$this->vocabolari($dtm);
+    $opt['dtm']=$this->buildSel($dtmArr);
 
     return $opt;
   }
@@ -246,17 +253,17 @@ class Scheda extends Conn{
     $aintArr=$this->vocabolari($aint);
     $opt['aint']=$this->buildSel($aintArr);
 
-    $dtzg=array("tab"=>'liste.dtzg');
-    $dtzgArr=$this->vocabolari($dtzg);
-    $opt['dtzg']=$this->buildSel($dtzgArr);
+    // $dtzg=array("tab"=>'liste.dtzg');
+    // $dtzgArr=$this->vocabolari($dtzg);
+    // $opt['dtzg']=$this->buildSel($dtzgArr);
 
-    $dtzs=array("tab"=>'liste.dtzs');
-    $dtzsArr=$this->vocabolari($dtzs);
-    $opt['dtzs']=$this->buildSel($dtzsArr);
-
-    $dtm=array("tab"=>'liste.dtm');
-    $dtmArr=$this->vocabolari($dtm);
-    $opt['dtm']=$this->buildSel($dtmArr);
+    // $dtzs=array("tab"=>'liste.dtzs');
+    // $dtzsArr=$this->vocabolari($dtzs);
+    // $opt['dtzs']=$this->buildSel($dtzsArr);
+    //
+    // $dtm=array("tab"=>'liste.dtm');
+    // $dtmArr=$this->vocabolari($dtm);
+    // $opt['dtm']=$this->buildSel($dtmArr);
 
     $stcc=array("tab"=>'liste.stcc');
     $stccArr=$this->vocabolari($stcc);

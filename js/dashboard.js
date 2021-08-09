@@ -45,7 +45,6 @@ $("body").on('click', '[name=delNotesBtn]', function() {
   .fail(function(data) { console.log(data); });
 });
 $('body').on('click', '[name=updateUser]', function() { $.redirectPost('usrAdd.php',{id:$(this).val()}); });
-
 function initComunicazioni(){
   $.ajax({ url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: {trigger : 'comunicazioni'} })
   .done(function(data) {

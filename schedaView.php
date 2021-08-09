@@ -171,15 +171,19 @@
             <fieldset id="dtzFieldset" class="mb-3">
               <legend class="text-marta font-weight-bold border-bottom">DTZ - Cronologia generica</legend>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item"><span>DTZG - Fascia cronologica:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtzg']; ?></span></li>
-                <li class="list-group-item"><span>DTZS - Frazione cronologica:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtzs']; ?></span></li>
+                <li class="list-group-item"><span>DTZG - Fascia cronologica:</span><span class="font-weight-bold">
+                  <?php
+                    echo $scheda['dt']['dt']['ciid'] == $scheda['dt']['dt']['cfid'] ? $scheda['dt']['dt']['cf'] : $scheda['dt']['dt']['ci']." / ".$scheda['dt']['dt']['cf'];
+                  ?>
+                </span></li>
+                <li class="list-group-item"><span>DTZS - Frazione cronologica:</span><span class=""><?php echo !$scheda['dt']['dt']['dtzs'] ? $noValue : $scheda['dt']['dt']['dtzs']; ?></span></li>
               </ul>
             </fieldset>
             <fieldset id="dtsFieldset" class="mb-3">
               <legend class="text-marta font-weight-bold border-bottom">DTS - Cronologia specifica</legend>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item"><span>DTSI - Da:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtsi']; ?></span></li>
-                <li class="list-group-item"><span>DTSF - A:</span><span class="font-weight-bold"><?php echo $scheda['dt']['dt']['dtsf']; ?></span></li>
+                <li class="list-group-item"><span>DTSI - Da:</span><span class=""><?php echo $scheda['dt']['dt']['dtsi'] ? $scheda['dt']['dt']['dtsi'] : $noValue; ?></span></li>
+                <li class="list-group-item"><span>DTSF - A:</span><span class=""><?php echo $scheda['dt']['dt']['dtsf'] ? $scheda['dt']['dt']['dtsf'] : $noValue; ?></span></li>
               </ul>
             </fieldset>
             <fieldset id="dtmFieldset" class="mb-3">

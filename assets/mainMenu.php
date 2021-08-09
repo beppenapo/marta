@@ -53,8 +53,8 @@
           <a href="report.php" class="animated" data-toggle='tooltip' data-placement='left' title="gestisci report personali"><i class="fas fa-chevron-right fa-fw"></i> report</a>
         </li>
       </ul>
-    <?php } ?>
     </li>
+  <?php } ?>
     <li>
       <p class='text-danger'><i class="fas fa-user fa-fw"></i> Account</p>
       <ul class="subMenu">

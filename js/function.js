@@ -129,28 +129,23 @@ $("body").on('change', '[name=prvp]', function(el) {
 });
 
 //funzioni per la gestione della cronologia
-$("body").on('change', '[name=dtzg]', setCrono);
-$("body").on('change', '[name=dtzs]', function() {
-  let dtzg = $("[name=dtzg]").val();
-  if (!dtzg) {
-    alert('Attenzione, ricordati di selezionare una fascia cronologica');
-    return false;
-  }
-  setCrono()
-});
-function setCrono(){
-  let dtzg = $("[name=dtzg]").val()
-  let dtzs = $("[name=dtzs]").val()
-  let dati = {trigger:'setCrono',dtzg:dtzg};
-  if (dtzs) { dati.dtzs=dtzs; }
+$("body").on('change', '[name=dtzgi]', setDtzgf);
+
+function setDtzgf(){
+  let opt = [];
+  let dtzgi = $("[name=dtzgi]").val()
+  let dati = {trigger:'setDtzgf',dtzgi:dtzgi};
   $.ajax({
     type: "POST",
     url: "api/scheda.php",
     data: dati,
     dataType: 'json',
     success: function(data){
-      $("[name=dtsi]").val(data[0]['dtsi']);
-      $("[name=dtsf]").val(data[0]['dtsf']);
+      $("#dtzgf").prop('disabled',false);
+      data.forEach((item, i) => {
+        opt.push("<option value='"+item.id+"'>"+item.value+"</option>")
+      });
+      $("#dtzgf").html(opt.join(''));
     }
   });
 }
