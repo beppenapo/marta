@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['id'])){ header("location:login.php");}
+if (!isset($_SESSION['id']) || $_SESSION['classe'] > 1){ header("location:403.php");}
 require 'vendor/autoload.php';
 use \Marta\User;
 
