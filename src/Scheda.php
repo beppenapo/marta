@@ -434,7 +434,8 @@ class Scheda extends Conn{
       , tsk.value as tipo
       , ogtd.value as ogtd
       , array_agg(m.value order by materia asc) as materia
-      , concat (dtzg.value,' ', dtzs.value) as cronologia
+      , dtzgi.value as dtzgi
+      , dtzgf.value as dtzgf
       , lc.piano
       , concat(loc.sala,' ', loc.descrizione) as sala
     from scheda s
@@ -447,13 +448,13 @@ class Scheda extends Conn{
     INNER JOIN mtc on mtc.scheda = s.id
     INNER JOIN liste.materia as m on mtc.materia = m.id
     INNER JOIN dt on dt.scheda = s.id
-    INNER JOIN liste.dtzg on dt.dtzg = dtzg.id
-    INNER JOIN liste.dtzs on dt.dtzs = dtzs.id
+    INNER JOIN liste.cronologia dtzgi on dt.dtzgi = dtzgi.id
+    INNER JOIN liste.cronologia dtzgf on dt.dtzgf = dtzgf.id
     INNER JOIN lc on lc.scheda = s.id
     INNER JOIN liste.sale as loc on lc.sala = loc.id
     INNER JOIN utenti u on s.cmpn = u.id
     ".$where."
-    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, ogtd.value, dtzg.value, dtzs.value, lc.piano, loc.sala, loc.descrizione
+    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, ogtd.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione
 
     UNION
 
@@ -465,7 +466,8 @@ class Scheda extends Conn{
       , tsk.value as tipo
       , l4.value as ogtd
       , array_agg(m.value order by materia asc) as materia
-      , concat (dtzg.value,' ', dtzs.value) as cronologia
+      , dtzgi.value as dtzgi
+      , dtzgf.value as dtzgf
       , lc.piano
       , concat(loc.sala,' ', loc.descrizione) as sala
     from scheda s
@@ -478,13 +480,13 @@ class Scheda extends Conn{
     INNER JOIN mtc on mtc.scheda = s.id
     INNER JOIN liste.materia as m on mtc.materia = m.id
     INNER JOIN dt on dt.scheda = s.id
-    INNER JOIN liste.dtzg on dt.dtzg = dtzg.id
-    INNER JOIN liste.dtzs on dt.dtzs = dtzs.id
+    INNER JOIN liste.cronologia dtzgi on dt.dtzgi = dtzgi.id
+    INNER JOIN liste.cronologia dtzgf on dt.dtzgf = dtzgf.id
     INNER JOIN lc on lc.scheda = s.id
     INNER JOIN liste.sale as loc on lc.sala = loc.id
     INNER JOIN utenti u on s.cmpn = u.id
     ".$where."
-    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, l4.value, dtzg.value, dtzs.value, lc.piano, loc.sala, loc.descrizione
+    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, l4.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione
     order by nctn asc;";
     return $this->simple($sql);
   }

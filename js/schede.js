@@ -21,7 +21,7 @@ function buildTable(){
       $("<td/>",{text:v.titolo}).appendTo(tr);
       $("<td/>",{text:v.ogtd}).appendTo(tr);
       $("<td/>",{text:v.materia}).appendTo(tr);
-      $("<td/>",{text:v.cronologia}).appendTo(tr);
+      $("<td/>",{text:v.dtzgi == v.dtzgf ? v.dtzgi : v.dtzgi+' / '+v.dtzgf}).appendTo(tr);
       $("<td/>",{text:v.piano}).appendTo(tr);
       $("<td/>",{text:v.sala}).appendTo(tr);
       $("<td/>",{html:link, class:'text-center'}).appendTo(tr);
