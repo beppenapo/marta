@@ -1,6 +1,0 @@
-@import "main.css";
-.liste{height: 580px;/*max-height:300px;*/overflow: auto;}
-
-#countDownWrap{text-align: center;}
-#countdown{font-size: 8vw;}
-.info{width:80vw;margin:0 auto;}

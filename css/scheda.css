@@ -1,7 +1,0 @@
-@import "main.css";
-legend, label{font-size: .9rem;margin:0;}
-legend{text-transform: uppercase;}
-[name=addMtc]{margin-top:15px;}
-@media (min-width: 768px) {
-  [name=addMtc]{position: absolute;bottom: 0;}
-}
