@@ -1,1 +1,0 @@
-SELECT ci.id as ciid, ci.value as ci, cf.id as cfid, cf.value as cf, dtzs.value dtzs, dt.dtsi, dt.dtsf from dt inner join liste.cronologia ci on dt.cronoi = ci.id inner join liste.cronologia cf on dt.cronof = cf.id inner join liste.dtzs on dt.dtzs = dtzs.id where dt.scheda = 305
