@@ -13,14 +13,14 @@
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
-      <?php if (isset($_SESSION['id'])) { ?>
+      <?php if (isset($_SESSION['id']) && ($_SESSION['id'] == $scheda['scheda']['cmpid'] || $_SESSION['classe'] < 3)) { ?>
       <div id="menuScheda" class="bg-dark px-3">
         <div class="btn-group" role="group">
           <div class="btn-group" role="group">
             <button id="aggiungi" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> aggiungi</button>
             <div class="dropdown-menu" aria-labelledby="aggiungi">
               <a class="dropdown-item" href="biblioScheda.php?sk=<?php echo $_GET['get']; ?>" title="aggiungi fonte bibliografica<br><br>Ricorda che per chiudere la scheda devi aggiungere almeno 1 riferimento bibliografico" data-toggle="tooltip" data-placement="right">bibliografia</a>
-              <a class="dropdown-item" href="#" title="aggiungi fotografia<br><br>Ricorda che per chiudere la scheda devi aggiungere almeno 2 foto" data-toggle="tooltip" data-placement="right">foto</a>
+              <a class="dropdown-item" href="uploadFile.php?sk=<?php echo $_GET['get']; ?>&t=3" title="aggiungi fotografia<br><br>Ricorda che per chiudere la scheda devi aggiungere almeno 2 foto" data-toggle="tooltip" data-placement="right">foto</a>
               <a class="dropdown-item" href="#" title="aggiungi documentazione grafica come tavole, disegni ecc." data-toggle="tooltip" data-placement="right">grafica</a>
               <a class="dropdown-item" href="#" title="aggiungi fonte video" data-toggle="tooltip" data-placement="right">video</a>
               <a class="dropdown-item" href="#" title="aggiungi fonte audio" data-toggle="tooltip" data-placement="right">audio</a>
@@ -285,7 +285,8 @@
             <legend class="text-marta font-weight-bold border-bottom">Bibliografia correlata</legend>
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
-                $authority = "<a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ".$i['anno'].", ".$i['titolo']."</a>";
+                $anno = $i['anno'] ? $i['anno'].", ": '';
+                $authority = "<a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ". $anno .$i['titolo']."</a>";
                 echo "<li class='list-group-item'>";
                 if(isset($_SESSION['id'])){
                   echo "<button type='button' class='btn btn-sm btn-danger mr-3' name='delBiblioScheda' data-scheda='".$_GET['get']."' data-biblio='".$i['id']."'>
@@ -294,7 +295,11 @@
                 }
                 echo "<span>";
                 if ($i['contrib_id'] !== null) {
-                  echo "<a href='contribView.php?get=".$i['contrib_id']."'>".$i['contrib_aut'].", ".$i['contrib_tit']."</a> presente in: ".$authority;
+                  $pagArr = [];
+                  if($i['pagine']!=='' or $i['pagine']!== null){array_push($pagArr, "pag. ".$i['pagine']);}
+                  if($i['figure']!=='' or $i['figure']!== null){array_push($pagArr, "fig. ".$i['figure']);}
+                  $pag = count($pagArr) == 0 ? '' : "(".implode(', ', $pagArr).")";
+                  echo "<a href='contribView.php?get=".$i['contrib_id']."'>".$i['contrib_aut'].", ".$i['contrib_tit'].", ".$pag."</a> presente in: ".$authority;
                 }else {
                   echo $authority;
                 }
