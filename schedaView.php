@@ -297,7 +297,10 @@
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
                 $anno = $i['anno'] ? $i['anno'].", ": '';
-                $authority = "<a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ". $anno .$i['titolo']."</a>";
+                $pagArr = [];
+                if($i['pagine']!== null){array_push($pagArr, "pag. ".$i['pagine']);}
+                if($i['figure']!== null){array_push($pagArr, "fig. ".$i['figure']);}
+                $pag = count($pagArr) == 0 ? '' : "(".implode(', ', $pagArr).")";
                 echo "<li class='list-group-item'>";
                 if(isset($_SESSION['id'])){
                   echo "<button type='button' class='btn btn-sm btn-danger mr-3' name='delBiblioScheda' data-scheda='".$_GET['get']."' data-biblio='".$i['id']."'>
@@ -306,13 +309,9 @@
                 }
                 echo "<span>";
                 if ($i['contrib_id'] !== null) {
-                  $pagArr = [];
-                  if($i['pagine']!== null){array_push($pagArr, "pag. ".$i['pagine']);}
-                  if($i['figure']!== null){array_push($pagArr, "fig. ".$i['figure']);}
-                  $pag = count($pagArr) == 0 ? '' : "(".implode(', ', $pagArr).")";
-                  echo "<a href='contribView.php?get=".$i['contrib_id']."'>".$i['contrib_aut'].", ".$i['contrib_tit'].", ".$pag."</a> presente in: ".$authority;
+                  echo "<a href='contribView.php?get=".$i['contrib_id']."'>".$i['contrib_aut'].", ".$i['contrib_tit'].", ".$pag."</a> presente in: <a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ". $anno .$i['titolo']."</a>";
                 }else {
-                  echo $authority;
+                  echo "<a href='biblioView.php?get=".$i['id']."'>".$i['autore'].", ". $anno .$i['titolo'].", ".$pag."</a>";
                 }
                 echo "</span></li>";
               } ?>
