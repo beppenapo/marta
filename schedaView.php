@@ -31,8 +31,19 @@
           <div class="btn-group" role="group">
             <button id="modifica" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-edit"></i> modifica</button>
             <div class="dropdown-menu" aria-labelledby="modifica">
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right">titolo e codici</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right">og - oggetto</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="titoli">titolo e codici</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="og">OG - oggetto</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="lc">LC - localizzazione geografico-amministrativa</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="ub">UB - dati patrimoniali</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="gp">GP - georeferenziazione tramite punto</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="re">RE - modalità di reperimento</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="dt">DT - cronologia</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="mt">MT - dati tecnici</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="da">DA - dati analitici</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="co">CO - conservazione</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="tu">TU - condizione giuridica e vincoli</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="ad">AD - accesso ai dati</a>
+              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="an">AN - annotazioni</a>
             </div>
           </div>
           <button id="duplicaScheda" name="duplicaScheda" type="button" class="btn btn-dark"><i class="fas fa-copy"></i> duplica</button>
