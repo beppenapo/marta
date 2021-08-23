@@ -296,8 +296,8 @@
                 echo "<span>";
                 if ($i['contrib_id'] !== null) {
                   $pagArr = [];
-                  if($i['pagine']!=='' or $i['pagine']!== null){array_push($pagArr, "pag. ".$i['pagine']);}
-                  if($i['figure']!=='' or $i['figure']!== null){array_push($pagArr, "fig. ".$i['figure']);}
+                  if($i['pagine']!== null){array_push($pagArr, "pag. ".$i['pagine']);}
+                  if($i['figure']!== null){array_push($pagArr, "fig. ".$i['figure']);}
                   $pag = count($pagArr) == 0 ? '' : "(".implode(', ', $pagArr).")";
                   echo "<a href='contribView.php?get=".$i['contrib_id']."'>".$i['contrib_aut'].", ".$i['contrib_tit'].", ".$pag."</a> presente in: ".$authority;
                 }else {
