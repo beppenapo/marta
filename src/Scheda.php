@@ -15,6 +15,10 @@ class Scheda extends Conn{
     ORDER BY anno, autore, titolo asc;";
     return $this->simple($sql);
   }
+  public function getFoto(int $id = null){
+    $filter = $id !== null ? "and scheda = ".$id : '';
+    return $this->simple("select * from file where tipo = 3 ".$filter.";");
+  }
   public function getScheda(int $id){
     $out=[];
     $sql = "select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, u.id as cmpid, s.cmpd,  concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv

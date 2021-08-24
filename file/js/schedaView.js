@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   const scheda = parseInt($("[name=schedaId]").val());
   const nctn = parseInt($("[name=nctnId]").val());
   $(".list-group-item > span").each(function(){
@@ -27,7 +28,6 @@ $(document).ready(function() {
       delScheda(dati);
     }
   })
-
   getFoto(scheda);
 });
 
@@ -107,16 +107,11 @@ function getFoto(scheda){
     data: {trigger:'getFoto', id:scheda}
   })
   .done(function(data){
-    data.forEach((item, i) => {
+    data.forEach((item, i), function() {
       let div = $("<div/>",{class:'fotoDiv'}).css({"width":w,"height":w,"background-image": "url("+folder+item.file+")"});
       let overlay = $("<div/>",{class:'fotoOverlay animated'}).html('<i class="bi bi-arrows-fullscreen text-white"></i>').appendTo(div);
       div.appendTo('.fotoWrap')
-      div.on('click', () => {
-        // $("#divImgOrig").css("background-image": "url(file/foto/orig/"+item.file+")");
-        $("#fotoModal").fadeIn('fast');
-      })
     });
-
   })
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);

@@ -4,6 +4,7 @@
   <head>
     <?php require('assets/meta.html'); ?>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/schedaView.css">
   </head>
   <body>
@@ -13,6 +14,7 @@
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
+
       <?php if (isset($_SESSION['id']) && ($_SESSION['id'] == $scheda['scheda']['cmpid'] || $_SESSION['classe'] < 3)) { ?>
       <div id="menuScheda" class="bg-dark px-3">
         <div class="btn-group" role="group">
@@ -287,13 +289,9 @@
           </fieldset>
         </div>
         <div class="col-md-6">
-          <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">immagini - documenti - multimedia</legend>
-            <?php if(count($scheda['gp'])>0){ ?>
-            <div id="mappa" class="bg-marta"></div>
-            <?php } ?>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="biblioFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">Bibliografia correlata</legend>
             <?php if(count($bibScheda) > 0){ ?>
-            <legend class="text-marta font-weight-bold border-bottom">Bibliografia correlata</legend>
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
                 $anno = $i['anno'] ? $i['anno'].", ": '';
@@ -316,12 +314,39 @@
                 echo "</span></li>";
               } ?>
             </ul>
-            <?php } ?>
+          <?php }else { ?>
+            <h5>Nessuna bibliografia disponibile</h5>
+          <?php } ?>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="imageFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">Foto e immagini</legend>
+            <div class="fotoWrap elContainer"></div>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="mappaFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">Mappa</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="3dFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">Modello 3d</legend>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">Audio e video</legend>
           </fieldset>
         </div>
       </div>
     </div>
     </main>
+    <div id="fotoModal">
+      <div id="fotoOrigDiv" class="container-fluid">
+        <div class="row">
+          <div class="col p-5">
+            <div class="nav">
+              <button type="button" name="button" class="btn btn-light btn-sm" name="closeModal" data-modal="#fotoModal">x chiudi</button>
+            </div>
+            <div id="divImgOrig"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
