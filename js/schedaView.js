@@ -147,9 +147,10 @@ function getFoto(scheda){
       obj.res=data
       obj.msg = data === true ? "l'immagine è stata eliminata" : 'Errore nella query: '+data.msg;
       obj.btn = [];
-      obj.btn.push("<button type='button' class='btn btn-sm btn-light' name='dismiss' data-dismiss='toast'>ok</button>");
-      toast(obj);
-      getFoto(dati.scheda)
+      obj.btn.push("<button type='button' class='btn btn-light btn-sm' name='continua'>ok</button>");
+      $("#fotoModal").fadeOut('fast', function(){
+        toast(obj);
+      });
     })
     .fail(function (jqXHR, textStatus, error) {
       console.log("Post error: " + error);
