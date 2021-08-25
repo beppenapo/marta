@@ -84,6 +84,7 @@ function mapInit(){
 
 $("#fotoModal").hide();
 function getFoto(scheda){
+  $('.fotoWrap').html('');
   let wrapWidth = $(".fotoWrap").innerWidth();
   let w,folder;
   switch (true) {
@@ -112,8 +113,20 @@ function getFoto(scheda){
       let overlay = $("<div/>",{class:'fotoOverlay animated'}).html('<i class="bi bi-arrows-fullscreen text-white"></i>').appendTo(div);
       div.appendTo('.fotoWrap')
       div.on('click', () => {
-        // $("#divImgOrig").css("background-image": "url(file/foto/orig/"+item.file+")");
+        $("#divImgOrig").css({"background-image":"url(file/foto/orig/"+item.file+")"});
         $("#fotoModal").fadeIn('fast');
+        $("#closeModal").on('click', (e) => {
+          e.preventDefault();
+          $("#fotoModal").fadeOut('fast');
+        })
+        $("#downloadImg").attr("href","file/foto/orig/"+item.file);
+        $("#delImg").on('click', (e) => {
+          e.preventDefault();
+          dati={id:item.id, scheda:item.scheda, file:item.file}
+          if (window.confirm("Sei sicuro di voler eliminare l'immagine? Se confermi l'immagine verrà definitivamente eliminata dal server e non sarà più possibile recuperarla.")) {
+            delImg(dati);
+          }
+        })
       })
     });
 
@@ -121,4 +134,25 @@ function getFoto(scheda){
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);
   });
+
+  function delImg(dati){
+    $.ajax({
+      url: "api/file.php",
+      type: 'POST',
+      dataType: 'json',
+      data: {trigger:'delImg', dati:dati}
+    })
+    .done(function(data){
+      obj={}
+      obj.res=data
+      obj.msg = data === true ? "l'immagine è stata eliminata" : 'Errore nella query: '+data.msg;
+      obj.btn = [];
+      obj.btn.push("<button type='button' class='btn btn-sm btn-light' name='dismiss' data-dismiss='toast'>ok</button>");
+      toast(obj);
+      getFoto(dati.scheda)
+    })
+    .fail(function (jqXHR, textStatus, error) {
+      console.log("Post error: " + error);
+    });
+  }
 }

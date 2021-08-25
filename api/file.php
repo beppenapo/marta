@@ -10,4 +10,5 @@ if(isset($funzione) && function_exists($funzione)) {
 }
 
 function uploadImage($obj){return json_encode($obj->uploadImage($_POST,$_FILES));}
+function delImg($obj){return json_encode($obj->delImg($_POST['dati']));}
 ?>

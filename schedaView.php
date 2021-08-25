@@ -339,8 +339,10 @@
       <div id="fotoOrigDiv" class="container-fluid">
         <div class="row">
           <div class="col p-5">
-            <div class="nav">
-              <button type="button" name="button" class="btn btn-light btn-sm" name="closeModal" data-modal="#fotoModal">x chiudi</button>
+            <div class="nav modalMenu">
+              <a href="#" class="animated nav-link" id="closeModal" title="chiudi immagine" data-toggle="tooltip" data-placement="bottom" data-modal="#fotoModal"><i class="bi bi-x-lg"></i></a>
+              <a href="" class="animated nav-link" id="downloadImg" title="salva immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-cloud-arrow-down-fill"></i></a>
+              <a href="" class="animated nav-link" id="delImg" title="elimina immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-trash-fill"></i></a>
             </div>
             <div id="divImgOrig"></div>
           </div>

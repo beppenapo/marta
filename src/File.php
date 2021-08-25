@@ -3,16 +3,14 @@ namespace Marta;
 use \Marta\Scheda;
 use Imagick;
 class File extends Scheda{
-
+  public $dirOrig = "../file/foto/orig/";
+  public $dirLarge = "../file/foto/large/";
+  public $dirMedium = "../file/foto/medium/";
+  public $dirSmall = "../file/foto/small/";
   function __construct(){}
   public function uploadImage($dati, $file){
     try {
       if (!isset($file["file"])) { throw new \Exception("Non hai caricato nessun tipo di file", 1);}
-
-      $dirOrig = "../file/foto/orig/";
-      $dirLarge = "../file/foto/large/";
-      $dirMedium = "../file/foto/medium/";
-      $dirSmall = "../file/foto/small/";
       $filename = $_FILES['file']['tmp_name'];
       $fileSize = filesize($filename);
       $bytes2mb = intval($fileSize) / 1000000;
@@ -23,18 +21,18 @@ class File extends Scheda{
         throw new \Exception("Attenzione, immagine troppo grande! Il massimo consentito è di 10mb mentre l'immagine caricata è di ".round($bytes2mb,2)."mb. Riduci l'immagine e riprova", 1);
       }
       $name = $this->renameImage($dati['scheda'],$file['file']['name']);
-      if (!move_uploaded_file($filename,$dirOrig.$name)) {throw new \Exception("Errore nel caricamento dell'immagine nella cartella large", 1);}
-      chmod($dirOrig.$name,0777);
+      if (!move_uploaded_file($filename,$this->dirOrig.$name)) {throw new \Exception("Errore nel caricamento dell'immagine nella cartella large", 1);}
+      chmod($this->dirOrig.$name,0777);
 
-      if (!copy($dirOrig.$name,$dirLarge.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella large", 1);}
-      chmod($dirLarge.$name,0777);
-      if (!copy($dirOrig.$name,$dirMedium.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella medium", 1);}
-      chmod($dirMedium.$name,0777);
-      if (!copy($dirOrig.$name,$dirSmall.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella small", 1);}
-      chmod($dirSmall.$name,0777);
-      $this->modifyImage($dirLarge.$name,500);
-      $this->modifyImage($dirMedium.$name,250);
-      $this->modifyImage($dirSmall.$name,150);
+      if (!copy($this->dirOrig.$name,$this->dirLarge.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella large", 1);}
+      chmod($this->dirLarge.$name,0777);
+      if (!copy($this->dirOrig.$name,$this->dirMedium.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella medium", 1);}
+      chmod($this->dirMedium.$name,0777);
+      if (!copy($this->dirOrig.$name,$this->dirSmall.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella small", 1);}
+      chmod($this->dirSmall.$name,0777);
+      $this->modifyImage($this->dirLarge.$name,500);
+      $this->modifyImage($this->dirMedium.$name,250);
+      $this->modifyImage($this->dirSmall.$name,150);
       $dati = array("scheda"=>$dati['scheda'],"file"=>$name,"tipo"=>3);
       $this->saveFile($dati);
 
@@ -98,6 +96,22 @@ class File extends Scheda{
     $res = $this->prepared($sql,$dati);
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
+  }
+
+  public function delImg(array $dati){
+    try {
+      unlink($this->dirOrig.$dati['file']);
+      unlink($this->dirLarge.$dati['file']);
+      unlink($this->dirMedium.$dati['file']);
+      unlink($this->dirSmall.$dati['file']);
+      $sql = "delete from file where id = :id and scheda = :scheda and file = :file;";
+      $res = $this->prepared($sql, $dati);
+      if (!$res) { throw new \Exception($res, 1);}
+      return $res;
+    } catch (\Exception $e) {
+      return array("res"=>false, "msg"=>$e->getMessage());
+    }
+
   }
 }
 
