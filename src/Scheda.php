@@ -5,7 +5,16 @@ use \Marta\Conn;
 class Scheda extends Conn{
   public $db;
   function __construct(){}
-
+    public function cambiaStatoScheda(array $dati){
+      $filter = ["scheda"=>$dati['scheda']];
+      unset($dati['scheda']);
+      $sql = $this->buildUpdate('stato_scheda',$filter,$dati);
+      return $this->prepared($sql,$dati);
+    }
+    public function getStatoScheda(int $id){
+      $res = $this->simple("select * from stato_scheda where scheda = ".$id.";");
+      return $res[0];
+    }
   public function getBiblioScheda(int $id){
     $sql = "select b.id, b.titolo, b.anno, b.autore,c.id as contrib_id, c.titolo as contrib_tit, c.autore as contrib_aut,bs.pagine, bs.figure
     from bibliografia b

@@ -289,6 +289,11 @@
           </fieldset>
         </div>
         <div class="col-md-6">
+          <fieldset class="text-center mb-5">
+            <h3 class="">Check stato scheda</h3>
+            <div id="knob" class="text-center"></div>
+            <h5 id="labelStato" class="font-italic"></h5>
+          </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="biblioFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Bibliografia correlata</legend>
             <?php if(count($bibScheda) > 0){ ?>
@@ -299,7 +304,7 @@
                 if($i['pagine']!== null){array_push($pagArr, "pag. ".$i['pagine']);}
                 if($i['figure']!== null){array_push($pagArr, "fig. ".$i['figure']);}
                 $pag = count($pagArr) == 0 ? '' : "(".implode(', ', $pagArr).")";
-                echo "<li class='list-group-item'>";
+                echo "<li class='list-group-item biblioList'>";
                 if(isset($_SESSION['id'])){
                   echo "<button type='button' class='btn btn-sm btn-danger mr-3' name='delBiblioScheda' data-scheda='".$_GET['get']."' data-biblio='".$i['id']."'>
                   <i class='fas fa-times'></i>
@@ -324,12 +329,15 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="mappaFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Mappa</legend>
+            <div class="map" id="map"></div>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="3dFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Modello 3d</legend>
+            <h5>Nessun modello 3d disponibile</h5>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Audio e video</legend>
+            <h5>Nessun elemento multimediale disponibile</h5>
           </fieldset>
         </div>
       </div>
@@ -353,6 +361,7 @@
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="js/pureknob.js" charset="utf-8"></script>
     <script src="js/function.js" charset="utf-8"></script>
     <script src="js/schedaView.js" charset="utf-8"></script>
   </body>
