@@ -1,6 +1,11 @@
 $(document).ready(function() {
   const scheda = parseInt($("[name=schedaId]").val());
   const nctn = parseInt($("[name=nctnId]").val());
+
+  $("[name=modificaScheda]").on('click', function(){
+    $.redirectPost('scheda-ra-mod.php',{s:scheda});
+  })
+
   $(".list-group-item > span").each(function(){
     if ($(this).text()=='dato non inserito') {
       $(this).removeClass('font-weight-bold').addClass('text-secondary')
@@ -23,12 +28,34 @@ $(document).ready(function() {
       delScheda(dati);
     }
   })
-$("#chiudiScheda").on('click', (e) => {
-  if (window.confirm("Stai per chiudere la scheda, se confermi non potrai più effettuare modifiche. Per riaprire la scheda in modifica devi contattare un responsabile.")) {
-    cambiaStatoScheda(scheda, 'chiusa', true);
-  }
-});
-
+  $("[name=cambiaStato]").on('click', (e) => {
+    let stato = e.target.value;
+    let confMsg='';
+    switch (stato) {
+      case 'chiusa':
+        confMsg = "Stai per chiudere la scheda, se confermi non potrai più effettuare modifiche. Per riaprire la scheda in modifica devi contattare un responsabile.";
+      break;
+      case 'riapri':
+        confMsg = "Stai per riaprire la scheda, in questo modo permetterai al compilatore di modificarne nuovamente i dati o di aggiungere nuovi contenuti come foto, documenti ecc.";
+      break;
+      case 'verificata':
+        confMsg = 'Stai per cambiare lo stato della scheda in "verificata", ciò significa che la scheda sarà pronta per essere inviata al server ICCD. Se vuoi modificare la scheda devi farla riaprire dal funzionario di riferimento';
+      break;
+      case 'inviata':
+        confMsg = 'Stai per inviare la scheda al server ICCD, non potrai più riaprirla finché non sarà accettata o rifiutata da parte di ICCD';
+      break;
+      case 'accettata':
+        confMsg = "Se confermi, chiudi l'iter di creazione e validazione della scheda! Se decidi di riprirla ad eventuali modifiche dovrai ripetere il processo dall'inizio";
+      break;
+    }
+    if(stato == 'riapri'){
+      stato = 'chiusa';
+      val = false;
+    }else {
+      val = true;
+    }
+    if (window.confirm(confMsg)) { cambiaStatoScheda(scheda, stato, val); }
+  });
   getFoto(scheda);
   mapInit();
 });
@@ -70,6 +97,7 @@ function cambiaStatoScheda(scheda,stato, valore){
     console.log("Post error: " + error);
   });
 }
+
 function checkScheda(scheda, callBack){
   $.ajax({
     url: "api/scheda.php",
@@ -121,22 +149,22 @@ function initChart(check){
     }
   }
   if (check.chiusa == true & check.verificata == false) {
-    chartLabel = chartLabel + " ok, la scheda risulta chiusa ma non ancora verificata";
+    chartLabel = " ok, la scheda risulta chiusa ma non ancora verificata";
     value = 45;
     bgColor = '#ffc003';
   }
   if (check.verificata == true & check.inviata == false) {
-    chartLabel = chartLabel + " ok, la scheda risulta chiusa e verificata ma non ancora inviata al server ICCD";
+    chartLabel = " ok, la scheda risulta chiusa e verificata ma non ancora inviata al server ICCD";
     value = 60;
     bgColor = '#ffc003';
   }
   if (check.inviata == true & check.accettata == false) {
-    chartLabel = chartLabel + " ok, la scheda risulta chiusa, verificata e inviata ma non è ancora stata accettata dal server ICCD";
+    chartLabel = " ok, la scheda risulta chiusa, verificata e inviata ma non è ancora stata accettata dal server ICCD";
     value = 75;
     bgColor = '#ffc003';
   }
   if (check.accettata == true) {
-    chartLabel = chartLabel + "Iter completato!!!! La scheda risulta chiusa, verificata, inviata e accettata dal server ICCD";
+    chartLabel = "Complimenti, iter completato!!!!<br>La scheda risulta chiusa, verificata, inviata e accettata dal server ICCD";
     value = 100;
     bgColor = '#32ad32';
   }
@@ -155,7 +183,7 @@ function initChart(check){
   var node = knob.node();
   var elem = document.getElementById('knob');
   elem.appendChild(node);
-  $("#labelStato").text(chartLabel).css("color",bgColor);
+  $("#labelStato").html(chartLabel).css("color",bgColor);
 }
 
 function delScheda(dati){
@@ -217,11 +245,31 @@ function mapInit(){
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
-  L.marker([40.4737451,17.2365453]).addTo(map).bindPopup("MArTA").openPopup();
+  let museo = L.marker([40.4737451,17.2365453]).bindPopup("MArTA");
+
   let osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     opacity:0.7
   }).addTo(map)
+
+  let markers = new L.featureGroup([museo]).addTo(map);
+  map.flyToBounds(markers.getBounds());
+
+  let resetMap = L.Control.extend({
+    options: { position: 'topleft'},
+    onAdd: function (map) {
+      var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
+      btn=$("<a/>",{href:'#'}).appendTo(container);
+      $("<i/>",{class:'fas fa-crosshairs'}).appendTo(btn)
+      btn.on('click', function (e) {
+        e.preventDefault()
+        map.flyToBounds(markers.getBounds());
+      });
+      return container;
+    }
+  })
+
+  map.addControl(new resetMap());
 }
 
 $("#fotoModal").hide();
@@ -275,7 +323,7 @@ function getFoto(scheda){
         })
       })
     });
-    checkScheda(scheda)
+    // checkScheda(scheda)
   })
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);

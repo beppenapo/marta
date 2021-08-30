@@ -18,7 +18,7 @@
       <?php if (isset($_SESSION['id']) && ($_SESSION['id'] == $scheda['scheda']['cmpid'] || $_SESSION['classe'] < 3)) { ?>
       <div id="menuScheda" class="bg-dark px-3">
         <div class="btn-group" role="group">
-          <div class="btn-group" role="group">
+          <div class="btn-group <?php echo $modifica; ?>" role="group">
             <button id="aggiungi" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> aggiungi</button>
             <div class="dropdown-menu" aria-labelledby="aggiungi">
               <a class="dropdown-item" href="biblioScheda.php?sk=<?php echo $_GET['get']; ?>" title="aggiungi fonte bibliografica<br><br>Ricorda che per chiudere la scheda devi aggiungere almeno 1 riferimento bibliografico" data-toggle="tooltip" data-placement="right">bibliografia</a>
@@ -30,27 +30,13 @@
               <a class="dropdown-item" href="#" title="aggiungi modelli 3d" data-toggle="tooltip" data-placement="right">3d</a>
             </div>
           </div>
-          <div class="btn-group" role="group">
-            <button id="modifica" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-edit"></i> modifica</button>
-            <div class="dropdown-menu" aria-labelledby="modifica">
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="titoli">titolo e codici</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="og">OG - oggetto</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="lc">LC - localizzazione geografico-amministrativa</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="ub">UB - dati patrimoniali</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="gp">GP - georeferenziazione tramite punto</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="re">RE - modalità di reperimento</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="dt">DT - cronologia</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="mt">MT - dati tecnici</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="da">DA - dati analitici</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="co">CO - conservazione</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="tu">TU - condizione giuridica e vincoli</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="ad">AD - accesso ai dati</a>
-              <a class="dropdown-item" href="#" title="" data-toggle="tooltip" data-placement="right" data-form="an">AN - annotazioni</a>
-            </div>
-          </div>
-          <button id="duplicaScheda" name="duplicaScheda" type="button" class="btn btn-dark"><i class="fas fa-copy"></i> duplica</button>
-          <button id="chiudiScheda" name="chiudiScheda" type="button" class="btn btn-dark"><i class="fas fa-clipboard-check"></i> chiudi</button>
-          <button id="eliminaScheda" name="eliminaScheda" type="button" class="btn btn-dark"><i class="fas fa-times"></i> elimina</button>
+          <button name="modificaScheda" type="button" class="btn btn-dark" title="modifica scheda" data-toggle="tooltip" data-placement="bottom"><i class="fas fa-edit"></i> modifica</button>
+          <button name="cambiaStato" value="chiusa" type="button" class="btn btn-dark <?php echo $chiudi; ?>"><i class="fas fa-clipboard-check"></i> chiudi</button>
+          <button name="cambiaStato" value="riapri" type="button" class="btn btn-dark <?php echo $riapri; ?>"><i class="fas fa-clipboard-check"></i> riapri</button>
+          <button name="cambiaStato" value="verificata" type="button" class="btn btn-dark <?php echo $verifica; ?>"><i class="fas fa-clipboard-check"></i> verificata</button>
+          <button name="cambiaStato" value="inviata" type="button" class="btn btn-dark <?php echo $invia; ?>"><i class="fas fa-clipboard-check"></i> inviata</button>
+          <button name="cambiaStato" value="accettata" type="button" class="btn btn-dark <?php echo $accettata; ?>"><i class="fas fa-clipboard-check"></i> accettata</button>
+          <button id="eliminaScheda" name="eliminaScheda" type="button" class="btn btn-dark <?php echo $modifica; ?>"><i class="fas fa-times"></i> elimina</button>
         </div>
       </div>
     <?php } ?>
@@ -210,11 +196,56 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="mtFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">MT - DATI TECNICI</legend>
-            <ul class="list-group list-group-flush">
-              <?php foreach ($scheda['mt'] as $mtc) {
-                echo '<li class="list-group-item"><span>Materia/Tecnica:</span><span class="font-weight-bold">'.$mtc['materia'].'/'.$mtc['tecnica'].'</span></li>';
+            <fieldset id="mtcFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">mtc - materia e tecnica</legend>
+              <ul class="list-group list-group-flush">
+                <?php foreach ($scheda['mt']['mtc'] as $mtc) {
+                  echo '<li class="list-group-item"><span>Materia/Tecnica:</span><span class="font-weight-bold">'.$mtc['materia'].'/'.$mtc['tecnica'].'</span></li>';
+                } ?>
+              </ul>
+            </fieldset>
+            <fieldset id="misFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">mis - misure</legend>
+              <?php if($scheda['mt']['mis']['misr']){ echo $noData;}else{ $m = $scheda['mt']['mis']; ?>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><span>misa - altezza:</span><span class="font-weight-bold">
+                    <?php echo $m['misa'] ? $m['misa']." cm" : $noValue ; ?>
+                  </span></li>
+                  <li class="list-group-item"><span>misl - larghezza:</span><span class="font-weight-bold">
+                    <?php echo $m['misl'] ? $m['misl']." cm" : $noValue; ?>
+                  </span></li>
+                  <li class="list-group-item"><span>misp - profondità:</span><span class="font-weight-bold">
+                    <?php echo $m['misp'] ? $m['misp']." cm" : $noValue; ?>
+                  </span></li>
+                  <li class="list-group-item"><span>misd - diametro:</span><span class="font-weight-bold">
+                    <?php echo $m['misd'] ? $m['misd']." cm" : $noValue; ?>
+                  </span></li>
+                  <li class="list-group-item"><span>misn - lunghezza:</span><span class="font-weight-bold">
+                    <?php echo $m['misn'] ? $m['misn']." cm" : $noValue; ?>
+                  </span></li>
+                  <li class="list-group-item"><span>miss - spessore:</span><span class="font-weight-bold">
+                    <?php echo $m['miss'] ? $m['miss']." cm" : $noValue; ?>
+                  </span></li>
+                  <li class="list-group-item"><span>misg - peso:</span><span class="font-weight-bold">
+                    <?php echo $m['misa'] ? $m['misa']." gr" : $noValue; ?>
+                  </span></li>
+                  <li class="list-group-item"><span>misv - misure varie:</span><span class="font-weight-bold">
+                    <?php echo $m['misv'] ? $m['misv'] : $noValue; ?>
+                  </span></li>
+                </ul>
+              <?php } ?>
+            </fieldset>
+            <fieldset id="munsellFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">Munsell</legend>
+              <?php if ($scheda['mt']['munsell'] !== null){ ?>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><span>Munsell:</span><span class="font-weight-bold">
+                    <?php echo $scheda['mt']['munsell']['munsell']; ?>
+                  </span></li>
+              <?php }else {
+                echo $noData;
               } ?>
-            </ul>
+            </fieldset>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="daFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>

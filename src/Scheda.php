@@ -5,16 +5,20 @@ use \Marta\Conn;
 class Scheda extends Conn{
   public $db;
   function __construct(){}
-    public function cambiaStatoScheda(array $dati){
-      $filter = ["scheda"=>$dati['scheda']];
-      unset($dati['scheda']);
-      $sql = $this->buildUpdate('stato_scheda',$filter,$dati);
-      return $this->prepared($sql,$dati);
+  public function getStatoScheda(int $id){
+    $res = $this->simple("select * from stato_scheda where scheda = ".$id.";");
+    return $res[0];
+  }
+  public function cambiaStatoScheda(array $dati){
+    $filter = ["scheda"=>$dati['scheda']];
+    unset($dati['scheda']);
+    if(isset($dati['chiusa']) && $dati['chiusa'] === 'false'){
+      $dati = ["chiusa"=>'false', "verificata"=>'false', "inviata"=> 'false', "accettata"=>'false'];
     }
-    public function getStatoScheda(int $id){
-      $res = $this->simple("select * from stato_scheda where scheda = ".$id.";");
-      return $res[0];
-    }
+    $sql = $this->buildUpdate('stato_scheda',$filter,$dati);
+    return $this->prepared($sql,$dati);
+    // return([$sql,$dati]);
+  }
   public function getBiblioScheda(int $id){
     $sql = "select b.id, b.titolo, b.anno, b.autore,c.id as contrib_id, c.titolo as contrib_tit, c.autore as contrib_aut,bs.pagine, bs.figure
     from bibliografia b
@@ -28,28 +32,53 @@ class Scheda extends Conn{
     $filter = $id !== null ? "and scheda = ".$id : '';
     return $this->simple("select * from file where tipo = 3 ".$filter.";");
   }
-  public function getScheda(int $id){
-    $out=[];
+
+  private function sezScheda(int $id){
     $sql = "select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, u.id as cmpid, s.cmpd,  concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv
       from scheda s inner join liste.tsk on s.tsk = tsk.id inner join liste.lir on s.lir = lir.id inner join utenti u on s.cmpn = u.id inner join utenti fur on s.fur = fur.id inner join nctn_scheda ns on ns.scheda = s.id inner join nctn on ns.nctn = nctn.nctn left join inventario_scheda isc on isc.scheda = s.id left join inventario i on isc.inventario = i.id where s.id = ".$id.";";
-    $scheda = $this->simple($sql);
-    $out['scheda'] = $scheda[0];
-
-    if($out['scheda']['tskid']==1){
+    $res = $this->simple($sql);
+    return $res[0];
+  }
+  private function sezOg(int $id, int $tsk){
+    if($tsk==1){
+      //RA
       $sql = "select l1.value as cls1, l2.value as cls2, l3.value as cls3, l4.value as cls4, coalesce(l5.value,'dato non inserito') as cls5, coalesce(ogtt, 'dato non inserito') as ogtt from og_ra og inner join liste.ra_cls_l4 l4 on og.l4 = l4.id inner join liste.ra_cls_l3 l3 on og.l3 = l3.id inner join liste.ra_cls_l2 l2 on l3.l2 = l2.id inner join liste.ra_cls_l1 l1 on l2.l1 = l1.id left join liste.ra_cls_l5 l5 on og.l5 = l5.id where og.scheda = ".$id.";";
     }else {
+      //NU
       $sql = "select ogr.value as ogr, coalesce(og.ogtt,'dato non inserito') as ogtt, coalesce(og.ogth, 'dato non inserito') as ogth, coalesce(og.ogtl, 'dato non inserito') as ogtl, coalesce(ogto.value, 'dato non inserito') as ogto, coalesce(ogts.value, 'dato non inserito') as ogts, coalesce(ogtr.value, 'dato non inserito') as ogtr, ogtd.value as ogtd from og_nu og inner join liste.ogr on og.ogr = ogr.id inner join liste.ogtd on og.ogtd = ogtd.id left join liste.ogto on og.ogto = ogto.id left join liste.ogts on og.ogts = ogts.id left join liste.ogtr on og.ogtr = ogtr.id where og.scheda = ".$id.";";
     }
-    $og = $this->simple($sql);
-    $out['og'] = $og[0];
-
+    $res = $this->simple($sql);
+    return $res[0];
+  }
+  private function sezGp(int $id){
     $sql ="select gpl.value as gpl, gp.gpdpx, gp.gpdpy, gpm.value as gpm, gpt.value as gpt, gpp.value as gpp, gpp.epsg, gp.gpbb, gp.gpbt from gp inner join liste.gpl on gp.gpl = gpl.id inner join liste.gpm on gp.gpm = gpm.id inner join liste.gpt on gp.gpt = gpt.id inner join liste.gpp on gp.gpp = gpp.id where gp.scheda = ".$id.";";
     $gp = $this->simple($sql);
-    $out['gp'] = $gp[0];
+    return $gp[0];
+  }
 
+  private function sezMt(int $id){
+    $out = [];
+    $mtc ="select materia.value as materia, mtc.tecnica from mtc inner join liste.materia on mtc.materia = materia.id where mtc.scheda = ".$id.";";
+    $out['mtc'] = $this->simple($mtc);
+    $mis = $this->simple("select * from mis where scheda = ".$id.";");
+    $out['mis'] = $mis[0];
+    $munsell = $this->simple("select * from munsell where scheda = ".$id.";");
+    $out['munsell'] = $munsell[0];
+    return $out;
+  }
+
+  private function sezLc(int $id){
     $sql ="select comune.pvcc, ldc.ldcn, lc.piano, lc.sala, coalesce(lc.contenitore, 'dato non inserito o assente') as contenitore, coalesce(lc.colonna::varchar, 'dato non inserito o assente') as colonna, coalesce(lc.ripiano, 'dato non inserito o assente') as ripiano from lc INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = ".$id.";";
     $lc = $this->simple($sql);
-    $out['lc'] = $lc[0];
+    return $lc[0];
+  }
+
+  public function getScheda(int $id){
+    $out=[];
+    $out['scheda'] = $this->sezScheda($id);
+    $out['og'] = $this->sezOg($id,$out['scheda']['tskid']);
+    $out['gp'] = $this->sezGp($id);
+    $out['lc'] = $this->sezLc($id);
 
     $sql ="select ub.invn, coalesce(ub.stis,'dato non inserito') stis, coalesce(ub.stid::varchar,'dato non inserito') stid, coalesce(stim.value,'dato non inserito') stim
     from ub inner join liste.stim on ub.stim = stim.id where ub.scheda = ".$id.";";
@@ -74,8 +103,8 @@ class Scheda extends Conn{
     $sql = "SELECT val.value dtm from dtm inner join liste.dtm val on dtm.dtm = val.id where dtm.scheda = ".$id." order by dtm asc;";
     $out['dt']['dtm'] = $this->simple($sql);
 
-    $sql ="select materia.value as materia, mtc.tecnica from mtc inner join liste.materia on mtc.materia = materia.id where mtc.scheda = ".$id.";";
-    $out['mt'] = $this->simple($sql);
+
+    $out['mt'] = $this->sezMt($id);
 
     $sql ="select * from da where da.scheda = ".$id.";";
     $da = $this->simple($sql);

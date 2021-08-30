@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" id="mtForm">
   <fieldset class="bg-light rounded border p-3">
     <legend class="w-auto bg-marta text-white border  rounded p-1">MT - DATI TECNICI</legend>
     <fieldset id="mtcFieldset" class="mb-3">
@@ -39,7 +39,7 @@
       <div class="form-row mb-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input tab" id="misr" name="misr" value="MNR" data-table="mis" checked>
+            <input type="checkbox" class="custom-control-input tab" id="misr" name="misr" value="MNR" data-table="mis" <?php echo $misCheck; ?> >
             <label class="custom-control-label" for="misr">Misure non rilevabili</label>
           </div>
         </div>

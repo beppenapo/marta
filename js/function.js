@@ -314,29 +314,6 @@ function stat(){
 }
 
 $(".toast").hide();
-// function createToast(obj){
-//   obj.titolo='Risultato query';
-//   classe = obj.res === true ? 'bg-success' : 'bg-danger';
-//   $(".toast").removeClass('[class^="bg-"]').addClass(classe);
-//   $("#headerTxt").html('Risultato query');
-//   $(".toast>.toast-body>.toast-body-msg").html(obj.msg);
-//   $(".toast").toast({delay:3000});
-//   $(".toast").show();
-//   $(".toast").toast('show');
-//   $("[name='continua']").on('click', function(){window.location.reload(true);})
-//
-//   if (obj.res === true) {
-//     $("[name='continua']").show();
-//     $("[name='viewRec']").text('visualizza record').on('click', function(){window.location.href = obj.url});
-//   }else {
-//     $("[name='viewRec']").text('ok, chiudi alert');
-//     $("[name='continua']").hide();
-//     $('.toast').on('hidden.bs.toast', function () {
-//       $(".toast").removeClass(classe);
-//       $(".toast").hide();
-//     })
-//   }
-// }
 function toast(obj){
   console.log(obj);
   let btnDiv = $("#toastBtnDiv");
@@ -493,26 +470,6 @@ function mtcWrap(item, tecnica_value = null){
     $("[name=materia]").prop('disabled', false);
   });
 }
-
-// function autocomp(data){
-//   ogtdVal=[];
-//   data.forEach(function(item,idx){ ogtdVal.push({value:item.id,label:item.value}) });
-//   $("[name=resetOgtd]").prop('disabled',false);
-//   $( "[name=ogtdLabel]" ).prop('disabled',false).autocomplete({
-//     minLength: 0,
-//     source: ogtdVal,
-//     change: function(event,ui){if(!ui.item){$("#ogtdAlert").fadeIn("fast");}},
-//     select: function(event,ui){
-//       $( "[name=ogtdLabel]" ).val( ui.item.label );
-//       $( "[name=ogtd]" ).val( ui.item.value );
-//       $("#ogtdAlert").fadeOut("fast");
-//       return false;
-//     }
-//   }).focus(function() {
-//     $(this).autocomplete('search', $(this).val())
-//   });
-// }
-
 function reuseOption(v,text){
   $("<option/>").val(v).text(text).appendTo('[name=dtm]');
   var options = $("[name=dtm] option");

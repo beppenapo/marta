@@ -12,4 +12,11 @@ $nctnList = $obj->nctnList();
 $furList = $obj->furList();
 $munsellList = $obj->munsellList();
 
+$checked = 'checked';
+
+if (isset($_POST['s'])) {
+  $scheda = $obj->getScheda($_POST['s']);
+
+  $misCheck = $scheda['mt']['mis']['misr'] ? $checked : '';
+}
 ?>
