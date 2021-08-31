@@ -34,15 +34,14 @@ class Scheda extends Conn{
   }
 
   private function sezScheda(int $id){
-    $sql = "select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, u.id as cmpid, s.cmpd,  concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv
-      from scheda s inner join liste.tsk on s.tsk = tsk.id inner join liste.lir on s.lir = lir.id inner join utenti u on s.cmpn = u.id inner join utenti fur on s.fur = fur.id inner join nctn_scheda ns on ns.scheda = s.id inner join nctn on ns.nctn = nctn.nctn left join inventario_scheda isc on isc.scheda = s.id left join inventario i on isc.inventario = i.id where s.id = ".$id.";";
+    $sql = "select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, u.id as cmpid, s.cmpd, fur.id as furid, concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn,i.prefisso,i.inventario, i.suffisso, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv from scheda s inner join liste.tsk on s.tsk = tsk.id inner join liste.lir on s.lir = lir.id inner join utenti u on s.cmpn = u.id inner join utenti fur on s.fur = fur.id inner join nctn_scheda ns on ns.scheda = s.id inner join nctn on ns.nctn = nctn.nctn left join inventario_scheda isc on isc.scheda = s.id left join inventario i on isc.inventario = i.id where s.id = ".$id.";";
     $res = $this->simple($sql);
     return $res[0];
   }
   private function sezOg(int $id, int $tsk){
     if($tsk==1){
       //RA
-      $sql = "select l1.value as cls1, l2.value as cls2, l3.value as cls3, l4.value as cls4, coalesce(l5.value,'dato non inserito') as cls5, coalesce(ogtt, 'dato non inserito') as ogtt from og_ra og inner join liste.ra_cls_l4 l4 on og.l4 = l4.id inner join liste.ra_cls_l3 l3 on og.l3 = l3.id inner join liste.ra_cls_l2 l2 on l3.l2 = l2.id inner join liste.ra_cls_l1 l1 on l2.l1 = l1.id left join liste.ra_cls_l5 l5 on og.l5 = l5.id where og.scheda = ".$id.";";
+      $sql = "select l1.value as cls1, l2.value as cls2,l3.id as cls3id, l3.value as cls3, l4.id as cls4id, l4.value as cls4,l5.id as cls5id, coalesce(l5.value,'dato non inserito') as cls5, coalesce(ogtt, 'dato non inserito') as ogtt from og_ra og inner join liste.ra_cls_l4 l4 on og.l4 = l4.id inner join liste.ra_cls_l3 l3 on og.l3 = l3.id inner join liste.ra_cls_l2 l2 on l3.l2 = l2.id inner join liste.ra_cls_l1 l1 on l2.l1 = l1.id left join liste.ra_cls_l5 l5 on og.l5 = l5.id where og.scheda = ".$id.";";
     }else {
       //NU
       $sql = "select ogr.value as ogr, coalesce(og.ogtt,'dato non inserito') as ogtt, coalesce(og.ogth, 'dato non inserito') as ogth, coalesce(og.ogtl, 'dato non inserito') as ogtl, coalesce(ogto.value, 'dato non inserito') as ogto, coalesce(ogts.value, 'dato non inserito') as ogts, coalesce(ogtr.value, 'dato non inserito') as ogtr, ogtd.value as ogtd from og_nu og inner join liste.ogr on og.ogr = ogr.id inner join liste.ogtd on og.ogtd = ogtd.id left join liste.ogto on og.ogto = ogto.id left join liste.ogts on og.ogts = ogts.id left join liste.ogtr on og.ogtr = ogtr.id where og.scheda = ".$id.";";
@@ -243,14 +242,8 @@ class Scheda extends Conn{
   }
   public function listeRA(){
     $opt=[];
-    $ogtd=array("tab"=>"liste.ra_cls_l4", "order"=>3);
-    $ogtdArr=$this->vocabolari($ogtd);
-    $opt['ogtd']=$this->buildSel($ogtdArr);
-
-    $l3=array("tab"=>"liste.ra_cls_l3", "order"=>3);
-    $l3Arr=$this->vocabolari($l3);
-    $opt['l3']=$this->buildSel($l3Arr);
-
+    $opt['l3'] = $this->simple("select id, value from liste.ra_cls_l3 order by 2 asc;");
+    $opt['ogtd'] = $this->simple("select id, value from liste.ra_cls_l4 order by 2 asc;");
     return $opt;
   }
   public function listeNu(){

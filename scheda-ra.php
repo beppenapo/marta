@@ -37,7 +37,9 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                   <label for="l3" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Categoria - livello III"></i> CLS - Categoria</label>
                   <select class="form-control form-control-sm tab" data-table="og_ra" id="l3" name="l3" required>
                     <option value="" selected disabled>-- definizione --</option>
-                    <?php echo join("",$listeRA['l3']); ?>
+                    <?php foreach ($listeRA['l3'] as $key => $val) {
+                      echo "<option value='".$val['id']."' ".$sel.">".$val['value']."</option>";
+                    } ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">

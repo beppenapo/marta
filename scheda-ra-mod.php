@@ -37,19 +37,31 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                   <label for="l3" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Categoria - livello III"></i> CLS - Categoria</label>
                   <select class="form-control form-control-sm tab" data-table="og_ra" id="l3" name="l3" required>
                     <option value="" selected disabled>-- definizione --</option>
-                    <?php echo join("",$listeRA['l3']); ?>
+                    <?php foreach ($listeRA['l3'] as $key => $val) {
+                      if(isset($_POST['s'])){$sel = $val['id'] == $scheda['og']['cls3id'] ? 'selected' : '';}
+                      echo "<option value='".$val['id']."' ".$sel.">".$val['value']."</option>";
+                    } ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="l4" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine o locuzione che individua il bene oggetto della scheda in base alla connotazione funzionale e morfologica."></i> OGTD - Definizione</label>
-                  <select class="form-control form-control-sm tab" data-table="og_ra" id="l4" name="l4" required disabled>
-                    <option value="" selected disabled>-- definizione --</option>
+                  <select class="form-control form-control-sm tab" data-table="og_ra" id="l4" name="l4" required>
+                    <?php foreach ($l4List as $key => $val) {
+                      $sel = $val['id'] == $scheda['og']['cls4id'] ? 'selected' : '';
+                      echo "<option value='".$val['id']."' ".$sel.">".$val['value']."</option>";
+                    } ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="l5"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine che specifica forma, funzione, parte o produzione (se si tratta di ceramica)."></i> OGTD - specifiche</label>
-                  <select class="form-control form-control-sm tab" data-table="og_ra" id="l5" name="l5" disabled>
-                    <option value="" selected disabled>-- definizione --</option>
+                  <select class="form-control form-control-sm tab" data-table="og_ra" id="l5" name="l5" <?php echo $ogtdDis; ?>>
+                    <option value="">-- definizione --</option>
+                    <?php
+                        foreach ($l5List as $key => $val) {
+                          $sel = $val['id'] == $scheda['og']['cls5id'] ? 'selected' : '';
+                          echo "<option value='".$val['id']."' ".$sel.">".$val['value']."</option>";
+                        }
+                    ?>
                   </select>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
@@ -96,7 +108,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
           <div class="form-group">
             <div class="row">
               <div class="col-md-4 col-lg-3">
-                <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit">salva dati</button>
+                <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit" disabled>salva dati</button>
                 <a href="dashboard.php" class="btn btn-sm btn-outline-secondary">annulla</a>
               </div>
               <div class="col-md-8 col-lg-9">
