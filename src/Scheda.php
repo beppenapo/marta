@@ -238,6 +238,17 @@ class Scheda extends Conn{
     $dtmArr=$this->vocabolari($dtm);
     $opt['dtm']=$this->buildSel($dtmArr);
 
+    $piani = "select distinct piano id,
+    CASE
+      WHEN piano = -1 THEN 'Deposito'
+      WHEN piano = 0 THEN 'Piano terra'
+      WHEN piano = 1 THEN 'Primo piano'
+      WHEN piano = 3 THEN 'Terzo piano'
+    END as value
+    from liste.sale
+    order by piano asc;";
+    $opt['piani'] = $this->simple($piani);
+
     return $opt;
   }
   public function listeRA(){
@@ -287,18 +298,6 @@ class Scheda extends Conn{
     $aint=array("tab"=>'liste.aint');
     $aintArr=$this->vocabolari($aint);
     $opt['aint']=$this->buildSel($aintArr);
-
-    // $dtzg=array("tab"=>'liste.dtzg');
-    // $dtzgArr=$this->vocabolari($dtzg);
-    // $opt['dtzg']=$this->buildSel($dtzgArr);
-
-    // $dtzs=array("tab"=>'liste.dtzs');
-    // $dtzsArr=$this->vocabolari($dtzs);
-    // $opt['dtzs']=$this->buildSel($dtzsArr);
-    //
-    // $dtm=array("tab"=>'liste.dtm');
-    // $dtmArr=$this->vocabolari($dtm);
-    // $opt['dtm']=$this->buildSel($dtmArr);
 
     $stcc=array("tab"=>'liste.stcc');
     $stccArr=$this->vocabolari($stcc);

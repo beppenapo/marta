@@ -4,46 +4,66 @@
     <fieldset id="lcFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom">LDCS - collocazione specifica</legend>
       <div class="form-row">
+        <?php print_r($scheda['lc']); ?>
+        <?php print_r($contenitoreList); ?>
         <div class="col-md-3">
           <label for="piano" class="text-danger font-weight-bold">Piano</label>
           <select class="form-control form-control-sm tab" data-table="lc" id="piano" name="piano" required>
             <option value="" selected disabled>-- piano --</option>
-            <option value="-1">Deposito</option>
-            <option value="0">Piano terra</option>
-            <option value="1">Primo piano</option>
-            <option value="3">Terzo piano</option>
+            <?php
+            foreach ($listeComuni['piani'] as $key => $val) {
+              if(isset($_POST['s'])){ $sel = $val['id'] == $scheda['lc']['piano'] ? 'selected' : '';}
+              echo "<option value='".$val['id']."' ".$sel.">".$val['value']."</option>";
+            }
+            ?>
           </select>
         </div>
         <div class="col-md-2">
-          <div class="lcSel" id="lcSalaDiv">
+          <div class="<?php echo $lcView; ?>" id="lcSalaDiv">
             <label for="sala" class="text-danger font-weight-bold">Sala</label>
-            <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required></select>
+            <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required>
+              <?php
+              foreach ($salaList as $key => $val) {
+                if(isset($_POST['s'])){ $sel = $val['id'] == $scheda['lc']['sala'] ? 'selected' : '';}
+                echo "<option value='".$val['id']."' ".$sel.">".$val['sala']."</option>";
+              }
+              ?>
+            </select>
           </div>
         </div>
 
         <div class="col-md-2">
-          <div class="lcSel" id="lcContenitoreDiv">
-            <label for="contenitore" id="contenitoreLabel" class=""></label>
-            <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore"></select>
+          <div class="<?php echo $lcView; ?>" id="lcContenitoreDiv">
+            <label for="contenitore" id="contenitoreLabel" class="">
+              <?php if(isset($_POST['s'])){echo $labelContenitore;} ?>
+            </label>
+            <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore">
+              <?php
+              foreach ($contenitoreList as $key => $val) {
+                if(isset($_POST['s'])){ $sel = $val['id'] == $scheda['lc']['contenitore'] ? 'selected' : '';}
+                echo "<option value='".$val['c']."' ".$sel.">".$val['c']." ".$val['note']."</option>";
+              }
+              ?>
+            </select>
           </div>
         </div>
 
         <div class="col-md-2">
-          <div class="lcSel" id="lcColonnaDiv">
+          <div class="<?php echo $lcView; ?>" id="lcColonnaDiv">
             <label for="colonna" id="colonnaLabel" class="">Colonna</label>
             <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna"></select>
           </div>
         </div>
 
         <div class="col-md-2">
-          <div class="lcSel" id="lcRipianoDiv">
+          <div class="<?php echo $lcView; ?>" id="lcRipianoDiv">
             <label for="ripiano" id="ripianoLabel" class=""></label>
             <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"></select>
           </div>
         </div>
       </div>
 
-      <div class="form-row lcSel" id="noVetrine">
+      <div class="form-row <?php echo $lcNoVetrine; ?>" id="noVetrine">
         <div class="col-12">
           <div class="alert alert-warning mt-3 mb-0">
             <label class="">Non ci sono vetrine per il piano selezionato</label>

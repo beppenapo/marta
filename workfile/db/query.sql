@@ -1,16 +1,9 @@
-select
-  b.id
-  , b.titolo
-  , b.pagine
-  -- , b.anno
-  -- , b.autore
-  -- , c.id as contrib_id
-  -- , c.titolo as contrib_tit
-  -- , c.autore as contrib_aut
-  -- , bs.pagine
-  -- , bs.figure
-from bibliografia b
-INNER JOIN biblio_scheda bs on bs.biblio = b.id
-left join contributo c on bs.contributo = c.id
-WHERE bs.scheda = 391
-ORDER BY anno, autore, titolo asc;
+select distinct piano,
+CASE
+  WHEN piano = -1 THEN 'Deposito'
+  WHEN piano = 0 THEN 'Piano terra'
+  WHEN piano = 1 THEN 'Primo piano'
+  WHEN piano = 3 THEN 'Terzo piano'
+END as nome
+from liste.sale
+order by piano asc;

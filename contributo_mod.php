@@ -21,7 +21,6 @@ $contributo = $obj->getContrib($_GET['mod']);
           <div class="col">
             <h3 class="border-bottom">Modifica contributo</h3>
             <small class="text-danger font-weight-bold d-block">* Campi obbligatori</small>
-            <?php print_r($contributo); ?>
           </div>
         </div>
           <form id="addBiblioForm" autocomplete="off">

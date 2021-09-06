@@ -370,7 +370,8 @@ function getContenitore(contenitore, sala, label,piano, value = null){
   postData("scheda.php",{trigger:'getContenitore', contenitore:contenitore, sala:sala}, function(data){
     let options = [];
     let c = contenitore == 'vetrine' ? 'vetrina' : 'scaffale';
-  let selvoid = ""; if (value == null) { selvoid = " selected"; }
+    let selvoid = "";
+    if (value == null) { selvoid = " selected"; }
     options.push("<option disabled"+selvoid+">-- "+c+" --</option>")
     if(data.length == 0){
       $("#lcContenitoreDiv").hide();
