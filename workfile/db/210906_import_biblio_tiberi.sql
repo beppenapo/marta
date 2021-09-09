@@ -37,7 +37,7 @@ COPY work.biblio_scheda_tiberi FROM '/var/www/marta/workfile/csv/tiberi/biblio_s
 
 --MODIFICHE TABELLA BILIOGRAFIA
 alter table work.biblio_tiberi add column id_def SMALLINT;
--- alter table bibliografia add column id_temp SMALLINT;
+alter table bibliografia add column id_temp SMALLINT;
 insert into bibliografia(id_temp,tipo,titolo,autore,altri_autori,editore,anno,luogo,isbn,url,curatore) select id,tipo,titolo,autore,altri_autori,editore,anno,luogo,isbn,url,curatore from work.biblio_tiberi order by titolo asc;
 update work.biblio_tiberi set id_def = bibliografia.id from bibliografia where bibliografia.id_temp = biblio_tiberi.id;
 
@@ -46,7 +46,7 @@ update work.biblio_tiberi set id_def = bibliografia.id from bibliografia where b
 alter table work.contributi_tiberi add column raccolta_def SMALLINT;
 alter table work.contributi_tiberi add column id_def SMALLINT;
 UPDATE work.contributi_tiberi set raccolta_def = b.id_def from work.biblio_tiberi b where contributi_tiberi.raccolta = b.id;
--- alter table contributo add column id_temp SMALLINT;
+alter table contributo add column id_temp SMALLINT;
 alter table contributo drop CONSTRAINT contributo_raccolta_titolo_key;
 alter table contributo add constraint contributo_raccolta_titolo_key UNIQUE (raccolta, titolo, autore);
 insert into contributo(id_temp,raccolta,titolo,autore,altri_autori,pag) select id,raccolta_def, titolo,autore,altri_autori,pag from work.contributi_tiberi order by titolo asc;
