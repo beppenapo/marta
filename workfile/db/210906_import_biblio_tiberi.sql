@@ -31,9 +31,9 @@ CREATE TABLE work.biblio_scheda_tiberi(
   livello SMALLINT
   -- ,primary key (scheda,biblio,contributo)
 );
-COPY work.biblio_tiberi FROM '/var/www/html/marta/workfile/csv/tiberi/bibliografia_tiberi.csv' DELIMITER ',' CSV HEADER;
-COPY work.contributi_tiberi FROM '/var/www/html/marta/workfile/csv/tiberi/contributi_tiberi.csv' DELIMITER ',' CSV HEADER;
-COPY work.biblio_scheda_tiberi FROM '/var/www/html/marta/workfile/csv/tiberi/biblio_scheda_tiberi.csv' DELIMITER ',' CSV HEADER;
+COPY work.biblio_tiberi FROM '/var/www/marta/workfile/csv/tiberi/bibliografia_tiberi.csv' DELIMITER ',' CSV HEADER;
+COPY work.contributi_tiberi FROM '/var/www/marta/workfile/csv/tiberi/contributi_tiberi.csv' DELIMITER ',' CSV HEADER;
+COPY work.biblio_scheda_tiberi FROM '/var/www/marta/workfile/csv/tiberi/biblio_scheda_tiberi.csv' DELIMITER ',' CSV HEADER;
 
 --MODIFICHE TABELLA BILIOGRAFIA
 alter table work.biblio_tiberi add column id_def SMALLINT;
