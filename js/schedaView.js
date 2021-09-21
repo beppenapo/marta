@@ -323,12 +323,13 @@ function getFoto(scheda){
         })
       })
     });
-    // checkScheda(scheda)
   })
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);
   });
-  checkScheda(scheda,initChart)
+  if ($("[name=logged]").val()) {
+    checkScheda(scheda,initChart)
+  }
 }
 function delImg(dati){
   $.ajax({

@@ -8,10 +8,16 @@
     <link rel="stylesheet" href="css/schedaView.css">
   </head>
   <body>
+    <?php
+      $logged = $_SESSION['id'] ? true : false;
+      echo "<input type='hidden' name='logged' value='".$logged."' />";
+    ?>
     <input type="hidden" name="schedaId" value="<?php echo $_GET['get']; ?>">
     <input type="hidden" name="nctnId" value="<?php echo $scheda['scheda']['nctn']; ?>">
     <?php require('assets/headerMenu.php'); ?>
-    <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
+    <?php if (isset($_SESSION['id'])) {
+      require('assets/mainMenu.php');
+    } ?>
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
 
@@ -30,7 +36,7 @@
               <a class="dropdown-item" href="#" title="aggiungi modelli 3d" data-toggle="tooltip" data-placement="right">3d</a>
             </div>
           </div>
-          <button name="modificaScheda" type="button" class="btn btn-dark" title="modifica scheda" data-toggle="tooltip" data-placement="bottom" disabled><i class="fas fa-edit"></i> modifica</button>
+          <button name="modificaScheda" type="button" class="btn btn-dark" title="modifica scheda" data-toggle="tooltip" data-placement="bottom"><i class="fas fa-edit"></i> modifica</button>
           <button name="cambiaStato" value="chiusa" type="button" class="btn btn-dark <?php echo $chiudi; ?>"><i class="fas fa-clipboard-check"></i> chiudi</button>
           <button name="cambiaStato" value="riapri" type="button" class="btn btn-dark <?php echo $riapri; ?>"><i class="fas fa-clipboard-check"></i> riapri</button>
           <button name="cambiaStato" value="verificata" type="button" class="btn btn-dark <?php echo $verifica; ?>"><i class="fas fa-clipboard-check"></i> verificata</button>
@@ -320,11 +326,13 @@
           </fieldset>
         </div>
         <div class="col-md-6">
-          <fieldset class="text-center mb-5">
+          <?php if(isset($_SESSION['id'])){ ?>
+          <fieldset class="text-center mb-5" id="checkStatoScheda">
             <h3 class="">Check stato scheda</h3>
             <div id="knob" class="text-center"></div>
             <h5 id="labelStato" class="font-italic"></h5>
           </fieldset>
+        <?php } ?>
           <fieldset class="bg-light rounded border p-3 mb-3" id="biblioFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Bibliografia correlata</legend>
             <?php if(count($bibScheda) > 0){ ?>

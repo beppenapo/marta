@@ -4,8 +4,6 @@
     <fieldset id="lcFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom">LDCS - collocazione specifica</legend>
       <div class="form-row">
-        <?php print_r($scheda['lc']); ?>
-        <?php print_r($contenitoreList); ?>
         <div class="col-md-3">
           <label for="piano" class="text-danger font-weight-bold">Piano</label>
           <select class="form-control form-control-sm tab" data-table="lc" id="piano" name="piano" required>
@@ -25,7 +23,8 @@
               <?php
               foreach ($salaList as $key => $val) {
                 if(isset($_POST['s'])){ $sel = $val['id'] == $scheda['lc']['sala'] ? 'selected' : '';}
-                echo "<option value='".$val['id']."' ".$sel.">".$val['sala']."</option>";
+                $sala = !$val['descrizione'] ? $val['sala'] : $val['descrizione'];
+                echo "<option value='".$val['id']."' ".$sel.">".$sala."</option>";
               }
               ?>
             </select>
@@ -33,7 +32,7 @@
         </div>
 
         <div class="col-md-2">
-          <div class="<?php echo $lcView; ?>" id="lcContenitoreDiv">
+          <div class="<?php echo $lcViewContenitore; ?>" id="lcContenitoreDiv">
             <label for="contenitore" id="contenitoreLabel" class="">
               <?php if(isset($_POST['s'])){echo $labelContenitore;} ?>
             </label>
@@ -49,14 +48,14 @@
         </div>
 
         <div class="col-md-2">
-          <div class="<?php echo $lcView; ?>" id="lcColonnaDiv">
+          <div class="<?php echo $lcViewColonna; ?>" id="lcColonnaDiv">
             <label for="colonna" id="colonnaLabel" class="">Colonna</label>
             <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna"></select>
           </div>
         </div>
 
         <div class="col-md-2">
-          <div class="<?php echo $lcView; ?>" id="lcRipianoDiv">
+          <div class="<?php echo $lcViewRipiano; ?>" id="lcRipianoDiv">
             <label for="ripiano" id="ripianoLabel" class=""></label>
             <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"></select>
           </div>
@@ -72,4 +71,13 @@
       </div>
     </fieldset>
   </fieldset>
+  <?php print_r($scheda['lc']['contenitore']); ?>
+  <br>
+  <?php echo count($contenitoreList); ?>
+  <br>
+  <?php print_r($colonnaList); ?>
+  <br>
+  <?php echo $_POST['s']; ?>
+  <br>
+  <?php echo $contenitore; ?>
 </div>

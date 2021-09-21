@@ -471,7 +471,8 @@ class Scheda extends Conn{
       , dtzgi.value as dtzgi
       , dtzgf.value as dtzgf
       , lc.piano
-      , concat(loc.sala,' ', loc.descrizione) as sala
+      , loc.sala
+      , loc.descrizione as nome_sala
     from scheda s
     INNER JOIN stato_scheda on stato_scheda.scheda = s.id
     INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
@@ -503,7 +504,8 @@ class Scheda extends Conn{
       , dtzgi.value as dtzgi
       , dtzgf.value as dtzgf
       , lc.piano
-      , concat(loc.sala,' ', loc.descrizione) as sala
+      , loc.sala
+      , loc.descrizione as nome_sala
     from scheda s
     INNER JOIN stato_scheda on stato_scheda.scheda = s.id
     INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id

@@ -11,6 +11,7 @@ function buildTable(){
     // data: { trigger: 'listaSchede', dati:{tipo:1,stato:{field:'chiusa', value:'f'}}}
   })
   .done(function(data) {
+    console.log(data);
     data.forEach(function(v,i){
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip').attr("data-placement", 'left');
       let link = $("<a/>",{href:'schedaView.php?get='+v.id, html:linkIco});
@@ -23,7 +24,7 @@ function buildTable(){
       $("<td/>",{text:v.materia}).appendTo(tr);
       $("<td/>",{text:v.dtzgi == v.dtzgf ? v.dtzgi : v.dtzgi+' / '+v.dtzgf}).appendTo(tr);
       $("<td/>",{text:v.piano}).appendTo(tr);
-      $("<td/>",{text:v.sala}).appendTo(tr);
+      $("<td/>",{text:!v.nome_sala ? v.sala : v.nome_sala}).appendTo(tr);
       $("<td/>",{html:link, class:'text-center'}).appendTo(tr);
     })
     $('#dataTable').DataTable({
