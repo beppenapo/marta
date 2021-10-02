@@ -272,6 +272,7 @@ class Scheda extends Conn{
       $x = $this->prepared($daSql,$dati['da']);
       if(!$x){throw new \Exception($x['msg'], 1);}
 
+      if(!isset($dati['mis']['misr'])){$dati['mis']['misr']=null;}
       $misSql = $this->buildUpdate("mis", $filtroScheda, $dati['mis']);
       $x = $this->prepared($misSql,$dati['mis']);
       if(!$x){throw new \Exception($x['msg'], 1);}
