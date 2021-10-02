@@ -30,12 +30,12 @@
       <div class="col-md-4">
         <div class="">
           <label class="text-danger font-weight-bold">CMPN - Compilatore</label>
-          <p><?php echo $_SESSION['utente']; ?></p>
-          <input type="hidden" class="tab" data-table="scheda" id="cmpn" name="cmpn" value="<?php echo $_SESSION['id']; ?>">
+          <p><?php echo $scheda['scheda']['cmpn']; ?></p>
+          <input type="hidden" class="tab" data-table="scheda" id="cmpn" name="cmpn" value="<?php echo $scheda['scheda']['cmpid']; ?>">
         </div>
         <div class="">
           <label class="text-danger font-weight-bold">CMPD - Data</label>
-          <p><?php echo date('Y-m-d'); ?></p>
+          <p><?php echo $scheda['scheda']['cmpd'] ?></p>
         </div>
         <div class="">
           <label for="fur" class="text-danger font-weight-bold">FUR - Funzionario responsabile</label>
@@ -65,6 +65,9 @@
                 <input type="checkbox" aria-label="NCTN Checkbox" name="toggleNctn" <?php echo $nctnCheck; ?> >
               </div>
             </div>
+            <?php if(isset($_POST['s'])){?>
+            <input type="hidden" name="old_nctn" data-table="nctn_scheda" value="<?php echo $nctnSelected; ?>">
+            <?php } ?>
             <input type="number" min="314852" max="334518" step="1" class="form-control" aria-label="Text input with checkbox" data-table="nctn_scheda" name="nctn" id="nctn" list="nctnList" value="<?php echo $nctnSelected; ?>" <?php echo $nctnDisabled; ?>>
             <datalist id="nctnList">
               <?php foreach($nctnList as $nctnEl){echo "<option value='".$nctnEl['nctn']."'></option>";} ?>
@@ -78,6 +81,9 @@
     </fieldset>
     <fieldset class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom mb-3">Num. Inventario MArTA</legend>
+      <?php if(isset($_POST['s'])){?>
+      <input type="hidden" name="old_inventario" data-table="inventario" value="<?php echo $scheda['scheda']['inventarioid']; ?>">
+      <?php } ?>
       <div class="form-row">
         <div class="col-md-2">
           <label for="prefisso">Prefisso</label>

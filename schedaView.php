@@ -57,13 +57,34 @@
           <fieldset class="bg-light rounded border p-3 mb-3" id="cdFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">cd - codici</legend>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item"><span>NCTN - Numero catalogo:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['nctn']; ?></span></li>
-              <li class="list-group-item"><span>Num.Inv. MarTA:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['inv']; ?></span></li>
-              <li class="list-group-item"><span>TSK - Tipo scheda:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['tsk']; ?></span></li>
-              <li class="list-group-item"><span>LIR - Livello ricerca:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['lir']; ?></span></li>
-              <li class="list-group-item"><span>NCTR - Codice Regione:</span><span class="font-weight-bold">16 [Puglia]</span></li>
-              <li class="list-group-item"><span>ESC - Ente schedatore:</span><span class="font-weight-bold">M325</span></li>
-              <li class="list-group-item"><span>ECP - Ente competente:</span><span class="font-weight-bold">M325</span></li>
+              <li class="list-group-item">
+                <span>NCTN - Numero catalogo:</span>
+                <span><?php echo $scheda['scheda']['nctn']; ?></span>
+              </li>
+              <li class="list-group-item">
+                <span>Num.Inv. MarTA:</span>
+                <span><?php echo $scheda['scheda']['inv']; ?></span>
+              </li>
+              <li class="list-group-item">
+                <span>TSK - Tipo scheda:</span>
+                <span><?php echo $scheda['scheda']['tsk']; ?></span>
+              </li>
+              <li class="list-group-item">
+                <span>LIR - Livello ricerca:</span>
+                <span><?php echo $scheda['scheda']['lir']; ?></span>
+              </li>
+              <li class="list-group-item">
+                <span>NCTR - Codice Regione:</span>
+                <span>16 [Puglia]</span>
+              </li>
+              <li class="list-group-item">
+                <span>ESC - Ente schedatore:</span>
+                <span>M325</span>
+              </li>
+              <li class="list-group-item">
+                <span>ECP - Ente competente:</span>
+                <span>M325</span>
+              </li>
               <li class="list-group-item"><span>CMPN - Compilatore:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['cmpn']; ?></span></li>
               <li class="list-group-item"><span>CMPD - Data:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['cmpd']; ?></span></li>
               <li class="list-group-item"><span>FUR - Funzionario:</span><span class="font-weight-bold"><?php echo $scheda['scheda']['fur']; ?></span></li>
@@ -181,14 +202,14 @@
                     echo $scheda['dt']['dt']['ciid'] == $scheda['dt']['dt']['cfid'] ? $scheda['dt']['dt']['cf'] : $scheda['dt']['dt']['ci']." / ".$scheda['dt']['dt']['cf'];
                   ?>
                 </span></li>
-                <li class="list-group-item"><span>DTZS - Frazione cronologica:</span><span class=""><?php echo !$scheda['dt']['dt']['dtzs'] ? $noValue : $scheda['dt']['dt']['dtzs']; ?></span></li>
+                <li class="list-group-item"><span>DTZS - Frazione cronologica:</span><span class=""><?php echo $scheda['dt']['dt']['dtzs'] ? $scheda['dt']['dt']['dtzs'] : ''; ?></span></li>
               </ul>
             </fieldset>
             <fieldset id="dtsFieldset" class="mb-3">
               <legend class="text-marta font-weight-bold border-bottom">DTS - Cronologia specifica</legend>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item"><span>DTSI - Da:</span><span class=""><?php echo $scheda['dt']['dt']['dtsi'] ? $scheda['dt']['dt']['dtsi'] : $noValue; ?></span></li>
-                <li class="list-group-item"><span>DTSF - A:</span><span class=""><?php echo $scheda['dt']['dt']['dtsf'] ? $scheda['dt']['dt']['dtsf'] : $noValue; ?></span></li>
+                <li class="list-group-item"><span>DTSI - Da:</span><span class=""><?php echo $scheda['dt']['dt']['dtsi'] ? $scheda['dt']['dt']['dtsi'] : ''; ?></span></li>
+                <li class="list-group-item"><span>DTSF - A:</span><span class=""><?php echo $scheda['dt']['dt']['dtsf'] ? $scheda['dt']['dt']['dtsf'] : ''; ?></span></li>
               </ul>
             </fieldset>
             <fieldset id="dtmFieldset" class="mb-3">
@@ -215,28 +236,28 @@
               <?php if($scheda['mt']['mis']['misr']){ echo $noData;}else{ $m = $scheda['mt']['mis']; ?>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item"><span>misa - altezza:</span><span class="font-weight-bold">
-                    <?php echo $m['misa'] ? $m['misa']." cm" : $noValue ; ?>
+                    <?php echo $m['misa'] ? $m['misa']." cm" : '' ; ?>
                   </span></li>
                   <li class="list-group-item"><span>misl - larghezza:</span><span class="font-weight-bold">
-                    <?php echo $m['misl'] ? $m['misl']." cm" : $noValue; ?>
+                    <?php echo $m['misl'] ? $m['misl']." cm" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>misp - profondità:</span><span class="font-weight-bold">
-                    <?php echo $m['misp'] ? $m['misp']." cm" : $noValue; ?>
+                    <?php echo $m['misp'] ? $m['misp']." cm" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>misd - diametro:</span><span class="font-weight-bold">
-                    <?php echo $m['misd'] ? $m['misd']." cm" : $noValue; ?>
+                    <?php echo $m['misd'] ? $m['misd']." cm" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>misn - lunghezza:</span><span class="font-weight-bold">
-                    <?php echo $m['misn'] ? $m['misn']." cm" : $noValue; ?>
+                    <?php echo $m['misn'] ? $m['misn']." cm" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>miss - spessore:</span><span class="font-weight-bold">
-                    <?php echo $m['miss'] ? $m['miss']." cm" : $noValue; ?>
+                    <?php echo $m['miss'] ? $m['miss']." cm" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>misg - peso:</span><span class="font-weight-bold">
-                    <?php echo $m['misa'] ? $m['misa']." gr" : $noValue; ?>
+                    <?php echo $m['misa'] ? $m['misa']." gr" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>misv - misure varie:</span><span class="font-weight-bold">
-                    <?php echo $m['misv'] ? $m['misv'] : $noValue; ?>
+                    <?php echo $m['misv'] ? nl2br($m['misv']) : ''; ?>
                   </span></li>
                 </ul>
               <?php } ?>

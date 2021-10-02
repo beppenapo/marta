@@ -6,32 +6,32 @@
       <div class="form-row">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleACQ" name="toggleSection" data-fieldset="acqFieldset">
+            <input type="checkbox" class="custom-control-input" id="toggleACQ" name="toggleSection" data-fieldset="acqFieldset" <?php echo $acqCheck; ?>>
             <label class="custom-control-label" for="toggleACQ">Compila dati acquisizione</label>
           </div>
         </div>
       </div>
       <div class="form-row mt-3">
         <div class="col-md-4">
-          <label for="acqt" class="font-weight-bold obbligatorio">ACQT - Tipo acquisizione</label>
-          <select class="form-control form-control-sm tab obbligatorio" id="acqt" name="acqt" data-table="tu" disabled>
-            <option value="" selected disabled>--seleziona valore--</option>
-            <?php echo join("",$listeNU['acqt']); ?>
+          <label for="acqt" class="font-weight-bold obbligatorio <?php echo $acqLabelClass; ?>">ACQT - Tipo acquisizione</label>
+          <select class="form-control form-control-sm tab obbligatorio" id="acqt" name="acqt" data-table="tu" <?php echo $acqRequired; ?>>
+            <?php echo join("",$acqtList); ?>
           </select>
         </div>
         <div class="col-md-3">
           <label for="acqn">ACQN - Nome</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" disabled>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" <?php echo $acqDisabled; ?>>
         </div>
         <div class="col-md-2">
-          <label for="acqd" class="font-weight-bold obbligatorio">ACQD - Data</label>
-          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="tu" id="acqd" name="acqd" value="" disabled>
+          <label for="acqd" class="font-weight-bold obbligatorio <?php echo $acqLabelClass; ?>">ACQD - Data</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="tu" id="acqd" name="acqd" value="" <?php echo $acqRequired; ?>>
         </div>
         <div class="col-md-3">
           <label for="acqn">ACQL - Luogo</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" disabled>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" <?php echo $acqDisabled; ?>>
         </div>
       </div>
+      <?php print_r($scheda['tu']['acq']); ?>
     </fieldset>
     <fieldset id="cdgFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom mb-3">cdg - condizione giuridica</legend>
@@ -39,8 +39,7 @@
         <div class="col-md-6">
           <label for="cdgg" class="font-weight-bold text-danger">CDGG - Indicazione giuridica</label>
           <select class="form-control form-control-sm tab" id="cdgg" name="cdgg" data-table="tu" required>
-            <option value="" selected disabled>--seleziona valore--</option>
-            <?php echo join("",$listeNU['cdgg']); ?>
+            <?php echo join("",$cdggList); ?>
           </select>
         </div>
       </div>
@@ -50,22 +49,21 @@
       <div class="form-row mb-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleNVC" name="toggleSection" data-fieldset="nvcFieldset">
+            <input type="checkbox" class="custom-control-input" id="toggleNVC" name="toggleSection" data-fieldset="nvcFieldset" <?php echo $nvcCheck; ?> >
             <label class="custom-control-label" for="toggleNVC">Compila provvedimenti tutela</label>
           </div>
         </div>
       </div>
       <div class="form-row">
         <div class="col-md-6">
-          <label for="nvct" class="font-weight-bold obbligatorio">NVCT - Tipo provvedimento</label>
-          <select class="form-control form-control-sm tab obbligatorio" id="nvct" name="nvct" data-table="tu" disabled>
-            <option value="" selected disabled>--seleziona valore--</option>
-            <?php echo join("",$listeNU['nvct']); ?>
+          <label for="nvct" class="font-weight-bold obbligatorio <?php echo $nvcLabelClass; ?>">NVCT - Tipo provvedimento</label>
+          <select class="form-control form-control-sm tab obbligatorio" id="nvct" name="nvct" data-table="tu" <?php echo $nvcRequired; ?>>
+            <?php echo join("",$nvctList); ?>
           </select>
         </div>
         <div class="col-md-6">
-          <label for="acqn"><i class="far fa-question-circle" data-toggle="tooltip" title="Indicare la data di emissione del provvedimento amministrativo nella forma 'anno/mese/giorno' (aaaa/mm/gg)."></i> NVCE - Estrem provvedimento</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" disabled>
+          <label for="acqn"><i class="far fa-question-circle" data-toggle="tooltip" title="Indicare la data di emissione del provvedimento amministrativo nella forma 'anno/mese/giorno' (aaaa/mm/gg)."></i> NVCE - Estremi provvedimento</label>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="<?php echo $scheda['tu']['nvc']['nvce']; ?>" <?php echo $nvcDisabled; ?>>
         </div>
       </div>
     </fieldset>

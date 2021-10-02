@@ -26,14 +26,16 @@
           <button type="button" class="btn btn-sm btn-marta w-100" name="addMtc" disabled>Ok</button>
         </div>
       </div>
-      <div id="mtcWrap"></div>
+      <div id="mtcWrap">
+        <?php if(isset($_POST['s'])){echo join("",$mtcItems);} ?>
+      </div>
     </fieldset>
 
     <fieldset id="misFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom">mis - misure</legend>
       <div class="form-row mb-3">
         <div class="col">
-          <small class="d-block m-0 text-danger mt-3"><i class="fas fa-info-circle"></i> Attenzione! Le dimensioni vanno indicate in cm. mentre il peso in gr.<br/>Inserire almeno una misura</small>
+          <small class="d-block m-0 text-danger mt-3"><i class="fas fa-info-circle"></i> Attenzione! Le dimensioni vanno indicate in cm. mentre il peso in gr.<br/>Inserire almeno una misura o lasciare selezionata la casella "Misure non rilevabili"</small>
         </div>
       </div>
       <div class="form-row mb-3">
@@ -47,37 +49,37 @@
       <div class="form-row mb-3">
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misa">Altezza</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misa" name="misa" value="" data-table="mis" disabled>
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misa" name="misa" value="<?php echo $scheda['mt']['mis']['misa']; ?>" data-table="mis" <?php echo $misDisabled; ?>>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misl">Larghezza</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="misl" value="" data-table="mis" disabled>
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="misl" value="<?php echo $scheda['mt']['mis']['misl']; ?>" data-table="mis" <?php echo $misDisabled; ?>>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misp">Profondità</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misp" name="misp" value="" data-table="mis" disabled>
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misp" name="misp" value="<?php echo $scheda['mt']['mis']['misp']; ?>" data-table="mis" <?php echo $misDisabled; ?>>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misd">Diametro</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misd" name="misd" value="" data-table="mis" disabled>
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misd" name="misd" value="<?php echo $scheda['mt']['mis']['misd']; ?>" data-table="mis" <?php echo $misDisabled; ?>>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misn">Lunghezza</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misn" name="misn" value="" data-table="mis" disabled>
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misn" name="misn" value="<?php echo $scheda['mt']['mis']['misn']; ?>" data-table="mis" <?php echo $misDisabled; ?>>
         </div>
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="miss">Spessore</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="miss" value="" data-table="mis" disabled>
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misl" name="miss" value="<?php echo $scheda['mt']['mis']['misl']; ?>" data-table="mis" <?php echo $misDisabled; ?>>
         </div>
       </div>
       <div class="form-row mb-3">
         <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="misg">Peso</label>
-          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misg" name="misg" value="" data-table="mis" disabled>
+          <input type="number" min="0" max="999" step="0.01" placeholder="Es. 123,55" class="form-control form-control-sm tab misure" id="misg" name="misg" value="<?php echo $scheda['mt']['mis']['misg']; ?>" data-table="mis" <?php echo $misDisabled; ?>>
         </div>
         <div class="col">
           <label for="misv">Misure varie</label>
-          <textarea class="form-control form-control-sm tab misure" id="misv" name="misv" value="" rows="4" placeholder="indicare altre misure utili, specificando sia il tipo di misura, sia la parte presa in esame, sia l'unità di misura" data-table="mis" disabled></textarea>
+          <textarea class="form-control form-control-sm tab misure" id="misv" name="misv" value="" rows="4" placeholder="indicare altre misure utili, specificando sia il tipo di misura, sia la parte presa in esame, sia l'unità di misura" data-table="mis" <?php echo $misDisabled; ?>><?php echo $scheda['mt']['mis']['misv']; ?></textarea>
         </div>
       </div>
     </fieldset>
@@ -85,8 +87,8 @@
       <legend class="text-marta font-weight-bold border-bottom">Munsell</legend>
       <div class="form-row mb-3">
         <div class="col-sm-4 col-md-3 col-lg-2">
-          <label for="munsell">Codice</label>
-          <input type="text" placeholder="seleziona codice" class="form-control form-control-sm tab" id="munsell" name="munsell" value="" data-table="munsell" list="munsellList">
+          <label for="munsell"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="" aria-hidden="true" data-original-title="inizia a digitare un termine o scorri la lista per selezionare il valore desiderato. Usa il pulsante 'x' per pulire il filtro"></i> Codice</label>
+          <input type="search" placeholder="seleziona codice" class="form-control form-control-sm tab" id="munsell" name="munsell" value="<?php echo($scheda['mt']['munsell']['munsell']); ?>" data-table="munsell" list="munsellList">
           <datalist id="munsellList">
             <?php
             foreach($munsellList as $munsellEl){

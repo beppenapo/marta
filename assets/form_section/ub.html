@@ -3,30 +3,33 @@
     <legend class="w-auto bg-marta text-white border rounded p-1">ub - dati patrimoniali</legend>
     <div class="form-row mb-3">
       <div class="col">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="toggleUB" name="toggleSection" data-fieldset="ubFieldset">
+        <div class="custom-control custom-checkbox <?php echo $ubInsertVis; ?>" id="ubInsert">
+          <input type="checkbox" class="custom-control-input" id="toggleUB" name="toggleSection" value="1" data-table="ub" data-fieldset="ubFieldset">
           <label class="custom-control-label" for="toggleUB">Compila dati patrimoniali</label>
+        </div>
+        <div class="custom-control custom-checkbox <?php echo $ubDelVis; ?>" id="ubDel">
+          <input type="checkbox" class="custom-control-input" id="delUB" name="ubSection" value="2" data-table="ub" >
+          <label class="custom-control-label" for="delUB">Elimina dati sezione <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="" aria-hidden="true" data-original-title="Utilizza la checkbox se vuoi eliminare tutti i dati della sezione. Al salvataggio tutti i dati verranno eliminati."></i></label>
         </div>
       </div>
     </div>
     <div class="form-row">
       <div class="col-md-3">
-        <label for="invn" class="font-weight-bold obbligatorio">INVN - Inventario</label>
-        <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="invn" name="invn" value="" disabled>
+        <label for="invn" class="font-weight-bold obbligatorio <?php echo $ubLabelClass; ?> ">INVN - Inventario</label>
+        <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="invn" name="invn" value="<?php echo $scheda['ub']['invn']; ?>" <?php echo $ubRequired; ?>>
       </div>
       <div class="col-md-3">
-        <label for="stis" class="font-weight-bold obbligatorio">STIS - Stima</label>
-        <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stis" name="stis" value="" disabled>
+        <label for="stis" class="font-weight-bold obbligatorio <?php echo $ubLabelClass; ?>">STIS - Stima</label>
+        <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stis" name="stis" value="<?php echo $scheda['ub']['stis']; ?>" <?php echo $ubRequired; ?> >
       </div>
       <div class="col-md-3">
-        <label for="stid" class="font-weight-bold obbligatorio">STID - Anno stima</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stid" name="stid" min="1945" max="<?php echo date('Y'); ?>" step="1" value=""  disabled>
+        <label for="stid" class="font-weight-bold obbligatorio <?php echo $ubLabelClass; ?>">STID - Anno stima</label>
+        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stid" name="stid" min="1945" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['ub']['stid']; ?>"  <?php echo $ubRequired; ?>>
       </div>
       <div class="col-md-3">
         <label for="stim">STIM - Motivo stima</label>
-        <select class="form-control form-control-sm tab" name="stim" id="stim" data-table="ub" disabled>
-          <option value="" selected disabled>-- motivo stima --</option>
-          <?php echo join("",$listeComuni['stim']); ?>
+        <select class="form-control form-control-sm tab" name="stim" id="stim" data-table="ub" <?php echo $ubDisabled; ?>>
+          <?php echo join("",$stimList); ?>
         </select>
       </div>
     </div>

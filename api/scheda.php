@@ -9,6 +9,7 @@ if(isset($funzione) && function_exists($funzione)) {
   echo $trigger;
 }
 function addScheda($obj){return json_encode($obj->addScheda($_POST['dati']));}
+function editScheda($obj){return json_encode($obj->editScheda($_POST['dati']));}
 function delScheda($obj){return json_encode($obj->delScheda($_POST['dati']));}
 function cambiaStatoScheda($obj){return json_encode($obj->cambiaStatoScheda($_POST));}
 function getStatoScheda($obj){return json_encode($obj->getStatoScheda($_POST['id']));}

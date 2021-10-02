@@ -47,11 +47,13 @@ $(".lcSel").hide();
 $("[name=piano]").on('change', function(){
   let piano = $(this).val();
   $("#lcSalaDiv").fadeIn('fast');
-  $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
+  $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
+  $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
   getSale(piano)
 })
 $("[name=sala]").on('change', function(){
-  $("#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
+  $("#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
+  $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
   let piano = parseInt($("[name=piano]").val());
   let sala =  parseInt($(this).val());
   let label, contenitore;
@@ -65,7 +67,8 @@ $("[name=sala]").on('change', function(){
   getContenitore(contenitore,sala,label,piano)
 })
 $("[name=contenitore]").on('change', function(){
-  $("#lcRipianoDiv").fadeOut('fast');
+  $("#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
+  $("[name=colonna],[name=ripiano],[name=cassetta]").val('');
   let piano = parseInt($("[name=piano]").val());
   let sala = parseInt($("[name=sala]").val());
   let contenitore = parseInt($(this).val());
@@ -102,9 +105,10 @@ $("[name=colonna]").on('change', function(){
   $.each(slot, function(index, val){options.push("<option value='"+val+"'>"+val+"</option>");});
   $("#ripianoLabel").text(label);
   $("[name=ripiano]").html(options.join());
-  $("#lcRipianoDiv").fadeIn('fast');
+  $("#lcRipianoDiv,#lcCassettaDiv").fadeIn('fast');
+  $("[name=ripiano],[name=cassetta]").val('');
 })
-
+$("[name=ripiano]").on('change', function(){$("[name=cassetta]").val('');})
 //Sblocca obbligatorietà di contesto
 $("body").on('click', '[name=toggleSection]', function() {
   var fieldset = $(this).data('fieldset');
@@ -151,6 +155,16 @@ function setDtzgf(){
 }
 
 var dtm=[];
+if(window.location.pathname.split('/').pop().includes('-mod.php')){
+  $('[name=dtm]').prop("required", false);
+  $("[name=delDtmOpt]").each(function(i,v){ dtm.push(parseInt($(this).val())); })
+  $('body').on('click',"[name=delDtmOpt]", function(e){
+    let v = e.currentTarget.attributes.value.value;
+    dtm = dtm.filter(item => item !== parseInt(v))
+    $("#dtm"+v).remove();
+    if(dtm.length == 0){$("[name=dtm]").prop("required", true);}
+  })
+}
 $("body").on('change', '[name=dtm]', function() {
   let v = parseInt($(this).val());
   let t = $(this).find("option:selected").text();
@@ -164,6 +178,7 @@ $("body").on('change', '[name=dtm]', function() {
   $("<input/>",{type:'text', class:'form-control form-control-sm', name:'dtmText'}).val(t).prop('disabled', true).appendTo(group);
   var addon = $("<div/>", {class:'input-group-append'}).appendTo(group);
   $("<button/>",{class:'btn btn-danger btn-sm', type:'button', name:'delDtmOpt'})
+    .val(v)
     .html('<i class="fas fa-times"></i>')
     .appendTo(addon)
     .on('click', function(){
@@ -172,13 +187,13 @@ $("body").on('change', '[name=dtm]', function() {
       if(dtm.length == 0){$("[name=dtm]").prop("required", true);}
     });
 });
-
+var tecnicaItem
 $('body').on('click', '[name=addTecnica]', function(event) {
   $("[name=materia]").autocomplete('enable');
   var materiaVal = $("[name=materia]").val();
   materiaVal = materiaVal.replace(/\s+/g, '-');
   var tecnicaInput = $("[name=tecnica]");
-  var tecnicaItem = $("#"+materiaVal+"Row").find('[name=tecnicaItem]');
+  tecnicaItem = $("#"+materiaVal+"Row").find('[name=tecnicaItem]');
   if (!tecnicaInput.val()) {
     alert("Devi selezionare almeno una tecnica e/o confermare la scelta cliccando sul tasto +");
     return false;
@@ -393,7 +408,7 @@ function getContenitore(contenitore, sala, label,piano, value = null){
 function getColonna(sala, scaffale, value = null){
   postData("scheda.php",{trigger:'getColonna', sala:sala, scaffale:scaffale}, function(data){
     let options = [];
-  let selvoid = ""; if (value == null) { selvoid = " selected"; }
+    let selvoid = ""; if (value == null) { selvoid = " selected"; }
     options.push("<option disabled"+selvoid+">-- colonna --</option>")
     $.each(data, function(index, el) {
     if (el.val == value) { var selected = " selected"; }else{ var selected = ""; }
@@ -441,6 +456,18 @@ function delbiblioref(id_biblio){
   }
   })
   .fail(function() {console.log("error"); });
+}
+
+if(window.location.pathname.split('/').pop().includes('-mod.php')){
+  $("[name=delMateriaItem]").on('click', function() {
+    let row = $(this).val();
+    $(row).remove();
+    $( "[name=materia]" ).val('');
+    $( "[name=tecnica]" ).val('').prop('disabled', true);
+    $( "[name=addTecnica], [name=addMtc]" ).prop('disabled', true);
+    $("[name=materia]").autocomplete('enable');
+    $("[name=materia]").prop('disabled', false);
+  });
 }
 
 function mtcWrap(item, tecnica_value = null){
@@ -546,7 +573,9 @@ $("#errorDiv").hide();
 function salvaScheda(e){
   $("#errorDiv").hide()
   $("#errorDiv>ul").html('');
-  let isvalidate = $("#formScheda")[0].checkValidity()
+  let form = $("#formScheda");
+  let trigger = form.data('action');
+  let isvalidate = form[0].checkValidity()
   // let isvalidate = true
   if (isvalidate) {
     let dati={}
@@ -609,19 +638,22 @@ function salvaScheda(e){
       });
       return false;
     }
-    console.log(dati);
+    console.log(dati.ub);
     $.ajax({
       url: 'api/scheda.php',
       type: "POST",
       dataType: 'json',
-      data: {trigger : 'addScheda',  dati}
+      data: {trigger : trigger,  dati}
     })
     .done(function(data){
-      data.url='schedaView.php?get='+data.scheda;
+      let url = trigger == 'addScheda' ? data.scheda : dati.scheda.scheda;
+      data.url='schedaView.php?get='+url;
       data.btn = [];
-      data.btn.push("<button type='button' class='btn btn-light btn-sm' name='continua'>continua inserimento</button>");
+      if (trigger == 'addScheda') {
+        data.btn.push("<button type='button' class='btn btn-light btn-sm' name='continua'>continua inserimento</button>");
+        data.btn.push("<a href='schede.php' class='btn btn-light btn-sm'>termina inserimento</a>");
+      }
       data.btn.push("<a href='"+data.url+"' class='btn btn-light btn-sm'>visualizza scheda</a>");
-      data.btn.push("<a href='schede.php' class='btn btn-light btn-sm'>termina inserimento</a>");
       toast(data);
     })
     .fail(function(){console.log("error");});

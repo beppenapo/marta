@@ -4,59 +4,55 @@
     <div class="form-row mb-3">
       <div class="col">
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="toggleGP" name="toggleSection" data-fieldset="gpFieldset">
+          <input type="checkbox" class="custom-control-input" id="toggleGP" name="toggleSection" data-fieldset="gpFieldset" <?php echo $gpCheck; ?>>
           <label class="custom-control-label" for="toggleGP">Compila dati georeferenziazione</label>
         </div>
       </div>
     </div>
     <div class="form-row">
       <div class="col-md-6 col-lg-3 mb-3">
-        <label for="gpl" class="font-weight-bold obbligatorio">GPL - Tipo di localizzazione</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpl" name="gpl" disabled>
-          <option value="" selected disabled>-- tipo --</option>
-          <?php echo join("",$listeNU['gpl']); ?>
+        <label for="gpl" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPL - Tipo di localizzazione</label>
+        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpl" name="gpl" <?php echo $gpRequired; ?>>
+          <?php echo join("",$gplList); ?>
         </select>
       </div>
       <div class="col-md-6 col-lg-3 mb-3">
-        <label for="gpp" class="font-weight-bold obbligatorio">GPP - Sistema di riferimento</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpp" name="gpp" disabled>
-          <option value="" selected disabled>-- sistema --</option>
-          <?php echo join("",$listeNU['gpp']); ?>
+        <label for="gpp" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPP - Sistema di riferimento</label>
+        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpp" name="gpp" <?php echo $gpRequired; ?>>
+          <?php echo join("",$gppList); ?>
         </select>
       </div>
       <div class="col-md-6 col-lg-2 mb-3">
-        <label for="gpdpx" class="font-weight-bold obbligatorio">GPDPX - Coordinata X</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value=""  disabled>
+        <label for="gpdpx" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPX - Coordinata X</label>
+        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpx']; ?>"  <?php echo $gpRequired; ?>>
       </div>
       <div class="col-md-6 col-lg-2 mb-3">
-        <label for="gpdpy" class="font-weight-bold obbligatorio">GPDPY - Coordinata Y</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value=""  disabled>
+        <label for="gpdpy" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPY - Coordinata Y</label>
+        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpy']; ?>"  <?php echo $gpRequired; ?>>
       </div>
     </div>
     <div class="form-row">
       <div class="col-md-4 col-lg-3 mb-3">
-        <label for="gpm" class="font-weight-bold obbligatorio">GPM - Metodo</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpm" name="gpm" disabled>
-          <option value="" selected disabled>-- metodo --</option>
-          <?php echo join("",$listeNU['gpm']); ?>
+        <label for="gpm" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPM - Metodo</label>
+        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpm" name="gpm" <?php echo $gpRequired; ?>>
+          <?php echo join("",$gpmList); ?>
         </select>
       </div>
       <div class="col-md-4 col-lg-3 mb-3">
-        <label for="gpt" class="font-weight-bold obbligatorio">GPT - Tecnica</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpt" name="gpt" disabled>
-          <option value="" selected disabled>-- tecnica --</option>
-          <?php echo join("",$listeNU['gpt']); ?>
+        <label for="gpt" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPT - Tecnica</label>
+        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpt" name="gpt" <?php echo $gpRequired; ?>>
+          <?php echo join("",$gptList); ?>
         </select>
       </div>
       <div class="col-md-3 mb-3">
-        <label for="gpbt" class="font-weight-bold obbligatorio">GPBT - Data</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbt" name="gpbt" min="1945" max="<?php echo date('Y'); ?>" step="1" value=""  disabled>
+        <label for="gpbt" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPBT - Data</label>
+        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbt" name="gpbt" min="1945" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['gp']['gpbt']; ?>"  <?php echo $gpRequired; ?>>
       </div>
     </div>
     <div class="form-row">
       <div class="col-lg-6">
-        <label for="gpbb" class="font-weight-bold obbligatorio">GPBB - Descrizione sintetica</label>
-        <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" disabled></textarea>
+        <label for="gpbb" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPBB - Descrizione sintetica</label>
+        <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" <?php echo $gpRequired; ?>><?php echo $scheda['gp']['gpbb']; ?></textarea>
       </div>
     </div>
   </fieldset>

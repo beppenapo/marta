@@ -6,7 +6,7 @@
       <div class="form-row my-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleRCG" name="toggleSection" data-fieldset="rcgFieldset">
+            <input type="checkbox" class="custom-control-input" id="toggleRCG" name="toggleSection" data-fieldset="rcgFieldset" <?php echo $rcgCheck; ?> >
             <label class="custom-control-label" for="toggleRCG">Compila dati ricognizione</label>
           </div>
         </div>
@@ -14,21 +14,21 @@
       <div class="form-row">
         <div class="col-md-3">
           <label for="nucn">NUCN - Codice ICCD</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="rcg" id="nucn" name="nucn" value="" disabled>
+          <input type="text" class="form-control form-control-sm tab" data-table="rcg" id="nucn" name="nucn" value="<?php echo $scheda['re']['rcg']['nucn']; ?>" <?php echo $rcgDisabled; ?>>
         </div>
         <div class="col-md-6">
           <label for="rcga">RCGA - Responsabile scientifico</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="rcg" id="rcga" name="rcga" value="" disabled>
+          <input type="text" class="form-control form-control-sm tab" data-table="rcg" id="rcga" name="rcga" value="<?php echo $scheda['re']['rcg']['rcga']; ?>" <?php echo $rcgDisabled; ?>>
         </div>
         <div class="col-md-3">
-          <label for="rcgd" class="font-weight-bold obbligatorio">RCGD - Data</label>
-          <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="rcg" id="rcgd" name="rcgd" min="1945" max="<?php echo date('Y'); ?>" step="1" value="" disabled>
+          <label for="rcgd" class="font-weight-bold obbligatorio <?php echo $rcgdLabelClass; ?>">RCGD - Data</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="rcg" id="rcgd" name="rcgd" value="<?php echo $scheda['re']['rcg']['rcgd']; ?>" <?php echo $rcgRequired; ?>>
         </div>
       </div>
       <div class="form-row">
         <div class="col-md-6">
           <label for="rcgz">RCGZ - Specifiche</label>
-          <textarea class="form-control form-control-sm tab" data-table="rcg" id="rcgz" name="rcgz" rows="4" disabled></textarea>
+          <textarea class="form-control form-control-sm tab" data-table="rcg" id="rcgz" name="rcgz" rows="4" <?php echo $rcgDisabled; ?>><?php echo $scheda['re']['rcg']['rcgz']; ?></textarea>
         </div>
       </div>
     </fieldset>
@@ -38,34 +38,33 @@
       <div class="form-row my-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleDSC" name="toggleSection" data-fieldset="dscFieldset">
+            <input type="checkbox" class="custom-control-input" id="toggleDSC" name="toggleSection" data-fieldset="dscFieldset" <?php echo $dscCheck; ?>>
             <label class="custom-control-label" for="toggleDSC">Compila dati scavo</label>
           </div>
         </div>
       </div>
-
       <div class="form-row">
         <div class="col-md-6 col-lg-3">
           <label for="nucn">NUCN - Codice ICCD</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="dsc" id="nucn" name="nucn" value="" disabled>
+          <input type="text" class="form-control form-control-sm tab" data-table="dsc" id="nucn" name="nucn" value="<?php echo $scheda['re']['dsc']['nucn'] ?>" <?php echo $dscDisabled; ?>>
         </div>
         <div class="col-md-6 col-lg-3">
-          <label for="scan" class="font-weight-bold obbligatorio">SCAN - Denominazione dello scavo</label>
-          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="dsc" id="scan" name="scan" value="" disabled>
+          <label for="scan" class="font-weight-bold obbligatorio <?php echo $dscLabelClass; ?>">SCAN - Denominazione dello scavo</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="dsc" id="scan" name="scan" value="<?php echo $scheda['re']['dsc']['scan'] ?>" <?php echo $dscRequired; ?>>
         </div>
         <div class="col-md-6 col-lg-3">
           <label for="dsca">DSCA - Responsabile scientifico</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="dsc" id="dsca" name="dsca" value="" disabled>
+          <input type="text" class="form-control form-control-sm tab" data-table="dsc" id="dsca" name="dsca" value="<?php echo $scheda['re']['dsc']['dsca'] ?>" <?php echo $dscDisabled; ?>>
         </div>
         <div class="col-md-6 col-lg-3">
-          <label for="dscd" class="font-weight-bold obbligatorio">DSCD - Data</label>
-          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="dsc" id="dscd" name="dscd" value="" disabled>
+          <label for="dscd" class="font-weight-bold obbligatorio <?php echo $dscLabelClass; ?>">DSCD - Data</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="dsc" id="dscd" name="dscd" value="<?php echo $scheda['re']['dsc']['dscd'] ?>" <?php echo $dscRequired; ?>>
         </div>
       </div>
       <div class="form-row">
         <div class="col-md-6">
           <label for="dscn">DSCN - Specifiche</label>
-          <textarea class="form-control form-control-sm tab" data-table="dsc" id="dscn" name="dscn" rows="4" disabled></textarea>
+          <textarea class="form-control form-control-sm tab" data-table="dsc" id="dscn" name="dscn" rows="4" <?php echo $dscDisabled; ?>><?php echo $scheda['re']['dsc']['dscn'] ?></textarea>
         </div>
       </div>
     </fieldset>
@@ -74,31 +73,29 @@
       <div class="form-row my-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleAIN" name="toggleSection" data-fieldset="ainFieldset">
+            <input type="checkbox" class="custom-control-input" id="toggleAIN" name="toggleSection" data-fieldset="ainFieldset" <?php echo $ainCheck; ?> >
             <label class="custom-control-label" for="toggleAIN">Compila altre indagini</label>
           </div>
         </div>
       </div>
       <div class="form-row">
         <div class="col-md-4">
-          <label for="ain" class="font-weight-bold obbligatorio">AINT - Tipo</label>
-          <select class="form-control form-control-sm tab obbligatorio" data-table="ain" id="aint" name="aint" disabled>
-            <option value="" selected disabled>-- tipo --</option>
-            <?php echo join("",$listeNU['aint']); ?>
+          <label for="ain" class="font-weight-bold obbligatorio <?php echo $ainLabelClass; ?>">AINT - Tipo</label>
+          <select class="form-control form-control-sm tab obbligatorio" data-table="ain" id="aint" name="aint" <?php echo $ainRequired; ?>>
+            <?php echo join("",$aintList); ?>
           </select>
         </div>
         <div class="col-md-4">
-          <label for="aind" class="font-weight-bold obbligatorio">AIND - Data</label>
-          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ain" id="aind" name="aind" value="" disabled>
+          <label for="aind" class="font-weight-bold obbligatorio <?php echo $ainLabelClass; ?>">AIND - Data</label>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ain" id="aind" name="aind" value="<?php echo $scheda['re']['ain']['aind']; ?>" <?php echo $ainRequired; ?>>
         </div>
       </div>
       <div class="form-row">
         <div class="col">
           <label for="ains">AINS - Note</label>
-          <textarea class="form-control form-control-sm tab" data-table="ain" id="ains" name="ains" rows="4" disabled></textarea>
+          <textarea class="form-control form-control-sm tab" data-table="ain" id="ains" name="ains" rows="4" <?php echo $ainDisabled; ?>><?php echo $scheda['re']['ain']['ains']; ?></textarea>
         </div>
       </div>
     </fieldset>
   </fieldset>
-
 </div>

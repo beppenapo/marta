@@ -1,4 +1,6 @@
 const API = 'api/scheda.php';
+localStorage.clear();
+localStorage.sk = $("[name=scheda]").val();
 $(document).ready(function() {
   $("#tskTxt").text('RA - Reperto Archeologico');
   $("[name=tsk]").val(1);
@@ -17,9 +19,12 @@ $(document).ready(function() {
     ogtdSel(data)
   })
 
+  if(window.location.pathname.split('/').pop().includes('-mod.php')){
+    $("#countDesoChar").text(1000 - $("[name=deso]").val().length);
+  }
   $("[name=deso]").keyup(function(){
     $("#countDesoChar").text(1000 - $(this).val().length);
-});
+  });
 
   // NOTE: materia autocomplete
   $.ajax({

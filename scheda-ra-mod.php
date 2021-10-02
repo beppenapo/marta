@@ -16,13 +16,13 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
       <div class="container">
         <div class="row mb-4">
           <div class="col">
-            <h3 class="border-bottom">Stai inserendo una nuova scheda di Reperto Archeologico (RA)</h3>
+            <h3 class="border-bottom">Stai modificando una scheda di Reperto Archeologico (RA)</h3>
             <small class="text-danger font-weight-bold d-block">* Campo obbligatorio</small>
             <small class="font-weight-bold d-block">* Obbligatorietà di contesto</small>
             <small class="d-block">* Campo facoltativo</small>
           </div>
         </div>
-        <form id="formScheda" autocomplete="off">
+        <form id="formScheda" data-action="editScheda" autocomplete="off">
           <?php
             require_once($formFolder.'cd.html');
             require_once($formFolder.'titolo_scheda.html');
@@ -54,7 +54,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="l5"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Termine che specifica forma, funzione, parte o produzione (se si tratta di ceramica)."></i> OGTD - specifiche</label>
-                  <select class="form-control form-control-sm tab" data-table="og_ra" id="l5" name="l5" <?php echo $ogtdDis; ?>>
+                  <select class="form-control form-control-sm tab" data-table="og_ra" id="l5" name="l5" <?php echo $ogtdDisabled; ?>>
                     <option value="">-- definizione --</option>
                     <?php
                         foreach ($l5List as $key => $val) {
@@ -92,7 +92,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                 <div class="form-row mb-3">
                   <div class="col">
                     <label for="deso" class="text-danger font-weight-bold">DESO - Indicazioni sull'oggetto</label>
-                    <textarea class="form-control form-control-sm tab" data-table="da" id="deso" name="deso" rows="8" value="" maxlength="1000" required></textarea>
+                    <textarea class="form-control form-control-sm tab" data-table="da" id="deso" name="deso" rows="8" value="" maxlength="1000" required><?php echo $scheda['da']['deso']; ?></textarea>
                     <small class="d-block">caratteri disponibili: <span id="countDesoChar">1000</span></small>
                   </div>
                 </div>
@@ -108,8 +108,8 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
           <div class="form-group">
             <div class="row">
               <div class="col-md-4 col-lg-3">
-                <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit" disabled>salva dati</button>
-                <a href="dashboard.php" class="btn btn-sm btn-outline-secondary">annulla</a>
+                <button type="submit" class="btn btn-sm btn-marta tastischeda" name="submit" id="submit">salva dati</button>
+                <a href="schedaView.php?get=<?php echo $_POST['s']; ?>" class="btn btn-sm btn-outline-secondary">annulla</a>
               </div>
               <div class="col-md-8 col-lg-9">
                 <div id="errorDiv">
@@ -119,9 +119,9 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
               </div>
             </div>
           </div>
+          <input type="hidden" name="scheda" data-table="scheda" value="<?php echo $_POST['s']; ?>">
         </form>
       </div>
-
     </main>
     <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>

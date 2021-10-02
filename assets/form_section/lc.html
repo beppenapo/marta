@@ -4,7 +4,7 @@
     <fieldset id="lcFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom">LDCS - collocazione specifica</legend>
       <div class="form-row">
-        <div class="col-md-3">
+        <div class="col-md-4 col-lg-2">
           <label for="piano" class="text-danger font-weight-bold">Piano</label>
           <select class="form-control form-control-sm tab" data-table="lc" id="piano" name="piano" required>
             <option value="" selected disabled>-- piano --</option>
@@ -16,7 +16,7 @@
             ?>
           </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4 col-lg-2">
           <div class="<?php echo $lcView; ?>" id="lcSalaDiv">
             <label for="sala" class="text-danger font-weight-bold">Sala</label>
             <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required>
@@ -31,33 +31,37 @@
           </div>
         </div>
 
-        <div class="col-md-2">
-          <div class="<?php echo $lcViewContenitore; ?>" id="lcContenitoreDiv">
+        <div class="col-md-4 col-lg-2">
+          <div class="<?php echo $lcView; ?>" id="lcContenitoreDiv">
             <label for="contenitore" id="contenitoreLabel" class="">
               <?php if(isset($_POST['s'])){echo $labelContenitore;} ?>
             </label>
             <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore">
-              <?php
-              foreach ($contenitoreList as $key => $val) {
-                if(isset($_POST['s'])){ $sel = $val['id'] == $scheda['lc']['contenitore'] ? 'selected' : '';}
-                echo "<option value='".$val['c']."' ".$sel.">".$val['c']." ".$val['note']."</option>";
-              }
-              ?>
+              <?php echo implode("",$selContenitore); ?>
             </select>
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-4 col-lg-2">
           <div class="<?php echo $lcViewColonna; ?>" id="lcColonnaDiv">
             <label for="colonna" id="colonnaLabel" class="">Colonna</label>
-            <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna"></select>
+            <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna">
+              <?php echo implode("",$selColonna); ?>
+            </select>
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-4 col-lg-2">
           <div class="<?php echo $lcViewRipiano; ?>" id="lcRipianoDiv">
-            <label for="ripiano" id="ripianoLabel" class=""></label>
-            <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"></select>
+            <label for="ripiano" id="ripianoLabel" class=""><?php echo $labelRipiano; ?></label>
+            <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"><?php echo implode("",$selRipiano); ?></select>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <div class="<?php echo $lcViewCassetta; ?>" id="lcCassettaDiv">
+            <label for="cassetta" id="cassettaLabel" class="">Cassetta</label>
+            <input type="text" class="form-control form-control-sm" data-table="lc" name="cassetta" id="cassetta" value="<?php echo $scheda['lc']['cassetta']; ?>">
           </div>
         </div>
       </div>
@@ -71,13 +75,4 @@
       </div>
     </fieldset>
   </fieldset>
-  <?php print_r($scheda['lc']['contenitore']); ?>
-  <br>
-  <?php echo count($contenitoreList); ?>
-  <br>
-  <?php print_r($colonnaList); ?>
-  <br>
-  <?php echo $_POST['s']; ?>
-  <br>
-  <?php echo $contenitore; ?>
 </div>
