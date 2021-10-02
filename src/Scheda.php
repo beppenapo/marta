@@ -242,23 +242,23 @@ class Scheda extends Conn{
         if(!$x){throw new \Exception($x['msg'], 1);}
       }
 
-      if(isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && isset($dati['ub']['invn'])){
-        $ubSql = "delete from ub where scheda = :scheda;";
-        $x = $this->prepared($ubSql,array("scheda"=>$scheda));
-        if(!$x){throw new \Exception($x['msg'], 1);}
-      }
-      if(!isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && isset($dati['ub']['invn'])){
-        unset($dati['ub']['toggleSection']);
-        $ubSql = $this->buildUpdate("ub", $filtroScheda, $dati['ub']);
-        $x = $this->prepared($ubSql,$dati['ub']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
-      }
-      if(isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && !isset($dati['ub']['invn'])){
-        unset($dati['ub']['ubSection']);
-        unset($dati['ub']['toggleSection']);
-        $x = $this->addSection('ub', $scheda, $dati['ub']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
-      }
+      // if(isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && isset($dati['ub']['invn'])){
+      //   $ubSql = "delete from ub where scheda = :scheda;";
+      //   $x = $this->prepared($ubSql,array("scheda"=>$scheda));
+      //   if(!$x){throw new \Exception($x['msg'], 1);}
+      // }
+      // if(!isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && isset($dati['ub']['invn'])){
+      //   unset($dati['ub']['toggleSection']);
+      //   $ubSql = $this->buildUpdate("ub", $filtroScheda, $dati['ub']);
+      //   $x = $this->prepared($ubSql,$dati['ub']);
+      //   if(!$x){throw new \Exception($x['msg'], 1);}
+      // }
+      // if(isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && !isset($dati['ub']['invn'])){
+      //   unset($dati['ub']['ubSection']);
+      //   unset($dati['ub']['toggleSection']);
+      //   $x = $this->addSection('ub', $scheda, $dati['ub']);
+      //   if(!$x){throw new \Exception($x['msg'], 1);}
+      // }
 
       $adSql = $this->buildUpdate("ad", $filtroScheda, $dati['ad']);
       $x = $this->prepared($adSql,$dati['ad']);
@@ -270,6 +270,10 @@ class Scheda extends Conn{
 
       $daSql = $this->buildUpdate("da", $filtroScheda, $dati['da']);
       $x = $this->prepared($daSql,$dati['da']);
+      if(!$x){throw new \Exception($x['msg'], 1);}
+
+      $misSql = $this->buildUpdate("mis", $filtroScheda, $dati['mis']);
+      $x = $this->prepared($misSql,$dati['mis']);
       if(!$x){throw new \Exception($x['msg'], 1);}
 
       if(!isset($dati['dt']['dtsi']) || !isset($dati['dt']['dtsf'])){
@@ -287,7 +291,7 @@ class Scheda extends Conn{
 
       $this->commit();
       // return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.');
-      return array("res"=>true,"msg"=>$x, "sql"=>$ubSql);
+      return array("res"=>true,"msg"=>$x, "sql"=>$misSql);
     } catch (\Exception $e) {
       return array("res"=>false,"msg"=>$e->getMessage());
     }
