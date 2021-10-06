@@ -161,11 +161,7 @@ class Scheda extends Conn{
       }
       if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
       if (isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
-      if (isset($dati['ub'])) {
-        unset($dati['ub']['ubDelSection']);
-        unset($dati['ub']['toggleSection']);
-        $this->addSection('ub', $schedaId['field'], $dati['ub']);
-      }
+      if (isset($dati['ub'])) {$this->addSection('ub', $schedaId['field'], $dati['ub']);}
       if (isset($dati['gp'])) {$this->addSection('gp', $schedaId['field'], $dati['gp']);}
       if (isset($dati['rcg'])) {$this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
       if (isset($dati['dsc'])) {$this->addSection('dsc', $schedaId['field'], $dati['dsc']);}

@@ -638,7 +638,7 @@ function salvaScheda(e){
       });
       return false;
     }
-    console.log(dati.mis);
+    console.log(dati);
     $.ajax({
       url: 'api/scheda.php',
       type: "POST",

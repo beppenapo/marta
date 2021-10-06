@@ -30,12 +30,12 @@
       <div class="col-md-4">
         <div class="">
           <label class="text-danger font-weight-bold">CMPN - Compilatore</label>
-          <p><?php echo $scheda['scheda']['cmpn']; ?></p>
-          <input type="hidden" class="tab" data-table="scheda" id="cmpn" name="cmpn" value="<?php echo $scheda['scheda']['cmpid']; ?>">
+          <p><?php echo isset($_POST['s']) ? $scheda['scheda']['cmpn'] : $_SESSION['utente']; ?></p>
+          <input type="hidden" class="tab" data-table="scheda" id="cmpn" name="cmpn" value="<?php echo isset($_POST['s']) ? $scheda['scheda']['cmpid'] : $_SESSION['id']; ?>">
         </div>
         <div class="">
           <label class="text-danger font-weight-bold">CMPD - Data</label>
-          <p><?php echo $scheda['scheda']['cmpd'] ?></p>
+          <p><?php echo isset($_POST['s']) ? $scheda['scheda']['cmpd'] : date('Y-m-d'); ?></p>
         </div>
         <div class="">
           <label for="fur" class="text-danger font-weight-bold">FUR - Funzionario responsabile</label>

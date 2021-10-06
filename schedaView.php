@@ -36,7 +36,7 @@
               <a class="dropdown-item" href="#" title="aggiungi modelli 3d" data-toggle="tooltip" data-placement="right">3d</a>
             </div>
           </div>
-          <button name="modificaScheda" type="button" class="btn btn-dark" title="modifica scheda" data-toggle="tooltip" data-placement="bottom"><i class="fas fa-edit"></i> modifica</button>
+          <button name="modificaScheda" type="button" class="btn btn-dark" title="modifica scheda" data-toggle="tooltip" data-placement="bottom" disabled><i class="fas fa-edit"></i> modifica</button>
           <button name="cambiaStato" value="chiusa" type="button" class="btn btn-dark <?php echo $chiudi; ?>"><i class="fas fa-clipboard-check"></i> chiudi</button>
           <button name="cambiaStato" value="riapri" type="button" class="btn btn-dark <?php echo $riapri; ?>"><i class="fas fa-clipboard-check"></i> riapri</button>
           <button name="cambiaStato" value="verificata" type="button" class="btn btn-dark <?php echo $verifica; ?>"><i class="fas fa-clipboard-check"></i> verificata</button>
