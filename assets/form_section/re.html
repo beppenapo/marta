@@ -6,8 +6,8 @@
       <div class="form-row my-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleRCG" name="toggleSection" data-fieldset="rcgFieldset" <?php echo $rcgCheck; ?> >
-            <label class="custom-control-label" for="toggleRCG">Compila dati ricognizione</label>
+            <input type="checkbox" class="custom-control-input" id="toggleRCG" name="toggleSection" data-fieldset="rcgFieldset">
+            <label class="custom-control-label" for="toggleRCG"><?php echo $rcgCheckLabel; ?></label>
           </div>
         </div>
       </div>
@@ -21,7 +21,7 @@
           <input type="text" class="form-control form-control-sm tab" data-table="rcg" id="rcga" name="rcga" value="<?php echo $scheda['re']['rcg']['rcga']; ?>" <?php echo $rcgDisabled; ?>>
         </div>
         <div class="col-md-3">
-          <label for="rcgd" class="font-weight-bold obbligatorio <?php echo $rcgdLabelClass; ?>">RCGD - Data</label>
+          <label for="rcgd" class="font-weight-bold obbligatorio <?php echo $rcgLabelClass; ?>">RCGD - Data</label>
           <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="rcg" id="rcgd" name="rcgd" value="<?php echo $scheda['re']['rcg']['rcgd']; ?>" <?php echo $rcgRequired; ?>>
         </div>
       </div>
@@ -38,8 +38,8 @@
       <div class="form-row my-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleDSC" name="toggleSection" data-fieldset="dscFieldset" <?php echo $dscCheck; ?>>
-            <label class="custom-control-label" for="toggleDSC">Compila dati scavo</label>
+            <input type="checkbox" class="custom-control-input" id="toggleDSC" name="toggleSection" data-fieldset="dscFieldset">
+            <label class="custom-control-label" for="toggleDSC"><?php echo $dscCheckLabel; ?></label>
           </div>
         </div>
       </div>
@@ -73,8 +73,8 @@
       <div class="form-row my-3">
         <div class="col">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="toggleAIN" name="toggleSection" data-fieldset="ainFieldset" <?php echo $ainCheck; ?> >
-            <label class="custom-control-label" for="toggleAIN">Compila altre indagini</label>
+            <input type="checkbox" class="custom-control-input" id="toggleAIN" name="toggleSection" data-fieldset="ainFieldset" >
+            <label class="custom-control-label" for="toggleAIN"><?php echo $ainCheckLabel; ?></label>
           </div>
         </div>
       </div>

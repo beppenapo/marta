@@ -1,6 +1,5 @@
 const API = 'api/scheda.php';
-localStorage.clear();
-localStorage.sk = $("[name=scheda]").val();
+const SCHEDA = $("[name=scheda]").val();
 $(document).ready(function() {
   $("#tskTxt").text('RA - Reperto Archeologico');
   $("[name=tsk]").val(1);
@@ -85,7 +84,6 @@ function ogtdSel(dati){
     data: {trigger:'ogtdSel', dati:dati}
   })
   .done(function(data){
-    console.log(data.length);
     let opts = [];
     let firstOpt = "<option value='' selected disabled>-- definizione --</option>";
     let noOpt = "<option value=''>-- nessuna specifica presente --</option>";

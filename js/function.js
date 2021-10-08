@@ -12,6 +12,7 @@ const TOTNU = 20000;
 const TOTFOTO = 80000;
 const TOTSTEREO = 5000;
 const TOT3D = 110;
+
 ///////////////////////////
 let log = $("body>header").data('log');
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
@@ -586,9 +587,10 @@ function salvaScheda(e){
     let errori = []
     e.preventDefault();
     $("[data-table]").each(function(){
-      if ($(this).is("input:text") || $(this).is("input[type=number]") || $(this).is("input:hidden") || $(this).is("select") || $(this).is("textarea") || $(this).is(":radio:checked") || $(this).is(":checkbox:checked")) {
+      if ($(this).is("input:text") || $(this).is("input[type=number]") || $(this).is("input[type=search]") || $(this).is("input:hidden") || $(this).is("select") || $(this).is("textarea") || $(this).is(":radio:checked") || $(this).is(":checkbox:checked")) {
         if (!$(this).is(':disabled')) {
           if ($(this).val()) {
+            // let v = $(this).val() ? $(this).val() : null;
             tab.push($(this).data('table'));
             field.push({tab:$(this).data('table'),field:$(this).attr('name')});
             val.push({tab:$(this).data('table'),field:$(this).attr('name'),val:$(this).val()});

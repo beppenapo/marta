@@ -166,6 +166,7 @@ class Scheda extends Conn{
       if (isset($dati['rcg'])) {$this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
       if (isset($dati['dsc'])) {$this->addSection('dsc', $schedaId['field'], $dati['dsc']);}
       if (isset($dati['ain'])) {$this->addSection('ain', $schedaId['field'], $dati['ain']);}
+      if (isset($dati['munsell'])) {$this->addSection('munsell', $schedaId['field'], $dati['munsell']);}
       if (isset($dati['an'])) {$this->addSection('an', $schedaId['field'], $dati['an']);}
       if (isset($dati['nctn_scheda'])) {
         $nctn = $dati['nctn_scheda'];
@@ -209,12 +210,7 @@ class Scheda extends Conn{
         $this->prepared($nctnSql,array("nctn"=>$nctn['nctn']));
       }
 
-      if (isset($dati['inventario']['old_inventario']) && !isset($dati['inventario']['inventario'])) {
-        $invSql = "delete from inventario where id=:id;";
-        $x = $this->prepared($invSql,array("id"=>$dati['inventario']['old_inventario']));
-        if(!$x){throw new \Exception($x['msg'], 1);}
-      }
-      if (!isset($dati['inventario']['old_inventario']) && isset($dati['inventario']['inventario'])) {
+      if (!isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) > 0) {
         $invSql = $this->buildInsert('inventario',$dati['inventario']);
         $invSql = rtrim($invSql, ";") . " returning id;";
         $x = $invId = $this->returning($invSql,$dati['inventario']);
@@ -224,71 +220,132 @@ class Scheda extends Conn{
         $x = $this->prepared($sql,$inv_scheda);
         if(!$x){throw new \Exception($x['msg'], 1);}
       }
-      if (isset($dati['inventario']['old_inventario']) && isset($dati['inventario']['inventario'])){
+      if (isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) > 0){
         $filtro = array("id"=>$dati['inventario']['old_inventario']);
         unset($dati['inventario']['old_inventario']);
+        $dati['inventario']['prefisso'] = isset($dati['inventario']['prefisso']) ? $dati['inventario']['prefisso'] : null;
+        $dati['inventario']['suffisso'] = isset($dati['inventario']['suffisso']) ? $dati['inventario']['suffisso'] : null;
         $invSql = $this->buildUpdate("inventario", $filtro, $dati['inventario']);
         $x = $this->prepared($invSql,$dati['inventario']);
         if(!$x){throw new \Exception($x['msg'], 1);}
       }
-
-      if(isset($dati['og_ra'])){
-        $ograSql = $this->buildUpdate("og_ra", $filtroScheda, $dati['og_ra']);
-        $x = $this->prepared($ograSql,$dati['og_ra']);
+      if (isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) == 0){
+        $invSql = "delete from inventario where id=:id;";
+        $x = $this->prepared($invSql,array("id"=>$dati['inventario']['old_inventario']));
         if(!$x){throw new \Exception($x['msg'], 1);}
       }
 
-      // if(isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && isset($dati['ub']['invn'])){
-      //   $ubSql = "delete from ub where scheda = :scheda;";
-      //   $x = $this->prepared($ubSql,array("scheda"=>$scheda));
-      //   if(!$x){throw new \Exception($x['msg'], 1);}
-      // }
-      // if(!isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && isset($dati['ub']['invn'])){
-      //   unset($dati['ub']['toggleSection']);
-      //   $ubSql = $this->buildUpdate("ub", $filtroScheda, $dati['ub']);
-      //   $x = $this->prepared($ubSql,$dati['ub']);
-      //   if(!$x){throw new \Exception($x['msg'], 1);}
-      // }
-      // if(isset($dati['ub']['ubSection']) && isset($dati['ub']['toggleSection']) && !isset($dati['ub']['invn'])){
-      //   unset($dati['ub']['ubSection']);
-      //   unset($dati['ub']['toggleSection']);
-      //   $x = $this->addSection('ub', $scheda, $dati['ub']);
-      //   if(!$x){throw new \Exception($x['msg'], 1);}
-      // }
-
-      $adSql = $this->buildUpdate("ad", $filtroScheda, $dati['ad']);
-      $x = $this->prepared($adSql,$dati['ad']);
-      if(!$x){throw new \Exception($x['msg'], 1);}
-
-      $coSql = $this->buildUpdate("co", $filtroScheda, $dati['co']);
-      $x = $this->prepared($coSql,$dati['co']);
-      if(!$x){throw new \Exception($x['msg'], 1);}
-
-      $daSql = $this->buildUpdate("da", $filtroScheda, $dati['da']);
-      $x = $this->prepared($daSql,$dati['da']);
-      if(!$x){throw new \Exception($x['msg'], 1);}
-
-      if(!isset($dati['mis']['misr'])){$dati['mis']['misr']=null;}
-      $misSql = $this->buildUpdate("mis", $filtroScheda, $dati['mis']);
-      $x = $this->prepared($misSql,$dati['mis']);
-      if(!$x){throw new \Exception($x['msg'], 1);}
-
-      if(!isset($dati['dt']['dtsi']) || !isset($dati['dt']['dtsf'])){
-        $dati['dt']['dtsi'] = null;
-        $dati['dt']['dtsf'] = null;
+      if(isset($dati['og_ra'])){
+        $dati['og_ra']['ogtt'] = strlen(trim($dati['og_ra']['ogtt'])) == 0 ? null : $dati['og_ra']['ogtt'];
+        $dati['og_ra']['l5'] = isset($dati['og_ra']['l5']) ? $dati['og_ra']['l5'] : null;
+        $sql = $this->buildUpdate("og_ra", $filtroScheda, $dati['og_ra']);
+        $x = $this->prepared($sql,$dati['og_ra']);
+        if(!$x){throw new \Exception($x['msg'], 1);}
       }
-      $dtSql = $this->buildUpdate("dt", $filtroScheda, $dati['dt']);
-      $x = $this->prepared($dtSql,$dati['dt']);
-      if(!$x){throw new \Exception($x['msg'], 1);}
 
-      $lcSql = "delete from lc where scheda = :scheda";
-      $x = $this->prepared($lcSql,array("scheda"=>$scheda));
-      if(!$x){throw new \Exception($x['msg'], 1);}
-      $this->addSection('lc', $scheda, $dati['lc']);
+      if (isset($dati['lc'])) {
+        $dati['lc']['contenitore'] = isset($dati['lc']['contenitore']) ? $dati['lc']['contenitore'] : null;
+        $dati['lc']['colonna'] = isset($dati['lc']['colonna']) ? $dati['lc']['colonna'] : null;
+        $dati['lc']['ripiano'] = isset($dati['lc']['ripiano']) ? $dati['lc']['ripiano'] : null;
+        $dati['lc']['cassetta'] = isset($dati['lc']['cassetta']) ? $dati['lc']['cassetta'] : null;
+        $sql = $this->buildUpdate("lc", $filtroScheda, $dati['lc']);
+        $x = $this->prepared($sql,$dati['lc']);
+        if(!$x){throw new \Exception($x['msg'], 1);}
+      }
 
+      // UB
+      $ubExists = $this->simple("select count(*) from ub where scheda = ".$scheda.";");
+      if ($ubExists[0]['count'] == 0 && isset($dati['ub'])) { $this->addSection('ub', $scheda, $dati['ub']); }
+      if ($ubExists[0]['count'] > 0 && isset($dati['ub'])) { $this->updateSection('ub', $scheda, $dati['ub']); }
+      if ($ubExists[0]['count'] > 0 && !isset($dati['ub'])) { $this->delSection('ub', $scheda); }
+      // GP
+      $gpExists = $this->simple("select count(*) from gp where scheda = ".$scheda.";");
+      if ($gpExists[0]['count'] == 0 && isset($dati['gp'])) { $this->addSection('gp', $scheda, $dati['gp']); }
+      if ($gpExists[0]['count'] > 0 && isset($dati['gp'])) { $this->updateSection('gp', $scheda, $dati['gp']); }
+      if ($gpExists[0]['count'] > 0 && !isset($dati['gp'])) { $this->delSection('gp', $scheda); }
+      // RCG
+      $rcgExists = $this->simple("select count(*) from rcg where scheda = ".$scheda.";");
+      if ($rcgExists[0]['count'] == 0 && isset($dati['rcg'])) { $this->addSection('rcg', $scheda, $dati['rcg']); }
+      if ($rcgExists[0]['count'] > 0 && isset($dati['rcg'])) { $this->updateSection('rcg', $scheda, $dati['rcg']); }
+      if ($rcgExists[0]['count'] > 0 && !isset($dati['rcg'])) { $this->delSection('rcg', $scheda); }
+      // DSC
+      $dscExists = $this->simple("select count(*) from dsc where scheda = ".$scheda.";");
+      if ($dscExists[0]['count'] == 0 && isset($dati['dsc'])) { $this->addSection('dsc', $scheda, $dati['dsc']); }
+      if ($dscExists[0]['count'] > 0 && isset($dati['dsc'])) { $this->updateSection('dsc', $scheda, $dati['dsc']); }
+      if ($dscExists[0]['count'] > 0 && !isset($dati['dsc'])) { $this->delSection('dsc', $scheda); }
+      // AIN
+      $ainExists = $this->simple("select count(*) from ain where scheda = ".$scheda.";");
+      if ($ainExists[0]['count'] == 0 && isset($dati['ain'])) { $this->addSection('ain', $scheda, $dati['ain']); }
+      if ($ainExists[0]['count'] > 0 && isset($dati['ain'])) { $this->updateSection('ain', $scheda, $dati['ain']); }
+      if ($ainExists[0]['count'] > 0 && !isset($dati['ain'])) { $this->delSection('ain', $scheda); }
+      // DTZ
+      $dtzs = isset($dati['dt']['dtzs']) ? $dati['dt']['dtzs'] : null;
+      $dtzData = array("dtzgi"=>$dati['dt']['dtzgi'],"dtzgf"=>$dati['dt']['dtzgf'], "dtzs"=>$dtzs);
+      $this->updateSection('dt', $scheda, $dtzData);
+      // DTS
+      if (isset($dati['dt']['dtsi'])) { $this->updateSection('dt', $scheda, array("dtsi" => $dati['dt']['dtsi'],"dtsf" => $dati['dt']['dtsf'])); }
+      if (!isset($dati['dt']['dtsi'])) { $this->updateSection('dt', $scheda, array("dtsi" => null,"dtsf" => null)); }
+      // DTM
+      $this->delSection('dtm', $scheda);
+      foreach ($dati['dtm'] as $value) {$this->addSection('dtm',$scheda,array("dtm"=>(int)$value));}
+      // MTC
+      $this->delSection('mtc', $scheda);
+      foreach ($dati['mtc'] as $val) {
+        $datiMtc = array('materia'=>$val['materia'], 'tecnica'=>$val['tecnica']);
+        $this->addSection('mtc', $scheda, $datiMtc);
+      }
+      // MIS
+      if (isset($dati['mis']['misr'])) {
+        $misr = $dati['mis']['misr'];
+        $misa = $misl = $misp = $misd = $misn = $miss = $misg = $misv = null;
+      }else {
+        $misr = null;
+        $misa = isset($dati['mis']['misa']) ? $dati['mis']['misa'] : null;
+        $misl = isset($dati['mis']['misl']) ? $dati['mis']['misl'] : null;
+        $misp = isset($dati['mis']['misp']) ? $dati['mis']['misp'] : null;
+        $misd = isset($dati['mis']['misd']) ? $dati['mis']['misd'] : null;
+        $misn = isset($dati['mis']['misn']) ? $dati['mis']['misn'] : null;
+        $miss = isset($dati['mis']['miss']) ? $dati['mis']['miss'] : null;
+        $misg = isset($dati['mis']['misg']) ? $dati['mis']['misg'] : null;
+        $misv = isset($dati['mis']['misv']) ? $dati['mis']['misv'] : null;
+      }
+      $misData = array("misr" => $misr, "misa" => $misa, "misl" => $misl, "misp" => $misp, "misd" => $misd, "misn" => $misn, "miss" => $miss, "misg" => $misg, "misv" => $misv);
+      $this->updateSection('mis', $scheda, $misData);
+      // MUNSELL
+      $munsellExists = $this->simple("select count(*) from munsell where scheda = ".$scheda.";");
+      if ($munsellExists[0]['count'] == 0 && isset($dati['munsell'])) { $this->addSection('munsell', $scheda, $dati['munsell']); }
+      if ($munsellExists[0]['count'] > 0 && isset($dati['munsell'])) { $this->updateSection('munsell', $scheda, $dati['munsell']); }
+      if ($munsellExists[0]['count'] > 0 && !isset($dati['munsell'])) { $this->delSection('munsell', $scheda); }
+      // DES
+      $this->updateSection('da', $scheda, $dati['da']);
+      // STC
+      $this->updateSection('co', $scheda, $dati['co']);
+      // ACQ
+      if (isset($dati['tu']['acqt'])) {
+        $acqn = isset($dati['tu']['acqn']) ? $dati['tu']['acqn'] : null;
+        $acql = isset($dati['tu']['acql']) ? $dati['tu']['acql'] : null;
+        $this->updateSection('tu', $scheda, array("acqt" => $dati['tu']['acqt'], "acqn" => $acqn, "acqd" => $dati['tu']['acqd'], "acql" => $acql));
+      }
+      if (!isset($dati['tu']['acqt'])) { $this->updateSection('tu', $scheda, array("acqt" => null, "acqn" => null, "acqd" => null, "acql" => null)); }
+      // CDG
+      $this->updateSection('tu', $scheda, array("cdgg" => $dati['tu']['cdgg']));
+      // NVC
+      if (isset($dati['tu']['nvct'])) {
+        $nvce = isset($dati['tu']['nvce']) ? $dati['tu']['nvce'] : null;
+        $this->updateSection('tu', $scheda, array("nvct" => $dati['tu']['nvct'], "nvce" => $nvce));
+      }
+      if (!isset($dati['tu']['nvct'])) { $this->updateSection('tu', $scheda, array("nvct" => null, "nvce" => null)); }
+      // AD
+      $this->updateSection('ad', $scheda, $dati['ad']);
+      // AN
+      $ossExists = $this->simple("select count(*) from an where scheda = ".$scheda.";");
+      if ($ossExists[0]['count'] == 0 && isset($dati['an'])) { $this->addSection('an', $scheda, $dati['an']); }
+      if ($ossExists[0]['count'] > 0 && isset($dati['an'])) { $this->updateSection('an', $scheda, $dati['an']); }
+      if ($ossExists[0]['count'] > 0 && !isset($dati['an'])) { $this->delSection('an', $scheda); }
+      
       $this->commit();
       // return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.');
-      return array("res"=>true,"msg"=>$x, "sql"=>$misSql);
+      return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.', "pdo"=>$x['msg']);
     } catch (\Exception $e) {
       return array("res"=>false,"msg"=>$e->getMessage());
     }
@@ -501,6 +558,21 @@ class Scheda extends Conn{
     $dati['scheda'] = $scheda;
     $sql = $this->buildInsert($tab,$dati);
     $res = $this->prepared($sql,$dati);
+    if (!$res) { throw new \Exception($res, 1);}
+    return $res;
+  }
+  protected function updateSection(string $tab, int $scheda, array $dati){
+    $filter = array("scheda" => $scheda);
+    $sql = $this->buildUpdate($tab, $filter, $dati);
+    $res = $this->prepared($sql,$dati);
+    if (!$res) { throw new \Exception($res, 1);}
+    return $res;
+  }
+
+  protected function delSection(string $tab, int $scheda){
+    $dati = array("scheda" => $scheda);
+    $sql = "delete from ".$tab." where scheda = :scheda;";
+    $res = $this->prepared($sql, $dati);
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
   }

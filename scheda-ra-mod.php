@@ -36,7 +36,9 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="l3" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Categoria - livello III"></i> CLS - Categoria</label>
                   <select class="form-control form-control-sm tab" data-table="og_ra" id="l3" name="l3" required>
-                    <option value="" selected disabled>-- definizione --</option>
+                    <?php if (!isset($_POST['s'])) {
+                      echo '<option value="" selected disabled>-- definizione --</option>';
+                    } ?>
                     <?php foreach ($listeRA['l3'] as $key => $val) {
                       if(isset($_POST['s'])){$sel = $val['id'] == $scheda['og']['cls3id'] ? 'selected' : '';}
                       echo "<option value='".$val['id']."' ".$sel.">".$val['value']."</option>";
@@ -66,7 +68,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                   <label for="ogtt"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Specifiche relative alla tipologia del bene catalogato.<br>Esempio<br>OGTD: Anfora<br>OGTT: Dressel 20"></i> OGTT - Tipologia</label>
-                  <input type="text" class="form-control form-control-sm tab" data-table="og_ra" name="ogtt" id="ogtt" value="">
+                  <input type="text" class="form-control form-control-sm tab" data-table="og_ra" name="ogtt" id="ogtt" value="<?php echo $scheda['og']['ogtt']; ?>">
                 </div>
 
               </div>

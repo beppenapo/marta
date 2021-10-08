@@ -25,9 +25,9 @@
       </fieldset>
       <fieldset id="dtsFieldset" class="col-md-4 mb-3">
         <legend class="text-marta font-weight-bold border-bottom">dts - cronologia specifica</legend>
-        <div class="mt-3 custom-control custom-checkbox <?php echo $dtsVisCheck; ?>">
-            <input type="checkbox" class="custom-control-input" data-fieldset="dtsFieldset" id="toggleDTS" name="toggleSection" <?php echo $dtsCheck; ?>>
-            <label class="custom-control-label" for="toggleDTS">Compila cronologia specifica</label>
+        <div class="mt-3 custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" data-fieldset="dtsFieldset" id="toggleDTS" name="toggleSection">
+            <label class="custom-control-label" for="toggleDTS"> <?php echo $dtsCheckLabel; ?></label>
           </div>
         <div class="mt-3">
           <label for="dtsi" class="font-weight-bold obbligatorio <?php echo $dtsLabelClass; ?>">DTSI - Da</label>

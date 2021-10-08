@@ -118,18 +118,15 @@ if (isset($_POST['s'])) {
   }
   //**********************************************//
   //************* sezione UB *********************//
-  $ubCheck = count($scheda['ub']) == 0 ? '' : $checked;
-  $ubDelCheck = '';
+  $ubCheckLabel = count($scheda['ub']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
   $ubRequired = count($scheda['ub']) == 0 ? 'disabled' : 'required';
   $ubDisabled = count($scheda['ub']) == 0 ? 'disabled' : '';
   $ubLabelClass = count($scheda['ub']) == 0 ? '' : 'text-danger';
   $stimArr=$obj->vocabolari(array("tab"=>'liste.stim'));
   $stimList=$obj->buildSel($stimArr,$scheda['ub']['idstim']);
-  $ubInsertVis = count($scheda['ub']) == 0 ? '' : 'd-none';
-  $ubDelVis = count($scheda['ub']) == 0 ? 'd-none' : '';
   //**********************************************//
   //************* sezione GP *********************//
-  $gpCheck = count($scheda['gp']) == 0 ? '' : $checked;
+  $gpCheckLabel = count($scheda['gp']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
   $gpRequired = count($scheda['gp']) == 0 ? 'disabled' : 'required';
   $gpDisabled = count($scheda['gp']) == 0 ? 'disabled' : '';
   $gpLabelClass = count($scheda['gp']) == 0 ? '' : 'text-danger';
@@ -143,19 +140,19 @@ if (isset($_POST['s'])) {
   $gptList=$obj->buildSel($gptArr,$scheda['gp']['gptid']);
   //**********************************************//
   //************* sezione RCG *********************//
-  $rcgCheck = count($scheda['re']['rcg']) == 0 ? '' : $checked;
+  $rcgCheckLabel = count($scheda['re']['rcg']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
   $rcgRequired = count($scheda['re']['rcg']) == 0 ? 'disabled' : 'required';
   $rcgDisabled = count($scheda['re']['rcg']) == 0 ? 'disabled' : '';
-  $rcgdLabelClass = count($scheda['re']['rcg']) == 0 ? '' : 'text-danger';
+  $rcgLabelClass = count($scheda['re']['rcg']) == 0 ? '' : 'text-danger';
   //**********************************************//
   //************* sezione DSC *********************//
-  $dscCheck = count($scheda['re']['dsc']) == 0 ? '' : $checked;
+  $dscCheckLabel = count($scheda['re']['dsc']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
   $dscRequired = count($scheda['re']['dsc']) == 0 ? 'disabled' : 'required';
   $dscDisabled = count($scheda['re']['dsc']) == 0 ? 'disabled' : '';
   $dscLabelClass = count($scheda['re']['dsc']) == 0 ? '' : 'text-danger';
   //**********************************************//
   //************* sezione AIN *********************//
-  $ainCheck = count($scheda['re']['ain']) == 0 ? '' : $checked;
+  $ainCheckLabel = count($scheda['re']['ain']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
   $ainRequired = count($scheda['re']['ain']) == 0 ? 'disabled' : 'required';
   $ainDisabled = count($scheda['re']['ain']) == 0 ? 'disabled' : '';
   $ainLabelClass = count($scheda['re']['ain']) == 0 ? '' : 'text-danger';
@@ -170,8 +167,7 @@ if (isset($_POST['s'])) {
   $dtzsList=$obj->buildSel($dtzsArr,$scheda['dt']['dt']['dtzsid']);
   //**********************************************//
   //************* sezione DTS *********************//
-  $dtsCheck = isset($scheda['dt']['dt']['dtsi']) ? $checked : '';
-  $dtsVisCheck = isset($scheda['dt']['dt']['dtsi']) ? 'd-none' : '';
+  $dtsCheckLabel = !isset($scheda['dt']['dt']['dtsi']) ? 'Compila dati sezione' : 'Cancella dati sezione';
   $dtsDisabled = isset($scheda['dt']['dt']['dtsi']) ? '' : 'disabled';
   $dtsRequired = isset($scheda['dt']['dt']['dtsi']) ? 'required' : 'disabled';
   // $dtsLabelClass = isset($scheda['dt']['dt']['dtsi']) ? 'text-danger' : '';
@@ -223,10 +219,9 @@ if (isset($_POST['s'])) {
   $adSectDiv = adSectDiv($scheda['ad'], $adspArr, $adsmArr);
   //**********************************************//
 }else {
-  $ubDelVis = 'd-none';
-
-  $ubCheck = $ubDelCheck = $gpCheck = $rcgCheck = $dscCheck = $ainCheck = $dtsCheck = $ubLabelClass = $gpLabelClass = $rcgdLabelClass = $dscLabelClass = $ainLabelClass = $dtsLabelClass = $nvcLabelClass = $nvcCheck = $acqLabelClass = $acqCheck = '';
   $misCheck = $checked;
+  $ubCheckLabel = $gpCheckLabel = $rcgCheckLabel = $dscCheckLabel = $ainCheckLabel = $dtsCheckLabel = $acqCheckLabel = $nvcCheckLabel = 'Compila dati sezione';
+  $ubLabelClass = $gpLabelClass = $rcgLabelClass = $dscLabelClass = $ainLabelClass = $dtsLabelClass = $acqLabelClass = $nvcLabelClass = '';
   $ubRequired = $gpRequired = $rcgRequired = $dscRequired = $ainRequired = $dtsRequired = $ubDisabled = $gpDisabled = $rcgDisabled = $dscDisabled = $ainDisabled = $dtsDisabled = $misDisabled = $nvcRequired = $nvcDisabled = $acqRequired = $acqDisabled ='disabled';
 
   $stimList = $listeComuni['stim'];
@@ -255,7 +250,7 @@ $lcView = isset($_POST['s']) ? '' : 'lcSel';
 function setCf4(){ return explode(',',"A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U");}
 
 function setCassetti($n){
-  $cassetti = array("adsp"=>[],"adsm"=>[]);
+  $cassetti = array();
   for ($i=1; $i < $n + 1; $i++) { array_push($cassetti,$i); }
   return $cassetti;
 }
@@ -296,7 +291,7 @@ function adSectDiv(array $dati = null, $adspArr, $adsmArr){
 function mtcItems(array $dati, $obj){
   $out = [];
   foreach ($dati as $i) {
-    $item = "<div class='form-row mb-3' id='".$i['materia']."Row'>";
+    $item = "<div class='form-row mb-3' id='".str_replace(" ","-",$i['materia'])."Row'>";
     $item .= "<div class='col-md-5'>";
     $item .= "<input type='text' class='form-control form-control-sm' name='materiaLabel' value='".$i['materia']."' disabled />";
     $item .= "<input type='hidden' name='materiaItem' value='".$i['materiaid']."' disabled />";
@@ -305,7 +300,7 @@ function mtcItems(array $dati, $obj){
     $item .= "<input type='text' class='form-control form-control-sm' name='tecnicaItem' value='".$i['tecnica']."' disabled />";
     $item .= "</div>";
     $item .= "<div class='col-md-1'>";
-    $item .= "<button type='button' class='btn btn-danger btn-sm' name='delMateriaItem' value='#".$i['materia']."Row'><i class='fas fa-times'></i></button>";
+    $item .= "<button type='button' class='btn btn-danger btn-sm' name='delMateriaItem' value='#".str_replace(" ","-",$i['materia'])."Row'><i class='fas fa-times'></i></button>";
     $item .= "</div>";
     $item .= "</div>";
     array_push($out,$item);

@@ -81,7 +81,7 @@
     </fieldset>
     <fieldset class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom mb-3">Num. Inventario MArTA</legend>
-      <?php if(isset($_POST['s'])){?>
+      <?php if(isset($_POST['s']) && isset($scheda['scheda']['inventarioid'])){?>
       <input type="hidden" name="old_inventario" data-table="inventario" value="<?php echo $scheda['scheda']['inventarioid']; ?>">
       <?php } ?>
       <div class="form-row">

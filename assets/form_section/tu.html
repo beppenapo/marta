@@ -20,18 +20,17 @@
         </div>
         <div class="col-md-3">
           <label for="acqn">ACQN - Nome</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" <?php echo $acqDisabled; ?>>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="<?php echo $scheda['tu']['acq']['acqn']; ?>" <?php echo $acqDisabled; ?>>
         </div>
         <div class="col-md-2">
           <label for="acqd" class="font-weight-bold obbligatorio <?php echo $acqLabelClass; ?>">ACQD - Data</label>
-          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="tu" id="acqd" name="acqd" value="" <?php echo $acqRequired; ?>>
+          <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="tu" id="acqd" name="acqd" value="<?php echo $scheda['tu']['acq']['acqd']; ?>" <?php echo $acqRequired; ?>>
         </div>
         <div class="col-md-3">
           <label for="acqn">ACQL - Luogo</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="" <?php echo $acqDisabled; ?>>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acql" name="acql" value="<?php echo $scheda['tu']['acq']['acql']; ?>" <?php echo $acqDisabled; ?>>
         </div>
       </div>
-      <?php print_r($scheda['tu']['acq']); ?>
     </fieldset>
     <fieldset id="cdgFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom mb-3">cdg - condizione giuridica</legend>
@@ -63,7 +62,7 @@
         </div>
         <div class="col-md-6">
           <label for="acqn"><i class="far fa-question-circle" data-toggle="tooltip" title="Indicare la data di emissione del provvedimento amministrativo nella forma 'anno/mese/giorno' (aaaa/mm/gg)."></i> NVCE - Estremi provvedimento</label>
-          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="acqn" name="acqn" value="<?php echo $scheda['tu']['nvc']['nvce']; ?>" <?php echo $nvcDisabled; ?>>
+          <input type="text" class="form-control form-control-sm tab" data-table="tu" id="nvce" name="nvce" value="<?php echo $scheda['tu']['nvc']['nvce']; ?>" pattern="([12]\d{3}(\/)(0[1-9]|1[0-2])(\/)(0[1-9]|[12]\d|3[01]))" <?php echo $nvcDisabled; ?>>
         </div>
       </div>
     </fieldset>
