@@ -44,7 +44,7 @@ class Scheda extends Conn{
       $sql = "select l1.value as cls1, l2.value as cls2,l3.id as cls3id, l3.value as cls3, l4.id as cls4id, l4.value as cls4,l5.id as cls5id, l5.value as cls5, ogtt from og_ra og inner join liste.ra_cls_l4 l4 on og.l4 = l4.id inner join liste.ra_cls_l3 l3 on og.l3 = l3.id inner join liste.ra_cls_l2 l2 on l3.l2 = l2.id inner join liste.ra_cls_l1 l1 on l2.l1 = l1.id left join liste.ra_cls_l5 l5 on og.l5 = l5.id where og.scheda = ".$id.";";
     }else {
       //NU
-      $sql = "select ogr.value as ogr, og.ogtt, og.ogth, og.ogtl, ogto.value as ogto, ogts.value as ogts, ogtr.value as ogtr, ogtd.value as ogtd from og_nu og inner join liste.ogr on og.ogr = ogr.id inner join liste.ogtd on og.ogtd = ogtd.id left join liste.ogto on og.ogto = ogto.id left join liste.ogts on og.ogts = ogts.id left join liste.ogtr on og.ogtr = ogtr.id where og.scheda = ".$id.";";
+      $sql = "select ogtd.value as ogtd, ogtd.id as ogtdid, ogr.value as ogr, ogr.id as ogrid, og.ogtt, og.ogth, og.ogtl, ogto.id as ogtoid, ogto.value as ogto, ogts.id as ogtsid, ogts.value as ogts, ogtr.id as ogtrid, ogtr.value as ogtr from og_nu og inner join liste.ogr on og.ogr = ogr.id inner join liste.ogtd on og.ogtd = ogtd.id left join liste.ogto on og.ogto = ogto.id left join liste.ogts on og.ogts = ogts.id left join liste.ogtr on og.ogtr = ogtr.id where og.scheda = ".$id.";";
     }
     $res = $this->simple($sql);
     return $res[0];
@@ -242,6 +242,19 @@ class Scheda extends Conn{
         $x = $this->prepared($sql,$dati['og_ra']);
         if(!$x){throw new \Exception($x['msg'], 1);}
       }
+      if(isset($dati['og_nu'])){
+        $dati['og_nu']['ogtt'] = strlen(trim($dati['og_nu']['ogtt'])) == 0 ? null : $dati['og_nu']['ogtt'];
+        $dati['og_nu']['ogth'] = strlen(trim($dati['og_nu']['ogth'])) == 0 ? null : $dati['og_nu']['ogth'];
+        $dati['og_nu']['ogtl'] = strlen(trim($dati['og_nu']['ogtl'])) == 0 ? null : $dati['og_nu']['ogtl'];
+
+        $dati['og_nu']['ogto'] = isset($dati['og_nu']['ogto']) ? $dati['og_nu']['ogto'] : null;
+        $dati['og_nu']['ogts'] = isset($dati['og_nu']['ogts']) ? $dati['og_nu']['ogts'] : null;
+        $dati['og_nu']['ogtr'] = isset($dati['og_nu']['ogtr']) ? $dati['og_nu']['ogtr'] : null;
+
+        $sql = $this->buildUpdate("og_nu", $filtroScheda, $dati['og_nu']);
+        $x = $this->prepared($sql,$dati['og_nu']);
+        if(!$x){throw new \Exception($x['msg'], 1);}
+      }
 
       if (isset($dati['lc'])) {
         $dati['lc']['contenitore'] = isset($dati['lc']['contenitore']) ? $dati['lc']['contenitore'] : null;
@@ -342,7 +355,7 @@ class Scheda extends Conn{
       if ($ossExists[0]['count'] == 0 && isset($dati['an'])) { $this->addSection('an', $scheda, $dati['an']); }
       if ($ossExists[0]['count'] > 0 && isset($dati['an'])) { $this->updateSection('an', $scheda, $dati['an']); }
       if ($ossExists[0]['count'] > 0 && !isset($dati['an'])) { $this->delSection('an', $scheda); }
-      
+
       $this->commit();
       // return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.');
       return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.', "pdo"=>$x['msg']);
@@ -480,24 +493,19 @@ class Scheda extends Conn{
   public function listeNu(){
     $opt=[];
     $ogtd=array("tab"=>"liste.ogtd","filter"=>array("field"=>'tipo',"value"=>2));
-    $ogtdArr=$this->vocabolari($ogtd);
-    $opt['ogtd']=$this->buildSel($ogtdArr);
+    $opt['ogtd']=$this->vocabolari($ogtd);;
 
     $ogr=array("tab"=>'liste.ogr');
-    $ogrArr=$this->vocabolari($ogr);
-    $opt['ogr']=$this->buildSel($ogrArr);
+    $opt['ogr']=$this->vocabolari($ogr);
 
     $ogto=array("tab"=>'liste.ogto');
-    $ogtoArr=$this->vocabolari($ogto);
-    $opt['ogto']=$this->buildSel($ogtoArr);
+    $opt['ogto']=$this->vocabolari($ogto);
 
     $ogts=array("tab"=>'liste.ogts');
-    $ogtsArr=$this->vocabolari($ogts);
-    $opt['ogts']=$this->buildSel($ogtsArr);
+    $opt['ogts']=$this->vocabolari($ogts);
 
     $ogtr=array("tab"=>'liste.ogtr');
-    $ogtrArr=$this->vocabolari($ogtr);
-    $opt['ogtr']=$this->buildSel($ogtrArr);
+    $opt['ogtr']=$this->vocabolari($ogtr);
 
     return $opt;
   }

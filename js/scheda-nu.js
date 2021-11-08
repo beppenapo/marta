@@ -1,4 +1,5 @@
 const API = 'api/scheda.php';
+const SCHEDA = $("[name=scheda]").val();
 $(document).ready(function() {
   $("#munsellFieldset").remove();
   $("#tskTxt").text('NU - Numismatica');
@@ -51,6 +52,5 @@ $(document).ready(function() {
     });
   })
   .fail(function(data) { console.log(data); });
+  $("[name=submit]").on('click',function(e){ salvaScheda(e); });
 });
-
-$("[name=submit]").on('click',function(e){ salvaScheda(e); });

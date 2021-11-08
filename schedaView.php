@@ -68,6 +68,7 @@
               <li class="list-group-item">
                 <span>TSK - Tipo scheda:</span>
                 <span><?php echo $scheda['scheda']['tsk']; ?></span>
+                <input type="hidden" name="tsk" value="<?php echo $scheda['scheda']['tskid'] ?>">
               </li>
               <li class="list-group-item">
                 <span>LIR - Livello ricerca:</span>

@@ -1,10 +1,10 @@
 $(document).ready(function() {
   const scheda = parseInt($("[name=schedaId]").val());
   const nctn = parseInt($("[name=nctnId]").val());
+  const tsk = parseInt($("[name=tsk]").val());
+  let urlMod = tsk == 1 ? 'scheda-ra-mod.php' : 'scheda-nu-mod.php';
 
-  $("[name=modificaScheda]").on('click', function(){
-    $.redirectPost('scheda-ra-mod.php',{s:scheda});
-  })
+  $("[name=modificaScheda]").on('click', function(){ $.redirectPost(urlMod,{s:scheda}); })
 
   $(".list-group-item > span").each(function(){
     if ($(this).text()=='dato non inserito') {
