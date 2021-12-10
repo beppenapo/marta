@@ -255,7 +255,7 @@
                     <?php echo $m['miss'] ? $m['miss']." cm" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>misg - peso:</span><span class="font-weight-bold">
-                    <?php echo $m['misa'] ? $m['misa']." gr" : ''; ?>
+                    <?php echo $m['misg'] ? $m['misg']." gr" : ''; ?>
                   </span></li>
                   <li class="list-group-item"><span>misv - misure varie:</span><span class="font-weight-bold">
                     <?php echo $m['misv'] ? nl2br($m['misv']) : ''; ?>
