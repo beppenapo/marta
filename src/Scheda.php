@@ -67,7 +67,7 @@ class Scheda extends Conn{
   }
 
   private function sezLc(int $id){
-    $sql ="select comune.pvcc, ldc.ldcn, lc.piano, lc.sala, lc.contenitore, lc.colonna, lc.ripiano, lc.cassetta from lc INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = ".$id.";";
+    $sql ="select comune.pvcc, ldc.ldcn, lc.piano, lista.sala, lc.contenitore, lc.colonna, lc.ripiano, lc.cassetta from lc INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN liste.sale lista on lc.sala = lista.id INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = ".$id.";";
     $lc = $this->simple($sql);
     return $lc[0];
   }
