@@ -22,12 +22,14 @@
             <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required>
               <?php
               foreach ($salaList as $key => $val) {
-                if(isset($_POST['s'])){ $sel = $val['id'] == $scheda['lc']['sala'] ? 'selected' : '';}
+                if(isset($_POST['s'])){ $sel = $val['sala'] == $scheda['lc']['sala'] ? 'selected' : '';}
                 $sala = !$val['descrizione'] ? $val['sala'] : $val['descrizione'];
                 echo "<option value='".$val['id']."' ".$sel.">".$sala."</option>";
               }
               ?>
             </select>
+            <?php echo $scheda['lc']['sala']; ?>
+            <?php print_r($salaList); ?>
           </div>
         </div>
 
