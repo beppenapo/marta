@@ -14,4 +14,5 @@ function editComunicazione($obj){ return json_encode($obj->editComunicazione($_P
 function delComunicazione($obj){ return json_encode($obj->delComunicazione($_POST['id'])); }
 function comunicazioni($obj){ return json_encode($obj->comunicazioni()); }
 function statoSchede($obj){ return json_encode($obj->statoSchede($_POST)); }
+function schedatori($obj){ return json_encode($obj->schedatori()); }
 ?>

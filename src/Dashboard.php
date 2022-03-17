@@ -30,14 +30,18 @@ class Dashboard extends Conn{
   public function statoSchede(array $dati = null){
     $where = '';
     if($dati && !empty($dati)){ $where = ' where s.cmpn = '.$dati['cmpn']; }
-    $sql = "select nctn.nctn, s.titolo, stato.*, s.cmpd, concat(u.cognome,' ',u.nome) cmpn
+    $sql = "select nctn.nctn, s.titolo, stato.*, s.cmpd
     from scheda s
     INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
     INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
     INNER JOIN stato_scheda stato on stato.scheda = s.id
-    inner JOIN utenti u on s.cmpn = u.id
      ".$where."
     ORDER BY nctn asc;";
+    return $this->simple($sql);
+  }
+
+  function schedatori(){
+    $sql = "select u.id, concat(u.cognome,' ',u.nome) utente, count(s.*) schede from utenti u left join scheda s on s.cmpn = u.id group by u.id having (u.classe = 3 and u.id <> 36) or (u.classe <> 3 and count(s.*) > 0) order by 2 asc;";
     return $this->simple($sql);
   }
 

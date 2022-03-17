@@ -593,7 +593,7 @@ class Scheda extends Conn{
     if($dati && !empty($dati)){
       if(isset($dati['stato'])){array_push($filter, "stato_scheda.".$dati['stato']['field']." = '".$dati['stato']['value']."'");}
       if(isset($dati['tipo'])){array_push($filter, "s.tsk = ".$dati['tipo']);}
-      if(isset($dati['usr'])){array_push($filter,' s.cmpn = '.$dati['usr']);}
+      if(isset($dati['operatore'])){array_push($filter,' s.cmpn = '.$dati['operatore']);}
       $where = ' where '.join(" and ",$filter);
     }
     $sql="SELECT
@@ -601,6 +601,7 @@ class Scheda extends Conn{
       , nctn.nctn
       , s.titolo
       , s.tsk
+      , concat(u.nome,' ',u.cognome) operatore
       , tsk.value as tipo
       , ogtd.value as ogtd
       , array_agg(m.value order by materia asc) as materia
@@ -625,7 +626,7 @@ class Scheda extends Conn{
     INNER JOIN liste.sale as loc on lc.sala = loc.id
     INNER JOIN utenti u on s.cmpn = u.id
     ".$where."
-    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, ogtd.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione
+    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, ogtd.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione, u.nome, u.cognome
 
     UNION
 
@@ -634,6 +635,7 @@ class Scheda extends Conn{
       , nctn.nctn
       , s.titolo
       , s.tsk
+      , concat(u.nome,' ',u.cognome) operatore
       , tsk.value as tipo
       , l4.value as ogtd
       , array_agg(m.value order by materia asc) as materia
@@ -658,7 +660,7 @@ class Scheda extends Conn{
     INNER JOIN liste.sale as loc on lc.sala = loc.id
     INNER JOIN utenti u on s.cmpn = u.id
     ".$where."
-    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, l4.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione
+    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, l4.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione, u.nome, u.cognome
     order by nctn asc;";
     return $this->simple($sql);
   }

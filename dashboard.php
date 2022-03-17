@@ -1,6 +1,10 @@
 <?php
   session_start();
   if (!isset($_SESSION['id'])){ header("location:login.php");}
+  require 'vendor/autoload.php';
+  use \Marta\Dashboard;
+  $obj = new Dashboard();
+  $schedatoriList = $obj->schedatori();
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -18,18 +22,29 @@
     <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main class="bg-light">
       <div class="container-fluid">
-        <!-- <?php require("assets/stat.html"); ?> -->
+        <?php require("assets/stat.html"); ?>
       </div>
       <div class="container-fluid">
         <div class="row mb-3">
           <div class="col-lg-4">
-            <div class="card" id="comunicazioni">
+            <div class="card" id="schedatori">
               <div class="card-header bg-white font-weight-bold">
-                <p class="card-title m-0">Comunicazioni progetto</p>
+                <p class="card-title m-0">Schedatori</p>
               </div>
-              <div class="list-group liste"></div>
-              <div class="card-footer">
-                <button type="button" class="btn btn-sm btn-outline-marta" name="addComunicazioneBtn">aggiungi comunicazione</button>
+              <div class="list-group liste">
+                <div class="list-group list-group-flush">
+                  <?php
+                  foreach ($schedatoriList as $item) {
+                    $disabled = $item['schede'] == 0 ? 'disabled' : '';
+                    $url = $item['schede'] == 0 ? '' : 'href="#"';
+                    $tooltip = $item['schede'] == 0 ? '' : 'data-toggle="tooltip" data-placement="right" title="visualizza le schede di <br>'.$item['utente'].'"';
+                    echo "<a ".$url." class='list-group-item list-group-item-action schedatore ".$disabled."' data-id='".$item['id']."' ".$tooltip.">
+                          <span>".$item['utente']."</span>
+                          <span class='float-right'>".$item['schede']."</span>
+                          </a>";
+                  }
+                  ?>
+                </div>
               </div>
             </div>
           </div>
@@ -49,7 +64,6 @@
                       <th class="no-sort">Inviata</th>
                       <th class="no-sort">Accettata</th>
                       <th class="no-sort">Data</th>
-                      <?php if($_SESSION['classe'] !==3){ echo "<th>Compilatore</th>"; } ?>
                       <th></th>
                     </tr>
                   </thead>
@@ -83,6 +97,17 @@
               </div>
               <div class="card-footer">
                 <a href="usrAdd.php" class="btn btn-sm btn-outline-marta"><i class="fas fa-plus"></i> nuovo utente</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card" id="comunicazioni">
+              <div class="card-header bg-white font-weight-bold">
+                <p class="card-title m-0">Comunicazioni progetto</p>
+              </div>
+              <div class="list-group liste"></div>
+              <div class="card-footer">
+                <button type="button" class="btn btn-sm btn-outline-marta" name="addComunicazioneBtn">aggiungi comunicazione</button>
               </div>
             </div>
           </div>

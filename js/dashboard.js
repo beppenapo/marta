@@ -45,6 +45,11 @@ $("body").on('click', '[name=delNotesBtn]', function() {
   .fail(function(data) { console.log(data); });
 });
 $('body').on('click', '[name=updateUser]', function() { $.redirectPost('usrAdd.php',{id:$(this).val()}); });
+$('body').on('click', 'a.schedatore', function(e) {
+  e.preventDefault();
+  localStorage.setItem('operatore',$(this).data('id'));
+  $.redirectPost('schede.php');
+});
 function initComunicazioni(){
   $.ajax({ url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: {trigger : 'comunicazioni'} })
   .done(function(data) {
@@ -119,7 +124,6 @@ function buildSchedeTable(){
       $("<td/>",{class:'text-center'}).html(v.inviata == true ? vero : falso).appendTo(tr);
       $("<td/>",{class:'text-center'}).html(v.accettata == true ? vero : falso).appendTo(tr);
       $("<td/>",{text:v.cmpd}).appendTo(tr);
-      if(userClass !==3){$("<td/>",{text:v.cmpn}).appendTo(tr);}
       $("<td/>",{class:'text-center',html:link}).appendTo(tr);
     })
     initDataTab('#dataTableScheda')
