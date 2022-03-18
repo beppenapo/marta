@@ -1,6 +1,13 @@
 // aggiungi il seguente blocco nelle pagine che prevedono chiamate ajax:
 // <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
+const bingKey = "Arsp1cEoX9gu-KKFYZWbJgdPEa8JkRIUkxcPr8HBVSReztJ6b0MOz3FEgmNRd4nM";
+const thunderFKey = "f1151206891e4ca7b1f6eda1e0852b2e";
+const thunderFTile = 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey='+thunderFKey;
+const thunderFAttrib = 'Maps &copy; <a href="https://www.thunderforest.com">Thunderforest</a>, Data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>';
+const osmTile = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const osmAttrib="Map data (c)OpenStreetMap contributors";
 let start
+
 $(document)
 .ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
 .ajaxStop(function(){ $("#loadingDiv").addClass('invisible');});
@@ -114,11 +121,17 @@ $("[name=colonna]").on('change', function(){
 })
 $("[name=ripiano]").on('change', function(){$("[name=cassetta]").val('');})
 //Sblocca obbligatorietà di contesto
-$("body").on('click', '[name=toggleSection]', function() {
-  var fieldset = $(this).data('fieldset');
+$("body").on('click', '[name=toggleSection]', function(e) {
+  let checked = e.target.checked;
+  let fieldset = $(this).data('fieldset');
   $("#"+fieldset+" .tab").prop('disabled',(i,v)=>!v);
   $("#"+fieldset+" label.obbligatorio").toggleClass('text-danger');
   $("#"+fieldset+" .tab.obbligatorio").prop('required',(i,v)=>!v);
+
+  if (fieldset == 'gpFieldset') {
+    if (!checked) {$("#gpFieldset input, #gpFieldset select").val('')}
+    $("#mapCover").toggle()
+  }
 });
 
 //Sblocca Misure
@@ -693,4 +706,62 @@ function salvaScheda(e){
     .fail(function(){console.log("error");});
 
   }
+}
+
+function gpMap(){
+  $("#gpMap").css({"width":'100%',"height":'333px'});
+  let zoom = 8;
+  let center = [40.4391259,17.2153126];
+  let marker = {}
+
+  var map = L.map('gpMap').setView(center,zoom);
+  let bing = L.tileLayer.bing({bingMapsKey: bingKey, imagerySet:'AerialWithLabels'})
+  let outdoor = L.tileLayer(thunderFTile, { attribution: thunderFAttrib, maxZoom: 19});
+  let osm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    opacity:0.7
+  });
+  bing.addTo(map)
+  var baseLayers = {
+    "Satellite": bing,
+    "OpenStreetMap": osm,
+    "ThunderForest": outdoor
+  };
+  L.control.layers(baseLayers, null).addTo(map);
+
+  let resetMap = L.Control.extend({
+    options: { position: 'topleft'},
+    onAdd: function (map) {
+      var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
+      btn=$("<a/>",{href:'#'}).appendTo(container);
+      $("<i/>",{class:'fas fa-crosshairs'}).appendTo(btn)
+      btn.on('click', function (e) {
+        e.preventDefault()
+        map.flyTo(center,zoom);
+      });
+      return container;
+    }
+  })
+
+  map.addControl(new resetMap());
+  map.on('click', function(e) {
+    let lng = parseFloat(e.latlng.lng).toFixed(4)
+    let lat = parseFloat(e.latlng.lat).toFixed(4)
+    $("[name=gpl]").val(1)
+    $("[name=gpp]").val(1)
+    $("[name=gpm]").val(2)
+    $("[name=gpbt]").val(2022)
+    $("[name=gpt]").val(5)
+    $("[name=gpbb]").val('Punto individuato tramite ricerca su OpenStreetMap')
+    $("[name=gpdpx]").val(lng)
+    $("[name=gpdpy]").val(lat)
+
+    if (marker != undefined) { map.removeLayer(marker);};
+    marker = L.marker([lat,lng]).addTo(map);
+  });
+  $("#toggleGP").on('click', function(){
+    if(!$(this).is(':checked')){
+      if (marker != undefined) { map.removeLayer(marker);};
+    }
+  })
 }

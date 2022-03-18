@@ -10,49 +10,64 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="col-md-6 col-lg-3 mb-3">
-        <label for="gpl" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPL - Tipo di localizzazione</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpl" name="gpl" <?php echo $gpRequired; ?>>
-          <?php echo join("",$gplList); ?>
-        </select>
+      <div class="col-md-6">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="gpl" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPL - Tipo di localizzazione</label>
+            <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpl" name="gpl" <?php echo $gpRequired; ?>>
+              <?php echo join("",$gplList); ?>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="gpp" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPP - Sistema di riferimento</label>
+            <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpp" name="gpp" <?php echo $gpRequired; ?>>
+              <?php echo join("",$gppList); ?>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="gpm" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPM - Metodo</label>
+            <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpm" name="gpm" <?php echo $gpRequired; ?>>
+              <?php echo join("",$gpmList); ?>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="gpt" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPT - Tecnica</label>
+            <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpt" name="gpt" <?php echo $gpRequired; ?>>
+              <?php echo join("",$gptList); ?>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="gpdpx" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPX-Long</label>
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpx']; ?>"  <?php echo $gpRequired; ?>>
+          </div>
+          <div class="col-md-4">
+            <label for="gpdpy" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPY-Lat</label>
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpy']; ?>"  <?php echo $gpRequired; ?>>
+          </div>
+          <div class="col-md-4">
+            <label for="gpbt" data-toggle="tooltip" data-placement="top" title="inserire solo l'anno" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>"><i class="fas fa-info-circle"></i> GPBT - Data</label>
+            <input type="number" placeholder="-- <?php echo date('Y'); ?> --" class="form-control form-control-sm tab obbligatorio"  data-table="gp" id="gpbt" name="gpbt" min="1945" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['gp']['gpbt']; ?>"  <?php echo $gpRequired; ?>>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="gpbb" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPBB - Descrizione sintetica</label>
+            <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" <?php echo $gpRequired; ?>><?php echo $scheda['gp']['gpbb']; ?></textarea>
+          </div>
+        </div>
       </div>
-      <div class="col-md-6 col-lg-3 mb-3">
-        <label for="gpp" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPP - Sistema di riferimento</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpp" name="gpp" <?php echo $gpRequired; ?>>
-          <?php echo join("",$gppList); ?>
-        </select>
-      </div>
-      <div class="col-md-6 col-lg-2 mb-3">
-        <label for="gpdpx" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPX - Coordinata X</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpx']; ?>"  <?php echo $gpRequired; ?>>
-      </div>
-      <div class="col-md-6 col-lg-2 mb-3">
-        <label for="gpdpy" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPY - Coordinata Y</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpy']; ?>"  <?php echo $gpRequired; ?>>
+      <div class="col-md-6">
+        <div id="mapCover"></div>
+        <div id="gpMap"></div>
       </div>
     </div>
     <div class="form-row">
-      <div class="col-md-4 col-lg-3 mb-3">
-        <label for="gpm" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPM - Metodo</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpm" name="gpm" <?php echo $gpRequired; ?>>
-          <?php echo join("",$gpmList); ?>
-        </select>
-      </div>
-      <div class="col-md-4 col-lg-3 mb-3">
-        <label for="gpt" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPT - Tecnica</label>
-        <select class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpt" name="gpt" <?php echo $gpRequired; ?>>
-          <?php echo join("",$gptList); ?>
-        </select>
-      </div>
-      <div class="col-md-3 mb-3">
-        <label for="gpbt" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPBT - Data</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbt" name="gpbt" min="1945" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['gp']['gpbt']; ?>"  <?php echo $gpRequired; ?>>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-lg-6">
-        <label for="gpbb" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPBB - Descrizione sintetica</label>
-        <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" <?php echo $gpRequired; ?>><?php echo $scheda['gp']['gpbb']; ?></textarea>
+      <div class="col">
+        <small class="text-muted"><i class="fas fa-lightbulb"></i> Se non riesci a localizzare il punto tramite dati d'archivio o cartografia nota, puoi utilizzare il tool grafico: abilita la sezione e inizia a navigare nella mappa in alto a destra, una volta individuato, clicca sul punto, i campi della sezione verranno automaticamente compilati con le coordinate rilevate sulla mappa e con alcuni valori di default. Tutti i valori inseriti automaticamente dal sistema possono essere modificati. Basta cliccare su un altro punto della mappa per modificare le coordinate.<br />Per annullare i dati immessi basta disattivare e riattivare la sezione cliccando sulla checkbox "Compila dati sezione"</small>
       </div>
     </div>
   </fieldset>
