@@ -752,7 +752,7 @@ function gpMap(){
     $("[name=gpm]").val(2)
     $("[name=gpbt]").val(2022)
     $("[name=gpt]").val(5)
-    $("[name=gpbb]").val('Punto individuato tramite ricerca su OpenStreetMap')
+    $("[name=gpbb]").val('Punto individuato tramite ricerca su piattaforma di mappatura web')
     $("[name=gpdpx]").val(lng)
     $("[name=gpdpy]").val(lat)
 
