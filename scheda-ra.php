@@ -20,7 +20,6 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
             <small class="text-danger font-weight-bold d-block">* Campo obbligatorio</small>
             <small class="font-weight-bold d-block">* Obbligatorietà di contesto</small>
             <small class="d-block">* Campo facoltativo</small>
-            <?php print_r($listeComuni['piani']); ?>
           </div>
         </div>
         <form id="formScheda" data-action="addScheda" autocomplete="off">
