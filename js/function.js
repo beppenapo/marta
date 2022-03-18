@@ -43,6 +43,9 @@ $("[name=toggleNctn]").on('click', function(){
     .prop('required', function(i, v) { return !v; });
 })
 
+// check titolo scheda
+$("[name=checkTitolo]").on('click', checkTitolo);
+
 // funzioni per select dinamiche sezione LC
 $(".lcSel").hide();
 $("[name=piano]").on('change', function(){
@@ -240,6 +243,31 @@ copyright = (data.y = 2020) ? copyright + '2020' : copyright + '2020 - '+copyrig
 copyright=copyright+"  Tutti i diritti riservati";
 $(".copyright>span").html(copyright);
 
+
+function checkTitolo(){
+  let out = $("#checkTitoloMsg");
+  let v = $("[name=titolo]").val();
+  out.removeClass('[class^="text-"]');
+  if(!v){
+    out.addClass('text-marta').text("Il campo è vuoto, inserisci un valore e riprova");
+    return false;
+  }
+  $.ajax({
+    url: API,
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger: 'checkTitolo', val: v}
+  })
+  .done(function(data) {
+    console.log(data.count);
+    data.count == 0
+    ? out.addClass('text-success').text("Ok! Puoi utilizzare questo titolo")
+    : out.addClass('text-danger').text("Attenzione! Esiste già una scheda con questo titolo")
+  });
+
+}
+
+
 //NOTE: funzioni generali
 function getData(){
   let data = new Date();
@@ -304,12 +332,16 @@ function stat(){
   $("#totSchede").text(TOTRA+TOTNU);
   $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
   .done(function(data){
+    console.log(data);
     let raPerc = parseInt(data['ra']*100/TOTRA);
     let nuPerc = parseInt(data['nu']*100/TOTNU);
     $("#numschede").text(parseInt(data['ra'])+parseInt(data['nu']));
+
     $("#percSchedeOk").text(parseInt(raPerc+nuPerc));
-    $("#raBar").attr('style','width:'+raPerc+'%').attr('aria-valuenow',raPerc);
-    $("#nuBar").attr('style','width:'+nuPerc+'%').attr('aria-valuenow',nuPerc);
+    $("#raBar").text('RA '+data['ra']);
+    $("#nuBar").text('NU '+data['nu']);
+    // $("#raBar").attr('style','width:'+raPerc+'%').attr('aria-valuenow',raPerc);
+    // $("#nuBar").attr('style','width:'+nuPerc+'%').attr('aria-valuenow',nuPerc);
 
     $("#numFoto").text(data['foto']);
     let fotoPerc = parseInt(data['foto']*100/TOTFOTO);

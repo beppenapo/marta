@@ -4,13 +4,9 @@
       <div class="card-body">
         <div class="border-bottom">schede RA/NU</div>
         <div class="display-4 text-success text-center" id="numschede"></div>
-        <div class="d-flex justify-content-between">
-          <div class="progress w-50 mr-1">
-            <div class="progress-bar bg-success"  id="raBar" role="progressbar" aria-valuemin="0" aria-valuemax="100">RA</div>
-          </div>
-          <div class="progress w-50">
-            <div class="progress-bar" id="nuBar" role="progressbar" aria-valuemin="0" aria-valuemax="100">NU</div>
-          </div>
+        <div class="d-flex justify-content-between flex-fill">
+          <div id="raBar" class="badge badge-success badge-stat"></div>
+          <div id="nuBar" class="badge badge-success badge-stat"></div>
         </div>
         <div class="d-flex justify-content-between">
           <small>tot.: <span id="totSchede"></span></small>

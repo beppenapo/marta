@@ -5,6 +5,13 @@ use \Marta\Conn;
 class Scheda extends Conn{
   public $db;
   function __construct(){}
+
+  public function checkTitolo($titolo){
+    $sql = "select count(*) from scheda where titolo = '".$titolo."'";
+    $out = $this->simple($sql);
+    return $out[0];
+  }
+
   public function getStatoScheda(int $id){
     $res = $this->simple("select * from stato_scheda where scheda = ".$id.";");
     return $res[0];

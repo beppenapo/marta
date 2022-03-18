@@ -23,97 +23,9 @@ require("api/php/home.php");
         </div>
       </div>
       <div class="container-fluid">
-        <div class="row mb-3">
-          <div class="col-sm-6 col-lg-3 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="border-bottom d-flex justify-content-between">
-                  <span>schede RA/NU</span>
-                  <a href="schede.php" title="visualizza archivio completo" data-toggle="tooltip" data-placement="top"><i class="fas fa-arrow-right fa-fw" aria-hidden="true"></i></a>
-                </div>
-                <div class="display-4 text-success text-center" id="numschede"><?php echo (int)$stat['ra']+(int)$stat['nu']; ?></div>
-                <div class="d-flex justify-content-between">
-                  <div class="progress w-50 mr-1">
-                    <div class="progress-bar bg-success"  id="raBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->raPerc; ?>%">RA</div>
-                  </div>
-                  <div class="progress w-50">
-                    <div class="progress-bar" id="nuBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->nuPerc; ?>%">NU</div>
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <small>tot.: <?php echo (int)$obj->totra+(int)$obj->totnu; ?></small>
-                  <small><?php echo (int)$obj->raPerc+(int)$obj->nuPerc; ?>% completate</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="border-bottom d-flex justify-content-between">
-                  <span>fotografie</span>
-                  <a href=""><i class="fas fa-arrow-right fa-fw" aria-hidden="true"></i></a>
-                </div>
-                <div class="display-4 text-danger text-center" id="numFoto"></div>
-                <div class="progress">
-                  <div class="progress-bar bg-danger" id="fotoBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->fotoPerc; ?>%"></div>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <small>tot.: <?php echo (int)$obj->totfoto; ?></small>
-                  <small><?php echo (int)$obj->fotoPerc; ?>% completate</small>
-                </div>
-                <div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="border-bottom d-flex justify-content-between">
-                  <span>foto stereo</span>
-                  <a href=""><i class="fas fa-arrow-right fa-fw" aria-hidden="true"></i></a>
-                </div>
-                <div class="display-4 text-primary text-center" id="numStereo"></div>
-                <div class="progress">
-                  <div class="progress-bar bg-primary" role="progressbar" id="stereoBar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->stereoPerc; ?>%"></div>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <small>tot.: <?php echo (int)$obj->totstereo; ?></small>
-                  <small><?php echo (int)$obj->stereoPerc; ?>% completate</small>
-                </div>
-                <div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3 mb-3">
-            <div class="card card-sm">
-              <div class="card-body">
-                <div class="border-bottom d-flex justify-content-between">
-                  <span>modelli 3d</span>
-                  <a href=""><i class="fas fa-arrow-right fa-fw" aria-hidden="true"></i></a>
-                </div>
-                <div class="display-4 text-warning text-center" id="numModelli"></div>
-                <div class="progress">
-                  <div class="progress-bar bg-warning" id="3dBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (int)$obj->modelliPerc; ?>%"></div>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <small>tot.: <?php echo (int)$obj->tot3d; ?></small>
-                  <small><?php echo (int)$obj->modelliPerc; ?>% completati</small>
-                </div>
-                <div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <?php require("assets/stat.html"); ?>
       </div>
-      <div class="fotoWrap">
-        <?php
-
-        ?>
-      </div>
+      <div class="fotoWrap"></div>
     </main>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>

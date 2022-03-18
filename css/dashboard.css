@@ -4,5 +4,5 @@
 #countdown{font-size: 8vw;}
 .info{width:80vw;margin:0 auto;}
 
-.liste{height: 580px !important;}
+.liste{height: 580px;}
 #schede .card-body, .liste{height:auto; max-height:825px; overflow: auto;}

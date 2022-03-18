@@ -1,30 +1,9 @@
 @import "font.css";
-html, body{
-  position:relative;
-  font-family: 'GothamRounded-Book', sans-serif;
-}
+html, body{ position:relative; font-family: 'GothamRounded-Book', sans-serif;}
 ul {list-style-type: none; margin: 0; padding: 0; overflow: hidden;}
-body>header{
-  position:fixed;
-  left:0;
-  top:0;
-  height:60px;
-  background: #fff;
-  z-index:1000;
-}
-body>header, body > footer{
-  width:100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-body>main{
-  position:relative;
-  padding: 80px 0 20px;
-  min-height:calc(100vh - 60px);
-  z-index:1;
-}
+body>header{position:fixed; left:0; top:0; height:60px; background: #fff; z-index:1000;}
+body>header, body > footer{width:100%; display: flex; flex-direction: row; align-items:center; justify-content: space-between;}
+body>main{position:relative; padding: 80px 0 20px; min-height:calc(100vh - 60px); z-index:1;}
 body>nav#mainMenu{
   position:fixed;
   top:60px;
@@ -47,10 +26,7 @@ body>nav#mainMenu a.mainLink, body>nav#mainMenu p{
   border-top: 1px solid #343a40;
   border-bottom: 1px solid #1f1f1f;
 }
-body>nav#mainMenu a.mainLink:hover{
-  background:#343a40;
-  color:#fff;
-}
+body>nav#mainMenu a.mainLink:hover{background:#343a40; color:#fff;}
 body>nav#mainMenu p{margin:0;}
 
 body>nav#mainMenu ul.subMenu a{
@@ -61,17 +37,9 @@ body>nav#mainMenu ul.subMenu a{
   color:#ddd;
   text-decoration: none;
 }
-body>nav#mainMenu ul.subMenu a:hover{
-  padding-left:30px;
-  color:#fff;
-}
+body>nav#mainMenu ul.subMenu a:hover{padding-left:30px; color:#fff;}
 body>nav#mainMenu ul.subMenu li:last-child a{border-bottom: 1px solid #1f1f1f;}
-body>footer{
-  position: relative;
-  background:#343a40;
-  color:#fff;
-  min-height: 60px;
-}
+body>footer{position: relative;background:#343a40; color:#fff; min-height: 60px;}
 .headerMenu > ul {display:flex;}
 .headerMenu > ul > li{float: left;}
 .headerMenu > ul > li > a {
@@ -85,14 +53,10 @@ body>footer{
     line-height: 30px;
     margin: 0;
 }
-.headerMenu > ul > li > a:hover {
-  background: rgb(198,156,85);
-  color:#fff;
-}
+.headerMenu > ul > li > a:hover {background: rgb(198,156,85); color:#fff;}
 header .logo{ display:none; padding: 10px;}
 header .logo>img{ height:40px;}
 header .headerMenu{margin: 0 auto;}
-
 body>footer .copyright{padding:0 10px;font-size:.7rem;}
 body>footer .logo > img{height:40px;}
 
@@ -180,7 +144,10 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 
 /* BOOTSTRAP */
 .badge{font-size: 100% !important;}
-
+.badge-stat{
+  font-size: 10px !important;
+  width:48%;
+}
 
 /* Ale qui */
 .lista_header { border-top:0.5px solid #DDDDDD; padding:6px 0px;}

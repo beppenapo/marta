@@ -23,8 +23,6 @@
     <main class="bg-light">
       <div class="container-fluid">
         <?php require("assets/stat.html"); ?>
-      </div>
-      <div class="container-fluid">
         <div class="row mb-3">
           <div class="col-lg-4">
             <div class="card" id="schedatori">
