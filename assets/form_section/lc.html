@@ -37,7 +37,7 @@
               <?php if(isset($_POST['s'])){echo $labelContenitore;} ?>
             </label>
             <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore">
-              <?php echo implode("",$selContenitore); ?>
+              <?php echo implode("",(array)$selContenitore); ?>
             </select>
           </div>
         </div>
@@ -46,7 +46,7 @@
           <div class="<?php echo $lcViewColonna; ?>" id="lcColonnaDiv">
             <label for="colonna" id="colonnaLabel" class="">Colonna</label>
             <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna">
-              <?php echo implode("",$selColonna); ?>
+              <?php echo implode("",(array)$selColonna); ?>
             </select>
           </div>
         </div>
@@ -54,7 +54,7 @@
         <div class="col-md-4 col-lg-2">
           <div class="<?php echo $lcViewRipiano; ?>" id="lcRipianoDiv">
             <label for="ripiano" id="ripianoLabel" class=""><?php echo $labelRipiano; ?></label>
-            <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"><?php echo implode("",$selRipiano); ?></select>
+            <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"><?php echo implode("",(array)$selRipiano); ?></select>
           </div>
         </div>
 
