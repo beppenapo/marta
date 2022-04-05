@@ -18,3 +18,11 @@ legend{text-transform: uppercase;}
   background-size: cover;
   z-index: 2000;
 }
+
+#osmList{
+  position: absolute;
+  top: 54px;
+  left: 5px;
+  width: 92%;
+  z-index: 2200;
+}

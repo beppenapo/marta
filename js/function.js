@@ -256,6 +256,58 @@ copyright = (data.y = 2020) ? copyright + '2020' : copyright + '2020 - '+copyrig
 copyright=copyright+"  Tutti i diritti riservati";
 $(".copyright>span").html(copyright);
 
+$("#osmList, #resetVia").hide();
+$("[name=geolocComune]").on('change', function(){
+  let attiva = $(this).val() ? false : true ;
+  $("[name=cercaVia], [name=geolocVia]").prop('disabled',attiva)
+})
+$("[name=cercaVia]").on('click',function(){
+  let via = $("[name=geolocVia]").val();
+  let comune = $("[name=geolocComune] option:selected").text();
+  if(via.length < 3){
+    alert('Attenzione, il nome è troppo corto, riprova');
+    return false;
+  }
+  geocoding(comune,via);
+})
+$("#resetVia").on('click',function(){
+  $("#cercaVia,#resetVia").toggle()
+  $("#geolocVia").val('');
+  $("#osmList").html('').hide()
+})
+function geocoding(comune,via){
+  $("#cercaVia,#resetVia").toggle()
+  const list = $("#osmList");
+  const api = "http://nominatim.openstreetmap.org/search?q=";
+  let param = "&format=json&addressdetails=1";
+  let string = api+via+', '+comune+param;
+  list.html('').show()
+  $.getJSON(string, function (json) {
+    console.log(json);
+    if (json.length > 0) {
+      json.forEach(function(v){
+        let button =   $("<button/>",{type:'button', class:'list-group-item list-group-item-action btn-sm'});
+        let l = v.display_name.split(",");
+        l = l[0]+','+l[1]+','+l[2]+','+l[4];
+        button.text(l)
+          .appendTo(list)
+          .on('click', function(){
+            $("#geolocVia").val(l);
+            list.html('').hide()
+          });
+      })
+    }else {
+      let button =   $("<button/>",{type:'button', class:'list-group-item list-group-item-action btn-sm'});
+      button.text('nessuna via trovata')
+        .appendTo(list)
+        .on('click', function(){
+          $("#cercaVia,#resetVia").toggle()
+          $("#geolocVia").val('');
+          list.html('').hide()
+        });
+    }
+  });
+}
 
 function checkTitolo(){
   let out = $("#checkTitoloMsg");

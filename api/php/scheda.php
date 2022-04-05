@@ -6,6 +6,7 @@ $checked = 'checked';
 require 'vendor/autoload.php';
 use \Marta\Scheda;
 $obj = new Scheda();
+
 $listeComuni = $obj->listeComuni();
 $listeNU = $obj->listeNu();
 $listeRA = $obj->listeRA();
@@ -15,6 +16,7 @@ $munsellList = $obj->munsellList();
 $adspArr=$obj->vocabolari(array("tab"=>'liste.adsp', "order"=>1));
 $adsmArr=$obj->vocabolari(array("tab"=>'liste.adsm', "order"=>1));
 
+$comuniPuglia = $obj->comuniPuglia();
 //Nel form di inserimento questi elementi partono nascosti
 $lcViewColonna = $lcViewRipiano = $lcViewCassetta = $lcNoVetrine = 'lcSel';
 //********************************************//
@@ -126,6 +128,7 @@ if (isset($_POST['s'])) {
   $stimList=$obj->buildSel($stimArr,$scheda['ub']['idstim']);
   //**********************************************//
   //************* sezione GP *********************//
+
   $gpCheckLabel = count($scheda['gp']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
   $gpRequired = count($scheda['gp']) == 0 ? 'disabled' : 'required';
   $gpDisabled = count($scheda['gp']) == 0 ? 'disabled' : '';

@@ -6,6 +6,11 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function comuniPuglia(){
+    $sql = "select id, comune from comuni order by 2 asc;";
+    return $this->simple($sql);
+  }
+
   public function checkTitolo($titolo){
     $sql = "select count(*) from scheda where titolo = '".$titolo."'";
     $out = $this->simple($sql);
