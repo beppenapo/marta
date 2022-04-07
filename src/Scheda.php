@@ -61,6 +61,11 @@ class Scheda extends Conn{
     $res = $this->simple($sql);
     return $res[0];
   }
+  private function sezGeoloc(int $id){
+    $sql = "select c.id as id_comune, c.comune,v.osm_id, v.via,v.lon, v.lat, g.geonote from geolocalizzazione g inner join vie v on g.via = v.osm_id inner join comuni c on g.comune = c.id where g.scheda = ".$id.";";
+    $res = $this->simple($sql);
+    return $res[0];
+  }
   private function sezGp(int $id){
     $sql ="select gp.gpl as gplid, gpl.value as gpl, gp.gpdpx, gp.gpdpy, gp.gpm as gpmid, gpm.value as gpm, gp.gpt as gptid, gpt.value as gpt, gp.gpp as gppid, gpp.value as gpp, gpp.epsg, gp.gpbb, gp.gpbt from gp inner join liste.gpl on gp.gpl = gpl.id inner join liste.gpm on gp.gpm = gpm.id inner join liste.gpt on gp.gpt = gpt.id inner join liste.gpp on gp.gpp = gpp.id where gp.scheda = ".$id.";";
     $gp = $this->simple($sql);
@@ -88,6 +93,7 @@ class Scheda extends Conn{
     $out=[];
     $out['scheda'] = $this->sezScheda($id);
     $out['og'] = $this->sezOg($id,$out['scheda']['tskid']);
+    $out['geoloc'] = $this->sezGeoloc($id);
     $out['gp'] = $this->sezGp($id);
     $out['lc'] = $this->sezLc($id);
 
@@ -170,6 +176,14 @@ class Scheda extends Conn{
       foreach ($dati['mtc'] as $val) {
         $datiMtc = array('materia'=>$val['materia'], 'tecnica'=>$val['tecnica']);
         $this->addSection('mtc', $schedaId['field'], $datiMtc);
+      }
+      if(isset($dati['vie'])) {
+        $sql = $this->buildInsert('vie',$dati['vie']);
+        $this->prepared($sql,$dati['vie']);
+        if(isset($dati['geolocalizzazione'])) {
+          $dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];
+          $this->addSection('geolocalizzazione', $schedaId['field'], $dati['geolocalizzazione']);
+        }
       }
       if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
       if (isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}

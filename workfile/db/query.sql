@@ -1,9 +1,10 @@
-select distinct piano,
-CASE
-  WHEN piano = -1 THEN 'Deposito'
-  WHEN piano = 0 THEN 'Piano terra'
-  WHEN piano = 1 THEN 'Primo piano'
-  WHEN piano = 3 THEN 'Terzo piano'
-END as nome
-from liste.sale
-order by piano asc;
+SELECT row_to_json(json.*) AS geometrie FROM (
+  SELECT 'FeatureCollection'::text AS type, array_to_json(array_agg(features.*)) AS features
+  FROM (
+    SELECT 'Feature'::text AS type, st_asgeojson(comuni.geom)::json AS geometry, row_to_json(prop.*) AS properties
+    FROM comuni
+    JOIN ( SELECT id, comune FROM comuni ) prop
+    ON comuni.id = prop.id
+    where comuni.id = 108
+  ) features
+) json;

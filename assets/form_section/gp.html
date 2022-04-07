@@ -2,9 +2,9 @@
   <fieldset class="bg-light rounded border p-3" id="geolocFieldset">
     <legend class="w-auto bg-marta text-white border rounded p-1">geolocalizzazione generica</legend>
     <div class="form-row mb-3">
-      <div class="col-md-4">
-        <label for="geolocComune">Comune</label>
-        <select class="form-control form-control-sm tab" data-table="geolocalizzazione" id="geolocComune" name="geolocComune">
+      <div class="col-md-3">
+        <label for="comune">Comune</label>
+        <select class="form-control form-control-sm tab" data-table="geolocalizzazione" id="comune" name="comune">
           <option value="">-- seleziona Comune --</option>
           <?php
           foreach($comuniPuglia as $c){
@@ -13,14 +13,34 @@
           ?>
         </select>
       </div>
-      <div class="col-md-6">
-        <label for="geolocVia">Via</label>
+      <div class="col-md-7">
+        <label for="via">Via</label>
         <div class="input-group input-group-sm mb-3">
-          <input type="text" class="form-control tab" data-table="geolocalizzazione" name="geolocVia" id="geolocVia" value="" placeholder="cerca una via" disabled>
+          <input type="text" class="form-control tab" data-table="geolocalizzazione" name="via" id="via" value="" placeholder="cerca una via" disabled>
           <button class="btn btn-secondary btn-sm" type="button" id="cercaVia" name="cercaVia" disabled><i class="fa-solid fa-magnifying-glass"></i></button>
           <button class="btn btn-secondary btn-sm" type="button" id="resetVia" name="resetVia"><i class="fa-solid fa-trash-can"></i></button>
         </div>
         <div class="list-group" id="osmList"></div>
+      </div>
+    </div>
+    <div class="form-row mb-3">
+      <div class="col-md-5">
+        <label for="geonote">Note geolocalizzazione</label>
+        <textarea class="form-control form-control-sm tab" data-table="geolocalizzazione" id="geonote" name="geonote" rows="8"></textarea>
+      </div>
+      <div class="col-md-7">
+        <small class="text-muted"><i class="fas fa-lightbulb" aria-hidden="true"></i> Nelle situazioni in cui non è posibile compilare la sezione "GP-Georeferenziazione tramite punto" a causa dell'assenza di dati precisi, si può indicare in alternativa una localizzazione generica, specificando il comune ed eventualmente la via.<br>Per inserire la via bisogna prima selezionare un Comune dalla lista<br>La ricerca della via avviene tramite il servizio messo a disposizione da OpenStreetMap (Nominatim), una volta inserito il nome premere sul pulsante accanto alla casella di input e scegliere la via dalla lista che comparirà<br/>La via potrebbe non essere presente nel database di OpenStreetMap, in tal caso basta inserire solo il Comune especificare il nome della via nel campo note.</small>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <div id="osmFieldset">
+          <input type="hidden" class="form-control form-control-sm" name="osm_id" data-table='vie' value="">
+          <input type="hidden" class="form-control form-control-sm" id="comune_vie" name="comune" data-table='vie' value="">
+          <input type="hidden" value='' class="form-control form-control-sm" name="via" id="osm_via" data-table='vie' value="">
+          <input type="hidden" value='' class="form-control form-control-sm" name="lat" data-table='vie' value="">
+          <input type="hidden" value='' class="form-control form-control-sm" name="lon" data-table='vie' value="">
+        </div>
       </div>
     </div>
   </fieldset>

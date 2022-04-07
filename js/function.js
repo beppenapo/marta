@@ -257,13 +257,13 @@ copyright=copyright+"  Tutti i diritti riservati";
 $(".copyright>span").html(copyright);
 
 $("#osmList, #resetVia").hide();
-$("[name=geolocComune]").on('change', function(){
+$("#comune").on('change', function(){
   let attiva = $(this).val() ? false : true ;
-  $("[name=cercaVia], [name=geolocVia]").prop('disabled',attiva)
+  $("[name=cercaVia], #via").prop('disabled',attiva)
 })
 $("[name=cercaVia]").on('click',function(){
-  let via = $("[name=geolocVia]").val();
-  let comune = $("[name=geolocComune] option:selected").text();
+  let via = $("#via").val();
+  let comune = $("#comune option:selected").text();
   if(via.length < 3){
     alert('Attenzione, il nome è troppo corto, riprova');
     return false;
@@ -272,8 +272,9 @@ $("[name=cercaVia]").on('click',function(){
 })
 $("#resetVia").on('click',function(){
   $("#cercaVia,#resetVia").toggle()
-  $("#geolocVia").val('');
+  $("#via").val('');
   $("#osmList").html('').hide()
+  $("#osmFieldset input").val('')
 })
 function geocoding(comune,via){
   $("#cercaVia,#resetVia").toggle()
@@ -283,7 +284,6 @@ function geocoding(comune,via){
   let string = api+via+', '+comune+param;
   list.html('').show()
   $.getJSON(string, function (json) {
-    console.log(json);
     if (json.length > 0) {
       json.forEach(function(v){
         let button =   $("<button/>",{type:'button', class:'list-group-item list-group-item-action btn-sm'});
@@ -292,8 +292,13 @@ function geocoding(comune,via){
         button.text(l)
           .appendTo(list)
           .on('click', function(){
-            $("#geolocVia").val(l);
+            $("#via").val(v.display_name.split(",",3));
             list.html('').hide()
+            $("[name=osm_id]").val(v.osm_id);
+            $("#osm_via").val(v.display_name.split(",",3));
+            $("#comune_vie").val($("#comune").val());
+            $("[name=lat]").val(v.lat);
+            $("[name=lon]").val(v.lon);
           });
       })
     }else {
@@ -302,13 +307,12 @@ function geocoding(comune,via){
         .appendTo(list)
         .on('click', function(){
           $("#cercaVia,#resetVia").toggle()
-          $("#geolocVia").val('');
+          $("#via").val('');
           list.html('').hide()
         });
     }
   });
 }
-
 function checkTitolo(){
   let out = $("#checkTitoloMsg");
   let v = $("[name=titolo]").val();
@@ -397,7 +401,6 @@ function stat(){
   $("#totSchede").text(TOTRA+TOTNU);
   $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
   .done(function(data){
-    console.log(data);
     let raPerc = parseInt(data['ra']*100/TOTRA);
     let nuPerc = parseInt(data['nu']*100/TOTNU);
     $("#numschede").text(parseInt(data['ra'])+parseInt(data['nu']));
@@ -687,7 +690,6 @@ function salvaScheda(e){
       if ($(this).is("input:text") || $(this).is("input[type=number]") || $(this).is("input[type=search]") || $(this).is("input:hidden") || $(this).is("select") || $(this).is("textarea") || $(this).is(":radio:checked") || $(this).is(":checkbox:checked")) {
         if (!$(this).is(':disabled')) {
           if ($(this).val()) {
-            // let v = $(this).val() ? $(this).val() : null;
             tab.push($(this).data('table'));
             field.push({tab:$(this).data('table'),field:$(this).attr('name')});
             val.push({tab:$(this).data('table'),field:$(this).attr('name'),val:$(this).val()});
@@ -737,7 +739,6 @@ function salvaScheda(e){
       });
       return false;
     }
-    console.log(dati);
     $.ajax({
       url: 'api/scheda.php',
       type: "POST",

@@ -39,7 +39,7 @@ if (isset($_POST['s'])) {
   $contenitoreList = $obj->getContenitore(array("sala"=>$scheda['lc']['sala'], "contenitore"=>$contenitore));
 
   // se la sala non ha scaffali o vetrine mostra l'avviso
-  if (count($contenitoreList) == 0) {$lcNoVetrine = '';}
+  if (count((array)$contenitoreList) == 0) {$lcNoVetrine = '';}
 
   // preparo l'array per le options della lista contenitore
   $selContenitore = [];
@@ -120,19 +120,19 @@ if (isset($_POST['s'])) {
   }
   //**********************************************//
   //************* sezione UB *********************//
-  $ubCheckLabel = count($scheda['ub']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
-  $ubRequired = count($scheda['ub']) == 0 ? 'disabled' : 'required';
-  $ubDisabled = count($scheda['ub']) == 0 ? 'disabled' : '';
-  $ubLabelClass = count($scheda['ub']) == 0 ? '' : 'text-danger';
+  $ubCheckLabel = count((array)$scheda['ub']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
+  $ubRequired = count((array)$scheda['ub']) == 0 ? 'disabled' : 'required';
+  $ubDisabled = count((array)$scheda['ub']) == 0 ? 'disabled' : '';
+  $ubLabelClass = count((array)$scheda['ub']) == 0 ? '' : 'text-danger';
   $stimArr=$obj->vocabolari(array("tab"=>'liste.stim'));
   $stimList=$obj->buildSel($stimArr,$scheda['ub']['idstim']);
   //**********************************************//
   //************* sezione GP *********************//
 
-  $gpCheckLabel = count($scheda['gp']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
-  $gpRequired = count($scheda['gp']) == 0 ? 'disabled' : 'required';
-  $gpDisabled = count($scheda['gp']) == 0 ? 'disabled' : '';
-  $gpLabelClass = count($scheda['gp']) == 0 ? '' : 'text-danger';
+  $gpCheckLabel = count((array)$scheda['gp']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
+  $gpRequired = count((array)$scheda['gp']) == 0 ? 'disabled' : 'required';
+  $gpDisabled = count((array)$scheda['gp']) == 0 ? 'disabled' : '';
+  $gpLabelClass = count((array)$scheda['gp']) == 0 ? '' : 'text-danger';
   $gplArr=$obj->vocabolari(array("tab"=>'liste.gpl'));
   $gplList=$obj->buildSel($gplArr,$scheda['gp']['gplid']);
   $gppArr=$obj->vocabolari(array("tab"=>'liste.gpp'));
@@ -143,22 +143,22 @@ if (isset($_POST['s'])) {
   $gptList=$obj->buildSel($gptArr,$scheda['gp']['gptid']);
   //**********************************************//
   //************* sezione RCG *********************//
-  $rcgCheckLabel = count($scheda['re']['rcg']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
-  $rcgRequired = count($scheda['re']['rcg']) == 0 ? 'disabled' : 'required';
-  $rcgDisabled = count($scheda['re']['rcg']) == 0 ? 'disabled' : '';
-  $rcgLabelClass = count($scheda['re']['rcg']) == 0 ? '' : 'text-danger';
+  $rcgCheckLabel = count((array)$scheda['re']['rcg']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
+  $rcgRequired = count((array)$scheda['re']['rcg']) == 0 ? 'disabled' : 'required';
+  $rcgDisabled = count((array)$scheda['re']['rcg']) == 0 ? 'disabled' : '';
+  $rcgLabelClass = count((array)$scheda['re']['rcg']) == 0 ? '' : 'text-danger';
   //**********************************************//
   //************* sezione DSC *********************//
-  $dscCheckLabel = count($scheda['re']['dsc']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
-  $dscRequired = count($scheda['re']['dsc']) == 0 ? 'disabled' : 'required';
-  $dscDisabled = count($scheda['re']['dsc']) == 0 ? 'disabled' : '';
-  $dscLabelClass = count($scheda['re']['dsc']) == 0 ? '' : 'text-danger';
+  $dscCheckLabel = count((array)$scheda['re']['dsc']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
+  $dscRequired = count((array)$scheda['re']['dsc']) == 0 ? 'disabled' : 'required';
+  $dscDisabled = count((array)$scheda['re']['dsc']) == 0 ? 'disabled' : '';
+  $dscLabelClass = count((array)$scheda['re']['dsc']) == 0 ? '' : 'text-danger';
   //**********************************************//
   //************* sezione AIN *********************//
-  $ainCheckLabel = count($scheda['re']['ain']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
-  $ainRequired = count($scheda['re']['ain']) == 0 ? 'disabled' : 'required';
-  $ainDisabled = count($scheda['re']['ain']) == 0 ? 'disabled' : '';
-  $ainLabelClass = count($scheda['re']['ain']) == 0 ? '' : 'text-danger';
+  $ainCheckLabel = count((array)$scheda['re']['ain']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
+  $ainRequired = count((array)$scheda['re']['ain']) == 0 ? 'disabled' : 'required';
+  $ainDisabled = count((array)$scheda['re']['ain']) == 0 ? 'disabled' : '';
+  $ainLabelClass = count((array)$scheda['re']['ain']) == 0 ? '' : 'text-danger';
   $aintArr=$obj->vocabolari(array("tab"=>'liste.aint'));
   $aintList=$obj->buildSel($gptArr,$scheda['re']['ain']['aintid']);
   //**********************************************//
@@ -199,10 +199,10 @@ if (isset($_POST['s'])) {
   $stclList=$obj->buildSel($stclArr,$scheda['co']['stclid']);
   //**********************************************//
   //************* sezione ACQ ********************//
-  $acqCheck = count($scheda['tu']['acq']) == 0 ? '' : 'checked';
-  $acqRequired = count($scheda['tu']['acq']) == 0 ? 'disabled' : 'required';
-  $acqDisabled = count($scheda['tu']['acq']) == 0 ? 'disabled' : '';
-  $acqLabelClass = count($scheda['tu']['acq']) == 0 ? '' : 'text-danger';
+  $acqCheck = count((array)$scheda['tu']['acq']) == 0 ? '' : 'checked';
+  $acqRequired = count((array)$scheda['tu']['acq']) == 0 ? 'disabled' : 'required';
+  $acqDisabled = count((array)$scheda['tu']['acq']) == 0 ? 'disabled' : '';
+  $acqLabelClass = count((array)$scheda['tu']['acq']) == 0 ? '' : 'text-danger';
   $acqtArr=$obj->vocabolari(array("tab"=>'liste.acqt'));
   $acqtList=$obj->buildSel($acqtArr,$scheda['tu']['acq']['acqtid']);
   //**********************************************//
@@ -211,10 +211,10 @@ if (isset($_POST['s'])) {
   $cdggList=$obj->buildSel($cdggArr,$scheda['tu']['cdg']['cdggid']);
   //**********************************************//
   //************* sezione NVC ********************//
-  $nvcCheck = count($scheda['tu']['nvc']) == 0 ? '' : 'checked';
-  $nvcRequired = count($scheda['tu']['nvc']) == 0 ? 'disabled' : 'required';
-  $nvcDisabled = count($scheda['tu']['nvc']) == 0 ? 'disabled' : '';
-  $nvcLabelClass = count($scheda['tu']['nvc']) == 0 ? '' : 'text-danger';
+  $nvcCheck = count((array)$scheda['tu']['nvc']) == 0 ? '' : 'checked';
+  $nvcRequired = count((array)$scheda['tu']['nvc']) == 0 ? 'disabled' : 'required';
+  $nvcDisabled = count((array)$scheda['tu']['nvc']) == 0 ? 'disabled' : '';
+  $nvcLabelClass = count((array)$scheda['tu']['nvc']) == 0 ? '' : 'text-danger';
   $nvctArr=$obj->vocabolari(array("tab"=>'liste.nvct'));
   $nvctList=$obj->buildSel($nvctArr,$scheda['tu']['nvc']['nvctid']);
   //**********************************************//

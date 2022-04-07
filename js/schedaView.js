@@ -232,28 +232,69 @@ function delBiblioScheda(dati){
 
 function mapInit(){
   let mappaDim = $("#mappaFieldset").innerWidth();
-  let x = parseFloat($("[name=gpdpx]").val()).toFixed(4)
-  let y = parseFloat($("[name=gpdpy]").val()).toFixed(4)
-  let epsg = parseInt($("[name=epsg]").val())
-  let zoom = 13;
-  let center = [40.4391259,17.2153126];
-  // console.log([x,y,epsg]);
-
   $("#map").css({"width":"100%","height":mappaDim});
+  let check_poly = parseInt($("[name=poly]").val());
+  let  check_marker= parseInt($("[name=marker]").val());
+  if (check_poly + check_marker > 0) {$("#alertWrap").hide();}
+  let zoom = 8;
+  let center = [40.4391259,17.2153126];
+  let rank = 0;
+  let x,y,osm_lat,osm_lon;
 
   var map = L.map('map',{minZoom:zoom}).setView(center,zoom);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-  let museo = L.marker([40.4737451,17.2365453]).bindPopup("MArTA");
-
   let osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    opacity:0.7
-  }).addTo(map)
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map)
 
-  let markers = new L.featureGroup([museo]).addTo(map);
-  map.flyToBounds(markers.getBounds());
+  let comune = L.featureGroup().addTo(map);
+  let via = L.featureGroup().addTo(map);
+  let marker = L.featureGroup().addTo(map);
+
+  //se è stato salvato il Comune lo aggiungo alla mappa
+  if (check_poly > 0) {
+    rank = 1;
+    let idComune = $("[name=id_comune]").val();
+    let osm_id = $("[name=osm_id]").val();
+
+    $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:idComune})
+    .done(function( json ) {
+      let layer = L.geoJson(json).addTo(comune);
+    })
+    .fail(function( jqxhr, textStatus, error ) {
+      var err = jqxhr+", "+textStatus + ", " + error;
+      console.log("Request Failed: " + err );
+    });
+    //se c'è anche la via aggiungo anche questa
+    if (osm_id) {
+      rank = 2;
+      osm_lon = $("[name=osm_lon]").val();
+      osm_lat = $("[name=osm_lat]").val();
+      let viaStyle = {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.3,
+        stroke:0
+      }
+      L.circle([osm_lat,osm_lon],50,viaStyle).addTo(map);
+      // map.removeLayer(comune)
+    }
+  }
+
+  if (check_marker > 0) {
+    rank = 3;
+    x = parseFloat($("[name=gpdpx]").val()).toFixed(4)
+    y = parseFloat($("[name=gpdpy]").val()).toFixed(4)
+    let epsg = parseInt($("[name=epsg]").val())
+    if (epsg !== 4326) {let newLatLon = transformMarker([x,y,epsg]) }
+    let point = L.marker([y,x]).addTo(marker);
+    map.removeLayer(comune)
+    map.removeLayer(via)
+  }
+  switch (rank) {
+    case 0: map.setView(center,zoom); break;
+    case 1: map.flyToBounds(comune.getBounds()); break;
+    case 2: map.setView([osm_lat,osm_lon], 18); break;
+    case 3: map.setView([y,x],18); break;
+  }
 
   let resetMap = L.Control.extend({
     options: { position: 'topleft'},
@@ -263,13 +304,22 @@ function mapInit(){
       $("<i/>",{class:'fas fa-crosshairs'}).appendTo(btn)
       btn.on('click', function (e) {
         e.preventDefault()
-        map.flyToBounds(markers.getBounds());
+        switch (rank) {
+          case 0: map.flyTo(center,zoom); break;
+          case 1: map.flyToBounds(comune.getBounds()); break;
+          case 2: map.flyTo([osm_lat,osm_lon], 18); break;
+          case 3: map.flyTo([y,x],18); break;
+        }
       });
       return container;
     }
   })
 
   map.addControl(new resetMap());
+}
+
+function transformMarker(dati){
+  console.log(dati);
 }
 
 $("#fotoModal").hide();
