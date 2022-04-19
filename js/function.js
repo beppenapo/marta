@@ -1,12 +1,4 @@
-// aggiungi il seguente blocco nelle pagine che prevedono chiamate ajax:
-// <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
-const bingKey = "Arsp1cEoX9gu-KKFYZWbJgdPEa8JkRIUkxcPr8HBVSReztJ6b0MOz3FEgmNRd4nM";
-const thunderFKey = "f1151206891e4ca7b1f6eda1e0852b2e";
-const thunderFTile = 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey='+thunderFKey;
-const thunderFAttrib = 'Maps &copy; <a href="https://www.thunderforest.com">Thunderforest</a>, Data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>';
-const osmTile = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-const osmAttrib="Map data (c)OpenStreetMap contributors";
-let start
+let start;
 
 $(document)
 .ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
@@ -42,6 +34,11 @@ if (screen.width >= 992 ) {
   });
   $("body>nav#mainMenu").on("click", function (event) { event.stopPropagation(); });
 }
+
+$.ajax({type: "POST",url: "api/scheda.php",dataType: 'json',data: {trigger: 'checkNctn'}})
+.done(function(data) {
+  $("[name=nctn]").attr({"min":data.min, "max":data.max})
+});
 
 // toggle nctn
 $("[name=toggleNctn]").on('click', function(){
@@ -135,9 +132,7 @@ $("body").on('click', '[name=toggleSection]', function(e) {
 });
 
 //Sblocca Misure
-$("[name=misr]").on('click', function(event) {
-  $(".misure").prop('disabled',(i,v)=>!v);
-})
+$("[name=misr]").on('click', function(event) { $(".misure").prop('disabled',(i,v)=>!v); })
 
 $("body").on('change', '[name=prvp]', function(el) {
   const dati = {
