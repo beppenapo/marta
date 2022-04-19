@@ -8,6 +8,7 @@ if(isset($funzione) && function_exists($funzione)) {
   $trigger = $funzione($obj);
   echo $trigger;
 }
+function checkNctn($obj){return json_encode($obj->checkNctn());}
 function checkTitolo($obj){return json_encode($obj->checkTitolo($_POST['val']));}
 function addScheda($obj){return json_encode($obj->addScheda($_POST['dati']));}
 function editScheda($obj){return json_encode($obj->editScheda($_POST['dati']));}

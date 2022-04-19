@@ -404,6 +404,17 @@
           <fieldset class="bg-light rounded border p-3 mb-3" id="mappaFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Mappa</legend>
             <div class="map" id="map">
+              <div id="cardInfoMappa">
+                <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                  </div>
+                </div>
+              </div>
               <div id="alertWrap">
                 <div class="alert alert-danger">
                   <h6>non è stato possibile geolocalizzare il reperto</h6>
@@ -441,6 +452,7 @@
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="js/wmsTile.js" charset="utf-8"></script>
     <script src="js/pureknob.js" charset="utf-8"></script>
     <script src="js/function.js" charset="utf-8"></script>
     <script src="js/schedaView.js" charset="utf-8"></script>

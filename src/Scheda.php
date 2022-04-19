@@ -11,6 +11,11 @@ class Scheda extends Conn{
     return $this->simple($sql);
   }
 
+  public function checkNctn(){
+    $sql = "select min(nctn), max(nctn) from nctn where libero = true;";
+    $out = $this->simple($sql);
+    return $out[0];
+  }
   public function checkTitolo($titolo){
     $sql = "select count(*) from scheda where titolo = '".$titolo."'";
     $out = $this->simple($sql);

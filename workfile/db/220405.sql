@@ -1,4 +1,5 @@
 begin;
+DROP TABLE if EXISTS strade;
 create TABLE vie(
   osm_id bigint PRIMARY KEY,
   comune integer references comuni(id) on delete cascade not null,
