@@ -68,14 +68,14 @@
             <?php if(isset($_POST['s'])){?>
             <input type="hidden" name="old_nctn" data-table="nctn_scheda" value="<?php echo $nctnSelected; ?>">
             <?php } ?>
-            <input type="number" min="314852" max="334518" step="1" class="form-control" aria-label="Text input with checkbox" data-table="nctn_scheda" name="nctn" id="nctn" list="nctnList" value="<?php echo $nctnSelected; ?>" <?php echo $nctnDisabled; ?>>
+            <input type="number" step="1" class="form-control" aria-label="Text input with checkbox" data-table="nctn_scheda" name="nctn" id="nctn" list="nctnList" value="<?php echo $nctnSelected; ?>" <?php echo $nctnDisabled; ?>>
             <datalist id="nctnList">
               <?php foreach($nctnList as $nctnEl){echo "<option value='".$nctnEl['nctn']."'></option>";} ?>
             </datalist>
           </div>
         </div>
         <div class="col-md-8">
-          <small class="text-muted"><i class="fas fa-info-circle"></i> Se si conosce il Numero di Catalogo inserirlo manualmente abilitando la casella di input (click sulla checkbox), altrimenti lasciarlo disabilitato.<br>Il codice deve essere un numero compreso tra 314852 e 334518, inizia a digitare il codice, comparirà una lista valori con i numeri disponibili</small>
+          <small class="text-muted"><i class="fas fa-info-circle"></i> Se si conosce il Numero di Catalogo inserirlo manualmente abilitando la casella di input (click sulla checkbox), altrimenti lasciarlo disabilitato.<br>Inizia a digitare il codice, comparirà una lista valori con i numeri disponibili, scegli uno dei numeri presenti in lista.<br><strong>Attenzione: se il numero di catalogo non è presente vuol dire che è già stato utilizzato</strong></small>
         </div>
       </div>
     </fieldset>
