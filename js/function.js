@@ -58,7 +58,7 @@ $("[name=nctn]").on('focusout', function(e){
   let list = $(this).attr('list');
   let match = $('#'+list + ' option').filter(function() { return ($(this).val() === val); });
   if(match.length > 0) {
-    $("#nctn-msg").removeClass('[class^="text-"]').text('');
+    $("#nctn-msg").addClass('text-success').text('Ok! Selezione valida');
   } else {
     $("#nctn-msg").addClass('text-danger').text('Attenzione! Devi scegliere un valore presente in lista, non è permesso inserire manualmente il numero di catalogo');
     $("[name=nctn]").val('')
