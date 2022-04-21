@@ -45,8 +45,26 @@ $("[name=toggleNctn]").on('click', function(){
   $('[name=nctn]')
     .prop('disabled', function(i, v) { return !v; })
     .prop('required', function(i, v) { return !v; });
+  if($(this).is(':checked')){ $("#nctn").focus(); }
 })
+$("[name=nctn]").on('focusout', function(e){
+  $("#nctn-msg").removeClass('[class^="text-"]').text('');
+  let val = $(this).val();
+  if (!val) {
+    $("#nctn-msg").addClass('text-danger').text('Attenzione! Il campo è obbligatorio, devi scegliere un valore presente in lista');
+  }else {
+    $("#nctn-msg").removeClass('[class^="text-"]').text('');
+  }
+  let list = $(this).attr('list');
+  let match = $('#'+list + ' option').filter(function() { return ($(this).val() === val); });
+  if(match.length > 0) {
+    $("#nctn-msg").removeClass('[class^="text-"]').text('');
+  } else {
+    $("#nctn-msg").addClass('text-danger').text('Attenzione! Devi scegliere un valore presente in lista, non è permesso inserire manualmente il numero di catalogo');
+    $("[name=nctn]").val('')
+  }
 
+});
 // check titolo scheda
 $("[name=checkTitolo]").on('click', checkTitolo);
 
