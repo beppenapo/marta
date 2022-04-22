@@ -177,6 +177,15 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                   </div>
                 </div>
               </fieldset>
+              <fieldset id="zecFieldset" class="mb-3">
+                <legend class="text-marta font-weight-bold border-bottom mb-3">zec - zecca</legend>
+                <div class="form-row mb-3">
+                  <div class="col-md-4">
+                    <label for="zec" class="">ZEC - zecca</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="zec" name="zec" value="<?php echo($scheda['da']['zec']); ?>">
+                  </div>
+                </div>
+              </fieldset>
             </fieldset>
           </div>
           <?php

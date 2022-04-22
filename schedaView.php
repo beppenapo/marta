@@ -290,26 +290,37 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="daFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>
-            <ul class="list-group list-group-flush">
-              <?php
-              if($scheda['scheda']['tskid']==1){
-                echo '<li class="list-group-item"><span>DESO - Indicazioni sull\'oggetto:</span><span class="font-weight-bold">'.$scheda['da']['deso'].'</span></li>';
-              }else{
-              ?>
-              <li class="list-group-item"><span>DESA - Dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desa']; ?></span></li>
-              <li class="list-group-item"><span>DESM - Rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desm']; ?></span></li>
-              <li class="list-group-item"><span>DESV - Taglio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desv']; ?></span></li>
-              <li class="list-group-item"><span>DESL - Legenda dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desl']; ?></span></li>
-              <li class="list-group-item"><span>DESG - Legenda rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desg']; ?></span></li>
-              <li class="list-group-item"><span>DESU - Soggetto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desu']; ?></span></li>
-              <li class="list-group-item"><span>DESF - Alfabeto/scrittura dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desf']; ?></span></li>
-              <li class="list-group-item"><span>DEST - Alfabeto/scrittura rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['dest']; ?></span></li>
-              <li class="list-group-item"><span>DESO - Taglio:</span><span class="font-weight-bold"><?php echo $scheda['da']['deso']; ?></span></li>
-              <li class="list-group-item"><span>DESN - Lingua dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desn']; ?></span></li>
-              <li class="list-group-item"><span>DESR - Lingua rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desr']; ?></span></li>
-              <li class="list-group-item"><span>DESD - Descrizione bene paramonetale:</span><span class="font-weight-bold"><?php echo $scheda['da']['desd']; ?></span></li>
-              <?php } ?>
-            </ul>
+            <fieldset id="desFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">DES - DESCRIZIONE</legend>
+              <ul class="list-group list-group-flush">
+                <?php
+                if($scheda['scheda']['tskid']==1){
+                  echo '<li class="list-group-item"><span>DESO - Indicazioni sull\'oggetto:</span><span class="font-weight-bold">'.$scheda['da']['deso'].'</span></li>';
+                }else{
+                  ?>
+                  <li class="list-group-item"><span>DESA - Dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desa']; ?></span></li>
+                  <li class="list-group-item"><span>DESM - Rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desm']; ?></span></li>
+                  <li class="list-group-item"><span>DESV - Taglio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desv']; ?></span></li>
+                  <li class="list-group-item"><span>DESL - Legenda dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desl']; ?></span></li>
+                  <li class="list-group-item"><span>DESG - Legenda rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desg']; ?></span></li>
+                  <li class="list-group-item"><span>DESU - Soggetto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desu']; ?></span></li>
+                  <li class="list-group-item"><span>DESF - Alfabeto/scrittura dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desf']; ?></span></li>
+                  <li class="list-group-item"><span>DEST - Alfabeto/scrittura rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['dest']; ?></span></li>
+                  <li class="list-group-item"><span>DESO - Taglio:</span><span class="font-weight-bold"><?php echo $scheda['da']['deso']; ?></span></li>
+                  <li class="list-group-item"><span>DESN - Lingua dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desn']; ?></span></li>
+                  <li class="list-group-item"><span>DESR - Lingua rovescio:</span><span class="font-weight-bold"><?php echo $scheda['da']['desr']; ?></span></li>
+                  <li class="list-group-item"><span>DESD - Descrizione bene paramonetale:</span><span class="font-weight-bold"><?php echo $scheda['da']['desd']; ?></span></li>
+                <?php } ?>
+              </ul>
+            </fieldset>
+            <?php if($scheda['scheda']['tskid']==2){ ?>
+            <fieldset id="zecFieldset" class="mb-3">
+              <legend class="text-marta font-weight-bold border-bottom">ZEC - ZECCA</legend>
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><span>ZEC - Zecca:</span><span class="font-weight-bold"><?php echo $scheda['da']['zec']; ?></span></li>
+              </ul>
+            </fieldset>
+          <?php } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="coFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">CO - CONSERVAZIONE</legend>
