@@ -33,12 +33,19 @@
 
         <div class="col-md-4 col-lg-2">
           <div class="<?php echo $lcView; ?>" id="lcContenitoreDiv">
-            <label for="contenitore" id="contenitoreLabel" class="">
-              <?php if(isset($_POST['s'])){echo $labelContenitore;} ?>
+            <label for="contenitore" id="contenitoreLabel" class="text-danger font-weight-bold">
+              <?php if(isset($_POST['s'])){echo $labelContenitore;}?>
             </label>
-            <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore">
+            <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore" required>
               <?php echo implode("",(array)$selContenitore); ?>
             </select>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <div class="<?php echo $lcViewCassetta; ?>" id="lcCassettaDiv">
+            <label for="cassetta" id="cassettaLabel" class="text-danger font-weight-bold">Cassetta</label>
+            <input type="text" class="form-control form-control-sm" data-table="lc" name="cassetta" id="cassetta" value="<?php echo $scheda['lc']['cassetta']; ?>" required>
           </div>
         </div>
 
@@ -58,12 +65,6 @@
           </div>
         </div>
 
-        <div class="col-md-4 col-lg-2">
-          <div class="<?php echo $lcViewCassetta; ?>" id="lcCassettaDiv">
-            <label for="cassetta" id="cassettaLabel" class="">Cassetta</label>
-            <input type="text" class="form-control form-control-sm" data-table="lc" name="cassetta" id="cassetta" value="<?php echo $scheda['lc']['cassetta']; ?>">
-          </div>
-        </div>
       </div>
 
       <div class="form-row <?php echo $lcNoVetrine; ?>" id="noVetrine">

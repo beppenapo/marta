@@ -78,7 +78,7 @@ $("[name=piano]").on('change', function(){
   getSale(piano)
 })
 $("[name=sala]").on('change', function(){
-  $("#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
+  $("#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
   $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
   let piano = parseInt($("[name=piano]").val());
   let sala =  parseInt($(this).val());
@@ -92,13 +92,21 @@ $("[name=sala]").on('change', function(){
   }
   getContenitore(contenitore,sala,label,piano)
 })
+
 $("[name=contenitore]").on('change', function(){
-  $("#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
+  $("#lcRipianoDiv").fadeOut('fast');
   $("[name=colonna],[name=ripiano],[name=cassetta]").val('');
   let piano = parseInt($("[name=piano]").val());
   let sala = parseInt($("[name=sala]").val());
   let contenitore = parseInt($(this).val());
-  if (piano === -1) { getColonna(sala, contenitore) }
+  if (piano === -1) {
+    getColonna(sala, contenitore)
+    if(contenitore >= 40){
+      $("#lcCassettaDiv").hide()
+    }else {
+      $("#lcCassettaDiv").show()
+    }
+  }
 })
 
 $("[name=colonna]").on('change', function(){
@@ -501,9 +509,9 @@ function getContenitore(contenitore, sala, label,piano, value = null){
     let c = contenitore == 'vetrine' ? 'vetrina' : 'scaffale';
     let selvoid = "";
     if (value == null) { selvoid = " selected"; }
-    options.push("<option disabled"+selvoid+">-- "+c+" --</option>")
+    options.push("<option value='' disabled"+selvoid+">-- "+c+" --</option>")
     if(data.length == 0){
-      $("#lcContenitoreDiv").hide();
+      $("#lcContenitoreDiv,#lcCassettaDiv").hide();
       $("#noVetrine").fadeIn('fast');
       return;
     }
@@ -512,10 +520,11 @@ function getContenitore(contenitore, sala, label,piano, value = null){
     if (el.c == value) { var selected = " selected"; }else{ var selected = ""; }
       options.push("<option value='"+el.c+"'"+selected+">"+el.c+" "+note+"</option>");
     });
-    $("[name=contenitore]").html(options.join());
+    $("[name=contenitore]").html(options.join())
     $("#contenitoreLabel").text(label);
     $("#noVetrine").hide();
     $("#lcContenitoreDiv").fadeIn('fast');
+    piano === -1 ? $("#lcCassettaDiv").fadeIn('fast') : $("#lcCassettaDiv").fadeOut('fast')
   })
 }
 

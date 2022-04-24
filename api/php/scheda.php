@@ -18,7 +18,7 @@ $adsmArr=$obj->vocabolari(array("tab"=>'liste.adsm', "order"=>1));
 
 $comuniPuglia = $obj->comuniPuglia();
 //Nel form di inserimento questi elementi partono nascosti
-$lcViewColonna = $lcViewRipiano = $lcViewCassetta = $lcNoVetrine = 'lcSel';
+$lcViewColonna = $lcViewRipiano = $lcNoVetrine = 'lcSel';
 //********************************************//
 // Questa sezione gestisce il form di modifica
 //*******************************************//
@@ -33,10 +33,10 @@ if (isset($_POST['s'])) {
   // creo la label della lista in base al piano
   $labelContenitore = $scheda['lc']['piano'] > 0 ? 'Vetrina' : 'Scaffale';
   $labelLista = $scheda['lc']['piano'] > 0 ? 'vetrina' : 'scaffale';
-
+  $lcViewCassetta = $scheda['lc']['piano'] > 0 ? 'lcSel' : '';
   // sempre in base al piano decido da quale tabella creare la lista precedente
   $contenitore = $scheda['lc']['piano'] > 0 ? 'vetrine' : 'scaffali';
-  $contenitoreList = $obj->getContenitore(array("sala"=>$scheda['lc']['sala'], "contenitore"=>$contenitore));
+  $contenitoreList = $obj->getContenitore(array("sala"=>$scheda['lc']['id_sala'], "contenitore"=>$contenitore));
 
   // se la sala non ha scaffali o vetrine mostra l'avviso
   if (count((array)$contenitoreList) == 0) {$lcNoVetrine = '';}
@@ -45,7 +45,7 @@ if (isset($_POST['s'])) {
   $selContenitore = [];
   // se il contenitore è specificato aggiungo l'attributo 'selected' al contenitore salvato
   if (is_numeric($scheda['lc']['contenitore'])) {
-    $firstContenitore = "<option value=''>--".$labelLista."--</option>";
+    $firstContenitore = "<option value=''>-- ".$labelLista." --</option>";
     array_push($selContenitore,$firstContenitore);
     foreach ($contenitoreList as $key => $val) {
       $sel = $val['c'] == $scheda['lc']['contenitore'] ? 'selected' : '';
@@ -95,7 +95,6 @@ if (isset($_POST['s'])) {
           $sel = $val == $scheda['lc']['ripiano'] ? 'selected' : '';
           array_push($selRipiano,"<option value='".$val."' ".$sel.">".$val."</option>");
         }
-        $lcViewCassetta='';
       }else {
         $firstRipiano = "<option value='' selected>--".$labelRipiano."--</option>";
         array_push($selRipiano,$firstRipiano);
@@ -112,7 +111,7 @@ if (isset($_POST['s'])) {
     }
   }else {
   // se non è stato inserito il contenitore, seleziono il primo valore della lista
-    $firstContenitore = "<option value='' selected>--".$labelLista."--</option>";
+    $firstContenitore = "<option value='' selected>-- ".$labelLista." --</option>";
     array_push($selContenitore,$firstContenitore);
     foreach ($contenitoreList as $key => $val) {
       array_push($selContenitore,"<option value='".$val['c']."'>".$val['c']." ".$val['note']."</option>");
@@ -241,6 +240,8 @@ if (isset($_POST['s'])) {
   $cdggList = $listeComuni['cdgg'];
   $nvctList = $listeComuni['nvct'];
   $acqtList = $listeComuni['acqt'];
+
+  $lcViewCassetta = 'lcSel';
 }
 $nctnCheck = isset($_POST['s']) ? $checked : '';
 $nctnDisabled = isset($_POST['s']) ? '' : 'disabled';

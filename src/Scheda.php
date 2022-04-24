@@ -12,7 +12,7 @@ class Scheda extends Conn{
   }
 
   public function checkNctn(){
-    $sql = "select min(nctn), max(nctn) from nctn where libero = true;";
+    $sql = "select min(nctn), max(nctn) from nctn;";
     $out = $this->simple($sql);
     return $out[0];
   }
@@ -89,7 +89,7 @@ class Scheda extends Conn{
   }
 
   private function sezLc(int $id){
-    $sql ="select comune.pvcc, ldc.ldcn, lc.piano, lista.sala, lc.contenitore, lc.colonna, lc.ripiano, lc.cassetta from lc INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN liste.sale lista on lc.sala = lista.id INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = ".$id.";";
+    $sql ="select comune.pvcc, ldc.ldcn, lc.piano,lista.id id_sala, lista.sala, lc.contenitore, lc.colonna, lc.ripiano, lc.cassetta from lc INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN liste.sale lista on lc.sala = lista.id INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = ".$id.";";
     $lc = $this->simple($sql);
     return $lc[0];
   }
@@ -564,7 +564,8 @@ class Scheda extends Conn{
 
   public function getContenitore(array $dati){
     $f = $dati['contenitore'] == 'vetrine' ? 'vetrina' : 'scaffale';
-    $sql = "select distinct ".$f." as c, note from liste.".$dati['contenitore']." where sala = ".$dati['sala']." order by 1 asc;";
+    $id = $dati['contenitore'] == 'vetrine' ? 'a.id,' : '';
+    $sql = "select distinct ".$id." a.".$f." as c, a.note from liste.".$dati['contenitore']." a, liste.sale s where a.sala = s.id and s.id = ".$dati['sala']." order by 1 asc;";
     return $this->simple($sql);
   }
 
