@@ -7,8 +7,9 @@ const utente = parseInt($("[name=utente]").val());
 
 stat();
 initComunicazioni();
-buildSchedeTable();
+// buildSchedeTable();
 buildUserTable();
+statoSchede();
 
 $("[name=addComunicazioneBtn]").on('click', function(){
   $("[name=testo]").val('');
@@ -103,6 +104,51 @@ function buildUserTable(){
     initDataTab('#dataTable')
   })
   .fail(function() {console.log("error");});
+}
+
+function statoSchede(){
+  $.ajax({
+    url: 'api/dashboard.php',
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger: 'statoSchede'}
+  })
+  .done(statoChart);
+}
+function statoChart(dataset){
+  item = dataset[0];
+  const ctx = $('#statoChart');
+  const labels = ['Aperte','Chiuse','Verificate','Inviate','Accettate'];
+  const data = {
+    labels: labels,
+    datasets: [{
+      data: [item.aperta, item.chiusa, item.verificata, item.inviata, item.accettata],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)'
+      ],
+      borderWidth: 1
+    }]
+  };
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      plugins:{legend:{display:false}},
+      scales: {y: {beginAtZero: true}}
+    },
+  };
+  const myChart = new Chart(ctx, config);
 }
 
 function buildSchedeTable(){

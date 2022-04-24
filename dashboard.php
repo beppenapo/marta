@@ -24,7 +24,7 @@
       <div class="container-fluid">
         <?php require("assets/stat.html"); ?>
         <div class="row mb-3">
-          <div class="col-lg-4">
+          <div class="col-lg-6">
             <div class="card" id="schedatori">
               <div class="card-header bg-white font-weight-bold">
                 <p class="card-title m-0">Schedatori</p>
@@ -46,27 +46,13 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-8">
+          <div class="col-lg-6">
             <div class="card" id="schede">
               <div class="card-header bg-white font-weight-bold">
                 <p class="card-title m-0">Stato schede</p>
               </div>
               <div class="card-body">
-                <table id="dataTableScheda" class="dataTable table table-striped table-bordered">
-                  <thead>
-                    <tr>
-                      <th>NCTN</th>
-                      <th>Titolo</th>
-                      <th class="no-sort">Chiusa</th>
-                      <th class="no-sort">Verificata</th>
-                      <th class="no-sort">Inviata</th>
-                      <th class="no-sort">Accettata</th>
-                      <th class="no-sort">Data</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
+                <canvas id="statoChart"></canvas>
               </div>
             </div>
           </div>
@@ -157,6 +143,9 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" charset="utf-8"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js" charset="utf-8"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="js/function.js" charset="utf-8"></script>
     <script src="js/dashboard.js" charset="utf-8"></script>
   </body>

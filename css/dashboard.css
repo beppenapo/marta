@@ -5,4 +5,6 @@
 .info{width:80vw;margin:0 auto;}
 
 .liste{height: 580px;}
-#schede .card-body, .liste{height:auto; max-height:825px; overflow: auto;}
+#schede .card-body, .liste{max-height:825px; overflow: auto;}
+#schede .card-body, #schedatori .liste{height:500px;}
+#statoChart{width:100%;height: calc(500px - 2.5rem) !important;}

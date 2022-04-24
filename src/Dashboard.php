@@ -27,16 +27,23 @@ class Dashboard extends Conn{
     $sql = "delete from progetto.comunicazioni where id = :id;";
     return $this->prepared($sql, $dati);
   }
-  public function statoSchede(array $dati = null){
-    $where = '';
-    if($dati && !empty($dati)){ $where = ' where s.cmpn = '.$dati['cmpn']; }
-    $sql = "select nctn.nctn, s.titolo, stato.*, s.cmpd
-    from scheda s
-    INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
-    INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
-    INNER JOIN stato_scheda stato on stato.scheda = s.id
-     ".$where."
-    ORDER BY nctn asc;";
+  public function statoSchede(){
+    // $where = '';
+    // if($dati && !empty($dati)){ $where = ' where s.cmpn = '.$dati['cmpn']; }
+    // $sql = "select nctn.nctn, s.titolo, stato.*, s.cmpd
+    // from scheda s
+    // INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
+    // INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
+    // INNER JOIN stato_scheda stato on stato.scheda = s.id
+    //  ".$where."
+    // ORDER BY nctn asc;";
+    $sql = "with
+a as (select count(*) aperta from stato_scheda where chiusa = false),
+b as (select count(*) chiusa from stato_scheda where chiusa = true),
+c as (select count(*) verificata from stato_scheda where verificata = true),
+d as (select count(*) inviata from stato_scheda where inviata = true),
+e as (select count(*) accettata from stato_scheda where accettata = true)
+select a.aperta, b.chiusa, c.verificata, d.inviata, e.accettata from a, b, c, d, e";
     return $this->simple($sql);
   }
 
