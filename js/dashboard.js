@@ -145,7 +145,8 @@ function statoChart(dataset){
     data: data,
     options: {
       plugins:{legend:{display:false}},
-      scales: {y: {beginAtZero: true}}
+      scales: {y: {beginAtZero: true}},
+      responsive:true
     },
   };
   const myChart = new Chart(ctx, config);
