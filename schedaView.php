@@ -35,6 +35,7 @@
             </div>
           </div>
           <button name="modificaScheda" type="button" class="btn btn-dark" title="modifica scheda" data-toggle="tooltip" data-placement="bottom"><i class="fas fa-edit"></i> modifica</button>
+          <button name="duplicaScheda" type="button" class="btn btn-dark" title="duplica scheda" data-toggle="tooltip" data-placement="bottom"><i class="fa-solid fa-clone"></i> duplica</button>
           <button name="cambiaStato" value="chiusa" type="button" class="btn btn-dark <?php echo $chiudi; ?>"><i class="fas fa-clipboard-check"></i> chiudi</button>
           <button name="cambiaStato" value="riapri" type="button" class="btn btn-dark <?php echo $riapri; ?>"><i class="fas fa-clipboard-check"></i> riapri</button>
           <button name="cambiaStato" value="verificata" type="button" class="btn btn-dark <?php echo $verifica; ?>"><i class="fas fa-clipboard-check"></i> verificata</button>
@@ -61,7 +62,7 @@
               </li>
               <li class="list-group-item">
                 <span>Num.Inv. MarTA:</span>
-                <span><?php echo $scheda['scheda']['inv']; ?></span>
+                <span><?php echo $inventario; ?></span>
               </li>
               <li class="list-group-item">
                 <span>TSK - Tipo scheda:</span>

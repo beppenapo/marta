@@ -157,3 +157,9 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 .lista_even{ background-color:#EEEEEE;}
 .lista_compilatore{ float:right;}
 .elimina{ color:#FF0000; cursor:pointer;}
+
+
+table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>td:first-child:before,
+table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>th:first-child:before {
+  top: 15px;
+}

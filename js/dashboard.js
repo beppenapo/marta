@@ -48,7 +48,7 @@ $("body").on('click', '[name=delNotesBtn]', function() {
 $('body').on('click', '[name=updateUser]', function() { $.redirectPost('usrAdd.php',{id:$(this).val()}); });
 $('body').on('click', 'a.schedatore', function(e) {
   e.preventDefault();
-  localStorage.setItem('operatore',$(this).data('id'));
+  localStorage.setItem('operatore',JSON.stringify([$(this).data('id'),$(this).data('schedatore')]));
   $.redirectPost('schede.php');
 });
 function initComunicazioni(){

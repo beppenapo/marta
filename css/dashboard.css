@@ -7,4 +7,4 @@
 .liste{height: 580px;}
 #schede .card-body, .liste{max-height:825px; overflow: auto;}
 #schede .card-body, #schedatori .liste{height:500px;}
-#statoChart{width:100%;height: calc(500px - 2.5rem) !important;}
+#statoChart{width:100%;}

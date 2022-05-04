@@ -243,9 +243,16 @@ if (isset($_POST['s'])) {
 
   $lcViewCassetta = 'lcSel';
 }
-$nctnCheck = isset($_POST['s']) ? $checked : '';
-$nctnDisabled = isset($_POST['s']) ? '' : 'disabled';
-$nctnSelected =isset($_POST['s']) ? $scheda['scheda']['nctn'] : '';
+$nctnCheck = isset($_POST['s']) && $_POST['act'] == 'mod' ? $checked : '';
+$nctnDisabled = isset($_POST['s']) && $_POST['act'] == 'mod' ? '' : 'disabled';
+$nctnSelected =isset($_POST['s']) && $_POST['act'] == 'mod' ? $scheda['scheda']['nctn'] : '';
+
+switch ($_POST['act']) {
+  case 'mod': $titolo = $scheda['scheda']['titolo']; break;
+  case 'clone': $titolo = date("ymdHis")."-".$scheda['scheda']['titolo']; break;
+  default: ''; break;
+}
+
 $ogtdDisabled = isset($_POST['s']) ? '' : 'disabled';
 $dtzgDisabled = isset($_POST['s']) ? '' : 'disabled';
 $lcView = isset($_POST['s']) ? '' : 'lcSel';

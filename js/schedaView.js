@@ -3,8 +3,10 @@ $(document).ready(function() {
   const nctn = parseInt($("[name=nctnId]").val());
   const tsk = parseInt($("[name=tsk]").val());
   let urlMod = tsk == 1 ? 'scheda-ra-mod.php' : 'scheda-nu-mod.php';
+  let cloneMod = tsk == 1 ? 'scheda-ra-clone.php' : 'scheda-nu-clone.php';
 
-  $("[name=modificaScheda]").on('click', function(){ $.redirectPost(urlMod,{s:scheda}); })
+  $("[name=modificaScheda]").on('click', function(){ $.redirectPost(urlMod,{s:scheda,act:'mod'}); })
+  $("[name=duplicaScheda]").on('click', function(){ $.redirectPost(cloneMod,{s:scheda,act:'clone'}); })
 
   $(".list-group-item > span").each(function(){
     if ($(this).text()=='dato non inserito') {

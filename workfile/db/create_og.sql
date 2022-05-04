@@ -1,5 +1,0 @@
-BEGIN;
-CREATE TABLE ogt(
-  
-);
-COMMIT;

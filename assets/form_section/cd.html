@@ -66,7 +66,7 @@
               </div>
             </div>
             <?php if(isset($_POST['s'])){?>
-            <input type="hidden" name="old_nctn" data-table="nctn_scheda" value="<?php echo $nctnSelected; ?>">
+            <input type="hidden" name="old_nctn" data-table="nctn_scheda" value="<?php echo $scheda['scheda']['nctn']; ?>">
             <?php } ?>
             <input type="number" step="1" class="form-control" data-table="nctn_scheda" name="nctn" id="nctn" list="nctnList" value="<?php echo $nctnSelected; ?>" <?php echo $nctnDisabled; ?>>
             <datalist id="nctnList">

@@ -51,7 +51,30 @@ class Scheda extends Conn{
   }
 
   private function sezScheda(int $id){
-    $sql = "select s.titolo, tsk.id as tskid, tsk.value as tsk, concat(lir.tipo,' - ', lir.definizione) as lir, concat(u.nome,' ',u.cognome) as cmpn, u.id as cmpid, s.cmpd, fur.id as furid, concat(fur.nome,' ',fur.cognome) as fur, nctn.nctn,i.id inventarioid, i.prefisso,i.inventario, i.suffisso, coalesce(nullif(concat(i.prefisso,'-',i.inventario,'-',i.suffisso),'--'),'dato non inserito') inv from scheda s inner join liste.tsk on s.tsk = tsk.id inner join liste.lir on s.lir = lir.id inner join utenti u on s.cmpn = u.id inner join utenti fur on s.fur = fur.id inner join nctn_scheda ns on ns.scheda = s.id inner join nctn on ns.nctn = nctn.nctn left join inventario_scheda isc on isc.scheda = s.id left join inventario i on isc.inventario = i.id where s.id = ".$id.";";
+    $sql = "select s.id,
+              s.titolo,
+              tsk.id as tskid,
+              tsk.value as tsk,
+              concat(lir.tipo,' - ', lir.definizione) as lir,
+              concat(u.nome,' ',u.cognome) as cmpn,
+              u.id as cmpid,
+              s.cmpd,
+              fur.id as furid,
+              concat(fur.nome,' ',fur.cognome) as fur,
+              nctn.nctn,
+              i.id inventarioid,
+              i.prefisso,
+              i.inventario,
+              i.suffisso
+            from scheda s
+            inner join liste.tsk on s.tsk = tsk.id
+            inner join liste.lir on s.lir = lir.id
+            inner join utenti u on s.cmpn = u.id
+            inner join utenti fur on s.fur = fur.id
+            inner join nctn_scheda ns on ns.scheda = s.id
+            inner join nctn on ns.nctn = nctn.nctn
+            left join inventario i on i.scheda = s.id
+            where s.id = ".$id.";";
     $res = $this->simple($sql);
     return $res[0];
   }
@@ -155,20 +178,97 @@ class Scheda extends Conn{
     return $out;
   }
 
+  public function cloneScheda(array $dati){
+    $this->begin();
+    $clonata = $dati['scheda']['scheda'];
+    unset($dati['scheda']['scheda']);
+    unset($dati['nctn_scheda']['old_nctn']);
+
+    $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
+    $schedaSql = rtrim($schedaSql, ";") . " returning id;";
+    $schedaId = $this->returning($schedaSql,$dati['scheda']);
+    $this->prepared("insert into stato_scheda(scheda) values (:scheda);", array("scheda"=>$schedaId['field']));
+
+    if (isset($dati['nctn_scheda']['nctn'])) {
+      $nctn = $dati['nctn_scheda']['nctn'];
+      $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
+      $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
+    }else {
+      $nctn = $this->getNctn();
+      $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
+      $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
+    }
+
+    if (isset($dati['inventario'])) {
+      unset($dati['inventario']['old_inventario']);
+      $dati['inventario']['scheda'] = $schedaId['field'];
+      $invSql = $this->buildInsert('inventario',$dati['inventario']);
+      $this->prepared($invSql,$dati['inventario']);
+    }
+
+    $this->addSection('ad', $schedaId['field'], $dati['ad']);
+    $this->addSection('co', $schedaId['field'], $dati['co']);
+    $this->addSection('da', $schedaId['field'], $dati['da']);
+    $this->addSection('dt', $schedaId['field'], $dati['dt']);
+    $this->addSection('lc', $schedaId['field'], $dati['lc']);
+    $this->addSection('mis', $schedaId['field'], $dati['mis']);
+    $this->addSection('tu', $schedaId['field'], $dati['tu']);
+
+    foreach ($dati['dtm'] as $value) {$this->addSection('dtm',$schedaId['field'],array("dtm"=>(int)$value));}
+    foreach ($dati['mtc'] as $val) {
+      $datiMtc = array('materia'=>$val['materia'], 'tecnica'=>$val['tecnica']);
+      $this->addSection('mtc', $schedaId['field'], $datiMtc);
+    }
+    if(isset($dati['vie'])) {
+      $sql = $this->buildInsert('vie',$dati['vie']);
+      $this->prepared($sql,$dati['vie']);
+      if(isset($dati['geolocalizzazione'])) {
+        $dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];
+        $this->addSection('geolocalizzazione', $schedaId['field'], $dati['geolocalizzazione']);
+      }
+    }
+    if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
+    if(isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
+    if(isset($dati['ub'])) {$this->addSection('ub', $schedaId['field'], $dati['ub']);}
+    if(isset($dati['gp'])) {$this->addSection('gp', $schedaId['field'], $dati['gp']);}
+    if(isset($dati['rcg'])) {$this->addSection('rcg', $schedaId['field'], $dati['rcg']);}
+    if(isset($dati['dsc'])) {$this->addSection('dsc', $schedaId['field'], $dati['dsc']);}
+    if(isset($dati['ain'])) {$this->addSection('ain', $schedaId['field'], $dati['ain']);}
+    if(isset($dati['munsell'])) {$this->addSection('munsell', $schedaId['field'], $dati['munsell']);}
+    if(isset($dati['an'])) {$this->addSection('an', $schedaId['field'], $dati['an']);}
+
+    //Bibliografia
+    $biblioCheck = $this->simple("select count(*) from biblio_scheda where scheda = ".$clonata.";");
+    if($biblioCheck[0]['count'] > 0){
+      $x = $this->simple('insert into biblio_scheda(scheda, biblio, pagine, figure, livello, contributo) select '.$schedaId['field'].', biblio, pagine, figure, livello, contributo from biblio_scheda where scheda = '.$clonata.';');
+      if(!$x){throw new \Exception($x['msg'], 1);}
+    }
+
+    $this->commit();
+    return array("res"=>true,"msg"=>'La scheda è stata correttamente clonata.', "scheda"=>$schedaId['field'], "nctn"=>$nctn['nctn'], "pdo"=>$x['msg']);
+  }
+
   public function addScheda(array $dati){
+    // return $dati;
     try {
       $this->begin();
       $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
       $schedaSql = rtrim($schedaSql, ";") . " returning id;";
       $schedaId = $this->returning($schedaSql,$dati['scheda']);
       $this->prepared("insert into stato_scheda(scheda) values (:scheda);", array("scheda"=>$schedaId['field']));
+      if (isset($dati['nctn_scheda'])) {
+        $nctn = $dati['nctn_scheda'];
+        $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
+        $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
+      }else {
+        $nctn = $this->getNctn();
+        $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
+        $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
+      }
       if (isset($dati['inventario'])) {
+        $dati['inventario']['scheda'] = $schedaId['field'];
         $invSql = $this->buildInsert('inventario',$dati['inventario']);
-        $invSql = rtrim($invSql, ";") . " returning id;";
-        $invId = $this->returning($invSql,$dati['inventario']);
-        $inv_scheda = array("scheda"=>$schedaId['field'], "inventario"=>$invId['field']);
-        $sql = $this->buildInsert("inventario_scheda",$inv_scheda);
-        $this->prepared($sql,$inv_scheda);
+        $this->prepared($invSql,$dati['inventario']);
       }
       $this->addSection('ad', $schedaId['field'], $dati['ad']);
       $this->addSection('co', $schedaId['field'], $dati['co']);
@@ -199,15 +299,6 @@ class Scheda extends Conn{
       if (isset($dati['ain'])) {$this->addSection('ain', $schedaId['field'], $dati['ain']);}
       if (isset($dati['munsell'])) {$this->addSection('munsell', $schedaId['field'], $dati['munsell']);}
       if (isset($dati['an'])) {$this->addSection('an', $schedaId['field'], $dati['an']);}
-      if (isset($dati['nctn_scheda'])) {
-        $nctn = $dati['nctn_scheda'];
-        $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
-        $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
-      }else {
-        $nctn = $this->getNctn();
-        $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
-        $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
-      }
       $this->commit();
       return array("res"=>true,"msg"=>'La scheda è stata correttamente salvata.<br/>Inserisci un nuovo record o accedi alla pagina di visualizzazione della scheda creata, dalla quale sarà possibile aggiungere bibliografia, file o immagini, e dalla quale sarà possibile duplicare i dati per creare nuove schede più velocemente', "scheda"=>$schedaId['field'], "nctn"=>$nctn['nctn']);
     } catch (\Exception $e) {
@@ -216,7 +307,6 @@ class Scheda extends Conn{
   }
 
   public function editScheda(array $dati){
-    try {
       $this->begin();
       $scheda = $dati['scheda']['scheda'];
       unset($dati['scheda']['scheda']);
@@ -242,13 +332,9 @@ class Scheda extends Conn{
       }
 
       if (!isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) > 0) {
+        $dati['inventario']['scheda'] = $scheda;
         $invSql = $this->buildInsert('inventario',$dati['inventario']);
-        $invSql = rtrim($invSql, ";") . " returning id;";
-        $x = $invId = $this->returning($invSql,$dati['inventario']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
-        $inv_scheda = array("scheda"=>$scheda, "inventario"=>$invId['field']);
-        $sql = $this->buildInsert("inventario_scheda",$inv_scheda);
-        $x = $this->prepared($sql,$inv_scheda);
+        $x = $this->prepared($invSql,$dati['inventario']);
         if(!$x){throw new \Exception($x['msg'], 1);}
       }
       if (isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) > 0){
@@ -265,6 +351,7 @@ class Scheda extends Conn{
         $x = $this->prepared($invSql,array("id"=>$dati['inventario']['old_inventario']));
         if(!$x){throw new \Exception($x['msg'], 1);}
       }
+
 
       if(isset($dati['og_ra'])){
         $dati['og_ra']['ogtt'] = strlen(trim($dati['og_ra']['ogtt'])) == 0 ? null : $dati['og_ra']['ogtt'];
@@ -388,12 +475,7 @@ class Scheda extends Conn{
       if ($ossExists[0]['count'] > 0 && !isset($dati['an'])) { $this->delSection('an', $scheda); }
 
       $this->commit();
-      // return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.');
       return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.', "pdo"=>$x['msg']);
-    } catch (\Exception $e) {
-      return array("res"=>false,"msg"=>$e->getMessage());
-    }
-
   }
 
   public function delScheda(array $dati){
@@ -623,77 +705,12 @@ class Scheda extends Conn{
     $where = '';
     $filter = [];
     if($dati && !empty($dati)){
-      if(isset($dati['stato'])){array_push($filter, "stato_scheda.".$dati['stato']['field']." = '".$dati['stato']['value']."'");}
-      if(isset($dati['tipo'])){array_push($filter, "s.tsk = ".$dati['tipo']);}
-      if(isset($dati['operatore'])){array_push($filter,' s.cmpn = '.$dati['operatore']);}
+      if(isset($dati['stato'])){array_push($filter, $dati['stato']['field']." = '".$dati['stato']['value']."'");}
+      if(isset($dati['tipo'])){array_push($filter, "tsk = ".$dati['tipo']);}
+      if(isset($dati['operatore'])){array_push($filter,' cmpn = '.$dati['operatore']);}
       $where = ' where '.join(" and ",$filter);
     }
-    $sql="SELECT
-      s.id
-      , nctn.nctn
-      , s.titolo
-      , s.tsk
-      , concat(u.nome,' ',u.cognome) operatore
-      , tsk.value as tipo
-      , ogtd.value as ogtd
-      , array_agg(m.value order by materia asc) as materia
-      , dtzgi.value as dtzgi
-      , dtzgf.value as dtzgf
-      , lc.piano
-      , loc.sala
-      , loc.descrizione as nome_sala
-    from scheda s
-    INNER JOIN stato_scheda on stato_scheda.scheda = s.id
-    INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
-    INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
-    INNER JOIN liste.tsk as tsk on s.tsk = tsk.id
-    INNER JOIN og_nu on og_nu.scheda = s.id
-    INNER JOIN liste.ogtd as ogtd on og_nu.ogtd = ogtd.id
-    INNER JOIN mtc on mtc.scheda = s.id
-    INNER JOIN liste.materia as m on mtc.materia = m.id
-    INNER JOIN dt on dt.scheda = s.id
-    INNER JOIN liste.cronologia dtzgi on dt.dtzgi = dtzgi.id
-    INNER JOIN liste.cronologia dtzgf on dt.dtzgf = dtzgf.id
-    INNER JOIN lc on lc.scheda = s.id
-    INNER JOIN liste.sale as loc on lc.sala = loc.id
-    INNER JOIN utenti u on s.cmpn = u.id
-    ".$where."
-    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, ogtd.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione, u.nome, u.cognome
-
-    UNION
-
-    SELECT
-      s.id
-      , nctn.nctn
-      , s.titolo
-      , s.tsk
-      , concat(u.nome,' ',u.cognome) operatore
-      , tsk.value as tipo
-      , l4.value as ogtd
-      , array_agg(m.value order by materia asc) as materia
-      , dtzgi.value as dtzgi
-      , dtzgf.value as dtzgf
-      , lc.piano
-      , loc.sala
-      , loc.descrizione as nome_sala
-    from scheda s
-    INNER JOIN stato_scheda on stato_scheda.scheda = s.id
-    INNER JOIN nctn_scheda on nctn_scheda.scheda = s.id
-    INNER JOIN nctn on nctn_scheda.nctn = nctn.nctn
-    INNER JOIN liste.tsk as tsk on s.tsk = tsk.id
-    INNER JOIN og_ra on og_ra.scheda = s.id
-    INNER JOIN liste.ra_cls_l4 as l4 on og_ra.l4 = l4.id
-    INNER JOIN mtc on mtc.scheda = s.id
-    INNER JOIN liste.materia as m on mtc.materia = m.id
-    INNER JOIN dt on dt.scheda = s.id
-    INNER JOIN liste.cronologia dtzgi on dt.dtzgi = dtzgi.id
-    INNER JOIN liste.cronologia dtzgf on dt.dtzgf = dtzgf.id
-    INNER JOIN lc on lc.scheda = s.id
-    INNER JOIN liste.sale as loc on lc.sala = loc.id
-    INNER JOIN utenti u on s.cmpn = u.id
-    ".$where."
-    GROUP BY s.id, nctn.nctn, s.titolo, s.tsk, tsk.value, l4.value, dtzgi.value, dtzgf.value, lc.piano, loc.sala, loc.descrizione, u.nome, u.cognome
-    order by nctn asc;";
+    $sql="select * from lista_schede ".$where;
     return $this->simple($sql);
   }
 }

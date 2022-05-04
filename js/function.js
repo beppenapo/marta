@@ -75,11 +75,13 @@ $("[name=piano]").on('change', function(){
   $("#lcSalaDiv").fadeIn('fast');
   $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
   $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
+  $("[name=cassetta]").prop('required',false);
   getSale(piano)
 })
 $("[name=sala]").on('change', function(){
   $("#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
   $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
+  $("[name=cassetta]").prop('required',false);
   let piano = parseInt($("[name=piano]").val());
   let sala =  parseInt($(this).val());
   let label, contenitore;
@@ -96,6 +98,7 @@ $("[name=sala]").on('change', function(){
 $("[name=contenitore]").on('change', function(){
   $("#lcRipianoDiv").fadeOut('fast');
   $("[name=colonna],[name=ripiano],[name=cassetta]").val('');
+  $("[name=cassetta]").prop('required',false);
   let piano = parseInt($("[name=piano]").val());
   let sala = parseInt($("[name=sala]").val());
   let contenitore = parseInt($(this).val());
@@ -103,8 +106,10 @@ $("[name=contenitore]").on('change', function(){
     getColonna(sala, contenitore)
     if(contenitore >= 40){
       $("#lcCassettaDiv").hide()
+      $("[name=cassetta]").prop('required',false);
     }else {
       $("#lcCassettaDiv").show()
+      $("[name=cassetta]").prop('required',true);
     }
   }
 })
@@ -142,7 +147,9 @@ $("[name=colonna]").on('change', function(){
   $("#lcRipianoDiv,#lcCassettaDiv").fadeIn('fast');
   $("[name=ripiano],[name=cassetta]").val('');
 })
-$("[name=ripiano]").on('change', function(){$("[name=cassetta]").val('');})
+$("[name=ripiano]").on('change', function(){
+  $("[name=cassetta]").val('');
+})
 //Sblocca obbligatorietà di contesto
 $("body").on('click', '[name=toggleSection]', function(e) {
   let checked = e.target.checked;
@@ -193,7 +200,8 @@ function setDtzgf(){
 }
 
 var dtm=[];
-if(window.location.pathname.split('/').pop().includes('-mod.php')){
+let pagina = window.location.pathname.split('/').pop();
+if(pagina.includes('-mod.php') || pagina.includes('-clone.php')){
   $('[name=dtm]').prop("required", false);
   $("[name=delDtmOpt]").each(function(i,v){ dtm.push(parseInt($(this).val())); })
   $('body').on('click',"[name=delDtmOpt]", function(e){
@@ -768,7 +776,7 @@ function salvaScheda(e){
       data: {trigger : trigger,  dati}
     })
     .done(function(data){
-      let url = trigger == 'addScheda' ? data.scheda : dati.scheda.scheda;
+      let url = trigger == 'editScheda' ? dati.scheda.scheda : data.scheda;
       data.url='schedaView.php?get='+url;
       data.btn = [];
       if (trigger == 'addScheda') {

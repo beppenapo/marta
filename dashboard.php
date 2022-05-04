@@ -36,7 +36,7 @@
                     $disabled = $item['schede'] == 0 ? 'disabled' : '';
                     $url = $item['schede'] == 0 ? '' : 'href="#"';
                     $tooltip = $item['schede'] == 0 ? '' : 'data-toggle="tooltip" data-placement="right" title="visualizza le schede di <br>'.$item['utente'].'"';
-                    echo "<a ".$url." class='list-group-item list-group-item-action schedatore ".$disabled."' data-id='".$item['id']."' ".$tooltip.">
+                    echo "<a ".$url." class='list-group-item list-group-item-action schedatore ".$disabled."' data-schedatore='".$item['utente']."' data-id='".$item['id']."' ".$tooltip.">
                           <span>".$item['utente']."</span>
                           <span class='float-right'>".$item['schede']."</span>
                           </a>";

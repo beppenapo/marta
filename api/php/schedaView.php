@@ -21,4 +21,5 @@ if (!empty($stato['inviata']) && empty($stato['accettata']) && ($_SESSION['class
   $accettata = '';
   $riapri = 'nascondi';
 }
+$inventario = trim($scheda['scheda']['prefisso']." ".$scheda['scheda']['inventario']." ".$scheda['scheda']['suffisso']);
 ?>
