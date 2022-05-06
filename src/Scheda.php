@@ -96,7 +96,7 @@ class Scheda extends Conn{
   }
   private function sezGp(int $id){
     $out=[];
-    $sql = "select g.comune cid, c.comune, v.osm_id, v.via, g.geonote from geolocalizzazione g inner join comuni c on g.comune = c.id inner join vie v on g.via = v.osm_id where g.scheda = ".$id.";";
+    $sql = "select g.comune cid, c.comune, v.osm_id, v.via, g.geonote from geolocalizzazione g inner join comuni c on g.comune = c.id left join vie v on g.via = v.osm_id where g.scheda = ".$id.";";
     $geo = $this->simple($sql);
     $out['geo'] = $geo[0];
     $sql ="select gp.gpl as gplid, gpl.value as gpl, gp.gpdpx, gp.gpdpy, gp.gpm as gpmid, gpm.value as gpm, gp.gpt as gptid, gpt.value as gpt, gp.gpp as gppid, gpp.value as gpp, gpp.epsg, gp.gpbb, gp.gpbt from gp inner join liste.gpl on gp.gpl = gpl.id inner join liste.gpm on gp.gpm = gpm.id inner join liste.gpt on gp.gpt = gpt.id inner join liste.gpp on gp.gpp = gpp.id where gp.scheda = ".$id.";";
@@ -227,10 +227,10 @@ class Scheda extends Conn{
     if(isset($dati['vie'])) {
       $sql = $this->buildInsert('vie',$dati['vie']);
       $this->prepared($sql,$dati['vie']);
-      if(isset($dati['geolocalizzazione'])) {
-        $dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];
-        $this->addSection('geolocalizzazione', $schedaId['field'], $dati['geolocalizzazione']);
-      }
+    }
+    if(isset($dati['geolocalizzazione'])) {
+      if(isset($dati['vie'])) {$dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];}
+      $this->addSection('geolocalizzazione', $schedaId['field'], $dati['geolocalizzazione']);
     }
     if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
     if(isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}
@@ -355,6 +355,15 @@ class Scheda extends Conn{
         $invSql = "delete from inventario where id=:id;";
         $x = $this->prepared($invSql,array("id"=>$dati['inventario']['old_inventario']));
         if(!$x){throw new \Exception($x['msg'], 1);}
+      }
+
+      if(isset($dati['vie'])) {
+        $sql = $this->buildInsert('vie',$dati['vie']);
+        $this->prepared($sql,$dati['vie']);
+      }
+      if(isset($dati['geolocalizzazione'])) {
+        if(isset($dati['vie'])) {$dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];}
+        $this->updateSection('geolocalizzazione', $scheda, $dati['geolocalizzazione']);
       }
 
 

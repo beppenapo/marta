@@ -237,7 +237,7 @@ function mapInit(){
   let mappaDim = $("#mappaFieldset").innerWidth();
   $("#map").css({"width":"100%","height":mappaDim});
   let check_poly = parseInt($("[name=poly]").val());
-  let  check_marker= parseInt($("[name=marker]").val());
+  let check_marker= parseInt($("[name=marker]").val());
   if (check_poly + check_marker > 0) {$("#alertWrap").hide();}
   let zoom = 8;
   let center = [40.4391259,17.2153126];

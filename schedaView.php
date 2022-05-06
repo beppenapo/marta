@@ -154,7 +154,7 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="gpFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">GP - GEOREFERENZIAZIONE TRAMITE PUNTO</legend>
-            <input type="hidden" name="marker" value="<?php echo count((array)$scheda['gp']); ?>">
+            <input type="hidden" name="marker" value="<?php echo count((array)$scheda['gp']['gp']); ?>">
             <?php if(count((array)$scheda['gp'])==0){echo $noData;}else{ ?>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>GPL - Tipo di localizzazione:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpl']; ?></span></li>
