@@ -14,23 +14,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
     <?php require('assets/mainMenu.php'); ?>
     <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
-      <div class="my-5 bg-white shadow">
-        <div class="container">
-          <div class="row  align-items-center g-5 py-5">
-            <div class="col-lg-4">
-              <img src="img/spiderman.png" class="d-block mx-auto img-fluid" loading="lazy">
-            </div>
-            <div class="col-lg-8 text-center">
-              <h1 class="font-weight-bold text-info mb-3">Da un grande potere derivano grandi responsabilità</h1>
-              <p class="lead">Stai duplicando il reperto <span class="font-weight-bold"><?php echo $scheda['scheda']['titolo'];?></span><br>Da questa pagina, se necessario, puoi modificare i dati originali per adattarli al nuovo reperto<br>Per gestire la bibliografia e i file accessori devi prima salvare la scheda e poi accedere alla pagina di modifica.</p>
-              <div class="alert alert-danger" role="alert">
-                <p class="lead">La scheda "duplicata" deve necessariamente avere un nuovo numero di catalogo, ricordati di inserirlo manualmente altrimenti verrà assegnato automaticamente dal sistema.</p>
-                <p class="lead p-0 m-0">Il sistema, inoltre, aggiorna il titolo anteponendo al dato originale la data, completa di ore, minuti e secondi rilevati al momento della modifica. Ovviamente il titolo può essere modificato manualmente.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <?php require_once($formFolder.'cloneTip.html'); ?>
       <div class="container">
         <form id="formScheda" data-action="cloneScheda" autocomplete="off">
           <?php
