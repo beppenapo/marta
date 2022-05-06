@@ -250,7 +250,7 @@ $nctnSelected =isset($_POST['s']) && $_POST['act'] == 'mod' ? $scheda['scheda'][
 
 switch ($_POST['act']) {
   case 'mod': $titolo = $scheda['scheda']['titolo']; break;
-  case 'clone': $titolo = date("ymdHis")."-".$scheda['scheda']['titolo']; break;
+  //case 'clone': $titolo = date("ymdHis")."-".$scheda['scheda']['titolo']; break;
   default: ''; break;
 }
 
