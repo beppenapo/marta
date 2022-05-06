@@ -24,6 +24,7 @@ $(document).ready(function() {
   $("[name=deso]").keyup(function(){
     $("#countDesoChar").text(1000 - $(this).val().length);
   });
+  gpMap();
 
   // NOTE: materia autocomplete
   $.ajax({

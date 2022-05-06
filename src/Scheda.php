@@ -95,9 +95,14 @@ class Scheda extends Conn{
     return $res[0];
   }
   private function sezGp(int $id){
+    $out=[];
+    $sql = "select g.comune cid, c.comune, v.osm_id, v.via, g.geonote from geolocalizzazione g inner join comuni c on g.comune = c.id inner join vie v on g.via = v.osm_id where g.scheda = ".$id.";";
+    $geo = $this->simple($sql);
+    $out['geo'] = $geo[0];
     $sql ="select gp.gpl as gplid, gpl.value as gpl, gp.gpdpx, gp.gpdpy, gp.gpm as gpmid, gpm.value as gpm, gp.gpt as gptid, gpt.value as gpt, gp.gpp as gppid, gpp.value as gpp, gpp.epsg, gp.gpbb, gp.gpbt from gp inner join liste.gpl on gp.gpl = gpl.id inner join liste.gpm on gp.gpm = gpm.id inner join liste.gpt on gp.gpt = gpt.id inner join liste.gpp on gp.gpp = gpp.id where gp.scheda = ".$id.";";
     $gp = $this->simple($sql);
-    return $gp[0];
+    $out['gp'] = $gp[0];
+    return $out;
   }
 
   private function sezMt(int $id){

@@ -49,15 +49,6 @@ class Login extends User{
     return $out[0];
   }
 
-  // private function checkPwd(array $dati){
-  //   $sql = "SELECT id FROM utenti where id = ".$dati['id']." and pwd = crypt('".$dati['pwd']."',pwd) ;";
-  //   $out = $this->db->simple($sql);
-  //   $x = count($out[0]);
-  //   if ($x == 0) { throw new \Exception("La password inserita non è corretta, riprova o richiedi una nuova password", 0); }
-  //   return true;
-  // }
-
-
   private function setSession(array $dati){
     $_SESSION['id'] = $dati[0];
     $_SESSION['utente'] = $dati[1];

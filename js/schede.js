@@ -1,6 +1,12 @@
+let sess = $("[name=sessId]").val() ? [$("[name=sessId]").val(),$("[name=sessUsr]").val()] : [];
 let dati = {};
 let filter = {};
 $(document).ready(function() {
+  if (sess.length > 0 && !localStorage.getItem('operatore')) {
+    dati.operatore = parseInt(sess[0]);
+    filter.operatore = sess[1];
+    buildTable()
+  }
   if(localStorage.getItem('operatore')){
     i = JSON.parse(localStorage.getItem('operatore'));
     dati.operatore = i[0]
@@ -24,7 +30,8 @@ function viewFilter(){
       $(this).remove()
       delete dati[f];
       localStorage.removeItem(f);
-      buildTable()
+      location.reload();
+      // buildTable()
     })
     $("<span/>",{class:'btn-text'}).text(filter[f]).appendTo(item)
     $("<i/>",{class:'fas fa-times ml-2'}).appendTo(item)
@@ -73,35 +80,12 @@ function buildTable(){
         case 2: piano = 'Secondo piano'; break;
         case 3: piano = 'Terzo piano'; break;
       }
-      switch (true) {
-        case v.chiusa = false:
-          stato = 'in lavorazione';
-        break;
-        case v.chiusa = true:
-        case v.verificata = false:
-        case v.inviata = false:
-        case v.accettata = false:
-          stato = 'da verificare';
-        break;
-        case v.chiusa = true:
-        case v.verificata = true:
-        case v.inviata = false:
-        case v.accettata = false:
-          stato = 'da inviare';
-        break;
-        case v.chiusa = true:
-        case v.verificata = true:
-        case v.inviata = true:
-        case v.accettata = false:
-          stato = 'in attesa di accettazione ICCD';
-        break;
-        case v.chiusa = true:
-        case v.verificata = true:
-        case v.inviata = true:
-        case v.accettata = true:
-          stato = 'iter completo, scheda chiuda';
-        break;
-      }
+      if (!v.chiusa) {stato = 'in lavorazione';}
+      else if (v.chiusa && !v.verificata) {stato = 'da verificare';}
+      else if (v.chiusa && v.verificata && !v.inviata){stato = 'da inviare'}
+      else if (v.chiusa && v.verificata && v.inviata && !v.accettata){stato = 'in attesa di accettazione ICCD'}
+      else if (v.chiusa && v.verificata && v.inviata && v.accettata){stato = 'iter completo, scheda chiuda'}
+
       $("<td/>",{text:v.nctn}).appendTo(tr);
       $("<td/>",{text:v.inventario}).appendTo(tr);
       $("<td/>",{text:v.tipo}).appendTo(tr);

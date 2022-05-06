@@ -795,6 +795,7 @@ function gpMap(){
   $("#gpMap").css({"width":'100%',"height":'333px'});
   let zoom = 8;
   let center = [40.4391259,17.2153126];
+  let lng, lat;
   let marker = {}
 
   var map = L.map('gpMap').setView(center,zoom);
@@ -812,6 +813,14 @@ function gpMap(){
   };
   L.control.layers(baseLayers, null).addTo(map);
 
+  if($("[name=gpdpx]").val()){
+    lng = $("[name=gpdpx]").val()
+    lat = $("[name=gpdpy]").val()
+    $("#mapCover").hide()
+    marker = L.marker([lat,lng]).addTo(map);
+    map.setView([lat,lng],18)
+  }
+
   let resetMap = L.Control.extend({
     options: { position: 'topleft'},
     onAdd: function (map) {
@@ -828,8 +837,8 @@ function gpMap(){
 
   map.addControl(new resetMap());
   map.on('click', function(e) {
-    let lng = parseFloat(e.latlng.lng).toFixed(4)
-    let lat = parseFloat(e.latlng.lat).toFixed(4)
+    lng = parseFloat(e.latlng.lng).toFixed(4)
+    lat = parseFloat(e.latlng.lat).toFixed(4)
     $("[name=gpl]").val(1)
     $("[name=gpp]").val(1)
     $("[name=gpm]").val(2)
@@ -841,6 +850,7 @@ function gpMap(){
 
     if (marker != undefined) { map.removeLayer(marker);};
     marker = L.marker([lat,lng]).addTo(map);
+    map.setView([lat,lng],18)
   });
   $("#toggleGP").on('click', function(){
     if(!$(this).is(':checked')){

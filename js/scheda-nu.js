@@ -4,7 +4,7 @@ $(document).ready(function() {
   $("#munsellFieldset").remove();
   $("#tskTxt").text('NU - Numismatica');
   $("[name=tsk]").val(2);
-
+  gpMap();
   // NOTE: materia autocomplete
   $.ajax({
     url: "api/scheda.php",

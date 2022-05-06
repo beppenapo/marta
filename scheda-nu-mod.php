@@ -220,8 +220,5 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
     <script src="js/wmsTile.js" charset="utf-8"></script>
     <script src="js/function.js" charset="utf-8"></script>
     <script src="js/scheda-nu.js" charset="utf-8"></script>
-    <script type="text/javascript">
-      gpMap();
-    </script>
   </body>
 </html>
