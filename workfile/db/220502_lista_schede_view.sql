@@ -57,6 +57,8 @@ localizzazione as (
 select distinct 
   main.scheda, 
   main.nctn,
+  main.tsk,
+  main.tipo,
   main.inventario,
   main.titolo, 
   main.cmpn,

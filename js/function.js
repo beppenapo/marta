@@ -72,6 +72,7 @@ $("[name=checkTitolo]").on('click', checkTitolo);
 $(".lcSel").hide();
 $("[name=piano]").on('change', function(){
   let piano = $(this).val();
+  piano == 0 ? $("[name=contenitore]").prop('required',false) : $("[name=contenitore]").prop('required',true)
   $("#lcSalaDiv").fadeIn('fast');
   $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
   $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
@@ -769,6 +770,8 @@ function salvaScheda(e){
       });
       return false;
     }
+    console.log(dati);
+    // return false;
     $.ajax({
       url: 'api/scheda.php',
       type: "POST",

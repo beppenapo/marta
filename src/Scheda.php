@@ -90,7 +90,7 @@ class Scheda extends Conn{
     return $res[0];
   }
   private function sezGeoloc(int $id){
-    $sql = "select c.id as id_comune, c.comune,v.osm_id, v.via,v.lon, v.lat, g.geonote from geolocalizzazione g inner join vie v on g.via = v.osm_id inner join comuni c on g.comune = c.id where g.scheda = ".$id.";";
+    $sql = "select c.id as id_comune, c.comune,v.osm_id, v.via,v.lon, v.lat, g.geonote from geolocalizzazione g left join vie v on g.via = v.osm_id inner join comuni c on g.comune = c.id where g.scheda = ".$id.";";
     $res = $this->simple($sql);
     return $res[0];
   }
@@ -290,10 +290,10 @@ class Scheda extends Conn{
       if(isset($dati['vie'])) {
         $sql = $this->buildInsert('vie',$dati['vie']);
         $this->prepared($sql,$dati['vie']);
-        if(isset($dati['geolocalizzazione'])) {
-          $dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];
-          $this->addSection('geolocalizzazione', $schedaId['field'], $dati['geolocalizzazione']);
-        }
+      }
+      if(isset($dati['geolocalizzazione'])) {
+        if(isset($dati['vie'])) {$dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];}
+        $this->addSection('geolocalizzazione', $schedaId['field'], $dati['geolocalizzazione']);
       }
       if(isset($dati['og_ra'])) {$this->addSection('og_ra', $schedaId['field'], $dati['og_ra']);}
       if (isset($dati['og_nu'])) {$this->addSection('og_nu', $schedaId['field'], $dati['og_nu']);}

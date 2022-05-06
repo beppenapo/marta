@@ -36,7 +36,7 @@
             <label for="contenitore" id="contenitoreLabel" class="text-danger font-weight-bold">
               <?php if(isset($_POST['s'])){echo $labelContenitore;}?>
             </label>
-            <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore" required>
+            <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore">
               <?php echo implode("",(array)$selContenitore); ?>
             </select>
           </div>

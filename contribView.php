@@ -3,10 +3,7 @@
 <html lang="it" dir="ltr">
   <head>
     <?php require('assets/meta.html'); ?>
-    <link rel="stylesheet" href="css/main.css">
-    <style media="screen">
-    body>main {padding-top: 60px !important;}
-    </style>
+    <link rel="stylesheet" href="css/biblio.css">
   </head>
   <body>
     <input type="hidden" name="idContrib" value="<?php echo $_GET['get']; ?>">

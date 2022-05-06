@@ -1,0 +1,7 @@
+@import "main.css";
+body>main {padding-top: 60px !important;}
+#schede ul.list-group{
+  height:auto;
+  max-height: 370px;
+  overflow: auto;
+}
