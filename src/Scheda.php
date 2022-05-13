@@ -719,12 +719,20 @@ class Scheda extends Conn{
     $where = '';
     $filter = [];
     if($dati && !empty($dati)){
-      if(isset($dati['stato'])){array_push($filter, $dati['stato']['field']." = '".$dati['stato']['value']."'");}
+      // if(isset($dati['stato'])){array_push($filter, $dati['stato']['field']." = '".$dati['stato']['value']."'");}
       if(isset($dati['tipo'])){array_push($filter, "tsk = ".$dati['tipo']);}
       if(isset($dati['operatore'])){array_push($filter,' cmpn = '.$dati['operatore']);}
+      if(isset($dati['catalogo'])){array_push($filter," nctn::text ilike '%".$dati['catalogo']."%'");}
+      if(isset($dati['inventario'])){array_push($filter," inventario ilike '%".$dati['inventario']."%'");}
       $where = ' where '.join(" and ",$filter);
     }
     $sql="select * from lista_schede ".$where;
+    return $this->simple($sql);
+  }
+
+  public function listaSchedatori(int $cmpn = null){
+    $where = $cmpn != null ? ' where id = '.$cmpn : '';
+    $sql = "select distinct u.id, concat(u.cognome,' ',u.nome) compilatore from scheda s inner join utenti u on s.cmpn = u.id order by 2 asc;";
     return $this->simple($sql);
   }
 }

@@ -2,55 +2,96 @@ let sess = $("[name=sessId]").val() ? [$("[name=sessId]").val(),$("[name=sessUsr
 let dati = {};
 let filter = {};
 $(document).ready(function() {
+  $("#filtriTitle").hide();
   if (sess.length > 0 && !localStorage.getItem('operatore')) {
     dati.operatore = parseInt(sess[0]);
     filter.operatore = sess[1];
-    buildTable()
   }
   if(localStorage.getItem('operatore')){
     i = JSON.parse(localStorage.getItem('operatore'));
     dati.operatore = i[0]
     filter.operatore = i[1]
     viewFilter()
-    buildTable()
   }
-  $("#filtriRicerca").hide()
   $("#tableWrap").hide()
   $("[name=cerca]").on('click', cerca)
+  $("[name=clear]").on('click', function(){ location.reload() })
+  buildTable()
 });
 
 function viewFilter(){
+  $("#filtri").html('');
+  $("#filtriTitle").show();
   Object.keys(filter).forEach(f => {
-    console.log(f);
-    let item = $("<button/>", {class:'btn btn-secondary mx-2', type:'button', title:'cancella filtro '+f})
+    let item = $("<button/>", {class:'btn btn-secondary', type:'button', title:'cancella filtro '+f})
     .attr({"data-toggle":'tooltip', "data-placement":'top'})
     .appendTo('#filtri')
     .on('click', function(){
       $(this).tooltip('hide')
       $(this).remove()
       delete dati[f];
+      delete filter[f];
       localStorage.removeItem(f);
-      location.reload();
-      // buildTable()
+      if(Object.keys(dati).length == 0){
+        $("#filtriTitle").hide();
+        $("[name=clear]").addClass('invisible');
+        if (sess.length > 0 && !localStorage.getItem('operatore')) {
+          dati.operatore = parseInt(sess[0]);
+          filter.operatore = sess[1];
+        }
+      }
+      buildTable()
     })
     $("<span/>",{class:'btn-text'}).text(filter[f]).appendTo(item)
     $("<i/>",{class:'fas fa-times ml-2'}).appendTo(item)
   });
 }
+
+function resetFilter(){
+  $(".filtro").each(function(){
+    if ($(this).is("input:text") || $(this).is("input[type=number]")){ $(this).val(''); }
+    if ($(this).is("select")){
+      $(this).prop('selectedIndex',0);
+    }
+    if ($(this).is(":radio:checked") || $(this).is(":checkbox:checked")){
+      $(this).prop('checked', false);
+      $(".btn-group > label").removeClass('active')
+    }
+  })
+}
+
 function cerca(){
-  let filtri = []
-  $("#tableWrap").fadeIn('fast')
+  // dati = {};
+  // filter = {};
+  $("#filtri").html('');
   $(".filtro").each(function(i,v){
     if ($(this).is("input:text") || $(this).is("input[type=number]") || $(this).is("select") || $(this).is(":radio:checked") || $(this).is(":checkbox:checked")) {
       if (!$(this).is(':disabled')) {
         if ($(this).val()) {
           let filtro = $(this).attr('name');
-          filtri[filtro]=$(this).val();
+          dati[filtro]=$(this).val();
+          if ($(this).is("input:text") || $(this).is("input[type=number]")){
+            filter[filtro]= filtro+': '+$(this).val();
+          }
+          if ($(this).is("select")){
+            filter[filtro]=$(this).find('option:selected').text();
+          }
+          if ($(this).is(":radio:checked") || $(this).is(":checkbox:checked")){
+            filter[filtro]=$(this).next('span').text();
+          }
         }
       }
     }
   })
-  console.log(filtri);
+  if(Object.keys(dati).length==0){
+    $("[name=clear]").addClass('invisible');
+    $("<div/>",{class:'alert alert-warning'}).text("Per effettuare una ricerca nell'archivio devi impostare almeno un filtro tra quelli disponibili").appendTo("#filtri");
+    return false;
+  }
+  $("[name=clear]").removeClass('invisible');
+  resetFilter()
+  viewFilter()
+  buildTable()
 }
 
 function buildTable(){
@@ -66,7 +107,6 @@ function buildTable(){
     data: { trigger: 'listaSchede', dati}
   })
   .done(function(data) {
-    console.log(data);
     data.forEach(function(v,i){
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip').attr("data-placement", 'left');
       let link = $("<a/>",{href:'schedaView.php?get='+v.scheda, html:linkIco});

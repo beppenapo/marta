@@ -1,5 +1,14 @@
 <?php
 session_start();
+require 'vendor/autoload.php';
+use \Marta\Scheda;
+$obj = new Scheda();
+$cmpnList = $obj->listaSchedatori();
+$opt=[];
+foreach ($cmpnList as $op) {
+  // $sel = isset($_SESSION['id']) && $_SESSION['id'] == $op['id'] ? 'selected' : '';
+  array_push($opt,"<option value='".$op['id']."'>".$op['compilatore']."</option>");
+}
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -7,11 +16,7 @@ session_start();
     <?php require('assets/meta.html'); ?>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="css/main.css">
-    <style media="screen">
-      label.btn-outline-secondary{background-color: #fff;}
-      label.btn-outline-secondary:hover{background-color: #6c757d;}
-    </style>
+    <link rel="stylesheet" href="css/schede.css">
   </head>
   <body>
     <?php require('assets/headerMenu.php'); ?>
@@ -21,12 +26,15 @@ session_start();
       <div class="container-fluid">
         <h3 class="border-bottom border-dark mb-3">Archivio schede</h3>
         <div class="bg-light p-4 rounded border mb-4">
-          <div id="filtriRicerca"><?php require("assets/filtriRicerca.html"); ?></div>
+          <div id="filtriRicerca"><?php require("assets/filtriRicerca.php"); ?></div>
           <div class="row">
             <div class="col">
               <input type="hidden" name="sessId" value="<?php echo $_SESSION['id']; ?>">
               <input type="hidden" name="sessUsr" value="<?php echo $_SESSION['utente']; ?>">
-              <div id="filtri" class="my-3 d-flex justify-content-center"></div>
+              <div id="filtriWrap" class="my-3">
+                <div id="filtriTitle">Filtri attivi</div>
+                <div id="filtri" class=" d-flex justify-content-start"></div>
+              </div>
             </div>
           </div>
         </div>
