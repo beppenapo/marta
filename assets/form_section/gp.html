@@ -1,67 +1,47 @@
 <div class="form-group">
-  <fieldset class="bg-light rounded border p-3" id="geolocFieldset">
-    <legend class="w-auto bg-marta text-white border rounded p-1">geolocalizzazione generica</legend>
-    <div class="form-row mb-3">
-      <div class="col-md-3">
-        <label for="comune">Comune</label>
-        <select class="form-control form-control-sm tab" data-table="geolocalizzazione" id="comune" name="comune">
-          <option value="">-- seleziona Comune --</option>
-          <?php
-          foreach($comuniPuglia as $c){
-            $selected = isset($_POST['s']) && isset($scheda['gp']['geo']) && $scheda['gp']['geo']['cid'] == $c['id'] ? 'selected' : '';
-            echo "<option value='".$c['id']."' ".$selected.">".$c['comune']."</option>";
-          }
-          ?>
-        </select>
-        <!-- <?php print_r($scheda['gp']['geo']); ?> -->
-      </div>
-      <div class="col-md-7">
-        <label for="via">Via</label>
-        <div class="input-group input-group-sm mb-3">
-          <?php if(isset($_POST['s']) && isset($scheda['gp']['geo']['osm_id'])){ $v = $scheda['gp']['geo']['via'];} ?>
-          <input type="search" class="form-control tab" data-table="geolocalizzazione" name="via" id="via" value="<?php echo $v; ?>" placeholder="cerca una via" <?php echo $viaDisabled; ?>>
-          <button class="btn btn-secondary btn-sm" type="button" id="cercaVia" name="cercaVia" <?php echo $viaDisabled; ?>><i class="fa-solid fa-magnifying-glass"></i></button>
-          <button class="btn btn-secondary btn-sm" type="button" id="resetVia" name="resetVia"><i class="fa-solid fa-trash-can"></i></button>
-        </div>
-        <div class="list-group" id="osmList"></div>
-      </div>
-    </div>
-    <div class="form-row mb-3">
-      <div class="col-md-5">
-        <label for="geonote">Note geolocalizzazione</label>
-        <textarea class="form-control form-control-sm tab" value="<?php echo $scheda['gp']['geo']['geonote']; ?>" data-table="geolocalizzazione" id="geonote" name="geonote" rows="8"></textarea>
-      </div>
-      <div class="col-md-7">
-        <small class="text-muted"><i class="fas fa-lightbulb" aria-hidden="true"></i> Nelle situazioni in cui non è posibile compilare la sezione "GP-Georeferenziazione tramite punto" a causa dell'assenza di dati precisi, si può indicare in alternativa una localizzazione generica, specificando il comune ed eventualmente la via.<br>Per inserire la via bisogna prima selezionare un Comune dalla lista<br>La ricerca della via avviene tramite il servizio messo a disposizione da OpenStreetMap (Nominatim), una volta inserito il nome premere sul pulsante accanto alla casella di input e scegliere la via dalla lista che comparirà<br/>La via potrebbe non essere presente nel database di OpenStreetMap, in tal caso basta inserire solo il Comune especificare il nome della via nel campo note.</small>
-      </div>
-    </div>
+  <fieldset class="bg-light rounded border p-3">
+    <legend class="w-auto bg-marta text-white border rounded p-1">geolocalizzazione</legend>
     <div class="form-row">
-      <div class="col">
-        <div id="osmFieldset">
-          <input type="hidden" class="form-control form-control-sm" name="osm_id" data-table='vie' value="">
-          <input type="hidden" class="form-control form-control-sm" id="comune_vie" name="comune" data-table='vie' value="">
-          <input type="hidden" value='' class="form-control form-control-sm" name="via" id="osm_via" data-table='vie' value="">
-          <input type="hidden" value='' class="form-control form-control-sm" name="lat" data-table='vie' value="">
-          <input type="hidden" value='' class="form-control form-control-sm" name="lon" data-table='vie' value="">
+      <fieldset class="col-md-6 mb-3" id="geolocFieldset">
+        <legend class="text-marta font-weight-bold border-bottom">geolocalizzazione generica</legend>
+        <div class="mt-3">
+          <label for="comune">Comune</label>
+          <select class="form-control form-control-sm w-auto tab" data-table="geolocalizzazione" id="comune" name="comune">
+            <option value="">-- seleziona Comune --</option>
+            <?php
+            foreach($comuniPuglia as $c){
+              $selected = isset($_POST['s']) && isset($scheda['gp']['geo']) && $scheda['gp']['geo']['cid'] == $c['id'] ? 'selected' : '';
+              echo "<option value='".$c['id']."' ".$selected.">".$c['comune']."</option>";
+            }
+            ?>
+          </select>
         </div>
-      </div>
-    </div>
-  </fieldset>
-</div>
-
-<div class="form-group">
-  <fieldset class="bg-light rounded border p-3" id="gpFieldset">
-    <legend class="w-auto bg-marta text-white border rounded p-1">gp - georeferenziazione tramite punto</legend>
-    <div class="form-row mb-3">
-      <div class="col">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="toggleGP" name="toggleSection" data-fieldset="gpFieldset">
-          <label class="custom-control-label" for="toggleGP"><?php echo $gpCheckLabel; ?></label>
+        <div class="mt-1">
+          <label for="via">Via</label>
+          <div class="input-group input-group-sm mb-3 w-75">
+            <?php if(isset($_POST['s']) && isset($scheda['gp']['geo']['osm_id'])){ $v = $scheda['gp']['geo']['via'];} ?>
+            <input type="search" class="form-control tab" data-table="geolocalizzazione" name="via" id="via" value="<?php echo $v; ?>" placeholder="inserisci via" <?php echo $viaDisabled; ?>>
+            <div class="input-group-append">
+              <button class="btn btn-secondary btn-sm" type="button" id="cercaVia" name="cercaVia" <?php echo $viaDisabled; ?>><i class="fa-solid fa-magnifying-glass"></i> cerca</button>
+            </div>
+          </div>
+          <div class="list-group" id="osmList"></div>
         </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-6">
+        <div class="mt-1">
+          <label for="geonote">Note geolocalizzazione</label>
+          <textarea class="form-control form-control-sm tab w-75" value="<?php echo $scheda['gp']['geo']['geonote']; ?>" data-table="geolocalizzazione" id="geonote" name="geonote" rows="3"></textarea>
+        </div>
+      </fieldset>
+      <fieldset class="col-md-6 mb-3" id="gpFieldset">
+        <legend class="text-marta font-weight-bold border-bottom">gp - georeferenziazione tramite punto</legend>
+        <div class="form-row my-3">
+          <div class="col">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="toggleGP" name="toggleSection" data-fieldset="gpFieldset">
+              <label class="custom-control-label" for="toggleGP"><?php echo $gpCheckLabel; ?></label>
+            </div>
+          </div>
+        </div>
         <div class="row mb-3">
           <div class="col-md-6">
             <label for="gpl" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPL - Tipo di localizzazione</label>
@@ -92,33 +72,29 @@
         </div>
         <div class="row mb-3">
           <div class="col-md-4">
-            <label for="gpdpx" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPX-Long</label>
-            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gp']['gpdpx']; ?>"  <?php echo $gpRequired; ?>>
+            <label for="gpdpx" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPX - Long</label>
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gp']['gpdpx']; ?>" placeholder="longitudine"  <?php echo $gpRequired; ?> >
           </div>
           <div class="col-md-4">
-            <label for="gpdpy" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPY-Lat</label>
-            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gp']['gpdpy']; ?>"  <?php echo $gpRequired; ?>>
+            <label for="gpdpy" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPY - Lat</label>
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gp']['gpdpy']; ?>" placeholder="latitudine"  <?php echo $gpRequired; ?>>
           </div>
           <div class="col-md-4">
             <label for="gpbt" data-toggle="tooltip" data-placement="top" title="inserire solo l'anno" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>"><i class="fas fa-info-circle"></i> GPBT - Data</label>
-            <input type="number" placeholder="-- <?php echo date('Y'); ?> --" class="form-control form-control-sm tab obbligatorio"  data-table="gp" id="gpbt" name="gpbt" min="1500" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['gp']['gp']['gpbt']; ?>"  <?php echo $gpRequired; ?>>
+            <input type="number" placeholder="anno" class="form-control form-control-sm tab obbligatorio"  data-table="gp" id="gpbt" name="gpbt" min="1500" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['gp']['gp']['gpbt']; ?>"  <?php echo $gpRequired; ?>>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col">
             <label for="gpbb" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPBB - Descrizione sintetica</label>
-            <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" <?php echo $gpRequired; ?>><?php echo $scheda['gp']['gp']['gpbb']; ?></textarea>
+            <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" placeholder="aggiungi una breve descrizione" <?php echo $gpRequired; ?>><?php echo $scheda['gp']['gp']['gpbb']; ?></textarea>
           </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div id="mapCover"></div>
-        <div id="gpMap"></div>
-      </div>
+      </fieldset>
     </div>
     <div class="form-row">
       <div class="col">
-        <small class="text-muted"><i class="fas fa-lightbulb"></i> Se non riesci a localizzare il punto tramite dati d'archivio o cartografia nota, puoi utilizzare il tool grafico: abilita la sezione e inizia a navigare nella mappa in alto a destra, una volta individuato, clicca sul punto, i campi della sezione verranno automaticamente compilati con le coordinate rilevate sulla mappa e con alcuni valori di default. Tutti i valori inseriti automaticamente dal sistema possono essere modificati. Basta cliccare su un altro punto della mappa per modificare le coordinate.<br />Per annullare i dati immessi basta disattivare e riattivare la sezione cliccando sulla checkbox "Compila dati sezione"</small>
+        <div id="gpMap"></div>
       </div>
     </div>
   </fieldset>
