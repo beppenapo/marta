@@ -74,11 +74,11 @@
         <div class="row mb-3">
           <div class="col-md-4">
             <label for="gpdpx" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPX - Long</label>
-            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpx']; ?>" placeholder="longitudine"  <?php echo $gpRequired; ?> >
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000000" max="2222222222.9999999" step="0.0000001" value="<?php echo $scheda['gp']['gpdpx']; ?>" placeholder="longitudine"  <?php echo $gpRequired; ?> >
           </div>
           <div class="col-md-4">
             <label for="gpdpy" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPY - Lat</label>
-            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpy']; ?>" placeholder="latitudine"  <?php echo $gpRequired; ?>>
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000000" max="9999999.9999999" step="0.0000001" value="<?php echo $scheda['gp']['gpdpy']; ?>" placeholder="latitudine"  <?php echo $gpRequired; ?>>
           </div>
           <div class="col-md-4">
             <label for="gpbt" data-toggle="tooltip" data-placement="top" title="inserire solo l'anno" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>"><i class="fas fa-info-circle"></i> GPBT - Data</label>
