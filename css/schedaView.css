@@ -24,9 +24,11 @@ body>main{padding-top: 60px !important;}
 }
 
 #updateSection{position:absolute; top:0;left:0; width:100%; height:100vh; z-index: 2000;}
-#alertWrap,#cardInfoMappa{position: relative; display: flex; justify-content: center; height: 100%; z-index: 2000;}
-#alertWrap{align-items:center;}
+
+#alertWrap,#cardInfoMappa{position: absolute; display: flex; justify-content: center; z-index: 2000;}
+#alertWrap{width:400px; left:calc(50% - 200px);}
 #alertWrap,#cardInfoMappa{align-items:flex-start;margin-top:50px;}
+
 #divImgOrig{
   position: relative;
   width:90vw;

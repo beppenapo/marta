@@ -1,21 +1,33 @@
-let start;
-
-$(document)
-.ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
-.ajaxStop(function(){ $("#loadingDiv").addClass('invisible');});
-//NOTE: creazione meta base
 const BASE = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + "/marta/";
 document.head.innerHTML = document.head.innerHTML + "<base href='" +  BASE + "' />";
+const API = 'api/scheda.php';
 const TOTRA = 20000;
 const TOTNU = 20000;
 const TOTFOTO = 80000;
 const TOTSTEREO = 5000;
 const TOT3D = 110;
+const list = $("#osmList");
+const geoApi = "http://nominatim.openstreetmap.org/search?q=";
+const param = "&format=json&addressdetails=1&bounded=1&viewbox=";
+let reverseApi = "https://nominatim.openstreetmap.org/reverse?format=geojson&zoom=16&addressdetails=1&";
+let start;
+let zoom = 8;
+let center = [40.4391259,17.2153126];
+let lng, lat;
+let marker = {};
+let map;
+
+
+$(document)
+.ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
+.ajaxStop(function(){ $("#loadingDiv").addClass('invisible');})
+
+//NOTE: creazione meta base
 
 ///////////////////////////
 let log = $("body>header").data('log');
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
-const toolTipOpt = {container: 'body', boundary: 'viewport', selector: '[data-toggle=tooltip]', html: true}
+const toolTipOpt = {container: 'body', boundary: 'viewport', selector: '[data-toggle=tooltip]',trigger : 'hover', html: true}
 //NOTE: gestione menù laterale
 if (screen.width >= 992 ) {
   log == 'y' ? $("body>main").addClass('mainPadding') : $("body>main").removeClass('mainPadding');
@@ -161,7 +173,6 @@ $("body").on('click', '[name=toggleSection]', function(e) {
 
   if (fieldset == 'gpFieldset') {
     if (!checked) {$("#gpFieldset input, #gpFieldset select").val('')}
-    $("#mapCover").toggle()
   }
 });
 
@@ -286,63 +297,50 @@ copyright = (data.y = 2020) ? copyright + '2020' : copyright + '2020 - '+copyrig
 copyright=copyright+"  Tutti i diritti riservati";
 $(".copyright>span").html(copyright);
 
-$("#osmList, #resetVia").hide();
+list.hide();
 $("#comune").on('change', function(){
   let attiva = $(this).val() ? false : true ;
   $("[name=cercaVia], #via").prop('disabled',attiva)
+  $("#via").val('')
+  if ((!$("#toggleGP").is(':checked') && $("[name=scheda]").length > 0) || ($("#toggleGP").is(':checked') && $("[name=scheda]").length == 0)) {$("#toggleGP").trigger('click');}
+  if (!$(this).val()) {
+    map.fitBounds(pugliaExt);
+    if (marker != undefined) { map.removeLayer(marker);};
+    return false;
+  }
+  let ext = $(this).find('option:selected').data('extent').split(',');
+  let extent = [];
+  extent.push([parseFloat(ext[1]),parseFloat(ext[0])]);
+  extent.push([parseFloat(ext[3]),parseFloat(ext[2])]);
+  map.fitBounds(extent);
+})
+$("[name=via]").on('input', function(){
+  let via = $(this).val().length;
+  console.log($(this).val());
+  let gp = $("#toggleGP").is(':checked');
+  let mod = $("[name=scheda]").length;
+  if (via == 0) {
+    if((!gp && mod > 0)||(gp && mod == 0)){ $("#toggleGP").trigger('click'); }
+    if (marker != undefined) { map.removeLayer(marker);};
+    $("[name=via]").val('');
+  }
 })
 $("[name=cercaVia]").on('click',function(){
   let via = $("#via").val();
   let comune = $("#comune option:selected").text();
+  let viewbox = $("#comune option:selected").data('extent');
   if(via.length < 3){
     alert('Attenzione, il nome è troppo corto, riprova');
     return false;
   }
-  geocoding(comune,via);
+  geocoding(comune,via, viewbox);
 })
-$("#resetVia").on('click',function(){
-  $("#cercaVia,#resetVia").toggle()
-  $("#via").val('');
-  $("#osmList").html('').hide()
-  $("#osmFieldset input").val('')
+$("#toggleGP").on('click', function(){
+  if(!$(this).is(':checked')){
+    if (marker != undefined) { map.removeLayer(marker);};
+  }
 })
-function geocoding(comune,via){
-  $("#cercaVia,#resetVia").toggle()
-  const list = $("#osmList");
-  const api = "http://nominatim.openstreetmap.org/search?q=";
-  let param = "&format=json&addressdetails=1";
-  let string = api+via+', '+comune+param;
-  list.html('').show()
-  $.getJSON(string, function (json) {
-    if (json.length > 0) {
-      json.forEach(function(v){
-        let button =   $("<button/>",{type:'button', class:'list-group-item list-group-item-action btn-sm'});
-        let l = v.display_name.split(",");
-        l = l[0]+','+l[1]+','+l[2]+','+l[4];
-        button.text(l)
-          .appendTo(list)
-          .on('click', function(){
-            $("#via").val(v.display_name.split(",",3));
-            list.html('').hide()
-            $("[name=osm_id]").val(v.osm_id);
-            $("#osm_via").val(v.display_name.split(",",3));
-            $("#comune_vie").val($("#comune").val());
-            $("[name=lat]").val(v.lat);
-            $("[name=lon]").val(v.lon);
-          });
-      })
-    }else {
-      let button =   $("<button/>",{type:'button', class:'list-group-item list-group-item-action btn-sm'});
-      button.text('nessuna via trovata')
-        .appendTo(list)
-        .on('click', function(){
-          $("#cercaVia,#resetVia").toggle()
-          $("#via").val('');
-          list.html('').hide()
-        });
-    }
-  });
-}
+
 function checkTitolo(){
   let out = $("#checkTitoloMsg");
   let v = $("[name=titolo]").val();
@@ -365,7 +363,6 @@ function checkTitolo(){
   });
 
 }
-
 
 //NOTE: funzioni generali
 function getData(){
@@ -794,70 +791,121 @@ function salvaScheda(e){
   }
 }
 
-function gpMap(){
-  $("#gpMap").css({"width":'100%',"height":'333px'});
-  let zoom = 8;
-  let center = [40.4391259,17.2153126];
-  let lng, lat;
-  let marker = {}
-
-  var map = L.map('gpMap').setView(center,zoom);
-  let bing = L.tileLayer.bing({bingMapsKey: bingKey, imagerySet:'AerialWithLabels'})
-  let outdoor = L.tileLayer(thunderFTile, { attribution: thunderFAttrib, maxZoom: 19});
-  let osm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    opacity:0.7
+function geocoding(comune,via, viewbox){
+  if (marker != undefined) { map.removeLayer(marker);};
+  let string = geoApi+via+','+comune+param+viewbox;
+  list.html('').show()
+  $.getJSON(string, function (json) {
+    if (json.length > 0) {
+      json.forEach(function(v){
+        let button = $("<small/>",{class:'list-group-item list-group-item-action'});
+        let l = v.display_name.split(",");
+        let btnTxt = l[0]+','+l[1]+','+l[2]+','+l[4];
+        button.text(btnTxt)
+          .appendTo(list)
+          .on('click', function(){
+            $("#via").val(l[0]);
+            list.html('').hide()
+            let gp = $("#toggleGP").is(':checked');
+            let mod = $("[name=scheda]").length;
+            if ((!gp && mod > 0)||(!gp && mod == 0)) { $("#toggleGP").trigger('click');}
+            gpAutoCompile(v.lon, v.lat)
+            marker = L.marker([v.lat,v.lon]).addTo(map);
+            map.fitBounds([
+              [v.boundingbox[0],v.boundingbox[2]],
+              [v.boundingbox[1],v.boundingbox[3]]
+            ])
+          });
+      })
+    }else {
+      let button = $("<small/>",{class:'list-group-item list-group-item-action'});
+      button.text('nessuna via trovata')
+        .appendTo(list)
+        .on('click', function(){ list.html('').hide() });
+    }
+    $("<small/>",{class:'chiudiOsmList list-group-item list-group-item-action text-right text-secondary bg-light '})
+      .text('chiudi elenco')
+      .appendTo(list)
+      .on('click', function(){
+        list.html('').hide()
+        $("#via").val('')
+      });
   });
-  bing.addTo(map)
+}
+
+function gpMap(){
+  map = L.map('gpMap',{maxBounds:pugliaExt}).fitBounds(pugliaExt);
+  map.setMinZoom(map.getZoom());
+  var osm = L.tileLayer (osmTile, { attribution: osmAttrib,maxZoom: 18})
+  let gStreets = L.tileLayer(gStreetTile,{maxZoom: 18, subdomains:gSubDomains });
+  let gSat = L.tileLayer(gSatTile,{maxZoom: 18, subdomains:gSubDomains});
+  let gTerrain = L.tileLayer(gTerrainTile,{maxZoom: 18, subdomains:gSubDomains});
+  osm.addTo(map)
   var baseLayers = {
-    "Satellite": bing,
     "OpenStreetMap": osm,
-    "ThunderForest": outdoor
+    "Terrain":gTerrain,
+    "Satellite": gSat,
+    "Google Street": gStreets
   };
   L.control.layers(baseLayers, null).addTo(map);
 
   if($("[name=gpdpx]").val()){
     lng = $("[name=gpdpx]").val()
     lat = $("[name=gpdpy]").val()
-    $("#mapCover").hide()
     marker = L.marker([lat,lng]).addTo(map);
     map.setView([lat,lng],18)
   }
 
-  let resetMap = L.Control.extend({
-    options: { position: 'topleft'},
-    onAdd: function (map) {
-      var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
-      btn=$("<a/>",{href:'#'}).appendTo(container);
-      $("<i/>",{class:'fas fa-crosshairs'}).appendTo(btn)
-      btn.on('click', function (e) {
-        e.preventDefault()
-        map.flyTo(center,zoom);
-      });
-      return container;
-    }
-  })
-
-  map.addControl(new resetMap());
   map.on('click', function(e) {
     lng = parseFloat(e.latlng.lng).toFixed(4)
     lat = parseFloat(e.latlng.lat).toFixed(4)
-    $("[name=gpl]").val(1)
-    $("[name=gpp]").val(1)
-    $("[name=gpm]").val(2)
-    $("[name=gpbt]").val(2022)
-    $("[name=gpt]").val(5)
-    $("[name=gpbb]").val('Punto individuato tramite ricerca su piattaforma di mappatura web')
-    $("[name=gpdpx]").val(lng)
-    $("[name=gpdpy]").val(lat)
+    reverseApi = reverseApi+'lat='+lat+'&lon='+lng;
+    $.getJSON(reverseApi, function (json) {
+      let addr = json.features[0]
+      $.ajax({
+        url: 'api/scheda.php',
+        type: "POST",
+        dataType: 'json',
+        data: {
+          trigger : 'getComuneFromPoint',
+          dati:{
+            x:addr.geometry.coordinates[0],
+            y:addr.geometry.coordinates[1]
+          }
+        }
+      })
+      .done(function(data){
+        if (!data) {
+          alert('Il punto selezionato non corrisponde a nessun Comune presente nel database.\nRiprova o contatta l\'amministratore del sistema');
+          return false;
+        }
+        $("[name=comune]").val(data.id)
+        if(addr.properties.address.road){
+          $("[name=via]").prop("disabled",false).val(addr.properties.address.road);
+          $("[name=cercaVia]").prop("disabled",false);
+        }
+        let gp = $("#toggleGP").is(':checked');
+        if (!gp) { $("#toggleGP").trigger('click'); }
 
-    if (marker != undefined) { map.removeLayer(marker);};
-    marker = L.marker([lat,lng]).addTo(map);
-    map.setView([lat,lng],18)
+        gpAutoCompile(lng,lat)
+
+        if (marker != undefined) { map.removeLayer(marker);};
+        marker = L.marker([lat,lng]).addTo(map);
+        map.setView([lat,lng],18)
+      })
+      .fail(function(){console.log("error");});
+    });
+
   });
-  $("#toggleGP").on('click', function(){
-    if(!$(this).is(':checked')){
-      if (marker != undefined) { map.removeLayer(marker);};
-    }
-  })
+}
+
+function gpAutoCompile(lng,lat){
+  $("[name=gpl]").val(1)
+  $("[name=gpp]").val(1)
+  $("[name=gpm]").val(2)
+  $("[name=gpbt]").val(2022)
+  $("[name=gpt]").val(5)
+  $("[name=gpbb]").val('Punto individuato tramite ricerca su piattaforma di mappatura web')
+  $("[name=gpdpx]").val(lng)
+  $("[name=gpdpy]").val(lat)
 }
