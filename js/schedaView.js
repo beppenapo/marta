@@ -233,82 +233,53 @@ function delBiblioScheda(dati){
 }
 
 function mapInit(){
+  let checkComune,rank=0;
+  let checkPoint = [];
+  if ($("[name=id_comune]").length + $("[name=gpdpx]").length > 0) {
+    $("#alertWrap").hide();
+  }
+  if ($("[name=id_comune]").length > 0) { checkComune = $("[name=id_comune]").val(); }
+  if ($("[name=gpdpx]").length > 0) { checkPoint= [$("[name=gpdpy]").val(), $("[name=gpdpx]").val()];}
   $("#cardInfoMappa").hide();
-  let mappaDim = $("#mappaFieldset").innerWidth();
-  $("#map").css({"width":"100%","height":mappaDim});
-  let check_poly = parseInt($("[name=poly]").val());
-  let check_marker= parseInt($("[name=marker]").val());
-  if (check_poly + check_marker > 0) {$("#alertWrap").hide();}
-  let zoom = 8;
-  let center = [40.4391259,17.2153126];
-  let rank = 0;
-  let x,y,osm_lat,osm_lon;
+  $("#map").css({"width":"100%","height":$("#mappaFieldset").innerWidth()});
 
-  var map = L.map('map',{minZoom:zoom}).setView(center,zoom);
+  var map = L.map('map',{maxBounds:pugliaExt}).fitBounds(pugliaExt);
+  map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
   let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
   let gSat = L.tileLayer(gSatTile,{maxZoom: 20, subdomains:gSubDomains});
   let gTerrain = L.tileLayer(gTerrainTile,{maxZoom: 20, subdomains:gSubDomains});
-  gStreets.addTo(map)
+  gSat.addTo(map)
   var baseLayers = {
     "Terrain":gTerrain,
     "Satellite": gSat,
     "OpenStreetMap": osm,
     "Google Street": gStreets
   };
-  var overlay = null;
-
+  var overlay = {};
   let comune = L.featureGroup().addTo(map);
   let marker = L.featureGroup().addTo(map);
-
   //se è stato salvato il Comune lo aggiungo alla mappa
-  if (check_poly > 0) {
+
+  if (checkComune > 0) {
     rank = 1;
     let idComune = $("[name=id_comune]").val();
-    let osm_id = $("[name=osm_id]").val();
-
     $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:idComune})
     .done(function( json ) {
-      let layer = L.geoJson(json).addTo(comune);
+      let l = L.geoJson(json).addTo(comune);
+      if (checkPoint.length == 0) { map.fitBounds(l.getBounds()); }
     })
     .fail(function( jqxhr, textStatus, error ) {
-      var err = jqxhr+", "+textStatus + ", " + error;
-      console.log("Request Failed: " + err );
+      console.log("Request Failed: " + jqxhr+", "+textStatus + ", " + error );
     });
-    overlay = { "Comune":comune };
-    //se c'è anche la via aggiungo anche questa
-    if (osm_id) {
-      map.removeLayer(comune);
-      rank = 2;
-      osm_lon = $("[name=osm_lon]").val();
-      osm_lat = $("[name=osm_lat]").val();
-      let viaStyle = {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.3,
-        stroke:0
-      }
-      let via = L.circle([osm_lat,osm_lon],50,viaStyle).addTo(map);
-      overlay = {
-        "Comune":comune,
-        "Via":via
-      };
-    }
+    overlay["Comune"]=comune;
   }
 
-  if (check_marker > 0) {
-    rank = 3;
-    x = parseFloat($("[name=gpdpx]").val()).toFixed(4)
-    y = parseFloat($("[name=gpdpy]").val()).toFixed(4)
-    let point = L.marker([y,x]).addTo(marker);
+  if (checkPoint.length > 0) {
+    rank = 2;
+    L.marker(checkPoint).addTo(marker);
+    overlay["Reperto"]=marker;
     map.removeLayer(comune)
-    map.removeLayer(via)
-  }
-  switch (rank) {
-    case 0: map.setView(center,zoom); break;
-    case 1: map.flyToBounds(comune.getBounds()); break;
-    case 2: map.setView([osm_lat,osm_lon], 18); break;
-    case 3: map.setView([y,x],18); break;
   }
 
   L.control.layers(baseLayers, overlay, {position: 'bottomright'}).addTo(map);
@@ -317,24 +288,33 @@ function mapInit(){
     options: { position: 'topleft'},
     onAdd: function (map) {
       var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
-      btn=$("<a/>",{href:'#', title:'riporta la mappa allo zoom iniziale'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
-      $("<i/>",{class:'fas fa-crosshairs'}).appendTo(btn)
-      btn.on('click', function (e) {
+
+      btn1=$("<a/>",{href:'#', title:'zoom massimo'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
+      $("<i/>",{class:'fa-solid fa-crosshairs'}).appendTo(btn1)
+      btn1.on('click', function (e) {
         e.preventDefault()
-        switch (rank) {
-          case 0: map.flyTo(center,zoom); break;
-          case 1: map.flyToBounds(comune.getBounds()); break;
-          case 2: map.flyTo([osm_lat,osm_lon], 18); break;
-          case 3: map.flyTo([y,x],18); break;
-        }
+        map.fitBounds(pugliaExt);
       });
 
-      btn2=$("<a/>",{href:'#'}).appendTo(container);
-      $("<i/>",{class:'fas fa-info'}).appendTo(btn2)
-      btn2.on('click', function (e) {
-        e.preventDefault()
-        $("#cardInfoMappa").fadeIn('fast');
-      });
+      if (checkComune > 0){
+        btn2=$("<a/>",{href:'#', title:'zoom al comune'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
+        $("<i/>",{class:'fa-solid fa-map-location-dot'}).appendTo(btn2)
+        btn2.on('click', function (e) {
+          e.preventDefault()
+          map.addLayer(comune)
+          map.fitBounds(comune.getBounds());
+        });
+      }
+      if (checkPoint.length > 0) {
+        btn3=$("<a/>",{href:'#', title:'zoom al reperto'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
+        $("<i/>",{class:'fa-solid fa-location-dot'}).appendTo(btn3)
+        btn3.on('click', function (e) {
+          e.preventDefault()
+          map.removeLayer(comune)
+          map.addLayer(marker)
+          map.fitBounds(marker.getBounds());
+        });
+      }
       return container;
     }
   })
@@ -394,13 +374,11 @@ function getFoto(scheda){
       })
     });
   })
-  .fail(function (jqXHR, textStatus, error) {
-    console.log("Post error: " + error);
-  });
-  if ($("[name=logged]").val()) {
-    checkScheda(scheda,initChart)
-  }
+  .fail(function (jqXHR, textStatus, error) { console.log("Post error: " + error); }
+  );
+  if ($("[name=logged]").val()) { checkScheda(scheda,initChart) }
 }
+
 function delImg(dati){
   $.ajax({
     url: "api/file.php",

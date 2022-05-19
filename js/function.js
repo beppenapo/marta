@@ -7,7 +7,8 @@ const TOTSTEREO = 5000;
 const TOT3D = 110;
 const list = $("#osmList");
 const api = "http://nominatim.openstreetmap.org/search?q=";
-const param = "&format=json&addressdetails=1";
+const param = "&format=json&addressdetails=1&bounded=1&viewbox=";
+let reverseApi = "https://nominatim.openstreetmap.org/reverse?format=geojson&zoom=16&addressdetails=1&";
 let start;
 let zoom = 8;
 let center = [40.4391259,17.2153126];
@@ -25,7 +26,7 @@ $(document)
 ///////////////////////////
 let log = $("body>header").data('log');
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
-const toolTipOpt = {container: 'body', boundary: 'viewport', selector: '[data-toggle=tooltip]', html: true}
+const toolTipOpt = {container: 'body', boundary: 'viewport', selector: '[data-toggle=tooltip]',trigger : 'hover', html: true}
 //NOTE: gestione menù laterale
 if (screen.width >= 992 ) {
   log == 'y' ? $("body>main").addClass('mainPadding') : $("body>main").removeClass('mainPadding');
@@ -301,10 +302,17 @@ $("#comune").on('change', function(){
   let attiva = $(this).val() ? false : true ;
   $("[name=cercaVia], #via").prop('disabled',attiva)
   if (!$(this).val()) {
+    map.setView(center,zoom);
     $("#via").val('');
     if ($("#toggleGP").is(':checked')) {$("#toggleGP").trigger('click');}
     if (marker != undefined) { map.removeLayer(marker);};
+    return false;
   }
+  let ext = $(this).find('option:selected').data('extent').split(',');
+  let extent = [];
+  extent.push([parseFloat(ext[1]),parseFloat(ext[0])]);
+  extent.push([parseFloat(ext[3]),parseFloat(ext[2])]);
+  map.fitBounds(extent);
 })
 $("[name=via]").on('input', function(){
   let via = $(this).val().length;
@@ -317,11 +325,12 @@ $("[name=via]").on('input', function(){
 $("[name=cercaVia]").on('click',function(){
   let via = $("#via").val();
   let comune = $("#comune option:selected").text();
+  let viewbox = $("#comune option:selected").data('extent');
   if(via.length < 3){
     alert('Attenzione, il nome è troppo corto, riprova');
     return false;
   }
-  geocoding(comune,via);
+  geocoding(comune,via, viewbox);
 })
 $("#toggleGP").on('click', function(){
   if(!$(this).is(':checked')){
@@ -779,19 +788,20 @@ function salvaScheda(e){
   }
 }
 
-function geocoding(comune,via){
-  let string = api+via+', '+comune+param;
+function geocoding(comune,via, viewbox){
+  let string = api+via+','+comune+param+viewbox;
+  console.log(string);
   list.html('').show()
   $.getJSON(string, function (json) {
-    let button =   $("<small/>",{class:'list-group-item list-group-item-action'});
     if (json.length > 0) {
       json.forEach(function(v){
+        let button = $("<small/>",{class:'list-group-item list-group-item-action'});
         let l = v.display_name.split(",");
-        l = l[0]+','+l[1]+','+l[2]+','+l[4];
-        button.text(l)
+        let btnTxt = l[0]+','+l[1]+','+l[2]+','+l[4];
+        button.text(btnTxt)
           .appendTo(list)
           .on('click', function(){
-            $("#via").val(v.display_name.split(",",3));
+            $("#via").val(l[0]);
             list.html('').hide()
             if (!$("#toggleGP").is(':checked')) { $("#toggleGP").trigger('click');}
             gpAutoCompile(v.lon, v.lat)
@@ -818,54 +828,71 @@ function geocoding(comune,via){
 }
 
 function gpMap(){
-  map = L.map('gpMap').setView(center,zoom);
-  let bing = L.tileLayer.bing({bingMapsKey: bingKey, imagerySet:'AerialWithLabels'})
-  let outdoor = L.tileLayer(thunderFTile, { attribution: thunderFAttrib, maxZoom: 19});
-  let osm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    opacity:0.7
-  });
-  bing.addTo(map)
+  map = L.map('gpMap',{maxBounds:pugliaExt}).fitBounds(pugliaExt);
+  map.setMinZoom(map.getZoom());
+  var osm = L.tileLayer (osmTile, { attribution: osmAttrib,maxZoom: 18})
+  let gStreets = L.tileLayer(gStreetTile,{maxZoom: 18, subdomains:gSubDomains });
+  let gSat = L.tileLayer(gSatTile,{maxZoom: 18, subdomains:gSubDomains});
+  let gTerrain = L.tileLayer(gTerrainTile,{maxZoom: 18, subdomains:gSubDomains});
+  osm.addTo(map)
   var baseLayers = {
-    "Satellite": bing,
     "OpenStreetMap": osm,
-    "ThunderForest": outdoor
+    "Terrain":gTerrain,
+    "Satellite": gSat,
+    "Google Street": gStreets
   };
   L.control.layers(baseLayers, null).addTo(map);
 
   if($("[name=gpdpx]").val()){
     lng = $("[name=gpdpx]").val()
     lat = $("[name=gpdpy]").val()
-    // $("#mapCover").hide()
     marker = L.marker([lat,lng]).addTo(map);
     map.setView([lat,lng],18)
   }
 
-  let resetMap = L.Control.extend({
-    options: { position: 'topleft'},
-    onAdd: function (map) {
-      var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
-      btn=$("<a/>",{href:'#'}).appendTo(container);
-      $("<i/>",{class:'fas fa-crosshairs'}).appendTo(btn)
-      btn.on('click', function (e) {
-        e.preventDefault()
-        map.flyTo(center,zoom);
-      });
-      return container;
-    }
-  })
-
-  map.addControl(new resetMap());
   map.on('click', function(e) {
     lng = parseFloat(e.latlng.lng).toFixed(4)
     lat = parseFloat(e.latlng.lat).toFixed(4)
-    gpAutoCompile(lng,lat)
+    reverseApi = reverseApi+'lat='+lat+'&lon='+lng;
+    $.getJSON(reverseApi, function (json) {
+      console.log(json.features.length);
+      let addr = json.features[0]
+      $.ajax({
+        url: 'api/scheda.php',
+        type: "POST",
+        dataType: 'json',
+        data: {
+          trigger : 'getComuneFromPoint',
+          dati:{
+            x:addr.geometry.coordinates[0],
+            y:addr.geometry.coordinates[1]
+          }
+        }
+      })
+      .done(function(data){
+        console.log(data);
+        if (!data) {
+          alert('Il punto selezionato non corrisponde a nessun Comune presente nel database.\nRiprova o contatta l\'amministratore del sistema');
+          return false;
+        }
+        $("[name=comune]").val(data.id)
+        if(addr.properties.address.road){
+          $("[name=via]").prop("disabled",false).val(addr.properties.address.road);
+          $("[name=cercaVia]").prop("disabled",false);
+        }
+        let gp = $("#toggleGP").is(':checked');
+        if (!gp) { $("#toggleGP").trigger('click'); }
 
-    if (marker != undefined) { map.removeLayer(marker);};
-    marker = L.marker([lat,lng]).addTo(map);
-    map.setView([lat,lng],18)
+        gpAutoCompile(lng,lat)
+
+        if (marker != undefined) { map.removeLayer(marker);};
+        marker = L.marker([lat,lng]).addTo(map);
+        map.setView([lat,lng],18)
+      })
+      .fail(function(){console.log("error");});
+    });
+
   });
-
 }
 
 function gpAutoCompile(lng,lat){

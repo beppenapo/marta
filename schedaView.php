@@ -112,39 +112,10 @@
             <?php } ?>
             </ul>
           </fieldset>
-          <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
-            <?php if(count((array)$scheda['lc'])==0){echo $noData;}else{ ?>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><span>PVCC - Comune:</span><span class="font-weight-bold"><?php echo $scheda['lc']['pvcc']; ?></span></li>
-              <li class="list-group-item"><span>LDCN - Collocazione specifica (Denominazione):</span><span class="font-weight-bold"><?php echo $scheda['lc']['ldcn']; ?></span></li>
-              <li class="list-group-item"><span>PIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['piano']; ?></span></li>
-              <li class="list-group-item"><span>SALA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['sala']; ?></span></li>
-              <li class="list-group-item"><span>CONTENITORE:</span><span class="font-weight-bold"><?php echo $scheda['lc']['contenitore']; ?></span></li>
-              <li class="list-group-item"><span>COLONNA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['colonna']; ?></span></li>
-              <li class="list-group-item"><span>RIPIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['ripiano']; ?></span></li>
-            </ul>
-            <?php } ?>
-          </fieldset>
-          <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
-            <?php if(count((array)$scheda['ub'])==0){echo $noData;}else{ ?>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><span>INVN - Inventario:</span><span class="font-weight-bold"><?php echo $scheda['ub']['invn']; ?></span></li>
-              <li class="list-group-item"><span>STIS - Stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stis']; ?></span></li>
-              <li class="list-group-item"><span>STID - Anno stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stid']; ?></span></li>
-              <li class="list-group-item"><span>STIM - Motivo stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stim']; ?></span></li>
-            </ul>
-            <?php } ?>
-          </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="geolocFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">geolocalizzazione generica</legend>
-            <input type="hidden" name="poly" value="<?php echo count((array)$scheda['geoloc']); ?>">
             <?php if(count((array)$scheda['geoloc'])==0){echo $noData;}else{ ?>
             <input type="hidden" name="id_comune" value="<?php echo $scheda['geoloc']['id_comune']; ?>">
-            <input type="hidden" name="osm_id" value="<?php echo $scheda['geoloc']['osm_id']; ?>">
-            <input type="hidden" name="osm_lon" value="<?php echo $scheda['geoloc']['lon']; ?>">
-            <input type="hidden" name="osm_lat" value="<?php echo $scheda['geoloc']['lat']; ?>">
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>Comune:</span><span class="font-weight-bold"><?php echo $scheda['geoloc']['comune']; ?></span></li>
               <li class="list-group-item"><span>Via:</span><span class="font-weight-bold"><?php echo $scheda['geoloc']['via']; ?></span></li>
@@ -154,7 +125,6 @@
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="gpFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">GP - GEOREFERENZIAZIONE TRAMITE PUNTO</legend>
-            <input type="hidden" name="marker" value="<?php echo count((array)$scheda['gp']['gp']); ?>">
             <?php if(count((array)$scheda['gp'])==0){echo $noData;}else{ ?>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>GPL - Tipo di localizzazione:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpl']; ?></span></li>
@@ -170,6 +140,36 @@
             <input type="hidden" name="gpdpy" value="<?php echo $scheda['gp']['gpdpy'] ?>">
             <input type="hidden" name="epsg" value="<?php echo $scheda['gp']['epsg'] ?>">
           <?php } ?>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
+            <?php if(count((array)$scheda['lc'])==0){echo $noData;}else{ ?>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><span>PVCC - Comune:</span><span class="font-weight-bold"><?php echo $scheda['lc']['pvcc']; ?></span></li>
+              <li class="list-group-item"><span>LDCN - Collocazione specifica (Denominazione):</span><span class="font-weight-bold"><?php echo $scheda['lc']['ldcn']; ?></span></li>
+              <li class="list-group-item"><span>PIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['piano'] == -1 ? 'Deposito': $scheda['lc']['piano']; ?></span></li>
+              <li class="list-group-item"><span>SALA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['sala']; ?></span></li>
+              <?php if ($scheda['lc']['piano'] == -1) {?>
+                <li class="list-group-item"><span>SCAFFALE:</span><span class="font-weight-bold"><?php echo $scheda['lc']['contenitore']; ?></span></li>
+                <li class="list-group-item"><span>COLONNA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['colonna']; ?></span></li>
+                <li class="list-group-item"><span>RIPIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['ripiano']; ?></span></li>
+                <li class="list-group-item"><span>CASSETTA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['cassetta']; ?></span></li>
+              <?php }else{ ?>
+                <li class="list-group-item"><span>VETRINA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['contenitore']; ?></span></li>
+              <?php } ?>
+            </ul>
+          <?php } ?>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
+            <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
+            <?php if(count((array)$scheda['ub'])==0){echo $noData;}else{ ?>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>INVN - Inventario:</span><span class="font-weight-bold"><?php echo $scheda['ub']['invn']; ?></span></li>
+                <li class="list-group-item"><span>STIS - Stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stis']; ?></span></li>
+                <li class="list-group-item"><span>STID - Anno stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stid']; ?></span></li>
+                <li class="list-group-item"><span>STIM - Motivo stima:</span><span class="font-weight-bold"><?php echo $scheda['ub']['stim']; ?></span></li>
+              </ul>
+            <?php } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="reFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">RE- MODALITÀ DI REPERIMENTO</legend>

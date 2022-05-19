@@ -29,4 +29,6 @@ function getContenitore($obj){return json_encode($obj->getContenitore($_POST));}
 function getColonna($obj){return json_encode($obj->getColonna($_POST));}
 function setDtzgf($obj){return json_encode($obj->setDtzgf($_POST));}
 function uploadImage($obj){return json_encode($obj->uploadImage($_POST,$_FILES));}
+function getComuneFromPoint($obj){return json_encode($obj->getComuneFromPoint($_POST['dati']));}
+
 ?>
