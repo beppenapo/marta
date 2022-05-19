@@ -10,7 +10,7 @@
             <option value="">-- seleziona Comune --</option>
             <?php
             foreach($comuniPuglia as $c){
-              $selected = isset($_POST['s']) && isset($scheda['gp']['geo']) && $scheda['gp']['geo']['cid'] == $c['id'] ? 'selected' : '';
+              $selected = isset($_POST['s']) && isset($scheda['geoloc']) && $scheda['geoloc']['id_comune'] == $c['id'] ? 'selected' : '';
               $extent = $c['xmin'].','.$c['ymin'].','.$c['xmax'].','.$c[ymax];
               echo "<option value='".$c['id']."' data-extent='".$extent."' ".$selected.">".$c['comune']."</option>";
             }
@@ -20,7 +20,7 @@
         <div class="mt-1">
           <label for="via">Via</label>
           <div class="input-group input-group-sm mb-3 w-75">
-            <?php if(isset($_POST['s']) && isset($scheda['gp']['geo']['osm_id'])){ $v = $scheda['gp']['geo']['via'];} ?>
+            <?php if(isset($_POST['s']) && isset($scheda['geoloc'])){ $v = $scheda['geoloc']['via'];} ?>
             <input type="search" class="form-control tab" data-table="geolocalizzazione" name="via" id="via" value="<?php echo $v; ?>" placeholder="inserisci via" <?php echo $viaDisabled; ?>>
             <div class="input-group-append">
               <button class="btn btn-secondary btn-sm" type="button" id="cercaVia" name="cercaVia" <?php echo $viaDisabled; ?>><i class="fa-solid fa-magnifying-glass"></i> cerca</button>
@@ -30,7 +30,7 @@
         </div>
         <div class="mt-1">
           <label for="geonote">Note geolocalizzazione</label>
-          <textarea class="form-control form-control-sm tab w-75" value="<?php echo $scheda['gp']['geo']['geonote']; ?>" data-table="geolocalizzazione" id="geonote" name="geonote" rows="3"></textarea>
+          <textarea class="form-control form-control-sm tab w-75" value="" data-table="geolocalizzazione" id="geonote" name="geonote" rows="3"><?php echo $scheda['geoloc']['geonote']; ?></textarea>
         </div>
       </fieldset>
       <fieldset class="col-md-6 mb-3" id="gpFieldset">
@@ -74,21 +74,21 @@
         <div class="row mb-3">
           <div class="col-md-4">
             <label for="gpdpx" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPX - Long</label>
-            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gp']['gpdpx']; ?>" placeholder="longitudine"  <?php echo $gpRequired; ?> >
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpx" name="gpdpx" min="0.0000" max="2222222222.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpx']; ?>" placeholder="longitudine"  <?php echo $gpRequired; ?> >
           </div>
           <div class="col-md-4">
             <label for="gpdpy" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPDPY - Lat</label>
-            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gp']['gpdpy']; ?>" placeholder="latitudine"  <?php echo $gpRequired; ?>>
+            <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpdpy" name="gpdpy" min="0.0000" max="9999999.9999" step="0.0001" value="<?php echo $scheda['gp']['gpdpy']; ?>" placeholder="latitudine"  <?php echo $gpRequired; ?>>
           </div>
           <div class="col-md-4">
             <label for="gpbt" data-toggle="tooltip" data-placement="top" title="inserire solo l'anno" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>"><i class="fas fa-info-circle"></i> GPBT - Data</label>
-            <input type="number" placeholder="anno" class="form-control form-control-sm tab obbligatorio"  data-table="gp" id="gpbt" name="gpbt" min="1500" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['gp']['gp']['gpbt']; ?>"  <?php echo $gpRequired; ?>>
+            <input type="number" placeholder="anno" class="form-control form-control-sm tab obbligatorio"  data-table="gp" id="gpbt" name="gpbt" min="1500" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['gp']['gpbt']; ?>"  <?php echo $gpRequired; ?>>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col">
             <label for="gpbb" class="font-weight-bold obbligatorio <?php echo $gpLabelClass; ?>">GPBB - Descrizione sintetica</label>
-            <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" placeholder="aggiungi una breve descrizione" <?php echo $gpRequired; ?>><?php echo $scheda['gp']['gp']['gpbb']; ?></textarea>
+            <textarea class="form-control form-control-sm tab obbligatorio" data-table="gp" id="gpbb" name="gpbb" rows="4" placeholder="aggiungi una breve descrizione" <?php echo $gpRequired; ?>><?php echo $scheda['gp']['gpbb']; ?></textarea>
           </div>
         </div>
       </fieldset>

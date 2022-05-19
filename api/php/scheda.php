@@ -127,20 +127,20 @@ if (isset($_POST['s'])) {
   $stimList=$obj->buildSel($stimArr,$scheda['ub']['idstim']);
   //**********************************************//
   //************* sezione GP *********************//
-  $viaDisabled = count((array)$scheda['gp']['geo']) == 0 ? 'disabled' : '';
+  $viaDisabled = count((array)$scheda['geoloc']) == 0 ? 'disabled' : '';
 
-  $gpCheckLabel = count((array)$scheda['gp']['gp']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
-  $gpRequired = count((array)$scheda['gp']['gp']) == 0 ? 'disabled' : 'required';
-  $gpDisabled = count((array)$scheda['gp']['gp']) == 0 ? 'disabled' : '';
-  $gpLabelClass = count((array)$scheda['gp']['gp']) == 0 ? '' : 'text-danger';
+  $gpCheckLabel = count((array)$scheda['gp']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
+  $gpRequired = count((array)$scheda['gp']) == 0 ? 'disabled' : 'required';
+  $gpDisabled = count((array)$scheda['gp']) == 0 ? 'disabled' : '';
+  $gpLabelClass = count((array)$scheda['gp']) == 0 ? '' : 'text-danger';
   $gplArr=$obj->vocabolari(array("tab"=>'liste.gpl'));
-  $gplList=$obj->buildSel($gplArr,$scheda['gp']['gp']['gplid']);
+  $gplList=$obj->buildSel($gplArr,$scheda['gp']['gplid']);
   $gppArr=$obj->vocabolari(array("tab"=>'liste.gpp'));
-  $gppList=$obj->buildSel($gppArr,$scheda['gp']['gp']['gppid']);
+  $gppList=$obj->buildSel($gppArr,$scheda['gp']['gppid']);
   $gpmArr=$obj->vocabolari(array("tab"=>'liste.gpm'));
-  $gpmList=$obj->buildSel($gpmArr,$scheda['gp']['gp']['gpmid']);
+  $gpmList=$obj->buildSel($gpmArr,$scheda['gp']['gpmid']);
   $gptArr=$obj->vocabolari(array("tab"=>'liste.gpt'));
-  $gptList=$obj->buildSel($gptArr,$scheda['gp']['gp']['gptid']);
+  $gptList=$obj->buildSel($gptArr,$scheda['gp']['gptid']);
   //**********************************************//
   //************* sezione RCG *********************//
   $rcgCheckLabel = count((array)$scheda['re']['rcg']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';

@@ -280,6 +280,7 @@ function mapInit(){
     L.marker(checkPoint).addTo(marker);
     overlay["Reperto"]=marker;
     map.removeLayer(comune)
+    map.fitBounds(marker.getBounds());
   }
 
   L.control.layers(baseLayers, overlay, {position: 'bottomright'}).addTo(map);
