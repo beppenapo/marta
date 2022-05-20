@@ -1,3 +1,4 @@
+const API = 'api/scheda.php';
 const SCHEDA = $("[name=scheda]").val();
 $(document).ready(function() {
   $("#tskTxt").text('RA - Reperto Archeologico');

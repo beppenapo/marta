@@ -1,6 +1,6 @@
 const BASE = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + "/marta/";
 document.head.innerHTML = document.head.innerHTML + "<base href='" +  BASE + "' />";
-const API = 'api/scheda.php';
+
 const TOTRA = 20000;
 const TOTNU = 20000;
 const TOTFOTO = 80000;
