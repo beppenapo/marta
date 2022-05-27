@@ -14,6 +14,12 @@ $(document).ready(function() {
     viewFilter()
   }
   $("#tableWrap").hide()
+
+  $("[name=tipo]").on('change', function(){
+    let v = $(this).val();
+    $(".filtraTsk > option").hide()
+    $(".filtraTsk > option").filter(function(){return $(this).data('tsk') == 0 || $(this).data('tsk') == v }).show()
+  })
   $("[name=cerca]").on('click', cerca)
   $("[name=clear]").on('click', function(){ location.reload() })
   buildTable()
@@ -58,11 +64,10 @@ function resetFilter(){
       $(".btn-group > label").removeClass('active')
     }
   })
+  $(".filtraTsk > option").show()
 }
 
 function cerca(){
-  // dati = {};
-  // filter = {};
   $("#filtri").html('');
   $(".filtro").each(function(i,v){
     if ($(this).is("input:text") || $(this).is("input[type=number]") || $(this).is("select") || $(this).is(":radio:checked") || $(this).is(":checkbox:checked")) {
@@ -111,7 +116,6 @@ function buildTable(){
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip').attr("data-placement", 'left');
       let link = $("<a/>",{href:'schedaView.php?get='+v.scheda, html:linkIco});
       tr = $("<tr/>").appendTo('#dataTable');
-      //v.materia = v.materia.replace(/[{}"]/g, "");
       let piano,stato;
       switch (v.piano) {
         case -1: piano = 'Deposito'; break;
@@ -132,6 +136,8 @@ function buildTable(){
       $("<td/>",{text:stato}).appendTo(tr);
       $("<td/>",{text:v.titolo}).appendTo(tr);
       $("<td/>",{text:v.ogtd}).appendTo(tr);
+      $("<td/>",{text:v.materia}).appendTo(tr);
+      $("<td/>",{text:v.tecnica}).appendTo(tr);
       $("<td/>",{text:v.dtzgi == v.dtzgf ? v.inizio : v.inizio+' / '+v.fine}).appendTo(tr);
       $("<td/>",{text:piano}).appendTo(tr);
       $("<td/>",{text:!v.nome_sala ? v.sala : v.nome_sala}).appendTo(tr);
@@ -142,17 +148,7 @@ function buildTable(){
       $("<td/>",{text:v.operatore}).appendTo(tr);
       $("<td/>",{html:link, class:'text-center'}).appendTo(tr);
     })
-    $('#dataTable').DataTable({
-      paging: true,
-      lengthMenu: [20, 50, 75, 100, 200],
-      order: [],
-      columnDefs: [{targets  : 'no-sort', orderable: false }],
-      destroy:true,
-      retrieve:true,
-      responsive: true,
-      html:true,
-      language: { url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Italian.json' }
-    });
+    $('#dataTable').DataTable(dataTableOpt);
     $("#tableWrap").show()
   })
   .fail(function() {console.log("error");});

@@ -16,15 +16,7 @@ function buildTable(){
       $("<td/>",{text:v.schede, class:'text-center'}).appendTo(tr);
       $("<td/>",{html:link, class:'text-center'}).appendTo(tr);
     })
-    $('#dataTable').DataTable({
-      order: [],
-      columnDefs: [{targets  : 'no-sort', orderable: false }],
-      destroy:true,
-      retrieve:true,
-      responsive: true,
-      html:true,
-      language: { url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Italian.json' }
-    });
+    $('#dataTable').DataTable(dataTableOpt);
   })
   .fail(function() {console.log("error");});
 }

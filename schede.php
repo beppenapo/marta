@@ -3,12 +3,7 @@ session_start();
 require 'vendor/autoload.php';
 use \Marta\Scheda;
 $obj = new Scheda();
-$cmpnList = $obj->listaSchedatori();
-$opt=[];
-foreach ($cmpnList as $op) {
-  // $sel = isset($_SESSION['id']) && $_SESSION['id'] == $op['id'] ? 'selected' : '';
-  array_push($opt,"<option value='".$op['id']."'>".$op['compilatore']."</option>");
-}
+$filtriScheda = $obj->filtriScheda();
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
@@ -25,6 +20,17 @@ foreach ($cmpnList as $op) {
     <main class="">
       <div class="container-fluid">
         <h3 class="border-bottom border-dark mb-3">Archivio schede</h3>
+        <div class="row">
+          <div class="col-4 text-right">
+            <img src="img/searchIcon.png" class="img-fluid" alt="">
+          </div>
+          <div class="col-5">
+            <h3 class="">Cerca schede</h3>
+            Cerca all'interno dell'archivio utilizzando i seguenti filtri di ricerca.<br />
+            Il risultato dovrà soddisfare tutti i criteri di ricerca inseriti pertanto è importante utilizzare i filtri con criterio altrimenti il risultato potrebbe essere impreciso.<br />
+            I record trovati possono essere ulteriormente filtrati utilizzando il campo di ricerca aggiuntivo che comparirà in alto a destra della tabella.
+          </div>
+        </div>
         <div class="bg-light p-4 rounded border mb-4">
           <div id="filtriRicerca"><?php require("assets/filtriRicerca.php"); ?></div>
           <div class="row">
@@ -51,6 +57,8 @@ foreach ($cmpnList as $op) {
                   <th>Stato</th>
                   <th>Titolo</th>
                   <th>OGTD</th>
+                  <th>Materia</th>
+                  <th>Tecnica</th>
                   <th>Cronologia</th>
                   <th>Piano</th>
                   <th>Sala</th>

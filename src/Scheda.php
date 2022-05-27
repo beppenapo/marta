@@ -725,15 +725,41 @@ class Scheda extends Conn{
       if(isset($dati['operatore'])){array_push($filter,' cmpn = '.$dati['operatore']);}
       if(isset($dati['catalogo'])){array_push($filter," nctn::text ilike '%".$dati['catalogo']."%'");}
       if(isset($dati['inventario'])){array_push($filter," inventario ilike '%".$dati['inventario']."%'");}
+      if(isset($dati['titolo'])){array_push($filter," titolo ilike '%".$dati['titolo']."%'");}
+      if(isset($dati['ogtd'])){array_push($filter," ogtd ilike '%".$dati['ogtd']."%'");}
+      if(isset($dati['materia'])){array_push($filter," materia ilike '%".$dati['materia']."%'");}
+      if(isset($dati['tecnica'])){array_push($filter," tecnica ilike '%".$dati['tecnica']."%'");}
       $where = ' where '.join(" and ",$filter);
     }
-    $sql="select * from lista_schede ".$where;
+    $sql="select * from schede ".$where;
     return $this->simple($sql);
   }
+  public function filtriScheda(){
+    $out=[];
+    $out['schedatori'] = $this->filtroSchedatori();
+    $out['ogtd'] = $this->filtroCategorie();
+    $out['materia'] = $this->filtroMateria();
+    $out['tecnica'] = $this->filtroTecnica();
+    return $out;
+  }
 
-  public function listaSchedatori(int $cmpn = null){
-    $where = $cmpn != null ? ' where id = '.$cmpn : '';
-    $sql = "select distinct u.id, concat(u.cognome,' ',u.nome) compilatore from scheda s inner join utenti u on s.cmpn = u.id order by 2 asc;";
+  public function filtroSchedatori(int $id = null){
+    $where = $id != null ? ' where id = '.$id : '';
+    $sql = "select distinct u.id, concat(u.cognome,' ',u.nome) compilatore from scheda s inner join utenti u on s.cmpn = u.id ".$where." order by 2 asc;";
+    return $this->simple($sql);
+  }
+  public function filtroCategorie(int $id = null){
+    $where = $id != null ? ' where id = '.$id : '';
+    $sql = "select * from (SELECT distinct 2 as tsk, lower(ogtd_1.value) AS ogtd FROM og_nu JOIN liste.ogtd ogtd_1 ON og_nu.ogtd = ogtd_1.id UNION SELECT distinct 1 as tsk, lower(ogtd_1.value) AS ogtd FROM og_ra JOIN liste.ra_cls_l4 ogtd_1 ON og_ra.l4 = ogtd_1.id) ogtd ".$where." order by 2 asc";
+    return $this->simple($sql);
+  }
+  public function filtroMateria(int $id = null){
+    $where = $id != null ? ' where materia.id = '.$id : '';
+    $sql = "select distinct materia.id,materia.tsk, materia.value as materia from mtc inner join liste.materia on mtc.materia = materia.id ".$where." order by 3 asc;";
+    return $this->simple($sql);
+  }
+  public function filtroTecnica(){
+    $sql = "select distinct lower(unnest(string_to_array(tecnica,', '))) tecnica from mtc order by 1 asc;";
     return $this->simple($sql);
   }
 }

@@ -18,6 +18,7 @@ let marker = {};
 let map;
 
 
+
 $(document)
 .ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
 .ajaxStop(function(){ $("#loadingDiv").addClass('invisible');})
@@ -28,6 +29,17 @@ $(document)
 let log = $("body>header").data('log');
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
 const toolTipOpt = {container: 'body', boundary: 'viewport', selector: '[data-toggle=tooltip]',trigger : 'hover', html: true}
+const dataTableOpt = {
+  paging: true,
+  lengthMenu: [20, 50, 75, 100, 200],
+  order: [],
+  columnDefs: [{targets  : 'no-sort', orderable: false }],
+  destroy:true,
+  retrieve:true,
+  responsive: true,
+  html:true,
+  language: { url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Italian.json' }
+}
 //NOTE: gestione menù laterale
 if (screen.width >= 992 ) {
   log == 'y' ? $("body>main").addClass('mainPadding') : $("body>main").removeClass('mainPadding');
