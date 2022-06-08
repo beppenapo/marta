@@ -1,0 +1,41 @@
+-- id_scheda
+begin;
+create table work.tiberi(
+  id_scheda integer primary key,
+  nctn integer,
+  inv integer,
+  suf CHARACTER VARYING,
+  l4 INTEGER,
+  l3 INTEGER,
+  piano INTEGER,
+  sala INTEGER,
+  vetrina CHARACTER VARYING,
+  comune INTEGER,
+  geonote CHARACTER VARYING,
+  scan CHARACTER VARYING,
+  dsca CHARACTER VARYING,
+  dscd CHARACTER VARYING,
+  dtzgi INTEGER,
+  dtzgf INTEGER,
+  dtzs INTEGER,
+  dtsi NUMERIC(4,0),
+  dtsf NUMERIC(4,0),
+  dtm INTEGER,
+  materia INTEGER,
+  tecnica CHARACTER VARYING,
+  misa numeric(5,2),
+  misl numeric(5,2),
+  misp numeric(5,2),
+  misd numeric(5,2),
+  deso CHARACTER VARYING,
+  stcc INTEGER,
+  stcl integer,
+  adsp INTEGER,
+  adsm INTEGER,
+  cmpd date,
+  cmpn INTEGER,
+  fur INTEGER,
+  cdgg INTEGER
+);
+alter table work.tiberi owner to marta;
+COMMIT;
