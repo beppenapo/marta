@@ -17,18 +17,17 @@
           </select>
         </div>
         <div class="col-md-4 col-lg-2">
-          <div class="<?php echo $lcView; ?>" id="lcSalaDiv">
-            <label for="sala" class="text-danger font-weight-bold">Sala</label>
-            <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required>
-              <?php
-              foreach ($salaList as $key => $val) {
-                if(isset($_POST['s'])){ $sel = $val['sala'] == $scheda['lc']['sala'] ? 'selected' : '';}
-                $sala = !$val['descrizione'] ? $val['sala'] : $val['descrizione'];
-                echo "<option value='".$val['id']."' ".$sel.">".$sala."</option>";
-              }
-              ?>
-            </select>
-          </div>
+          <label for="sala" class="text-danger font-weight-bold">Sala</label>
+          <select class="form-control form-control-sm" data-table="lc" id="sala" name="sala" required>
+            <?php
+            if(!isset($_POST['s'])){echo "<option value='' selected disabled>--sala--</option>";}
+            foreach ($salaList as $key => $val) {
+              if(isset($_POST['s'])){ $sel = $val['sala'] == $scheda['lc']['sala'] ? 'selected' : '';}
+              $sala = !$val['descrizione'] ? $val['sala'] : $val['descrizione'];
+              echo "<option value='".$val['id']."' ".$sel.">".$sala."</option>";
+            }
+            ?>
+          </select>
         </div>
 
         <div class="col-md-4 col-lg-2">
@@ -70,7 +69,7 @@
       <div class="form-row <?php echo $lcNoVetrine; ?>" id="noVetrine">
         <div class="col-12">
           <div class="alert alert-warning mt-3 mb-0">
-            <label class="">Non ci sono vetrine per il piano selezionato</label>
+            <label class="">Non ci sono vetrine per la sala selezionata</label>
           </div>
         </div>
       </div>

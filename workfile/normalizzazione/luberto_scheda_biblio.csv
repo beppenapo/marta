@@ -1,0 +1,634 @@
+scheda_temp,biblio_temp,contributo_temp,pagine,figure
+1,1001,2,209 n. 24,dato assente
+1,1000,1,238 nota 18,Fig. 6.2
+2,1001,2,209 n. 25,dato assente
+2,1000,1,238 nota 19,Fig. 6.3 e 7
+3,1001,2,209 n. 26,dato assente
+3,1000,1,238 nota 19,Fig. 6.4 e 7
+4,1001,2,208 n. 28,dato assente
+4,1000,1,239 nota 21,Fig. 6.6 e 7
+5,1001,2,217 nn. 34-35,dato assente
+5,1000,1,239 nota 23,Fig. 6.8 e 7
+6,1001,2,"217 nn. 36,1",dato assente
+6,1000,1,237 nota 15,Fig. 6.1
+7,1001,2,"217 nn. 36,2",dato assente
+7,1000,1,239 nota 23,Fig. 6.9 e 7
+8,1001,2,217 n. 37,dato assente
+8,1000,1,239 nota 22,Fig. 6.7 e 7
+9,1000,1,237 nota 15,dato assente
+9,1001,2,"224 n. 44,2",dato assente
+10,1000,1,239 nota 24,dato assente
+10,1001,2,"209 n. 29,3",dato assente
+11,1000,1,239 nota 24,dato assente
+11,1001,2,"209 n. 29,4",dato assente
+16,1002,3,548 n. 57,dato assente
+17,1002,3,548 n. 57,dato assente
+18,1002,3,548 n. 57,dato assente
+18,1003,4,352,tav. LVIII.2
+19,1002,3,548 n. 57,dato assente
+19,1003,4,352,tav. LVIII.2
+20,1005,,"77, 258, TAR092",dato assente
+20,1004,5,8-11,Fig. 1a-c
+20,1003,4,352,tav. LVIII.2
+21,1005,,"77, 258, TAR097",dato assente
+21,1004,5,8-11,fig. 2a-c
+21,1003,4,352,tav. LVIII.2
+23,1001,2,Cfr. p. 217 n. 37,dato assente
+24,1006,,Cfr. p. 81 ,Fig. 52
+25,1006,,Cfr. p. 84 ,Fig. 58
+26,1006,,Cfr. pp. 62-70,dato assente
+28,1006,,Cfr. pp. 62-70,dato assente
+29,1006,,Cfr. pp. 62-70,dato assente
+30,1006,,Cfr. p. 98 ,Fig. 77
+31,1006,,Cfr.  p. 33 ,fig. 17 n. 15
+33,1006,,Cfr. pp. 62-70,dato assente
+34,1006,,Cfr. pp. 62-70,dato assente
+35,1006,,Cfr. p. 90 nn. 39-40,dato assente
+36,1006,,Cfr. p. 90 nn. 39-40,dato assente
+37,1006,,Cfr. pp. 62-70,dato assente
+38,1006,,Cfr. pp. 62-70,dato assente
+39,1006,,Cfr. pp. 62-70,dato assente
+42,1007,6,266-267 n. 245,dato assente
+43,1007,6,265-266 n. 234,dato assente
+44,1007,6,266-267 n. 247,dato assente
+45,1007,6,"263, 266 n. 248",dato assente
+46,1007,6,Cfr. pp. 262-263 n. 209,dato assente
+47,1007,6,"262, 264 n. 218",dato assente
+49,1007,6,"262, 264 n. 219",dato assente
+50,1007,6,"262, 264 n. 220",dato assente
+51,1007,6,"262, 264 n. 213",dato assente
+52,1007,6,"262, 264 n. 215",dato assente
+53,1007,6,"262, 264 n. 216",dato assente
+54,1007,6,"262, 264 n. 214",dato assente
+55,1007,6,"262, 264 n. 201",dato assente
+56,1007,6,"262, 264 n. 203",dato assente
+58,1007,6,"262, 263 n. 221",dato assente
+59,1008,,"Cfr. p. 161 n. 12, tav. V C.",dato assente
+60,1007,6,"262, 263 n. 222",dato assente
+61,1007,6,"262, 264 n. 202",dato assente
+62,1008,,"Cfr. pp. 61-62 nn. 4-5, tav. I A.",dato assente
+63,1007,6,"262, 265 n. 227",dato assente
+64,1007,6,"262, 264 n. 223",dato assente
+65,1009,7,52,dato assente
+66,1009,7,52,dato assente
+67,1009,7,52,dato assente
+68,1009,7,52,dato assente
+69,1009,7,52,dato assente
+70,1010,,"19, n. A2",Fig. 2
+71,1010,,"21, n. B3",Fig. 2
+72,1010,,"p. 21, n. B4","tav. I, fig. 2"
+73,1010,,"21, n. D39",Fig. 7
+74,1010,,"32, E58 (Repl.)",dato assente
+75,1010,,"49, n. B113",Fig. 18
+76,1010,,"46, n. B103",Fig. 16
+77,1010,,"53, n. B120",Fig. 20
+78,1010,,"49-53, n. B119",Fig. 19
+79,1010,,"60-61, n. D166",Fig. 16
+80,1010,,"53, n. B121",Fig. 20
+81,1010,,"65, n. E187",Fig. 27
+82,1006,,22,Fig. 6
+83,1006,,50,fig. 33 n. 25
+84,1006,,33,fig. 17 n. 14
+85,1006,,66-67,figg. 47-48
+86,1011,8,495 nota 12,Fig. 8.3
+87,1011,8,495 nota 12,Fig. 8.2
+88,1011,8,495 nota 12,Fig. 8.5
+89,1006,,66,fig. 47 n. 15
+90,1006,,82,fig. 54
+91,1011,8,495 nota 13,figg. 8.10 e 9.1
+92,1011,8,497 nota 14,figg. 8.11 e 9.2
+93,1011,8,,figg. 8.16 e 9.3
+94,1011,8,,figg. 8.16 e 9.3
+95,1011,8,,figg. 8.18 e 9.5
+96,1011,8,,fig. 9.7
+97,1011,8,,figg. 8.12 e 9.6
+98,1011,8,,figg. 8.12 e 9.6
+99,1011,8,,fig. 9.8
+100,1011,8,,fig. 10.2
+101,1011,8,,fig. 10.1
+102,1011,8,,Fig. 10.3
+103,1012,9,119-120 ,dato assente
+103,1011,8,501,figg. 13.11 e 14
+104,1011,8,, fig. 16 (con indicazione di provenienza errata)
+104,1012,9,119-120 ,dato assente
+105,1012,9,119-120 ,dato assente
+106,1011,8,502-504,figg. 15.11 e 16
+107,1011,8,502-504,fig. 15.9 e 16
+108,1011,8,502-503,Fig. 16
+109,1007,6,"263, 266, n. 249",dato assente
+110,1007,6,"263, 266, n. 250",dato assente
+111,1007,6,"263, 267, n. 251",dato assente
+112,1013,10,198 n. 1,dato assente
+113,1013,10,198 n. 1,dato assente
+114,1013,10,198 n. 21,dato assente
+114,1014,11,,fig. 8 n. 21
+115,1013,10,198 n. 21,dato assente
+115,1015,12,350 nota 14,dato assente
+115,1014,11,,fig. 8 n. 21
+116,1013,10,198 n. 19,dato assente
+116,1014,11,,fig. 8 n. 19
+117,1013,10,198 n. 19,dato assente
+117,1014,11,,fig. 8 n. 19
+118,1013,10,198 n. 19,dato assente
+118,1014,11,,fig. 8 n. 19
+119,1013,10,198 n. 19,dato assente
+119,1014,11,,fig. 8 n. 19
+120,1013,10,198 n. 19,dato assente
+120,1014,11,,fig. 8 n. 19
+121,1016,13,,nota 14
+122,1016,13,,nota 14
+123,1016,13,,nota 14
+124,1013,10,198 n. 22,dato assente
+124,1017,14,15 n. 6,fig. 5F
+124,1014,11,,fig. 8 n. 22
+125,1013,10,198 n. 22,dato assente
+125,1017,14,16 n. 11,fig. 5K
+125,1014,11,,fig. 8 n. 22
+126,1013,10,198 n. 22,dato assente
+126,1014,11,,fig. 8 n. 22
+126,1017,14,17 n. 14,"figg. 6c, 7b"
+127,1013,10,198 n. 22,dato assente
+127,1017,14,16 n. 10,fig. 5I
+127,1014,11,,fig. 8 n. 22
+128,1013,10,198 n. 22,dato assente
+128,1014,11,,fig. 8 n. 22
+128,1017,14,19 n. 20,"figg. 6i, 7c"
+129,1013,10,198 n. 22,dato assente
+129,1014,11,,fig. 8 n. 22
+129,1017,14,19 n. 21,"figg. 6k, 8a"
+130,1013,10,198 n. 22,dato assente
+130,1014,11,,fig. 8 n. 22
+130,1017,14,20 n. 24,fig. 8B
+131,1013,10,198 n. 22,dato assente
+131,1017,14,20 n. 22,fig. 6L
+131,1014,11,,fig. 8 n. 22
+132,1013,10,198 n. 22,dato assente
+132,1017,14,18 n. 18,fig. 6g
+132,1014,11,,fig. 8 n. 22
+133,1013,10,198 n. 22,dato assente
+133,1017,14,17 n. 15,fig. 6d
+133,1014,11,,fig. 8 n. 22
+134,1017,14,15 n. 4,fig. 5d.
+134,1014,11,,fig. 8 n. 22
+134,1013,10,198 n. 22,dato assente
+135,1017,14,18 n. 16,fig. 6e
+135,1014,11,,fig. 8 n. 22
+135,1013,10,198 n. 22,dato assente
+136,1017,14,15 n. 5,fig. 5E
+136,1014,11,,fig. 8 n. 22
+136,1013,10,198 n. 22,dato assente
+137,1017,14,14 n. 2,fig. 5b
+137,1014,11,,fig. 8 n. 22
+137,1013,10,198 n. 22,dato assente
+138,1017,14,20 n. 23,fig. 6M
+138,1014,11,,fig. 8 n. 22
+138,1013,10,198 n. 22,dato assente
+139,1017,14,14 n. 3,fig. 5C
+139,1014,11,,fig. 8 n. 22
+139,1013,10,198 n. 22,dato assente
+140,1017,14,16 n. 9,fig. 5H
+140,1014,11,,fig. 8 n. 22
+140,1013,10,198 n. 22,dato assente
+141,1017,14,16 n. 8,fig. 5G
+141,1014,11,,fig. 8 n. 22
+141,1013,10,198 n. 22,dato assente
+142,1014,11,,fig. 8 n. 22
+142,1013,10,198 n. 22,dato assente
+142,1017,14,15 n. 7,dato assente
+143,1014,11,,fig. 8 n. 22
+143,1018,,,"tav. 2, n. 2"
+143,1013,10,198 n. 22,dato assente
+143,1017,14,p. 14 n. 1,dato assente
+144,1017,14,19 n. 19,fig. 6h
+144,1014,11,,fig. 8 n. 22
+144,1013,10,198 n. 22,dato assente
+145,1014,11,,fig. 8 n. 22
+145,1017,14,20 n. 25,fig. 8c
+145,1013,10,198 n. 22,dato assente
+146,1017,14,24-25 ,fig. 17a-d
+146,1014,11,,fig. 8 n. 29
+146,1013,10,199 n. 29,dato assente
+147,1014,11,,fig. 8 n. 10
+147,1017,14,21-22 n. 1 ,"figg. 9a, 12-13"
+147,1019,15,,passim.
+147,1018,,,"tavv. 1 e 3, nn. 1-3."
+147,1013,10,198 n. 10,dato assente
+148,1014,11,,fig. 8 n. 10
+148,1017,14,22-23 n. 2 ,"figg. 9B, 14-16"
+148,1018,,,"tavv. 1 e 3, nn. 4-6."
+148,1013,10,198 n. 10,dato assente
+149,1014,11,,fig. 8 n. 10
+149,1017,14,23 n. 5 ,"figg. 9c, 10"
+149,1018,,,"tav. 2, n. 1."
+149,1013,10,198 n. 10,dato assente
+150,1014,11,,8 n. 6
+150,1017,14,13 n. 3 ,fig. 4b
+150,1013,10,198 n. 6,dato assente
+151,1014,11,,8 n. 6
+151,1017,14,13 n. 3 ,fig. 4b
+151,1013,10,198 n. 6,dato assente
+152,1014,11,,8 n. 6
+152,1017,14,12-13 n. 1 ,fig. 4a
+152,1013,10,198 n. 6,dato assente
+153,1014,11,,8 n. 6
+153,1017,14,13 n. 2 ,fig. 4c
+153,1013,10,198 n. 6,dato assente
+154,1017,14,63-64 n. 4 ,fig. 45d
+154,1014,11,,fig. 9e n. 56
+154,1013,10,228 n. H 14,dato assente
+155,1013,10,199 n. 56,dato assente
+156,1017,14,61 n. 1 ,figg. 45a
+156,1013,10,199 n. 56,dato assente
+157,1017,14,64 n. 5 ,figg. 45e
+157,1013,10,199 n. 56,dato assente
+158,1017,14, 61 n. 2 ,fig. 45b
+158,1013,10,199 n. 56,dato assente
+159,1017,14,49 n. 1,fig. 34a
+159,1013,10,199 n. 41,dato assente
+160,1017,14,49 n. 2 ,"figg. 34b-c, 35a-c"
+160,1013,10,199 n. 41,dato assente
+161,1017,14,51-52,fig. 36
+161,1013,10,199 n. 42,dato assente
+162,1017,14,34-36,figg. 23-24
+162,1020,16,365,dato assente
+163,1017,14,33,fig. 25b
+164,1017,14,33-34 n. 2 ,fig. 25a
+165,1017,14,"12, n. 1 ",fig. 3
+166,1017,14,39-40 n. 6,Fig. 26e
+166,1013,10,199 n. 31,dato assente
+167,1017,14,39-40 n. 6 ,fig. 26d
+167,1013,10,199 n. 31,dato assente
+168,1017,14,38 n. 3 ,fig. 26c
+168,1013,10,199 n. 31,dato assente
+169,1017,14,37 n. 1,fig. 26a
+169,1013,10,199 n. 31,dato assente
+170,1013,10,199 n. 31,dato assente
+170,1017,14,38-39 n. 6,dato assente
+171,1013,10,199 n. 31,dato assente
+171,1017,14,38 n. 4,dato assente
+172,1013,10,199 n. 31,dato assente
+172,1017,14,39 n. 7,dato assente
+173,1013,10,199 n. 31,dato assente
+173,1017,14,37-38 n. 2,dato assente
+174,1013,10,199 n. 31,dato assente
+174,1017,14,38 n. 5,dato assente
+175,1013,10,199 n. 31,dato assente
+175,1017,14,40 n. 10,dato assente
+176,1013,10,199 n. 31,dato assente
+176,1017,14,40 n. 11,dato assente
+177,1013,10,199 n. 57,dato assente
+177,1017,14,57-58 n. 1,dato assente
+178,1013,10,199 n. 57,dato assente
+178,1017,14,59 n. 3,dato assente
+179,1013,10,199 n. 57,dato assente
+179,1017,14,58 n. 2,dato assente
+180,1017,14,60 n. 4,"figg. 43d, 44a"
+180,1013,10,199 n. 62,dato assente
+181,1017,14,59 n. 2,"figg. 43b, 44b"
+181,1013,10,199 n. 62,dato assente
+182,1017,14,60 n. 3,"figg. 43c, 44c"
+182,1013,10,199 n. 62,dato assente
+183,1017,14,59 n. 1,fig. 43a
+183,1013,10,199 n. 62,dato assente
+184,1017,14,76-77 n. 1,"figg. 58a, 59"
+184,1013,10,200 n. 71,dato assente
+185,1017,14,77 n. 2,fig. 58b
+185,1013,10,200 n. 71,dato assente
+186,1017,14,78 n. 4,fig. 58d
+186,1013,10,200 n. 71,dato assente
+187,1017,14,77-78 n. 3,fig. 58c
+187,1013,10,200 n. 71,dato assente
+188,1013,10,200 n. 71,dato assente
+188,1017,14,78 n. 5,dato assente
+189,1017,14,66-67 n. 4,"figg. 48d, 49b-c"
+189,1013,10,200 n. 79,dato assente
+190,1017,14,66 n. 3,"figg. 48c, 49a"
+190,1013,10,200 n. 79,dato assente
+191,1017,14,66 n. 2,fig. 48b
+191,1013,10,200 n. 79,dato assente
+192,1017,14,67 n. 5,fig. 48g
+192,1013,10,200 n. 79,dato assente
+193,1017,14,67 n. 1,fig. 48e
+193,1013,10,200 n. 79,dato assente
+194,1017,14,67-68 n. 6,fig. 48f
+194,1013,10,200 n. 79,dato assente
+195,1017,14,69-70 n. 7,"figg. 48a, 50"
+195,1013,10,200 n. 79,dato assente
+196,1017,14,151 n. 1,fig. 132e
+196,1013,10,"201, n. 124",dato assente
+197,1017,14,152 n. 2,"figg. 132b, 133a"
+197,1013,10,"201, n. 124",dato assente
+198,1013,10,"201, n. 124",dato assente
+198,1017,14,156 n. 4,dato assente
+199,1017,14,156 n. 5,"figg. 132a, 133b"
+199,1013,10,"201, n. 124",dato assente
+200,1017,14,155 n. 3,fig. 132c
+200,1013,10,"201, n. 124",dato assente
+201,1017,14,156-159 n. 7,"figg. 132d, 134-136"
+201,1013,10,"201, n. 124",dato assente
+202,1017,14,156 n. 6,fig. 132f
+202,1013,10,"201, n. 124",dato assente
+203,1017,14,167 n. 1,fig. 147a
+203,1013,10,"201, n. 122",dato assente
+204,1017,14,169 n. 10,fig. 147h
+204,1013,10,"201, n. 122",dato assente
+205,1017,14,169 n. 11,fig. 147h
+205,1013,10,"201, n. 122",dato assente
+206,1017,14,169 n. 12,fig. 147h
+206,1013,10,"201, n. 122",dato assente
+207,1017,14,169-170 n. 13,fig. 148a-c
+207,1013,10,"201, n. 122",dato assente
+208,1017,14,169 n. 6,fig. 147d
+208,1013,10,"201, n. 122",dato assente
+209,1017,14,167-168 n. 4,fig. 147c
+209,1013,10,"201, n. 122",dato assente
+210,1013,10,"201, n. 122",dato assente
+210,1017,14,168 n. 5,dato assente
+211,1017,14,168 n. 2,fig. 147b
+211,1013,10,"201, n. 122",dato assente
+212,1013,10,"201, n. 122",dato assente
+212,1017,14,168 n. 3,dato assente
+213,1017,14,169 n. 9,fig. 147g
+213,1013,10,"201, n. 122",dato assente
+214,1017,14,p. 169 n. 9,fig. 147g
+215,1017,14,169 n. 8,fig. 147f
+215,1013,10,"201, n. 122",dato assente
+216,1017,14,118 n. 3,"figg. 94c, 96a-b"
+216,1013,10,"203, n. 194",dato assente
+217,1017,14,120 n. 8,"figg. 94c, 96a-b"
+217,1013,10,"203, n. 194",dato assente
+218,1017,14,118 n. 1,fig. 94a
+218,1013,10,"203, n. 194",dato assente
+219,1017,14,118 n. 2,fig. 94b
+219,1013,10,"203, n. 194",dato assente
+220,1017,14,120 n. 5,"figg. 94e, 97a"
+220,1013,10,"203, n. 194",dato assente
+221,1017,14,120 n. 6,"figg. 94f, 97b"
+221,1013,10,"203, n. 194",dato assente
+222,1013,10,"203, n. 194",dato assente
+222,1017,14,120 n. 7,dato assente
+223,1013,10,"203, n. 194",dato assente
+223,1017,14,123 n. 16,dato assente
+224,1017,14,122 n. 12,fig. 84k
+224,1013,10,"203, n. 194",dato assente
+225,1013,10,"203, n. 194",dato assente
+225,1017,14,122 n. 13,dato assente
+226,1017,14,120-121 n. 9,fig. 94g
+226,1013,10,"203, n. 194",dato assente
+227,1017,14,121 n. 10,fig. 94h
+227,1013,10,"203, n. 194",dato assente
+228,1017,14,121-122 n. 11,fig. 94i
+228,1013,10,"203, n. 194",dato assente
+229,1013,10,"203, n. 194",dato assente
+229,1017,14,123 n. 18,dato assente
+230,1017,14,122-123 n. 14,fig. 94 l
+230,1013,10,"203, n. 194",dato assente
+231,1013,10,"203, n. 194",dato assente
+231,1017,14,117 n. 15,dato assente
+232,1017,14,123 n. 19,fig. 94m
+232,1013,10,"203, n. 194",dato assente
+233,1017,14,123 n. 19,fig. 94m
+233,1021,17,107-130,dato assente
+234,1017,14,207 n. 16,fig. 181b
+234,1013,10,206 n. 347,dato assente
+235,1017,14,202 n. 1,"figg. 180a, 181a"
+235,1013,10,206 n. 347,dato assente
+236,1017,14,203 n. 2,fig. 180b
+236,1013,10,206 n. 347,dato assente
+237,1017,14,203 n. 3,fig. 180h
+237,1013,10,206 n. 347,dato assente
+238,1017,14,204 n. 4,fig. 180c
+238,1013,10,206 n. 347,dato assente
+239,1017,14,205 n. 6,fig. 180l
+239,1013,10,206 n. 347,dato assente
+240,1017,14,205 n. 7,fig. 180m
+240,1013,10,206 n. 347,dato assente
+241,1017,14,205 n. 8,fig. 180n
+241,1013,10,206 n. 347,dato assente
+242,1017,14,205 n. 9,fig. 180o
+242,1013,10,206 n. 347,dato assente
+243,1017,14,205 n. 10,fig. 180k
+243,1013,10,206 n. 347,dato assente
+244,1017,14, 205 n. 5,fig. 180i
+244,1013,10,206 n. 347,dato assente
+245,1017,14,207-208 n. 18,fig. 180i
+245,1013,10,206 n. 347,dato assente
+246,1017,14,205 n. 11,"figg. 180d, 182a"
+246,1013,10,206 n. 347,dato assente
+246,1021,17,107-130 e nota 126,dato assente
+247,1017,14,206 n. 12,"figg. 180e, 182b"
+247,1013,10,206 n. 347,dato assente
+247,1021,17,107-130 e nota 127,dato assente
+248,1017,14,206 n. 13,"figg. 180f, 182c"
+248,1013,10,206 n. 347,dato assente
+248,1021,17,107-130 e nota 138,dato assente
+249,1017,14,207 n. 14,fig. 180g
+249,1013,10,206 n. 347,dato assente
+249,1021,17,107-130 e nota 140,dato assente
+250,1017,14,207 n. 15,fig. 180p
+250,1013,10,206 n. 347,dato assente
+250,1021,17,107-130 e nota 140,dato assente
+251,1004,5,16 nota 1,dato assente
+251,1013,10,201 n. 132,dato assente
+252,1004,5,16 nota 1,dato assente
+252,1013,10,201 n. 132,dato assente
+253,1004,5,16 nota 1,dato assente
+253,1013,10,201 n. 132,dato assente
+254,1004,5,16 nota 1,dato assente
+254,1013,10,201 n. 132,dato assente
+255,1004,5,16 nota 1,dato assente
+255,1013,10,201 n. 132,dato assente
+256,1004,5,16 nota 1,dato assente
+256,1013,10,201 n. 132,dato assente
+257,1004,5,16 nota 1,dato assente
+257,1013,10,201 n. 132,dato assente
+258,1004,5,16 nota 1,dato assente
+258,1013,10,201 n. 132,dato assente
+259,1004,5,16 nota 1,dato assente
+259,1013,10,201 n. 132,dato assente
+260,1004,5,16 nota 1,dato assente
+260,1013,10,201 n. 132,dato assente
+261,1004,5,"11-15, nota 3","figg. 3b, 4-5"
+261,1005,,"258, TAR 052",dato assente
+262,1004,5,"11-15, nota 3","figg. 3a, 6"
+262,1005,,"258, TAR 051",dato assente
+263,1004,5,"11-15, nota 3","figg. 3a, 6"
+263,1005,,"258, TAR 050",dato assente
+264,1013,10,p. 201 n. 132,dato assente
+265,1013,10,p. 201 n. 132,dato assente
+266,1013,10,p. 201 n. 132,dato assente
+267,1004,5,23 nota 2,dato assente
+267,1013,10,201 n. 145,dato assente
+268,1004,5,23 e nota 2,fig. 19a
+268,1013,10,201 n. 145,dato assente
+269,1004,5,25 nota 5,dato assente
+269,1013,10,201 n. 145,dato assente
+270,1004,5," 23-25, nota 3",fig. 19b
+270,1013,10,201 n. 145,dato assente
+271,1022,18,154 n. 2.3,figg. 2.a-3
+272,1022,18,155 n. 2.4,"figg. 2d, 5"
+273,1022,18,154 n. 2.1,fig. 2b
+274,1022,18,154 n. 2.2,dato assente
+275,1013,10,206 n. 330,dato assente
+276,1023,,"266, P2",figg. 199-203
+276,1013,10,206 n. 330,dato assente
+277,1023,,"241, W2",Figg. 522-531
+277,1013,10,206 n. 330,dato assente
+278,1023,,"p. 241, in scheda W2",figg. 762-764
+278,1013,10,206 n. 330,dato assente
+279,1013,10,206 n. 330,dato assente
+280,1013,10,206 n. 330,dato assente
+281,1013,10,206 n. 330,dato assente
+282,1009,22,"141,142",dato assente
+282,1024,19,180-181,dato assente
+282,1025,20,105-107,dato assente
+282,1026,21,79,dato assente
+283,1009,22,"141,142",dato assente
+283,1024,19,180-181,dato assente
+283,1025,20,105-107,dato assente
+283,1026,21,79,dato assente
+284,1009,22,"141,142",dato assente
+284,1024,19,180-181,dato assente
+284,1025,20,105-107,dato assente
+284,1026,21,79,dato assente
+285,1009,22,"141,142",dato assente
+285,1024,19,180-181,dato assente
+285,1025,20,105-107,dato assente
+285,1026,21,79,dato assente
+286,1009,22,"141,142",dato assente
+286,1024,19,180-181,dato assente
+286,1025,20,105-107,dato assente
+286,1026,21,79,dato assente
+287,1009,22,"141,142",dato assente
+287,1024,19,180-181,dato assente
+287,1025,20,105-107,dato assente
+287,1026,21,79,dato assente
+288,1009,22,"141,142",dato assente
+288,1024,19,180-181,dato assente
+288,1025,20,105-107,dato assente
+288,1026,21,79,dato assente
+289,1009,22,"141,142",dato assente
+289,1024,19,180-181,dato assente
+289,1025,20,105-107,dato assente
+289,1026,21,79,dato assente
+290,1009,22,"141,142",dato assente
+290,1024,19,180-181,dato assente
+290,1025,20,105-107,dato assente
+290,1026,21,79,dato assente
+291,1009,22,"141,142",dato assente
+291,1024,19,180-181,dato assente
+291,1025,20,105-107,dato assente
+291,1026,21,79,dato assente
+292,1009,22,"141,142",dato assente
+292,1024,19,180-181,dato assente
+292,1025,20,105-107,dato assente
+292,1026,21,79,dato assente
+293,1008,,90 nn. I.134-135,dato assente
+293,1009,22,"141,142",dato assente
+293,1024,19,180-181,dato assente
+293,1025,20,105-107,dato assente
+293,1026,21,79,dato assente
+294,1008,,90 nn. I.134-135,dato assente
+294,1009,22,"141,142",dato assente
+294,1024,19,180-181,dato assente
+294,1025,20,105-107,dato assente
+294,1026,21,79,dato assente
+295,1008,,90 nn. I.134-135,dato assente
+295,1009,22,"141,142",dato assente
+295,1024,19,180-181,dato assente
+295,1025,20,105-107,dato assente
+295,1026,21,79,dato assente
+296,1008,,"159 e 164, nn. XI.5 e XI.24",dato assente
+296,1009,22,"141,142",dato assente
+296,1024,19,180-181,dato assente
+296,1025,20,105-107,dato assente
+296,1026,21,79,dato assente
+297,1009,22,"141,142",dato assente
+297,1024,19,180-181,dato assente
+297,1025,20,105-107,dato assente
+297,1026,21,79,dato assente
+298,1008,, 83 n. I.100,dato assente
+298,1009,22,"141,142",dato assente
+298,1024,19,180-181,dato assente
+298,1025,20,105-107,dato assente
+298,1026,21,79,dato assente
+299,1009,22,"141,142",dato assente
+299,1024,19,180-181,dato assente
+299,1025,20,105-107,dato assente
+299,1026,21,79,dato assente
+300,1009,22,"141,142",dato assente
+300,1024,19,180-181,dato assente
+300,1025,20,105-107,dato assente
+300,1026,21,79,dato assente
+301,1009,22,"141,142",dato assente
+301,1024,19,180-181,dato assente
+301,1025,20,105-107,dato assente
+301,1026,21,79,dato assente
+302,1009,22,"141,142",dato assente
+302,1024,19,180-181,dato assente
+302,1025,20,105-107,dato assente
+302,1026,21,79,dato assente
+303,1009,22,"141,142",dato assente
+303,1024,19,180-181,dato assente
+303,1025,20,105-107,dato assente
+303,1026,21,79,dato assente
+304,1009,22,"141,142",dato assente
+304,1024,19,180-181,dato assente
+304,1025,20,105-107,dato assente
+304,1026,21,79,dato assente
+305,1009,22,"141,142",dato assente
+305,1024,19,180-181,dato assente
+305,1025,20,105-107,dato assente
+305,1026,21,79,dato assente
+306,1009,22,"141,142",dato assente
+306,1024,19,180-181,dato assente
+306,1025,20,105-107,dato assente
+306,1026,21,79,dato assente
+307,1009,22,"141,142",dato assente
+307,1024,19,180-181,dato assente
+307,1025,20,105-107,dato assente
+307,1026,21,79,dato assente
+308,1009,22,"141,142",dato assente
+308,1024,19,180-181,dato assente
+308,1025,20,105-107,dato assente
+308,1026,21,79,dato assente
+309,1009,22,"141,142",dato assente
+309,1024,19,180-181,dato assente
+309,1025,20,105-107,dato assente
+309,1026,21,79,dato assente
+310,1009,22,"141,142",dato assente
+310,1024,19,180-181,dato assente
+310,1025,20,105-107,dato assente
+310,1026,21,79,dato assente
+311,1009,22,"141,142",dato assente
+311,1024,19,180-181,dato assente
+311,1025,20,105-107,dato assente
+311,1026,21,79,dato assente
+312,1009,22,"141,142",dato assente
+312,1024,19,180-181,dato assente
+312,1025,20,105-107,dato assente
+312,1026,21,79,dato assente
+313,1009,22,"141,142",dato assente
+313,1024,19,180-181,dato assente
+313,1025,20,105-107,dato assente
+313,1026,21,79,dato assente
+314,1009,22,"141,142",dato assente
+314,1024,19,180-181,dato assente
+314,1025,20,105-107,dato assente
+314,1026,21,79,dato assente
+315,1009,22,"141,142",dato assente
+315,1024,19,180-181,dato assente
+315,1025,20,105-107,dato assente
+315,1026,21,79,dato assente
+316,1009,22,"141,142",dato assente
+316,1024,19,180-181,dato assente
+316,1025,20,105-107,dato assente
+316,1026,21,79,dato assente
+317,1009,22,"141,142",dato assente
+317,1024,19,180-181,dato assente
+317,1025,20,105-107,dato assente
+317,1026,21,79,dato assente
+318,1009,22,"141,142",dato assente
+318,1024,19,180-181,dato assente
+318,1025,20,105-107,dato assente
+318,1026,21,79,dato assente

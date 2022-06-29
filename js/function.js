@@ -96,11 +96,10 @@ $("[name=checkTitolo]").on('click', checkTitolo);
 $(".lcSel").hide();
 $("[name=piano]").on('change', function(){
   let piano = $(this).val();
-  piano == 0 ? $("[name=contenitore]").prop('required',false) : $("[name=contenitore]").prop('required',true)
-  $("#lcSalaDiv").fadeIn('fast');
+  //piano == 0 ? $("[name=contenitore]").prop('required',false) : $("[name=contenitore]").prop('required',true)
+  // $("#lcSalaDiv").fadeIn('fast');
   $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
-  $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
-  $("[name=cassetta]").prop('required',false);
+  $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('').prop('required',false);
   getSale(piano)
 })
 $("[name=sala]").on('change', function(){
@@ -169,12 +168,10 @@ $("[name=colonna]").on('change', function(){
   $.each(slot, function(index, val){options.push("<option value='"+val+"'>"+val+"</option>");});
   $("#ripianoLabel").text(label);
   $("[name=ripiano]").html(options.join());
-  $("#lcRipianoDiv,#lcCassettaDiv").fadeIn('fast');
-  $("[name=ripiano],[name=cassetta]").val('');
+  $("#lcRipianoDiv").fadeIn('fast');
+  $("[name=ripiano]").val('');
 })
-$("[name=ripiano]").on('change', function(){
-  $("[name=cassetta]").val('');
-})
+
 //Sblocca obbligatorietà di contesto
 $("body").on('click', '[name=toggleSection]', function(e) {
   let checked = e.target.checked;
@@ -531,18 +528,20 @@ function getContenitore(contenitore, sala, label,piano, value = null){
     if(data.length == 0){
       $("#lcContenitoreDiv,#lcCassettaDiv").hide();
       $("#noVetrine").fadeIn('fast');
+      $("[name=contenitore]").prop('required', false);
       return;
     }
     $.each(data, function(index, el) {
       note = !el.note ? '' : el.note;
-    if (el.c == value) { var selected = " selected"; }else{ var selected = ""; }
+      if (el.c == value) { var selected = " selected"; }else{ var selected = ""; }
       options.push("<option value='"+el.c+"'"+selected+">"+el.c+" "+note+"</option>");
     });
-    $("[name=contenitore]").html(options.join())
+    $("[name=contenitore]").html(options.join()).prop('required', true);
     $("#contenitoreLabel").text(label);
     $("#noVetrine").hide();
     $("#lcContenitoreDiv").fadeIn('fast');
     piano === -1 ? $("#lcCassettaDiv").fadeIn('fast') : $("#lcCassettaDiv").fadeOut('fast')
+    piano === -1 ? $("[name=cassetta]").prop('required', true) : $("[name=cassetta]").prop('required', false)
   })
 }
 
