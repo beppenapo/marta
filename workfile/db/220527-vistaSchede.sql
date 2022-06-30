@@ -1,22 +1,22 @@
 begin;
 drop view if exists schede;
-create view schede as 
+create view schede as
 WITH main AS (
-         SELECT s.id AS scheda,
-            s.titolo,
-            s.tsk,
-            tsk.value AS tipo,
-            s.cmpn,
-            concat(u.nome, ' ', u.cognome) AS operatore,
-            nctn.nctn,
-            concat(i.prefisso, ' ', i.inventario, ' ', i.suffisso) AS inventario
-           FROM scheda s
-             JOIN liste.tsk tsk ON s.tsk = tsk.id
-             JOIN utenti u ON s.cmpn = u.id
-             JOIN nctn_scheda nctn ON nctn.scheda = s.id
-             LEFT JOIN inventario i ON i.scheda = s.id
-        ), stato AS (
-         SELECT stato_scheda.scheda,
+  SELECT s.id AS scheda,
+    s.titolo,
+    s.tsk,
+    tsk.value AS tipo,
+    s.cmpn,
+    concat(u.nome, ' ', u.cognome) AS operatore,
+    nctn.nctn,
+    concat(i.prefisso, ' ', i.inventario, ' ', i.suffisso) AS inventario
+  FROM scheda s
+  JOIN liste.tsk tsk ON s.tsk = tsk.id
+  JOIN utenti u ON s.cmpn = u.id
+  JOIN nctn_scheda nctn ON nctn.scheda = s.id
+  LEFT JOIN inventario i ON i.scheda = s.id
+), stato AS (
+ SELECT stato_scheda.scheda,
             stato_scheda.chiusa,
             stato_scheda.verificata,
             stato_scheda.inviata,
@@ -39,7 +39,7 @@ WITH main AS (
             l.value as materia,
             mtc_1.tecnica
          FROM public.mtc mtc_1
-         join liste.materia l on mtc_1.materia = l.id  
+         join liste.materia l on mtc_1.materia = l.id
         ), cronologia AS (
          SELECT dt.scheda,
             dt.dtzgi,
@@ -52,7 +52,7 @@ WITH main AS (
         ), ubicazione AS (
          SELECT lc.scheda,
             lc.piano,
-            lc.sala,
+            s.sala,
             lc.contenitore,
             lc.cassetta,
             s.descrizione AS nome_sala

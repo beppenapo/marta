@@ -4,6 +4,10 @@ update bibliografia set id_temp = null;
 update contributo set id_temp = null;
 update scheda set id_temp = null;
 
+drop table IF EXISTS work.luberto_bibliografia;
+drop table IF EXISTS work.luberto_contributi;
+drop table IF EXISTS work.luberto_biblio_scheda;
+drop table IF EXISTS work.luberto_schede;
 -- creo le tabelle
 create table work.luberto_bibliografia as select id, id_def as biblio, tipo, titolo, autore, editore, anno, luogo, curatore from work.biblio_tiberi limit 0;
 create table work.luberto_contributi as select id, raccolta as biblio_temp, id_def as contributo, raccolta_def as biblio, titolo, autore, altri_autori, pag from work.contributi_tiberi limit 0;
@@ -87,10 +91,30 @@ insert into contributo(id_temp, raccolta, titolo, autore, altri_autori, pag)
 update work.luberto_contributi l set contributo = c.id from contributo c where l.id = c.id_temp and c.id_temp is not null;
 
 --scheda
+update nctn set libero = false where nctn in (select nctn from work.luberto_schede);
+insert into scheda(id_temp, titolo, tsk,lir,cmpn,cmpd,fur) select id_temp, concat('luberto-',nctn), 1, 2, 33, cmpd, 39 from work.luberto_schede;
+update work.luberto_schede t set id_def = s.id from scheda s where t.id_temp = s.id_temp and s.id_temp is not null;
+insert into stato_scheda(scheda) select id_def from work.luberto_schede;
+insert into nctn_scheda(nctn, scheda) select nctn, id_def from work.luberto_schede;
+insert into inventario(inventario,suffisso,scheda) select inv,suf,id_def from work.luberto_schede where inv is not null;
+INSERT INTO ad(scheda, adsp, adsm) select id_def, adsp, adsm from work.luberto_schede;
+INSERT INTO co select id_def, stcc, stcl from work.luberto_schede;
+INSERT INTO da(scheda, deso) select id_def, deso from work.luberto_schede;
+INSERT INTO dt select id_def, dtzs, dtsi, dtsf, dtzgi, dtzgf from work.luberto_schede;
+INSERT INTO lc(scheda, piano, sala, contenitore) select id_def, piano, sala, vetrina from work.luberto_schede;
+INSERT INTO mis(scheda,misa, misl, misd) select id_def, misa, misl, misd from work.luberto_schede;
+INSERT INTO tu(scheda,cdgg) select id_def, cdgg from work.luberto_schede;
+INSERT INTO dtm select id_def, dtm from work.luberto_schede;
+INSERT INTO mtc select id_def, materia, tecnica from work.luberto_schede;
+INSERT INTO geolocalizzazione(scheda,comune,geonote) select id_def, comune, geonote from work.luberto_schede;
+INSERT INTO og_ra(scheda, l3, l4) select id_def, l3, l4 from work.luberto_schede;
+INSERT INTO dsc(scheda,scan, dsca, dscd) select id_def, scan, dsca, dscd from work.luberto_schede;
+
 
 --biblio_scheda
-update work.luberto_biblio_scheda l set biblio = b.id from bibliografia b where l.biblio_temp = b.id_temp and l.contributo_temp is null;
-
+update work.luberto_biblio_scheda l set biblio = b.biblio from work.luberto_bibliografia b where l.biblio_temp = b.id;
+update work.luberto_biblio_scheda l set contributo = b.contributo from work.luberto_contributi b where l.contributo_temp = b.id;
+update work.luberto_biblio_scheda l set scheda = b.id_def from work.luberto_schede b where l.scheda_temp = b.id_temp;
 
 
 COMMIT;

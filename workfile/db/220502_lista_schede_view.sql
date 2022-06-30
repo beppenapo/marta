@@ -1,15 +1,15 @@
 begin;
 drop view if exists lista_schede;
-create view lista_schede as 
+create view lista_schede as
 with main as (
   select
-    s.id scheda, 
+    s.id scheda,
     s.titolo,
     s.tsk,
     tsk.value as tipo,
     s.cmpn,
-    concat(u.nome,' ',u.cognome) operatore, 
-    nctn.nctn, 
+    concat(u.nome,' ',u.cognome) operatore,
+    nctn.nctn,
     concat(i.prefisso,' ',i.inventario,' ',i.suffisso) as inventario
   from scheda s
   INNER JOIN liste.tsk as tsk on s.tsk = tsk.id
@@ -25,8 +25,8 @@ ogtd as (
     ogtd.value as ogtd
   from og_nu
   INNER JOIN liste.ogtd as ogtd on og_nu.ogtd = ogtd.id
-  union 
-  select 
+  union
+  select
     og_ra.scheda,
     ogtd.id as ogtdid,
     ogtd.value as ogtd
@@ -35,46 +35,45 @@ ogtd as (
 ),
 mtc as ( select * from mtc ),
 cronologia as (
-  select 
+  select
     dt.scheda,
     dt.dtzgi,
     dt.dtzgf,
-    inizio.value as inizio, 
+    inizio.value as inizio,
     fine.value as fine
   from dt
   inner join liste.cronologia as inizio on dt.dtzgi = inizio.id
   inner join liste.cronologia as fine on dt.dtzgf = fine.id
 ),
 ubicazione as (
-  select lc.scheda,lc.piano, lc.sala, lc.contenitore, lc.cassetta, s.descrizione as nome_sala from lc, liste.sale s where lc.sala = s.id
+  select lc.scheda,lc.piano, s.sala, lc.contenitore, lc.cassetta, s.descrizione as nome_sala from lc, liste.sale s where lc.sala = s.id
 ),
 localizzazione as (
-  select s.scheda, s.comune comid, s.via viaid, s.geonote, c.comune, v.via
+  select s.scheda, s.comune comid, s.via, s.geonote, c.comune
   from geolocalizzazione s
   inner join comuni c on s.comune = c.id
-  left join vie v on s.via = v.osm_id
 )
-select distinct 
-  main.scheda, 
+select distinct
+  main.scheda,
   main.nctn,
   main.tsk,
   main.tipo,
   main.inventario,
-  main.titolo, 
+  main.titolo,
   main.cmpn,
   main.operatore,
   stato.chiusa,
   stato.verificata,
   stato.inviata,
   stato.accettata,
-  ogtd.ogtd, 
-  cronologia.inizio, 
-  cronologia.fine, 
+  ogtd.ogtd,
+  cronologia.inizio,
+  cronologia.fine,
   ubicazione.piano,
   ubicazione.sala,
   ubicazione.contenitore,
   ubicazione.cassetta,
-  localizzazione.comune, 
+  localizzazione.comune,
   localizzazione.via
 from main
 inner join stato on stato.scheda = main.scheda
