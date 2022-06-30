@@ -77,8 +77,7 @@ alter table work.luberto_contributi add unique (contributo);
 --copio i dati dai file csv
 copy work.luberto_bibliografia from '/var/www/marta/workfile/normalizzazione/luberto_bibliografia.csv' delimiter ',' csv header;
 copy work.luberto_contributi from '/var/www/marta/workfile/normalizzazione/luberto_contributi.csv' delimiter ',' csv header;
-copy work.luberto_biblio_scheda(scheda_temp, biblio_temp,contributo_temp, pagine, figura) from '/var/www/marta/workfile/normalizzazione/luberto_scheda_biblio.csv' delim
-iter ',' csv header;
+copy work.luberto_biblio_scheda(scheda_temp, biblio_temp,contributo_temp, pagine, figura) from '/var/www/marta/workfile/normalizzazione/luberto_scheda_biblio.csv' delimiter ',' csv header;
 copy work.luberto_schede from '/var/www/marta/workfile/normalizzazione/luberto_schede.csv' delimiter ',' csv header;
 
 --inserisco i dati nelle tabelle principali e copio l'id definitivo
