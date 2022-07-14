@@ -9,6 +9,7 @@ const TOT3D = 110;
 const list = $("#osmList");
 const geoApi = "http://nominatim.openstreetmap.org/search?q=";
 const param = "&format=json&addressdetails=1&bounded=1&viewbox=";
+const pagina = window.location.pathname.split('/').pop();
 let reverseApi = "https://nominatim.openstreetmap.org/reverse?format=geojson&zoom=16&addressdetails=1&";
 let start;
 let zoom = 8;
@@ -221,7 +222,7 @@ function setDtzgf(){
 }
 
 var dtm=[];
-let pagina = window.location.pathname.split('/').pop();
+
 if(pagina.includes('-mod.php') || pagina.includes('-clone.php')){
   $('[name=dtm]').prop("required", false);
   $("[name=delDtmOpt]").each(function(i,v){ dtm.push(parseInt($(this).val())); })
@@ -598,7 +599,7 @@ function delbiblioref(id_biblio){
   .fail(function() {console.log("error"); });
 }
 
-if(window.location.pathname.split('/').pop().includes('-mod.php')){
+if(pagina.includes('-mod.php') || pagina.includes('-clone.php')){
   $("[name=delMateriaItem]").on('click', function() {
     let row = $(this).val();
     $(row).remove();

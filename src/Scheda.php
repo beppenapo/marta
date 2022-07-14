@@ -188,22 +188,26 @@ class Scheda extends Conn{
     $this->begin();
     $clonata = $dati['scheda']['scheda'];
     unset($dati['scheda']['scheda']);
-    unset($dati['nctn_scheda']['old_nctn']);
+    // unset($dati['nctn_scheda']['old_nctn']);
 
     $schedaSql = $this->buildInsert('scheda',$dati['scheda']);
     $schedaSql = rtrim($schedaSql, ";") . " returning id;";
     $schedaId = $this->returning($schedaSql,$dati['scheda']);
     $this->prepared("insert into stato_scheda(scheda) values (:scheda);", array("scheda"=>$schedaId['field']));
 
-    if (isset($dati['nctn_scheda']['nctn'])) {
-      $nctn = $dati['nctn_scheda']['nctn'];
-      $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
-      $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
-    }else {
-      $nctn = $this->getNctn();
-      $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
-      $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
-    }
+    // if (isset($dati['nctn_scheda']['nctn'])) {
+    //   $nctn = $dati['nctn_scheda']['nctn'];
+    //   $this->addSection('nctn_scheda', $schedaId['field'], $dati['nctn_scheda']);
+    //   $this->setNctn(array("nctn"=>$dati['nctn_scheda']['nctn'],"libero" => 'f'));
+    // }else {
+    //   $nctn = $this->getNctn();
+    //   $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
+    //   $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
+    // }
+
+    $nctn = $this->getNctn();
+    $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
+    $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
 
     if (isset($dati['inventario'])) {
       unset($dati['inventario']['old_inventario']);
