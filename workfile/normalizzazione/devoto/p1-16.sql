@@ -61,8 +61,8 @@ alter table work.devoto_biblio_scheda owner to marta;
 alter table work.devoto_schede owner to marta;
 
 --copio i dati dai file csv
-copy work.devoto_biblio_scheda(scheda_temp, biblio, pagine) from '/var/www/marta/workfile/normalizzazione/devoto/devoto_scheda_biblio.csv' delimiter ',' csv header;
-copy work.devoto_schede from '/var/www/marta/workfile/normalizzazione/devoto/devoto_schede.csv' delimiter ',' csv header;
+copy work.devoto_biblio_scheda(scheda_temp, biblio, pagine) from '/var/www/marta/workfile/normalizzazione/devoto/p1-16_schede_biblio.csv' delimiter ',' csv header;
+copy work.devoto_schede from '/var/www/marta/workfile/normalizzazione/devoto/p1-16_schede.csv' delimiter ',' csv header;
 
 --aggiungo il campo id_def alla tabella delle schede
 ALTER TABLE work.devoto_schede add column id_def integer;
