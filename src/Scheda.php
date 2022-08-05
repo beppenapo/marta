@@ -205,10 +205,6 @@ class Scheda extends Conn{
       $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
     }
 
-    // $nctn = $this->getNctn();
-    // $this->addSection('nctn_scheda', $schedaId['field'], array("nctn"=>$nctn['nctn']));
-    // $this->setNctn(array("nctn"=>$nctn['nctn'],"libero" => 'f'));
-
     if (isset($dati['inventario'])) {
       unset($dati['inventario']['old_inventario']);
       $dati['inventario']['scheda'] = $schedaId['field'];
