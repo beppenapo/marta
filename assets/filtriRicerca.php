@@ -3,14 +3,14 @@
     <h5>Dati principali</h5>
     <nav>
       <div class="btn-toolbar mb-3" role="toolbar">
-        <div class="btn-group btn-group-sm btn-group-toggle mr-2" role="group" data-toggle="buttons">
+        <!-- <div class="btn-group btn-group-sm btn-group-toggle mr-2" role="group" data-toggle="buttons">
           <label class="btn btn-outline-secondary">
             <input type="radio" class="filtro" name="tipo" value="1" id="ra"><span>RA</span>
           </label>
           <label class="btn btn-outline-secondary">
             <input type="radio" class="filtro" name="tipo" value="2" id="nu"><span>NU</span>
           </label>
-        </div>
+        </div> -->
         <div class="input-group input-group-sm mr-2" role="group">
           <select class="form-control filtro" name="operatore">
             <option value="">--schedatore--</option>

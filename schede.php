@@ -53,19 +53,19 @@ $filtriScheda = $obj->filtriScheda();
                 <tr>
                   <th>NCTN</th>
                   <th>Inventario</th>
-                  <th>Tipo</th>
+                  <!-- <th>Tipo</th> -->
                   <th>Stato</th>
                   <th>Titolo</th>
                   <th>OGTD</th>
-                  <th>Materia</th>
-                  <th>Tecnica</th>
+                  <!-- <th>Materia</th> -->
+                  <!-- <th>Tecnica</th> -->
                   <th>Cronologia</th>
                   <th>Piano</th>
                   <th>Sala</th>
                   <th>Vetrina/Scaffale</th>
                   <th>Cassetta</th>
-                  <th>Comune</th>
-                  <th>Via</th>
+                  <!-- <th>Comune</th> -->
+                  <!-- <th>Via</th> -->
                   <th>Operatore</th>
                   <th class="no-sort all"></th>
                 </tr>

@@ -112,6 +112,7 @@ function buildTable(){
     data: { trigger: 'listaSchede', dati}
   })
   .done(function(data) {
+    console.log(data);
     data.forEach(function(v,i){
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip').attr("data-placement", 'left');
       let link = $("<a/>",{href:'schedaView.php?get='+v.scheda, html:linkIco});
@@ -122,7 +123,7 @@ function buildTable(){
         case 0: piano = 'Piano terra'; break;
         case 1: piano = 'Primo piano'; break;
         case 2: piano = 'Secondo piano'; break;
-        case 3: piano = 'Terzo piano'; break;
+        // case 3: piano = 'Terzo piano'; break;
       }
       if (!v.chiusa) {stato = 'in lavorazione';}
       else if (v.chiusa && !v.verificata) {stato = 'da verificare';}
@@ -132,19 +133,19 @@ function buildTable(){
 
       $("<td/>",{text:v.nctn}).appendTo(tr);
       $("<td/>",{text:v.inventario}).appendTo(tr);
-      $("<td/>",{text:v.tipo}).appendTo(tr);
+      // $("<td/>",{text:v.tipo}).appendTo(tr);
       $("<td/>",{text:stato}).appendTo(tr);
       $("<td/>",{text:v.titolo}).appendTo(tr);
       $("<td/>",{text:v.ogtd}).appendTo(tr);
-      $("<td/>",{text:v.materia}).appendTo(tr);
-      $("<td/>",{text:v.tecnica}).appendTo(tr);
+      // $("<td/>",{text:v.materia}).appendTo(tr);
+      // $("<td/>",{text:v.tecnica}).appendTo(tr);
       $("<td/>",{text:v.dtzgi == v.dtzgf ? v.inizio : v.inizio+' / '+v.fine}).appendTo(tr);
       $("<td/>",{text:piano}).appendTo(tr);
       $("<td/>",{text:!v.nome_sala ? v.sala : v.nome_sala}).appendTo(tr);
       $("<td/>",{text:v.contenitore}).appendTo(tr);
       $("<td/>",{text:v.cassetta}).appendTo(tr);
-      $("<td/>",{text:v.comune}).appendTo(tr);
-      $("<td/>",{text:v.via}).appendTo(tr);
+      // $("<td/>",{text:v.comune}).appendTo(tr);
+      // $("<td/>",{text:v.via}).appendTo(tr);
       $("<td/>",{text:v.operatore}).appendTo(tr);
       $("<td/>",{html:link, class:'text-center'}).appendTo(tr);
     })

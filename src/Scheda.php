@@ -564,7 +564,7 @@ class Scheda extends Conn{
       WHEN piano = -1 THEN 'Deposito'
       WHEN piano = 0 THEN 'Piano terra'
       WHEN piano = 1 THEN 'Primo piano'
-      WHEN piano = 3 THEN 'Terzo piano'
+      WHEN piano = 2 THEN 'Secondo piano'
     END as value
     from liste.sale
     order by piano asc;";
