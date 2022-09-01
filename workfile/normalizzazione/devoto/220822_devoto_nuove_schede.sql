@@ -25,8 +25,8 @@ create table work.devoto_schede(
   dtm INTEGER,
   materia INTEGER,
   tecnica CHARACTER VARYING,
-  misd NUMERIC(5,2),
-  misg NUMERIC(5,2),
+  misd CHARACTER VARYING,
+  misg CHARACTER VARYING,
   misv CHARACTER VARYING,
   desa CHARACTER VARYING,
   desm CHARACTER VARYING,
@@ -57,6 +57,7 @@ update work.devoto_schede set misd = replace(misd,',','.');
 update work.devoto_schede set misd = replace(misd,' ','');
 update work.devoto_schede set misg = replace(misg,',','.');
 update work.devoto_schede set misg = replace(misg,' ','');
+
 alter table work.devoto_schede alter column misd type numeric(5,2) using misd::numeric;
 alter table work.devoto_schede alter column misg type numeric(5,2) using misg::numeric;
 
