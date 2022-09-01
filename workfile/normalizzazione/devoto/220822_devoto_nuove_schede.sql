@@ -47,7 +47,11 @@ create table work.devoto_schede(
   oss text
 );
 alter table work.devoto_schede owner to marta;
-copy work.devoto_schede from '/var/www/html/marta/workfile/normalizzazione/devoto/devoto_nuove_schede.csv' delimiter ',' csv header;
+
+--path locale
+-- copy work.devoto_schede from '/var/www/html/marta/workfile/normalizzazione/devoto/devoto_nuove_schede.csv' delimiter ',' csv header;
+--path remoto
+copy work.devoto_schede from '/var/www/marta/workfile/normalizzazione/devoto/devoto_nuove_schede.csv' delimiter ',' csv header;
 
 update work.devoto_schede set misd = replace(misd,',','.');
 update work.devoto_schede set misd = replace(misd,' ','');
