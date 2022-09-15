@@ -131,46 +131,46 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
                     <input type="text" class="form-control form-control-sm tab" data-table="da" id="desm" name="desm" value="" required>
                   </div>
                   <div class="col-md-4">
-                    <label for="desv" class="text-danger font-weight-bold">DESV - Taglio</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desv" name="desv" value="" required>
+                    <label for="desv" class="">DESV - Taglio</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desv" name="desv" value="">
                   </div>
                 </div>
                 <div class="form-row mb-3">
                   <div class="col-md-4">
-                    <label for="desl" class="text-danger font-weight-bold">DESL - Legenda dritto</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desl" name="desl" value="" required>
+                    <label for="desl" class="">DESL - Legenda dritto</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desl" name="desl" value="">
                   </div>
                   <div class="col-md-4">
-                    <label for="desg" class="text-danger font-weight-bold">DESG - Legenda rovescio</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desg" name="desg" value="" required>
+                    <label for="desg" class="">DESG - Legenda rovescio</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desg" name="desg" value="">
                   </div>
                   <div class="col-md-4">
-                    <label for="desu" class="text-danger font-weight-bold">DESU - Soggetto</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desu" name="desu" value="" required>
-                  </div>
-                </div>
-                <div class="form-row mb-3">
-                  <div class="col-md-4">
-                    <label for="desf" class="text-danger font-weight-bold">DESF - Alfabeto/scrittura dritto</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desf" name="desf" value="" required>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="dest" class="text-danger font-weight-bold">DEST - Alfabeto/scrittura rovescio</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="dest" name="dest" value="" required>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="deso" class="text-danger font-weight-bold">DESO - Taglio</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="deso" name="deso" value="" required>
+                    <label for="desu" class="">DESU - Soggetto</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desu" name="desu" value="">
                   </div>
                 </div>
                 <div class="form-row mb-3">
                   <div class="col-md-4">
-                    <label for="desn" class="text-danger font-weight-bold">DESN - Lingua dritto</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desn" name="desn" value="" required>
+                    <label for="desf" class="">DESF - Alfabeto/scrittura dritto</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desf" name="desf" value="">
                   </div>
                   <div class="col-md-4">
-                    <label for="desr" class="text-danger font-weight-bold">DESR - Lingua rovescio</label>
-                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desr" name="desr" value="" required>
+                    <label for="dest" class="">DEST - Alfabeto/scrittura rovescio</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="dest" name="dest" value="">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="deso" class="">DESO - Taglio</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="deso" name="deso" value="">
+                  </div>
+                </div>
+                <div class="form-row mb-3">
+                  <div class="col-md-4">
+                    <label for="desn" class="">DESN - Lingua dritto</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desn" name="desn" value="">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="desr" class="">DESR - Lingua rovescio</label>
+                    <input type="text" class="form-control form-control-sm tab" data-table="da" id="desr" name="desr" value="">
                   </div>
                 </div>
                 <div class="form-row">
