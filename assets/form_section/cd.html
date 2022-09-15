@@ -92,11 +92,17 @@
         </div>
         <div class="col-md-4">
           <label for="inventario">Num.Inventario</label>
-          <input type="text" name="inventario" id="inventario" class="form-control form-control-sm" data-table="inventario" value="<?php echo isset($_POST['s']) ? $scheda['scheda']['inventario'] : '' ;?>">
+          <input type="number" step="1" min="0" name="inventario" id="inventario" class="form-control form-control-sm" data-table="inventario" value="<?php echo isset($_POST['s']) ? $scheda['scheda']['inventario'] : '' ;?>">
         </div>
         <div class="col-md-2">
           <label for="suffisso">Suffisso</label>
           <input type="text" name="suffisso" id="suffisso" class="form-control form-control-sm" data-table="inventario" value="<?php echo isset($_POST['s']) ? $scheda['scheda']['suffisso'] : '' ;?>">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-8">
+          <small class="text-muted d-block"><i class="fas fa-info-circle" aria-hidden="true"></i> I campi "Prefisso" e "Suffisso" accettano valori alfanumerici (lettere e numeri) mentre il campo "Num.Inventario" è di tipo numerico e accetta solo valori positivi (da 0 in su)</small>
+          <small class="text-muted d-block font-weight-bold">Attenzione: il numero di inventario non è obbligatorio quindi nei casi in cui trovate indicazioni tipo "SN" o "no inv." ecc. potete decidere di lasciare il campo vuoto o aggiungere uno 0, riportando nelle osservazioni finali (campo "OSS") l'esatta dicitura che trovate sul reperto</small>
         </div>
       </div>
     </fieldset>
