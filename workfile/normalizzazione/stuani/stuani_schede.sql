@@ -98,7 +98,7 @@ alter table work.stuani_biblio_scheda owner to marta;
 -- copy work.stuani_biblio_scheda from '/var/www/html/marta/workfile/normalizzazione/stuani/stuani_biblio_scheda.csv' delimiter ',' csv header;
 
 -- path server
-copy work.stuani_schede from '/var/www/marta/workfile/normalizzazione/stuani/stuani_schede.csv' delimiter ',' csv header;
+copy work.stuani_schede from '/var/www/marta/workfile/normalizzazione/stuani/stuani_scheda.csv' delimiter ',' csv header;
 copy work.stuani_mtc from '/var/www/marta/workfile/normalizzazione/stuani/stuani_mtc.csv' delimiter ',' csv header;
 copy work.stuani_raccolte from '/var/www/marta/workfile/normalizzazione/stuani/stuani_raccolte.csv' delimiter ',' csv header;
 copy work.stuani_contributi from '/var/www/marta/workfile/normalizzazione/stuani/stuani_contributi.csv' delimiter ',' csv header;
