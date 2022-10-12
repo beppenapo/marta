@@ -511,7 +511,7 @@ class Scheda extends Conn{
 
   public function nctnList(){ return $this->simple("select nctn from nctn where libero = true order by nctn asc;"); }
   public function furList(){ return $this->simple("select id, concat(cognome,' ',nome) fur from utenti where classe = 4 order by 2 asc;"); }
-  public function munsellList(){ return $this->simple("select code from liste.munsell order by code asc;"); }
+  public function munsellList(){ return $this->simple("select id, concat(gruppo,' ',code) as code from liste.munsell order by 2 asc;"); }
   public function ogtdSel(array $dati){
     return $this->simple("select * from liste.".$dati['tab']." where ".$dati['field']." = ".$dati['val']." order by value asc;");
   }
