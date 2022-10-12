@@ -7,7 +7,7 @@ create table liste.munsell(
   color character varying not null,
   unique(gruppo,code)
 );
-copy liste.munsell(gruppo, code, color) from '/var/www/html/marta/workfile/csv/munsell_completo.csv' delimiter ',' csv header;
+copy liste.munsell(gruppo, code, color) from '/var/www/marta/workfile/csv/munsell_completo.csv' delimiter ',' csv header;
 
 alter table munsell add column m_id integer foreign key liste.munsell(id);
 update munsell set m_id = m.id from liste.munsell m where munsell.munsell = concat(m.gruppo,' ',m.code);
