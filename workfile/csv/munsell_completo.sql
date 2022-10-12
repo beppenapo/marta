@@ -9,8 +9,11 @@ create table liste.munsell(
 );
 copy liste.munsell(gruppo, code, color) from '/var/www/marta/workfile/csv/munsell_completo.csv' delimiter ',' csv header;
 
-alter table munsell add column m_id integer foreign key liste.munsell(id);
+alter table munsell add column m_id integer;
+alter table munsell add constraint munsell_fki foreign key (m_id) references liste.munsell(id) on delete cascade;
 update munsell set m_id = m.id from liste.munsell m where munsell.munsell = concat(m.gruppo,' ',m.code);
 -- alter table munsell drop column munsell;
 -- alter table munsell alter column m_id rename to munsell;
+alter table liste.munsell OWNER to marta;
+alter table munsell OWNER to marta;
 commit;
