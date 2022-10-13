@@ -188,6 +188,8 @@ $("body").on('click', '[name=toggleSection]', function(e) {
 
 //Sblocca Misure
 $("[name=misr]").on('click', function(event) { $(".misure").prop('disabled',(i,v)=>!v); })
+// resetta munsell
+$("[name=resetMunsell]").on('click', function(){ $("[name=munsell]").prop("selectedIndex", 0);})
 
 $("body").on('change', '[name=prvp]', function(el) {
   const dati = {

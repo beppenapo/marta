@@ -87,7 +87,7 @@
       <legend class="text-marta font-weight-bold border-bottom">Munsell</legend>
       <div class="form-row my-3">
         <div class="col-lg-8">
-          <small class="d-block m-0 text-muted"><i class="fas fa-info-circle" aria-hidden="true"></i> Il campo "Codice/colore" mostra la lista completa dei codici Munsell, puoi utilizzare il campo "filtra gruppo" per filtrare solo i codici appartenenti al gruppo selezionato</small>
+          <small class="d-block m-0 text-muted"><i class="fas fa-info-circle" aria-hidden="true"></i> Il campo "Codice/colore" mostra la lista completa dei codici Munsell, puoi utilizzare il campo "filtra gruppo" per filtrare solo i codici appartenenti al gruppo selezionato.<br/>Se stai clonando o modificando una scheda puoi utilizzare il tasto di reset per eliminare il codice precedentemente associato.</small>
         </div>
       </div>
       <div class="form-row my-3">
@@ -104,30 +104,24 @@
         </div>
         <div class="col-8 col-lg-6">
           <label for="munsell">Codice/colore</label>
-          <select class="form-control form-control-sm tab" id="munsell" name="munsell" data-table="munsell">
-            <option value="">--codice--</option>
-            <?php
-            foreach($munsellCode as $code){
-              $sel = '';
-              if(isset($scheda['mt']['munsell'])){
-                $sel = $code['id'] == $scheda['mt']['munsell']['id'] ? 'selected' : '';
+          <div class="input-group input-group-sm mb-3">
+            <select class="form-control tab" id="munsell" name="munsell" data-table="munsell">
+              <option value="">--codice--</option>
+              <?php
+              foreach($munsellCode as $code){
+                $sel = '';
+                if(isset($scheda['mt']['munsell'])){
+                  $sel = $code['id'] == $scheda['mt']['munsell']['id'] ? 'selected' : '';
+                }
+                echo "<option value='".$code['id']."' ".$sel.">".$code['gruppo']." ".$code['code']." ".$code['color']."</option>";
               }
-              echo "<option value='".$code['id']."' ".$sel.">".$code['gruppo']." ".$code['code']." ".$code['color']."</option>";
-            }
-            ?>
-          </select>
+              ?>
+            </select>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" name="resetMunsell" data-toggle="tooltip" data-placement="top" title="resetta/elimina codice"><i class="fa-sharp fa-solid fa-filter-circle-xmark"></i></button>
+            </div>
+          </div>
         </div>
-        <!-- <div class="col-sm-4 col-md-3 col-lg-2">
-          <label for="munsell"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="" aria-hidden="true" data-original-title="inizia a digitare un termine o scorri la lista per selezionare il valore desiderato. Usa il pulsante 'x' per pulire il filtro"></i> Codice</label>
-          <input type="search" placeholder="seleziona codice" class="form-control form-control-sm tab" id="munsell" name="munsell" value="<?php echo($scheda['mt']['munsell']['munsell']); ?>" data-table="munsell" list="munsellList">
-          <datalist id="munsellList">
-            <?php
-            foreach($munsellList as $munsellEl){
-              echo "<option value='".$munsellEl['code']."'></option>";
-            }
-            ?>
-          </datalist>
-        </div> -->
       </div>
     </fieldset>
   </fieldset>

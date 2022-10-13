@@ -511,7 +511,6 @@ class Scheda extends Conn{
 
   public function nctnList(){ return $this->simple("select nctn from nctn where libero = true order by nctn asc;"); }
   public function furList(){ return $this->simple("select id, concat(cognome,' ',nome) fur from utenti where classe = 4 order by 2 asc;"); }
-  public function munsellList(){ return $this->simple("select id, concat(gruppo,' ',code) as code, color from liste.munsell order by 2 asc;"); } //cancella quando il nuovo schema è pronto
   public function munsellGroup(){ return $this->simple("select distinct gruppo from liste.munsell order by 1 asc;"); }
   public function munsellCode($group = null){
     $filter = $group == null ? '' : "where gruppo = '".$group."'";
