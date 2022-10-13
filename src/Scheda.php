@@ -112,7 +112,7 @@ class Scheda extends Conn{
     $out['mtc'] = $this->simple($mtc);
     $mis = $this->simple("select * from mis where scheda = ".$id.";");
     $out['mis'] = $mis[0];
-    $munsell = $this->simple("select * from munsell where scheda = ".$id.";");
+    $munsell = $this->simple("select m.* from liste.munsell m, munsell where munsell.munsell = m.id and munsell.scheda = ".$id.";");
     $out['munsell'] = $munsell[0];
     return $out;
   }
@@ -511,7 +511,12 @@ class Scheda extends Conn{
 
   public function nctnList(){ return $this->simple("select nctn from nctn where libero = true order by nctn asc;"); }
   public function furList(){ return $this->simple("select id, concat(cognome,' ',nome) fur from utenti where classe = 4 order by 2 asc;"); }
-  public function munsellList(){ return $this->simple("select id, concat(gruppo,' ',code) as code from liste.munsell order by 2 asc;"); }
+  public function munsellList(){ return $this->simple("select id, concat(gruppo,' ',code) as code, color from liste.munsell order by 2 asc;"); } //cancella quando il nuovo schema è pronto
+  public function munsellGroup(){ return $this->simple("select distinct gruppo from liste.munsell order by 1 asc;"); }
+  public function munsellCode($group = null){
+    $filter = $group == null ? '' : "where gruppo = '".$group."'";
+    return $this->simple("select id, gruppo, code, color from liste.munsell ".$filter." order by 2,3 asc;");
+  }
   public function ogtdSel(array $dati){
     return $this->simple("select * from liste.".$dati['tab']." where ".$dati['field']." = ".$dati['val']." order by value asc;");
   }

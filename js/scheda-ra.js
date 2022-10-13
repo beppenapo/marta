@@ -74,8 +74,30 @@ $(document).ready(function() {
   })
   .fail(function(data) { console.log(data); });
   $("[name=submit]").on('click',function(e){ salvaScheda(e); });
+
+  $("body").on('change','[name=munsell_group]',function(){
+    let g = $(this).val();
+    munsell(g)
+  })
 });
 
+function munsell(group){
+  $.ajax({
+    url: 'api/scheda.php',
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger: 'munsellCode',gruppo:group}
+  })
+  .done(function(data) {
+    const sel = $("select[name=munsell]");
+    sel.html('');
+    $("<option/>").text('--codice--').appendTo(sel);
+    data.forEach(function(v){
+      $("<option/>").text(v.gruppo+' '+v.code+' '+v.color).val(v.id).appendTo(sel);
+    })
+  });
+
+}
 function ogtdSel(dati){
   sel = $("[name="+dati.sel+"]");
   $.ajax({

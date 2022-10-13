@@ -282,7 +282,7 @@
               <?php if ($scheda['mt']['munsell'] !== null){ ?>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item"><span>Munsell:</span><span class="font-weight-bold">
-                    <?php echo $scheda['mt']['munsell']['munsell']; ?>
+                    <?php echo $scheda['mt']['munsell']['gruppo']." ".$scheda['mt']['munsell']['code']." ".$scheda['mt']['munsell']['color']; ?>
                   </span></li>
               <?php }else {
                 echo $noData;

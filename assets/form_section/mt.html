@@ -85,8 +85,39 @@
     </fieldset>
     <fieldset id="munsellFieldset" class="mb-3">
       <legend class="text-marta font-weight-bold border-bottom">Munsell</legend>
-      <div class="form-row mb-3">
-        <div class="col-sm-4 col-md-3 col-lg-2">
+      <div class="form-row my-3">
+        <div class="col-lg-8">
+          <small class="d-block m-0 text-muted"><i class="fas fa-info-circle" aria-hidden="true"></i> Il campo "Codice/colore" mostra la lista completa dei codici Munsell, puoi utilizzare il campo "filtra gruppo" per filtrare solo i codici appartenenti al gruppo selezionato</small>
+        </div>
+      </div>
+      <div class="form-row my-3">
+        <div class="col-4 col-lg-2">
+          <label for="munsell_group">Filtra gruppo</label>
+          <select class="form-control form-control-sm" id="munsell_group" name="munsell_group">
+            <option value="">--tutti--</option>
+            <?php
+            foreach($munsellGroup as $group){
+              echo "<option value='".$group['gruppo']."'>".$group['gruppo']."</option>";
+            }
+            ?>
+          </select>
+        </div>
+        <div class="col-8 col-lg-6">
+          <label for="munsell">Codice/colore</label>
+          <select class="form-control form-control-sm tab" id="munsell" name="munsell" data-table="munsell">
+            <option value="">--codice--</option>
+            <?php
+            foreach($munsellCode as $code){
+              $sel = '';
+              if(isset($scheda['mt']['munsell'])){
+                $sel = $code['id'] == $scheda['mt']['munsell']['id'] ? 'selected' : '';
+              }
+              echo "<option value='".$code['id']."' ".$sel.">".$code['gruppo']." ".$code['code']." ".$code['color']."</option>";
+            }
+            ?>
+          </select>
+        </div>
+        <!-- <div class="col-sm-4 col-md-3 col-lg-2">
           <label for="munsell"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="" aria-hidden="true" data-original-title="inizia a digitare un termine o scorri la lista per selezionare il valore desiderato. Usa il pulsante 'x' per pulire il filtro"></i> Codice</label>
           <input type="search" placeholder="seleziona codice" class="form-control form-control-sm tab" id="munsell" name="munsell" value="<?php echo($scheda['mt']['munsell']['munsell']); ?>" data-table="munsell" list="munsellList">
           <datalist id="munsellList">
@@ -96,7 +127,7 @@
             }
             ?>
           </datalist>
-        </div>
+        </div> -->
       </div>
     </fieldset>
   </fieldset>

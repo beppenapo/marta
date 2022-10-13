@@ -12,7 +12,9 @@ $listeNU = $obj->listeNu();
 $listeRA = $obj->listeRA();
 $nctnList = $obj->nctnList();
 $furList = $obj->furList();
-$munsellList = $obj->munsellList();
+$munsellList = $obj->munsellList(); //cancella quando il nuovo schema è pronto
+$munsellGroup = $obj->munsellGroup();
+$munsellCode = $obj->munsellCode();
 $adspArr=$obj->vocabolari(array("tab"=>'liste.adsp', "order"=>1));
 $adsmArr=$obj->vocabolari(array("tab"=>'liste.adsm', "order"=>1));
 

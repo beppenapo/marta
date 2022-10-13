@@ -256,7 +256,6 @@ $(document).ready(function() {
         data: {trigger : 'addScheda', dati}
       })
       .done(function(data) {
-        console.log(data);
         if (data.res === true || data.msg == 'There is no active transaction') {
           $(".toast").addClass('bg-success');
           $(".toast-body").html('La scheda è stata correttamente inserita');
