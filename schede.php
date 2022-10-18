@@ -32,7 +32,13 @@ $filtriScheda = $obj->filtriScheda();
           </div>
         </div>
         <div class="bg-light p-4 rounded border mb-4">
-          <div id="filtriRicerca"><?php require("assets/filtriRicerca.php"); ?></div>
+          <div id="filtriRicerca">
+            <div class="row">
+              <div class="col">
+                <?php require("assets/filtriRicerca.php"); ?>
+              </div>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
               <input type="hidden" name="sessId" value="<?php echo $_SESSION['id']; ?>">
