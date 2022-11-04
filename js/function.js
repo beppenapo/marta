@@ -18,7 +18,7 @@ let lng, lat;
 let marker = {};
 let map;
 
-
+const BGIMG = 5;
 
 $(document)
 .ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})

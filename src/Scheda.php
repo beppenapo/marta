@@ -1,7 +1,7 @@
 <?php
 namespace Marta;
 session_start();
-use \Marta\Conn;
+// use \Marta\Conn;
 class Scheda extends Conn{
   public $db;
   function __construct(){}
