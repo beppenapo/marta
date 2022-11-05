@@ -28,6 +28,10 @@ svg{width:80%;height:60vh;font-family: sans-serif;}
 
 #findWrap > .item > .legenda{
   position:absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   width:100%;
   top:60%;
   bottom:0;
