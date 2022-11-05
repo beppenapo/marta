@@ -22,18 +22,18 @@ let svgOpt = {
   // , eventsListenerElement: null
 }
 let schede=[];
+let pagenumber = 0;
+let perpage = 20;
 $(document).ready(function() {
   createCarousel()
   loadSvg('img/piante/piano1.svg');
   getReperti('piano',{piano:1});
-  // $("#resTitle").text('primo piano');
   $("[name=piani]").on('click', function(){
     let title;
     let p = $(this).val()
     $("#fuoriVetrinaTxt").hide();
     loadSvg('img/piante/piano'+p+'.svg');
     getReperti('piano',{piano:p});
-    infinityScroll()
   })
   $("#fuoriVetrinaTxt").hide();
 });
@@ -122,12 +122,15 @@ function loadSvg(svg){
 //   });
 // }
 function getReperti(el,v){
+  $("#findWrap").html('');
+  schede=[];
   let trigger;
   switch (el) {
     case 'piano': trigger = 'getRepertiPiano'; break;
     case 'sala': trigger = 'getRepertiSala'; break;
     case 'contenitore': trigger = 'getRepertiContenitore'; break;
   }
+
   $.ajax({
     type: "POST",
     url: "api/sale.php",
@@ -135,17 +138,15 @@ function getReperti(el,v){
     data: {trigger: trigger, dati:v}
   })
   .done(function(data){
-    // console.log(data.schede);
     let info = {sale:data.numSale.count,  contenitori:data.numContenitori.count, reperti:data.numReperti.count}
     setInfo(el,v,info)
     data.schede.forEach(function(item,i){ schede.push(item) });
-    infinityScroll()
+    loadGallery()
   })
 }
 
 function setInfo(el,v,info){
   $("#resTitle, #resSubTitle").html('')
-  // console.log(v);
   let title, text, contenitore;
   switch (true) {
     case v.piano == -1: title = 'deposito'; break ;
@@ -163,25 +164,35 @@ function setInfo(el,v,info){
   $("#resSubTitle").html(text)
 }
 
-function infinityScroll(){
-  let pagenumber = 0;
-  let perpage = 21;
-  let loadLock = false;
-  let startPage = pagenumber + 1;
-  let endPage = parseInt(schede.length / perpage);
+function loadGallery(){
   let wrap = $("#findWrap");
   let wrapWidth = wrap.width();
-  let itemMeasure = parseInt(wrapWidth / 3);
+  let itemMeasure = parseInt((wrapWidth / 5)-4);
   let currentDataset = schede.slice(pagenumber * perpage, (pagenumber * perpage) + perpage);
 
   if (currentDataset.length > 0){
-    $("#startPage").text(startPage)
-    $("#endPage").text(endPage)
-    // document.getElementById('items').appendChild(pageHeader);
     currentDataset.forEach(function(item){
       console.log(item);
-      $("<div/>",{class:'item'}).css({"width":itemMeasure, "height":itemMeasure}).appendTo(wrap)
+      let div = $("<div/>",{class:'item bg-white shadow', title:'visualizza scheda'})
+      .attr({"data-toggle":'tooltip'})
+      .css({
+        "width":itemMeasure
+        , "height":itemMeasure
+        , "background-image": "url(img/icone/ogtd/"+item.classe_id+".png)"
+      })
+      .on('click', function(){window.location.href = 'schedaView.php?get='+item.id})
+      .appendTo(wrap)
+      let legenda = $("<div/>",{class:'text-center legenda'}).appendTo(div)
+      $("<small/>",{class:'d-block'}).text('Piano: '+item.piano+' Sala: '+item.sala).appendTo(legenda)
+      $("<small/>",{class:'d-block'}).text(item.classe).appendTo(legenda)
+      $("<h5/>",{class:'p-0'}).text(item.ogtd).appendTo(legenda)
     });
   }
-  loadLock = false;
 }
+window.addEventListener('scroll',()=>{
+  console.log("scrolled", window.scrollY) //scrolled from top
+  console.log(window.innerHeight) //visible part of screen
+  if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight){
+    loadGallery();
+  }
+})

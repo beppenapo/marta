@@ -42,17 +42,22 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-6">
-            <div id="svgWrap"></div>
+          <div class="col">
+            <div id="svgWrap" class="text-center"></div>
           </div>
-          <div class="col-lg-6 text-center">
+        </div>
+        <div class="row my-3">
+          <div class="col text-center">
             <h1 id="resTitle" class="text-uppercase"></h1>
             <div id="resBody">
               <h4 id="resSubTitle" class="text-muted"></h4>
               <small class="text-muted" id="fuoriVetrinaTxt">Alcuni reperti potrebbero essere esposti "fuori vetrina"</small>
-              <small>Pagina <span id="startPage"></span> di <span id="endPage"></span></small>
-              <div id="findWrap" class=""></div>
             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div id="findWrap"></div>
           </div>
         </div>
       </div>
