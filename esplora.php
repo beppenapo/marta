@@ -17,7 +17,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col">
-
+            <p>Naviga nelle stanze del Museo grazie alle piante interattive. Scegli il piano e spostati al suo interno spostando il mouse mentre tieni premuto il tasto destro</p>
           </div>
         </div>
         <div class="row">

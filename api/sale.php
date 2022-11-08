@@ -8,6 +8,6 @@ if(isset($funzione) && function_exists($funzione)) {
   $trigger = $funzione($obj);
   echo $trigger;
 }
-function getRepertiPiano($obj){return json_encode($obj->getRepertiPiano($_POST['dati']));}
+function getReperti($obj){return json_encode($obj->getReperti($_POST['dati']));}
 // function getRepertiSala($obj){return json_encode($obj->getRepertiSala($_POST['dati']));}
 ?>

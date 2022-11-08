@@ -21,6 +21,9 @@ let svgOpt = {
   // , customEventsHandler: {}
   // , eventsListenerElement: null
 }
+let wrap = $("#findWrap");
+let wrapWidth = wrap.width();
+let itemMeasure = parseInt((wrapWidth / 5)-4);
 let schede=[];
 let pagenumber = 0;
 let perpage = 20;
@@ -58,21 +61,6 @@ function createCarousel(){
 function loadSvg(svg){
   $("#svgWrap").load(svg,{},function(){
     let svgEl = svgPanZoom('#pianta', svgOpt);
-    $("#pianta #vetrine g > g, #pianta #scaffali g").each(function(i,v){
-      $(this).on({
-        mouseenter: function(){
-          $(this).find('path, rect').addClass('contenitoreHover');
-        },
-        mouseleave: function(){
-          $(this).find('path, rect').removeClass('contenitoreHover');
-        },
-        click: function(){
-          // getRepertiContenitore('contenitore',$(this).prop('id'))
-          $("#pianta *").removeClass('salaActive').removeClass('contenitoreActive')
-          $(this).find('path, rect').addClass('contenitoreActive');
-        }
-      });
-    })
     $("#pianta #sale>g").each(function(i,v){
       $(this).on({
         mouseenter: function(){
@@ -84,95 +72,114 @@ function loadSvg(svg){
         click: function(){
           $("#pianta *").removeClass('salaActive').removeClass('contenitoreActive')
           $(this).find('path, rect').addClass('salaActive');
-          // getRepertiSala('sala',$(this).prop('id'))
+          let piano = $("[name=piani]:checked").val()
+          let dati = {piano:piano,sala:$(this).prop('id').slice(1)};
+          getReperti('sala',dati);
+        }
+      });
+    })
+
+    $("#pianta #vetrine g > g, #pianta #scaffali g").each(function(i,v){
+      $(this).on({
+        mouseenter: function(){
+          $(this).find('path, rect').addClass('contenitoreHover');
+        },
+        mouseleave: function(){
+          $(this).find('path, rect').removeClass('contenitoreHover');
+        },
+        click: function(){
+          $("#pianta *").removeClass('salaActive').removeClass('contenitoreActive')
+          $(this).find('path, rect').addClass('contenitoreActive');
+          let piano = $("[name=piani]:checked").val()
+          let sala = $(this).prop('id').split('_')[0].slice(1);
+          let contenitore = $(this).prop('id').split('_').pop().slice(1);
+          let dati = {piano:piano, sala:sala, contenitore:contenitore}
+          getReperti('contenitore',dati);
         }
       });
     })
   });
 }
-// function getRepertiSala(el,v){
-//   let piano = $("[name=piani]:checked").val()
-//   let sala = el == 'sala' ? v.slice(1) : v.split('_')[0].slice(1)
-//   $.ajax({
-//     type: "POST",
-//     url: "api/sale.php",
-//     dataType: 'json',
-//     data: {trigger: 'getRepertiSala', dati:{piano:piano,sala:sala}}
-//   })
-//   .done(function(data) {
-//     console.log(data);
-//     let tipoContenitore, numContenitori, subtitle, repertiTxt;
-//     if (piano == -1) {
-//       $("#fuoriVetrinaTxt").hide()
-//       numContenitori = data.numContenitori.count;
-//       tipoContenitore = data.numContenitori.count <= 1 ? 'scaffale' : 'scaffali'
-//     }else {
-//       $("#fuoriVetrinaTxt").show()
-//       numContenitori = data.numContenitori.count - 1
-//       tipoContenitore = numContenitori == 1 ? 'vetrina' : 'vetrine'
-//     }
-//     repertiTxt = data.numReperti.count == 1 ? 'reperto' : 'reperti'
-//     subtitle = ' contiene '+data.numReperti.count+ ' '+repertiTxt;
-//     if (data.numReperti.count > 0) {
-//       subtitle +=  ' in '+numContenitori+' '+tipoContenitore;
-//     }
-//
-//     $("#resTitle").text("sala "+data.nomeSala.sala)
-//     $("#resSubTitle").text("la sala "+data.nomeSala.sala + subtitle);
-//   });
-// }
-function getReperti(el,v){
-  $("#findWrap").html('');
-  schede=[];
-  let trigger;
-  switch (el) {
-    case 'piano': trigger = 'getRepertiPiano'; break;
-    case 'sala': trigger = 'getRepertiSala'; break;
-    case 'contenitore': trigger = 'getRepertiContenitore'; break;
-  }
 
+function getReperti(el,v){
+  window.scrollTo(500,500);
+  wrap.html('');
+  schede=[];
+  pagenumber = 0;
   $.ajax({
     type: "POST",
     url: "api/sale.php",
     dataType: 'json',
-    data: {trigger: trigger, dati:v}
+    data: {trigger: 'getReperti', dati:v}
   })
   .done(function(data){
-    let info = {sale:data.numSale.count,  contenitori:data.numContenitori.count, reperti:data.numReperti.count}
+    info = {sale:data.sale.count, contenitori:data.contenitori.count, reperti:data.schede.length}
+    if(data.schede.length > 0){
+      if(el == 'sala'){info.sala=data.schede[0].sala;}
+      if(el == 'contenitore'){
+        info.sala=data.schede[0].sala;
+        info.contenitore=data.schede[0].contenitore;
+      }
+    }
+    data.schede.forEach(function(item,i){ schede.push(item); });
     setInfo(el,v,info)
-    data.schede.forEach(function(item,i){ schede.push(item) });
-    loadGallery()
+    // loadGallery()
   })
 }
 
 function setInfo(el,v,info){
+  console.log({el,v,info});
   $("#resTitle, #resSubTitle").html('')
-  let title, text, contenitore;
+  let title, text, tipo, contenitori, reperti;
+  if (info.reperti == 0) {
+    $("<div/>",{class:'alert alert-warning mx-auto text-center'}).text('Non sono presenti reperti schedati per la sala o il contenitore selezionati.').appendTo(wrap);
+    return false;
+  }
   switch (true) {
     case v.piano == -1: title = 'deposito'; break ;
     case v.piano == 0: title = 'piano terra'; break ;
     case v.piano == 1: title = 'primo piano'; break ;
     case v.piano == 2: title = 'secondo piano'; break ;
   }
-
-  $("#resTitle").html(title);
-  contenitore = v.piano == -1 ? 'scaffali' : 'vetrine';
-  if (el == 'piano') {
-    text = "Il piano selezionato è suddiviso in <span class='font-weight-bold'>" + info.sale + " stanze</span> nelle quali sono presenti <span class='font-weight-bold'>"+ info.contenitori +" "+ contenitore +"</span> per un totale di <span class='font-weight-bold'>"+ info.reperti + ' reperti</span>';
+  if (v.piano == -1) {
+    contenitori = parseInt(info.contenitori);
+    tipo = contenitori == 1 ? 'scaffale' : 'scaffali';
+  }else {
+    contenitori = parseInt(info.contenitori - 1);
+    //escludo i fuori vetrina
+    tipo = contenitori == 1 ? 'vetrina' : 'vetrine';
   }
 
+  reperti = parseInt(info.reperti) == 1 ? parseInt(info.reperti) + ' reperto' : parseInt(info.reperti) + ' reperti'
+
+  if (contenitori == 0) {reperti += ' fuori vetrina';}
+
+  if (el == 'piano') {
+    text = "Il piano selezionato è suddiviso in <span class='font-weight-bold'>" + info.sale + " stanze</span> nelle quali sono presenti <span class='font-weight-bold'>"+ contenitori +" "+ tipo +"</span> per un totale di <span class='font-weight-bold'>"+ reperti + '</span>';
+  }
+
+  if (el == 'sala') {
+    title += ', sala '+info.sala;
+    text = "Nella sala selezionata sono presenti <span class='font-weight-bold'>"+ contenitori +" "+ tipo +"</span> per un totale di <span class='font-weight-bold'>"+ reperti + '</span>';
+  }
+  if (el == 'contenitore') {
+    let el = v.piano == -1 ? 'scaffale' : 'vetrina';
+    let incipit = v.piano == -1 ? 'Nello scaffale selezionato' : 'Nella vetrina selezionata';
+    title += ', sala '+info.sala+', '+el+' '+info.contenitore;
+    text = incipit + " sono presenti <span class='font-weight-bold'>"+ reperti + '</span>';
+  }
+  $("#resTitle").html(title);
   $("#resSubTitle").html(text)
+  setTimeout(loadGallery(),500)
+
 }
 
-function loadGallery(){
-  let wrap = $("#findWrap");
-  let wrapWidth = wrap.width();
-  let itemMeasure = parseInt((wrapWidth / 5)-4);
-  let currentDataset = schede.slice(pagenumber * perpage, (pagenumber * perpage) + perpage);
 
+
+function loadGallery(){
+  let currentDataset = schede.slice(pagenumber * perpage, (pagenumber * perpage) + perpage);
   if (currentDataset.length > 0){
     currentDataset.forEach(function(item){
-      console.log(item);
       let div = $("<div/>",{class:'item bg-white shadow', title:'visualizza scheda'})
       .attr({"data-toggle":'tooltip'})
       .css({
@@ -190,9 +197,9 @@ function loadGallery(){
   }
 }
 window.addEventListener('scroll',()=>{
-  console.log("scrolled", window.scrollY) //scrolled from top
-  console.log(window.innerHeight) //visible part of screen
+  console.log(pagenumber);
   if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight){
+    pagenumber++;
     loadGallery();
   }
 })
