@@ -10,8 +10,9 @@ $logged = isset($_SESSION['id']) ? 'y' : 'n';
       <li>
         <a class="dropdown-toggle animated" href="#" role="button" id="headerMenuLinkArchivi" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">archivi</a>
         <div class="dropdown-menu" aria-labelledby="headerMenuLinkArchivi">
-          <a class="dropdown-item" href="schede.php">archivio schede</a>
-          <a class="dropdown-item" href="bibliografia.php">archivio bibliografico</a>
+          <a class="dropdown-item" href="schede.php">schede</a>
+          <a class="dropdown-item" href="bibliografia.php">bibliografia</a>
+          <a class="dropdown-item disabled" href="">modelli 3d</a>
         </div>
       </li>
       <li><a href="board.php" class="animated" data-toggle='tooltip' data-placement="bottom" title="leggi le informazioni relative al progetto">project</a></li>

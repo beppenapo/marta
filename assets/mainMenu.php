@@ -7,10 +7,10 @@
       <p class='text-primary'><i class="fas fa-archive fa-fw"></i> archivi</p>
       <ul class="subMenu">
         <li>
-          <a href="schede.php" class='d-block m-0 animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> archivio schede</a>
+          <a href="schede.php" class='d-block m-0 animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> schede</a>
         </li>
         <li>
-          <a href="bibliografia.php" class='d-block m-0 animated' title="archivio record bibliografici" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> archivio bibliografia</a>
+          <a href="bibliografia.php" class='d-block m-0 animated' title="archivio record bibliografici" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
         </li>
       </ul>
     </li>
@@ -25,6 +25,9 @@
         </li>
         <li>
           <a href="bibliografia_add.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci un nuovo record bibliografico"><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
+        </li>
+        <li>
+          <a href="contributo_add.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci un nuovo contributo"><i class="fas fa-chevron-right fa-fw"></i> contributo</a>
         </li>
       </ul>
     </li>

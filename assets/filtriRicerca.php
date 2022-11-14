@@ -4,12 +4,12 @@
     <h5>Dati principali</h5>
     <nav>
       <div class="btn-toolbar mb-3" role="toolbar">
-        <div class="input-group input-group-sm mr-2" role="group">
+        <!-- <div class="input-group input-group-sm mr-2" role="group">
           <select class="form-control filtro" name="operatore">
             <option value="">--schedatore--</option>
             <?php foreach ($filtriScheda['schedatori'] as $op) {  echo"<option value='".$op['id']."'>".$op['compilatore']."</option>"; } ?>
           </select>
-        </div>
+        </div> -->
         <div class="input-group input-group-sm mr-2">
           <div class="input-group-prepend" data-toggle="tooltip" data-placement="top" title="non è necessario inserire il numero di catalogo completo, il sistema cercherà tutti i numeri di catalogo che contengono il valore inserito nel campo. Per una ricerca accurata si consiglia di inserire almeno 4 numeri">
             <span class="input-group-text">

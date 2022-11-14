@@ -1,12 +1,12 @@
-let sess = $("[name=sessId]").val() ? [$("[name=sessId]").val(),$("[name=sessUsr]").val()] : [];
+// let sess = $("[name=sessId]").val() ? [$("[name=sessId]").val(),$("[name=sessUsr]").val()] : [];
 let dati = {};
 let filter = {};
 $(document).ready(function() {
   $("#filtriTitle").hide();
-  if (sess.length > 0 && !localStorage.getItem('operatore')) {
-    dati.operatore = parseInt(sess[0]);
-    filter.operatore = sess[1];
-  }
+  // if (sess.length > 0 && !localStorage.getItem('operatore')) {
+  //   dati.operatore = parseInt(sess[0]);
+  //   filter.operatore = sess[1];
+  // }
   if(localStorage.getItem('operatore')){
     i = JSON.parse(localStorage.getItem('operatore'));
     dati.operatore = i[0]
@@ -41,10 +41,10 @@ function viewFilter(){
       if(Object.keys(dati).length == 0){
         $("#filtriTitle").hide();
         $("[name=clear]").addClass('invisible');
-        if (sess.length > 0 && !localStorage.getItem('operatore')) {
-          dati.operatore = parseInt(sess[0]);
-          filter.operatore = sess[1];
-        }
+        // if (sess.length > 0 && !localStorage.getItem('operatore')) {
+        //   dati.operatore = parseInt(sess[0]);
+        //   filter.operatore = sess[1];
+        // }
       }
       buildTable()
     })
@@ -100,6 +100,7 @@ function cerca(){
 }
 
 function buildTable(){
+  console.log(dati);
   if (Object.keys(dati).length == 0) {
     $("#tableWrap").hide();
     return false;
@@ -112,7 +113,6 @@ function buildTable(){
     data: { trigger: 'listaSchede', dati}
   })
   .done(function(data) {
-    console.log(data);
     data.forEach(function(v,i){
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip').attr("data-placement", 'left');
       let link = $("<a/>",{href:'schedaView.php?get='+v.scheda, html:linkIco});

@@ -4,12 +4,28 @@
   require 'vendor/autoload.php';
   use \Marta\Dashboard;
   $obj = new Dashboard();
+  $dirAssets = 'assets/dashboard/';
   $schedatoriList = $obj->schedatori();
+  $checkSchede = $obj->checkSchede();
+  $checkRes = $checkSchede['biblio']['count'] + $checkSchede['geo']['count'] + $checkSchede['img']['count'];
+  if ($checkRes > 0) {
+    $checkBiblioBtn = $checkSchede['biblio']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2 checkBtn" name="checkBtn" value="1"><span>'.$checkSchede['biblio']['count'].'</span> senza bibliografia</button>' : "";
+    $checkImgBtn = $checkSchede['img']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2" name="checkBtn" value="2"><span>'.$checkSchede['img']['count'].'</span> senza immagini</button>' : "";
+    $checkGeoBtn = $checkSchede['geo']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2" name="checkBtn" value="3"><span>'.$checkSchede['geo']['count'].'</span> senza geolocalizzazione</button>' : "";
+    $checkBtn = $checkBiblioBtn.$checkImgBtn.$checkGeoBtn;
+  }
+  if ($_SESSION['classe']==3){ $tot = $obj->schede_operatore(); }
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
   <head>
     <?php require('assets/meta.html'); ?>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+  crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
@@ -23,121 +39,11 @@
     <main class="bg-light">
       <div class="container-fluid">
         <?php require("assets/stat.html"); ?>
-        <div class="row mb-3">
-          <div class="col-lg-6">
-            <div class="card" id="schedatori">
-              <div class="card-header bg-white font-weight-bold">
-                <p class="card-title m-0">Schedatori</p>
-              </div>
-              <div class="list-group liste">
-                <div class="list-group list-group-flush">
-                  <?php
-                  foreach ($schedatoriList as $item) {
-                    $disabled = $item['schede'] == 0 ? 'disabled' : '';
-                    $url = $item['schede'] == 0 ? '' : 'href="#"';
-                    $tooltip = $item['schede'] == 0 ? '' : 'data-toggle="tooltip" data-placement="right" title="visualizza le schede di <br>'.$item['utente'].'"';
-                    echo "<a ".$url." class='list-group-item list-group-item-action schedatore ".$disabled."' data-schedatore='".$item['utente']."' data-id='".$item['id']."' ".$tooltip.">
-                          <span>".$item['utente']."</span>
-                          <span class='float-right'>".$item['schede']."</span>
-                          </a>";
-                  }
-                  ?>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="card" id="schede">
-              <div class="card-header bg-white font-weight-bold">
-                <p class="card-title m-0">Stato schede</p>
-              </div>
-              <div class="card-body">
-                <canvas id="statoChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-        <?php if ($_SESSION['classe']!==3) { ?>
-        <div class="row mb-3">
-          <div class="col-lg-8">
-            <div class="card" id="utenti">
-              <div class="card-header bg-white font-weight-bold">
-                <p class="card-title m-0">Utenti</p>
-              </div>
-              <div class="card-body">
-                <table id="dataTable" class="dataTable table table-striped table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Utente</th>
-                      <th>Email</th>
-                      <th class="no-sort">Telefono</th>
-                      <th class="no-sort"></th>
-                      <th class="no-sort"></th>
-                      <th class="no-sort"></th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-              <div class="card-footer">
-                <a href="usrAdd.php" class="btn btn-sm btn-outline-marta"><i class="fas fa-plus"></i> nuovo utente</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="card" id="comunicazioni">
-              <div class="card-header bg-white font-weight-bold">
-                <p class="card-title m-0">Comunicazioni progetto</p>
-              </div>
-              <div class="list-group liste"></div>
-              <div class="card-footer">
-                <button type="button" class="btn btn-sm btn-outline-marta" name="addComunicazioneBtn">aggiungi comunicazione</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <?php } ?>
+        <?php if ($_SESSION['classe']!==3) {require($dirAssets.'dashboard_amministratore.php'); } ?>
+        <?php if ($_SESSION['classe'] ==3) {require($dirAssets.'dashboard_operatore.php'); } ?>
       </div>
     </main>
-
-    <div id="addComunicazioneDiv" class="modal fade" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <form name="addComunicazioneForm">
-          <input type="hidden" name="idComunicazione" value="">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div class="form-row">
-                <div class="col">
-                  <label for="testo">Testo comunicazione</label>
-                  <textarea name="testo" id="testo" class="form-control form-control-sm" rows="8" cols="80" required></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">annulla</button>
-              <button type="submit" class="btn btn-primary btn-sm" name="saveComunicazione">salva testo</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="toast toastAddComunicazione bg-success text-white font-weight-bold hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"><div class="toast-body"></div></div>
-
-    <div class="toast toastDelComunicazione hide" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
-      <div class="toast-header">
-        <strong class="mr-auto">Cancella comunicazione</strong>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-      <div class="toast-body">
-        <p>Sei sicuro di voler eliminare la comunicazione?</p>
-        <p>Ricorda che i dati non sono recuperabili.</p>
-        <div class="d-block w-100 mx-auto mt-3 border-top pt-3">
-          <button type="button" class="btn btn-sm btn-danger" name="delNotesBtn" value="">conferma eliminazione</button>
-          <button type="button" class="btn btn-sm btn-secondary" name="annullaNotesBtn" data-dismiss="toast" aria-label="Close">annulla azione</button>
-        </div>
-      </div>
-    </div>
+    <?php require($dirAssets.'card_comunicazioni_modifica.php'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" charset="utf-8"></script>
@@ -145,6 +51,11 @@
     <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js" charset="utf-8"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js" charset="utf-8"></script>
+    <script src="js/wmsTile.js" charset="utf-8"></script>
 
     <script src="js/function.js" charset="utf-8"></script>
     <script src="js/dashboard.js" charset="utf-8"></script>

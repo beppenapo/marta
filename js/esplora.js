@@ -197,7 +197,6 @@ function loadGallery(){
   }
 }
 window.addEventListener('scroll',()=>{
-  console.log(pagenumber);
   if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight){
     pagenumber++;
     loadGallery();

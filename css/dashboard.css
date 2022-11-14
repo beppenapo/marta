@@ -1,10 +1,22 @@
 @import "main.css";
-
-#countDownWrap{text-align: center;}
-#countdown{font-size: 8vw;}
 .info{width:80vw;margin:0 auto;}
+.scroller{position: relative;overflow: auto;}
 
-.liste{height: 580px;}
-#schede .card-body, .liste{max-height:825px; overflow: auto;}
-#schede .card-body, #schedatori .liste{height:500px;}
 #statoChart{width:100%;}
+#scrollSchede,#scrollBiblio{height: 330px;}
+#wrapSchedatori,#wrapNote, #map{height: 450px;}
+
+.colonne > span{display:inline-block;font-size: 12px;vertical-align: top;}
+.colonneSchede > span:nth-child(1){width:80px;}
+.colonneSchede > span:nth-child(2){width:80px;}
+.colonneSchede > span:nth-child(3){width:calc(100% - 200px);}
+.colonneSchede > span:nth-child(4){width:35px;}
+
+.colonneBiblio > span:nth-child(1){width:40px;}
+.colonneBiblio > span:nth-child(2){width:60px;}
+.colonneBiblio > span:nth-child(3){width:150px;}
+.colonneBiblio > span:nth-child(4){width:calc(100% - 285px);}
+.colonneBiblio > span:nth-child(5){width:35px;}
+
+
+.mapPopUp > p {margin:1px !important; padding:0 !important;}

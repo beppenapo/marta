@@ -1,15 +1,84 @@
-$(document)
-.ajaxStart(function(){console.log('...loading');})
-.ajaxStop(function(){$("#loadingDiv").remove();});
-
+let biblioList = schedeList=[];
+let content =  $("#scrollSchede");
+let contentBiblio =  $("#scrollBiblio");
+let scrollDiv =  document.getElementById("scrollSchede");
+let scrollBiblioDiv =  document.getElementById("scrollBiblio");
+let href = 'schedaView.php?get=';
+let urlIco = '<i class="fas fa-link"></i>';
+let pagenumber = pageBiblio = 0;
+let perpage = 10;
+let resetBiblio = false;
 const userClass = parseInt($("[name=classe]").val());
 const utente = parseInt($("[name=utente]").val());
-
 stat();
+biblio([]);
 initComunicazioni();
-// buildSchedeTable();
+mapInit();
+
 buildUserTable();
-statoSchede();
+if (userClass !== 3) {
+  statoSchede();
+}
+
+$("[name=searchBiblioBtn]").on('click', function(){
+  let dati = {}
+  let aut = $("[name = biblioAut]");
+  let title = $("[name = biblioTitle]");
+  let tipo = $("[name = biblioTipo]");
+  if (aut.val()) {dati.autore = aut.val()}
+  if (title.val()) {dati.titolo = title.val()}
+  if (tipo.val()) {dati.tipo = tipo.val()}
+  if(Object.keys(dati).length === 0){
+    alert("Per cercare un record bibliografico devi inserire almeno un filtro di ricerca!");
+    return false;
+  }
+  biblio(dati);
+  if (resetBiblio == false) {
+    resetBiblio = true;
+    $("<button/>",{class:'btn btn-sm btn-outline-secondary', type:'button', name:'resetBiblioBtn'}).html('<i class="fas fa-repeat"></i>').appendTo('#searchBiblioToolbar').on('click',function(){
+      biblio([]);
+      $(".filtroBiblio").val('');
+      $(this).remove();
+      resetBiblio = false;
+    })
+  }
+})
+
+$("[name=usrBtn]").on('click', function(){
+  $("[name = searchNctn], [name = searchInv]").removeClass('is-invalid');
+  $("[name=checkBtn],[name = usrBtn]").removeClass('active');
+  $(this).addClass('active')
+  let dati = {tipo:10,operatore: $(this).val()}
+  schede(dati)
+})
+
+$("[name=checkBtn]").on('click', function(){
+  $("[name = searchNctn], [name = searchInv]").removeClass('is-invalid');
+  $("[name=checkBtn],[name = usrBtn]").removeClass('active');
+  let tipo = $(this).val();
+  let dati = {tipo:tipo}
+  if(tipo == 8){
+    if (!$("[name = searchNctn]").val()) {
+      $("[name = searchNctn]").addClass('is-invalid')
+      return false;
+    }
+    $("[name = searchNctn]").removeClass('is-invalid')
+    dati.nctn = $("[name = searchNctn]").val()
+  }
+  if(tipo == 9){
+    if (!$("[name = searchInv]").val()) {
+      $("[name = searchInv]").addClass('is-invalid')
+      return false;
+    }
+    $("[name = searchInv]").removeClass('is-invalid')
+    dati.inv = $("[name = searchInv]").val()
+  }
+  if ($(this).is('.checkBtn')){$("[name = searchNctn], [name = searchInv]").val('')}
+  if ($(this).is('.searchNctnBtn')){$("[name = searchInv]").val('')}
+  if ($(this).is('.searchInvBtn')){$("[name = searchNctn]").val('')}
+  $(this).addClass('active')
+  schede(dati);
+})
 
 $("[name=addComunicazioneBtn]").on('click', function(){
   $("[name=testo]").val('');
@@ -23,34 +92,117 @@ $("[name=saveComunicazione]").on('click', function(e){
     dati = !$("[name=idComunicazione]").val() ? {trigger : 'addComunicazione', testo:$("[name=testo]").val()} : {trigger : 'editComunicazione', id:$("[name=idComunicazione]").val(), testo:$("[name=testo]").val()}
     $.ajax({ url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: dati })
     .done(function(data) {
+      alert('nota salvata correttamente');
       $('#addComunicazioneDiv').modal('hide');
-      $(".toastAddComunicazione > .toast-body").html('<p>Comunicazione inserita correttamente!</p>');
-      $(".toastAddComunicazione").toast('show');
-      $('.toastAddComunicazione').on('hidden.bs.toast', function () {initComunicazioni();})
+      initComunicazioni();
     })
-    .fail(function() {console.log("error"); });
+    .fail(function() {console.log("errore nel salvataggio della comunicazione"); });
   }
 })
 //CBAEURSKUZBYXE
-$("body").on('click', '[name=delNotesBtn]', function() {
-  v=$(this).val();
-  $.ajax({url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: {trigger: 'delComunicazione', id:v}})
-  .done(function(data) {
-    $(".toastDelComunicazione").toast('hide');
-    $(".toastAddComunicazione > .toast-body").html('<p>Comunicazione eliminata!</p>');
-    $('.toastDelComunicazione').on('hidden.bs.toast', function () {
-      $(".toastAddComunicazione").toast('show');
-      $('.toastAddComunicazione').on('hidden.bs.toast', function () {initComunicazioni();})
-    })
-  })
-  .fail(function(data) { console.log(data); });
-});
 $('body').on('click', '[name=updateUser]', function() { $.redirectPost('usrAdd.php',{id:$(this).val()}); });
 $('body').on('click', 'a.schedatore', function(e) {
   e.preventDefault();
   localStorage.setItem('operatore',JSON.stringify([$(this).data('id'),$(this).data('schedatore')]));
   $.redirectPost('schede.php');
 });
+
+function schede(dati){
+  content.html('');
+  schedeList=[];
+  pagenumber=0;
+  $.ajax({
+    type: "POST",
+    url: "api/dashboard.php",
+    dataType: 'json',
+    data: {trigger: 'schede', dati:dati}
+  })
+  .done(function(data){
+    if(data.length == 0) {
+      content.html('<h6 class="text-center my-5">nessuna scheda trovata</h6>')
+      return false;
+    }
+    if(data.length <= 10){
+      data.forEach(function(item,i){
+        let li = $("<li/>",{class:'list-group-item colonne colonneSchede'}).appendTo(content)
+        $("<span/>").text(item.nctn).appendTo(li)
+        $("<span/>").text(item.inventario).appendTo(li)
+        $("<span/>").text(item.titolo).appendTo(li)
+        $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
+      });
+    }
+    if (data.length > 10) {
+      data.forEach(function(item,i){ schedeList.push(item); });
+      scrollSchede()
+      scrollDiv.addEventListener('scroll',function(e){
+        var lastDiv = document.querySelector(".colonneSchede:last-child");
+        var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
+        var pageOffset = scrollDiv.scrollTop + scrollDiv.clientHeight;
+        if (pageOffset > lastDivOffset - 10) {
+          pagenumber++;
+          scrollSchede();
+        }
+      })
+    }
+  })
+}
+
+function scrollSchede(){
+  let currentDataset = schedeList.slice(pagenumber * perpage, (pagenumber * perpage) + perpage);
+  if (currentDataset.length > 0){
+    currentDataset.forEach(function(item){
+      let li = $("<li/>",{class:'list-group-item colonne colonneSchede'}).appendTo(content)
+      $("<span/>").text(item.nctn).appendTo(li)
+      $("<span/>").text(item.inventario).appendTo(li)
+      $("<span/>").text(item.titolo).appendTo(li)
+      $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
+    });
+  }
+}
+
+function biblio(dati){
+  contentBiblio.html('');
+  schedeBiblio=[];
+  pageBiblio = 0;
+  $.ajax({
+    type: "POST",
+    url: "api/dashboard.php",
+    dataType: 'json',
+    data: {trigger: 'biblio', dati:dati}
+  })
+  .done(function(data){
+    if(data.length == 0) {
+      contentBiblio.html('<h6 class="text-center my-5">nessun record bibliografico corrisponde ai tuoi criteri di ricerca</h6>')
+      return false;
+    }
+    data.forEach(function(item,i){ schedeBiblio.push(item); });
+    scrollBiblio()
+    scrollBiblioDiv.addEventListener('scroll',function(e){
+      var lastDiv = document.querySelector(".colonneBiblio:last-child");
+      var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
+      var pageOffset = scrollBiblioDiv.scrollTop + scrollBiblioDiv.clientHeight;
+      if (pageOffset > lastDivOffset - 10) {
+        pageBiblio++;
+        scrollBiblio();
+      }
+    })
+  })
+}
+
+function scrollBiblio(){
+  let currentDataset = schedeBiblio.slice(pageBiblio * perpage, (pageBiblio * perpage) + perpage);
+  if (currentDataset.length > 0){
+    currentDataset.forEach(function(item){
+      let li = $("<li/>",{class:'list-group-item colonne colonneBiblio'}).appendTo(contentBiblio)
+      $("<span/>").text(item.id).appendTo(li)
+      $("<span/>").text(item.tipo).appendTo(li)
+      $("<span/>").text(item.autore).appendTo(li)
+      $("<span/>").text(nl2br(item.titolo)).appendTo(li)
+      $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
+    });
+  }
+}
+
 function initComunicazioni(){
   $.ajax({ url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: {trigger : 'comunicazioni'} })
   .done(function(data) {
@@ -61,29 +213,34 @@ function initComunicazioni(){
       div = $("<div/>",{class:'list-group-item flex-column align-items-start'}).appendTo(wrap);
       $("<p/>", {class:'mb-1'}).html(nl2br(item.testo)).appendTo(div);
       footer = $("<div/>",{class:'d-flex w-100 justify-content-between'}).appendTo(div);
-      $("<small/>").html(item.utente).appendTo(footer);
       $("<small/>").html(item.data).appendTo(footer);
-      if (sex && sex === item.session) {
-        btnWrap = $("<div/>",{class:'d-flex w-100 justify-content-start mt-3'}).appendTo(div);
-        $("<button/>",{type:'button', class:'btn btn-sm btn-light text-dark mr-2 p-1', name:'editComunicazione'})
-          .html('<small>modifica</small>')
-          .appendTo(btnWrap)
-          .on('click', function(){
-            $("[name=testo]").val(item.testo);
-            $("[name=idComunicazione]").val(item.id);
-            $("#addComunicazioneDiv").modal('show');
-          });
-        $("<button/>",{type:'button', class:'btn btn-sm btn-light text-dark', name:'delComunicazione'})
-          .html('<small>elimina</small>')
-          .appendTo(btnWrap)
-          .on('click', function(){
-            $("[name=delNotesBtn]").val(item.id);
-            $(".toastDelComunicazione").toast('show');
-          });
-      }
+      btnWrap = $("<div/>",{class:'d-flex w-100 justify-content-start mt-3'}).appendTo(div);
+      $("<button/>",{type:'button', class:'btn btn-sm btn-light text-dark mr-2 p-1', name:'editComunicazione'})
+        .html('<small>modifica</small>')
+        .appendTo(btnWrap)
+        .on('click', function(){
+          $("[name=testo]").val(item.testo);
+          $("[name=idComunicazione]").val(item.id);
+          $("#addComunicazioneDiv").modal('show');
+        });
+      $("<button/>",{type:'button', class:'btn btn-sm btn-light text-dark', name:'delComunicazione'})
+        .html('<small>elimina</small>')
+        .appendTo(btnWrap)
+        .on('click', function(){
+          if(confirm('vuoi davvero eliminare la nota?')){
+            $.ajax({url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: {trigger: 'delComunicazione', id:item.id}})
+            .done(function(data) {
+              alert('nota eliminata definitivamente')
+              initComunicazioni()
+            })
+            .fail(function(data) {
+              alert("errore durante l'eliminazione della nota");
+            });
+          }
+        });
     });
   })
-  .fail(function() {console.log("error"); });
+  .fail(function() {console.log("errore caricamento comunicazioni"); });
 }
 
 function buildUserTable(){
@@ -97,9 +254,11 @@ function buildUserTable(){
       $("<td/>",{text:v.cognome+" "+v.nome}).appendTo(tr);
       $("<td/>",{text:v.email}).appendTo(tr);
       $("<td/>",{text:v.cellulare}).appendTo(tr);
-      $("<td/>",{html:classe, class:'text-center'}).appendTo(tr);
-      $("<td/>",{html:act, class:'text-center'}).appendTo(tr);
-      $("<td/>",{html:btnUpdate, class:'text-center'}).appendTo(tr);
+      if (userClass !== 3) {
+        $("<td/>",{html:classe, class:'text-center'}).appendTo(tr);
+        $("<td/>",{html:act, class:'text-center'}).appendTo(tr);
+        $("<td/>",{html:btnUpdate, class:'text-center'}).appendTo(tr);
+      }
     })
     initDataTab('#dataTable')
   })
@@ -115,6 +274,7 @@ function statoSchede(){
   })
   .done(statoChart);
 }
+
 function statoChart(dataset){
   item = dataset[0];
   const ctx = $('#statoChart');
@@ -158,7 +318,6 @@ function buildSchedeTable(){
   let opt={ url: 'api/dashboard.php', type: 'POST', dataType: 'json', data: dati }
   $.ajax(opt)
   .done(function(data) {
-    console.log(data);
     data.forEach(function(v,i){
       let vero = "<i class='fas fa-check-circle text-success'></i>";
       let falso = "<i class='fas fa-times-circle text-danger'></i>";
@@ -176,8 +335,103 @@ function buildSchedeTable(){
     initDataTab('#dataTableScheda')
   })
   .fail(function(xhr, ajaxOptions, thrownError) {
-    console.log([xhr, ajaxOptions, thrownError]);
+    console.log("boh!"+[xhr, ajaxOptions, thrownError]);
   });
 }
+const userDataOpt = {
+  paging: true,
+  lengthMenu: [5,10, 20, 50, 100],
+  order: [],
+  columnDefs: [{targets  : 'no-sort', orderable: false }],
+  destroy:true,
+  retrieve:true,
+  responsive: true,
+  html:true,
+  language: { url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Italian.json' }
+}
+function initDataTab(tab){ $(tab).DataTable(userDataOpt); }
 
-function initDataTab(tab){ $(tab).DataTable(dataTableOpt); }
+
+function mapInit(){
+  var map = L.map('map',{maxBounds:pugliaExt}).fitBounds(pugliaExt);
+  map.setMinZoom(map.getZoom());
+  let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
+  let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
+  let gSat = L.tileLayer(gSatTile,{maxZoom: 20, subdomains:gSubDomains});
+  let gTerrain = L.tileLayer(gTerrainTile,{maxZoom: 20, subdomains:gSubDomains});
+  osm.addTo(map)
+  var baseLayers = {
+    "OpenStreetMap": osm,
+    "Terrain":gTerrain,
+    "Satellite": gSat,
+    "Google Street": gStreets
+  };
+  var overlay = {};
+  let comune = L.featureGroup().addTo(map);
+  var markers = L.markerClusterGroup();
+
+  $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0})
+    .done(function( json ) {
+      let l = L.geoJson(json).addTo(comune);
+      map.fitBounds(l.getBounds());
+    })
+    .fail(function( jqxhr, textStatus, error ) {
+      console.log("Request Failed: " + jqxhr+", "+textStatus + ", " + error );
+    });
+  overlay["Comuni"]=comune;
+
+  $.ajax({
+    type: "GET",
+    url: "api/geom.php",
+    dataType: 'json',
+    data: {trigger: 'getMarker'}
+  })
+    .done(function(data){
+      data.forEach(function(m,i){
+        let marker = L.marker([m.gpdpy,m.gpdpx],{
+          ogtd:m.ogtd
+          ,classe:m.classe
+          ,via:m.via
+          ,href: 'schedaView.php?get='+m.id
+        });
+        let pop = "<div class='text-center mapPopUp'>";
+        pop += "<h5>"+m.ogtd+"</h5>";
+        pop += "<p class='font-weight-bold'>"+m.classe+"</p>";
+        pop += "<p>"+m.comune+"</p>";
+        pop += "<p>"+m.via+"</p>";
+        pop += "<hr>";
+        pop += "<a href='schedaView.php?get="+m.scheda+"'>apri scheda</a>";
+        pop += "</div>";
+        marker.bindPopup(pop);
+        markers.addLayer(marker);
+      })
+    })
+    overlay["Reperti"]=markers;
+    markers.addTo(map);
+  L.control.layers(baseLayers, overlay, {position: 'bottomright'}).addTo(map);
+
+  let resetMap = L.Control.extend({
+    options: { position: 'topleft'},
+    onAdd: function (map) {
+      var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
+
+      btn1=$("<a/>",{href:'#', title:'zoom massimo'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
+      $("<i/>",{class:'fa-solid fa-crosshairs'}).appendTo(btn1)
+      btn1.on('click', function (e) {
+        e.preventDefault()
+        map.fitBounds(pugliaExt);
+      });
+
+      btn2=$("<a/>",{href:'#', title:'zoom al comune'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
+      $("<i/>",{class:'fa-solid fa-map-location-dot'}).appendTo(btn2)
+      btn2.on('click', function (e) {
+        e.preventDefault()
+        map.addLayer(comune)
+        map.fitBounds(comune.getBounds());
+      });
+      return container;
+    }
+  })
+
+  map.addControl(new resetMap());
+}

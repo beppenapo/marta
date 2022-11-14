@@ -429,7 +429,7 @@
               </div>
               <div id="alertWrap">
                 <div class="alert alert-danger">
-                  <h6>non è stato possibile geolocalizzare il reperto</h6>
+                  <h6>Luogo di ritrovamento sconosciuto</h6>
                 </div>
               </div>
             </div>

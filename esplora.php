@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
   <head>
@@ -6,7 +7,7 @@
   </head>
   <body>
     <?php require('assets/headerMenu.php'); ?>
-    <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
+    <?php if(isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <main class="bg-light">
       <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
         <div class="carousel-inner"></div>
