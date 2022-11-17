@@ -436,38 +436,6 @@ function postData(url, dati, callback){
   });
 }
 
-function stat(){
-  $("#totSchede").text(TOTRA+TOTNU);
-  $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
-  .done(function(data){
-    let raPerc = parseInt(data['ra']*100/TOTRA);
-    let nuPerc = parseInt(data['nu']*100/TOTNU);
-    $("#numschede").text(parseInt(data['ra'])+parseInt(data['nu']));
-
-    $("#percSchedeOk").text(parseInt(raPerc+nuPerc));
-    $("#raBar").text('RA '+data['ra']);
-    $("#nuBar").text('NU '+data['nu']);
-    // $("#raBar").attr('style','width:'+raPerc+'%').attr('aria-valuenow',raPerc);
-    // $("#nuBar").attr('style','width:'+nuPerc+'%').attr('aria-valuenow',nuPerc);
-
-    $("#numFoto").text(data['foto']);
-    let fotoPerc = parseInt(data['foto']*100/TOTFOTO);
-    $("#fotoBar").attr('style','width:'+fotoPerc+'%').attr('aria-valuenow',fotoPerc);
-    $("#percFoto").text(fotoPerc);
-
-    $("#numStereo").text(data['stereo']);
-    let stereoPerc = parseInt(data['stereo']*100/TOTSTEREO);
-    $("#stereoBar").attr('style','width:'+stereoPerc+'%').attr('aria-valuenow',stereoPerc);
-    $("#stereoFoto").text(stereoPerc);
-
-    $("#numModelli").text(data['modelli']);
-    let modelliPerc = parseInt(data['modelli']*100/TOT3D);
-    $("#3dBar").attr('style','width:'+modelliPerc+'%').attr('aria-valuenow',modelliPerc);
-    $("#perc3d").text(modelliPerc);
-  })
-  .fail(function(){console.log('error');});
-}
-
 $(".toast").hide();
 function toast(obj){
   console.log(obj);
@@ -922,4 +890,20 @@ function gpAutoCompile(lng,lat){
   $("[name=gpbb]").val('Punto individuato tramite ricerca su piattaforma di mappatura web')
   $("[name=gpdpx]").val(lng)
   $("[name=gpdpy]").val(lat)
+}
+
+function createCarousel(){
+  let bgArr = [];
+  const content = $(".carousel-inner");
+  for (let i=0, j=BGIMG; i<j; i++) {
+    let i = Math.random()*(BGIMG-1) + 1;
+    i = Math.ceil(i);
+    if (!bgArr.includes(i)) {bgArr.push(i);}
+  }
+  bgArr.forEach(function(img, i){
+    let item = $("<div/>",{class:'carousel-item'}).appendTo(content);
+    $("<div/>").css({"background-image":"url(img/banner/"+img+".jpg)"}).appendTo(item);
+  });
+  $(".carousel-item").eq(0).addClass('active');
+  $('#carousel').carousel({wrap:true})
 }

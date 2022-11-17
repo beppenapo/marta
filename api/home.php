@@ -10,4 +10,7 @@ if(isset($funzione) && function_exists($funzione)) {
 }
 
 function statHome($obj){ return json_encode($obj->statHome()); }
+function ogtdStat($obj){ return json_encode($obj->ogtdStat()); }
+function nuCronoStat($obj){ return json_encode($obj->nuCronoStat()); }
+function miniGallery($obj){ return json_encode($obj->miniGallery()); }
 ?>

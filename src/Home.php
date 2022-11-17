@@ -20,5 +20,26 @@ class Home extends Conn{
     $arr = array( "ra"=>$ra[0]['count'], "nu"=>$nu[0]['count'], "foto"=>$foto[0]['count'], "stereo"=>$stereo[0]['count'], "modelli"=>$modelli[0]['count']);
     return $arr;
   }
+
+  public function ogtdStat(){
+    $sql = "with tot as (select count(*) from og_ra),
+    ra as (select l4, count(*) from og_ra group by l4)
+    select ra.l4, l4.value as ogtd, ra.count, ((ra.count * 100 ) / tot.count)::int as perc
+    from ra, tot, liste.ra_cls_l4 l4
+    where ra.l4 = l4.id
+    group by ra.l4, ra.count, tot.count, l4.value
+    HAVING ((ra.count * 100 ) / tot.count)::int > 1
+    order by 3 desc;";
+    return $this->simple($sql);
+  }
+
+  public function nuCronoStat(){
+    $sql = "SELECT crono.id, crono.value as cronologia, count(dt.*) from dt inner join liste.cronologia crono on dt.dtzgi = crono.id group by crono.id, crono.value having count(dt.*) > 30 order by 1 desc;";
+    return $this->simple($sql);
+  }
+
+  public function miniGallery(){
+    return $this->simple("select id, ogtd from gallery where piano > 0 order by random() limit 6;");
+  }
 }
 ?>

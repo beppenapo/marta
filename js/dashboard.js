@@ -10,15 +10,13 @@ let perpage = 10;
 let resetBiblio = false;
 const userClass = parseInt($("[name=classe]").val());
 const utente = parseInt($("[name=utente]").val());
-stat();
+statDashboard();
 biblio([]);
 initComunicazioni();
 mapInit();
 
 buildUserTable();
-if (userClass !== 3) {
-  statoSchede();
-}
+if (userClass !== 3) { statoSchede(); }
 
 $("[name=searchBiblioBtn]").on('click', function(){
   let dati = {}
@@ -434,4 +432,33 @@ function mapInit(){
   })
 
   map.addControl(new resetMap());
+}
+
+function statDashboard(){
+  $("#totSchede").text(TOTRA+TOTNU);
+  $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
+  .done(function(data){
+    let totSchede = parseInt(data['ra'])+parseInt(data['nu']);
+    $("#numschede").text(totSchede);
+
+    $("#percSchedeOk").text(parseInt(totSchede*100/40000));
+    $("#raBar").text('RA '+data['ra']);
+    $("#nuBar").text('NU '+data['nu']);
+
+    $("#numFoto").text(data['foto']);
+    let fotoPerc = parseInt(data['foto']*100/TOTFOTO);
+    $("#fotoBar").attr('style','width:'+fotoPerc+'%').attr('aria-valuenow',fotoPerc);
+    $("#percFoto").text(fotoPerc);
+
+    $("#numStereo").text(data['stereo']);
+    let stereoPerc = parseInt(data['stereo']*100/TOTSTEREO);
+    $("#stereoBar").attr('style','width:'+stereoPerc+'%').attr('aria-valuenow',stereoPerc);
+    $("#stereoFoto").text(stereoPerc);
+
+    $("#numModelli").text(data['modelli']);
+    let modelliPerc = parseInt(data['modelli']*100/TOT3D);
+    $("#3dBar").attr('style','width:'+modelliPerc+'%').attr('aria-valuenow',modelliPerc);
+    $("#perc3d").text(modelliPerc);
+  })
+  .fail(function(){console.log('error');});
 }

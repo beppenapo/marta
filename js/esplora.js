@@ -43,21 +43,7 @@ $(document).ready(function() {
 
 
 /* www.flaticon.com */
-function createCarousel(){
-  let bgArr = [];
-  const content = $(".carousel-inner");
-  for (let i=0, j=BGIMG; i<j; i++) {
-    let i = Math.random()*(BGIMG-1) + 1;
-    i = Math.ceil(i);
-    if (!bgArr.includes(i)) {bgArr.push(i);}
-  }
-  bgArr.forEach(function(img, i){
-    let item = $("<div/>",{class:'carousel-item'}).appendTo(content);
-    $("<div/>").css({"background-image":"url(img/banner/"+img+".jpg)"}).appendTo(item);
-  });
-  $(".carousel-item").eq(0).addClass('active');
-  $('#carousel').carousel({wrap:true})
-}
+
 function loadSvg(svg){
   $("#svgWrap").load(svg,{},function(){
     let svgEl = svgPanZoom('#pianta', svgOpt);
