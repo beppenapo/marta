@@ -18,7 +18,7 @@ let lng, lat;
 let marker = {};
 let map;
 
-const BGIMG = 5;
+const BGIMG = 34;
 
 $(document)
 .ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
@@ -895,8 +895,9 @@ function gpAutoCompile(lng,lat){
 function createCarousel(){
   let bgArr = [];
   const content = $(".carousel-inner");
-  for (let i=0, j=BGIMG; i<j; i++) {
-    let i = Math.random()*(BGIMG-1) + 1;
+  for (let i=1, j=BGIMG; i<j; i++) {
+    // let i = Math.random()*(BGIMG-1) + 1;
+    let i = Math.random()*BGIMG;
     i = Math.ceil(i);
     if (!bgArr.includes(i)) {bgArr.push(i);}
   }
