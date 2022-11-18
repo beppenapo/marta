@@ -48,24 +48,26 @@ class Dashboard extends Conn{
     $tipo = $dati['tipo'];
     switch (true) {
       case $tipo == 1:
-        array_push($filter,'s.id not in (select scheda from biblio_scheda)');
-        if($_SESSION['classe'] == 3){array_push($filter,'s.cmpn = '.$_SESSION['id']);}
+        array_push($filter,'scheda not in (select scheda from biblio_scheda)');
+        if($_SESSION['classe'] == 3){array_push($filter,'cmpn = '.$_SESSION['id']);}
       break;
       case $tipo == 2:
-        array_push($filter,'s.id not in (select scheda from file where tipo = 3)');
+        array_push($filter,'scheda not in (select scheda from file where tipo = 3)');
         if($_SESSION['classe'] == 3){array_push($filter,'s.cmpn = '.$_SESSION['id']);}
       break;
-      case $tipo == 3: array_push($filter,'s.id in (select scheda from stato_scheda where chiusa = false)'); break;
-      case $tipo == 4: array_push($filter,'s.id in (select scheda from stato_scheda where chiusa = true and verificata = false)'); break;
-      case $tipo == 5: array_push($filter,'s.id in (select scheda from stato_scheda where verificata = true and inviata = false)'); break;
-      case $tipo == 6: array_push($filter,'s.id in (select scheda from stato_scheda where inviata = true and accettata = false)'); break;
-      case $tipo == 7: array_push($filter,'s.id in (select scheda from stato_scheda where accettata = true)'); break;
-      case $tipo == 8: array_push($filter,"nctn.nctn::text ilike '".$dati['nctn']."%'"); break;
-      case $tipo == 9: array_push($filter,"inv.inventario::text ilike '".$dati['inv']."%'"); break;
-      case $tipo == 10: array_push($filter,"s.cmpn = ".$dati['operatore']); break;
+      case $tipo == 3: array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = false)'); break;
+      case $tipo == 4: array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = true and verificata = false)'); break;
+      case $tipo == 5: array_push($filter,'scheda in (select scheda from stato_scheda where verificata = true and inviata = false)'); break;
+      case $tipo == 6: array_push($filter,'scheda in (select scheda from stato_scheda where inviata = true and accettata = false)'); break;
+      case $tipo == 7: array_push($filter,'scheda in (select scheda from stato_scheda where accettata = true)'); break;
+      case $tipo == 8: array_push($filter,"nctn::text ilike '".$dati['nctn']."%'"); break;
+      case $tipo == 9: array_push($filter,"inventario::text ilike '".$dati['inv']."%'"); break;
+      case $tipo == 10: array_push($filter,"cmpn = ".$dati['operatore']); break;
     }
 
-    $sql = "select s.id, nctn.nctn, trim(concat(inv.inventario,' ',coalesce(inv.suffisso,''))) inventario, s.titolo from scheda s inner join nctn_scheda nctn on nctn.scheda = s.id left join inventario inv on inv.scheda = s.id where ". join(' and ', $filter)." ;";
+    // $sql = "select s.id, nctn.nctn, trim(concat(inv.inventario,' ',coalesce(inv.suffisso,''))) inventario, s.titolo from scheda s inner join nctn_scheda nctn on nctn.scheda = s.id left join inventario inv on inv.scheda = s.id where ". join(' and ', $filter)." ;";
+
+    $sql = "select scheda, nctn, inventario, titolo, ogtd, piano, sala, cassetta from schede where ". join(' and ', $filter)." ;";
     return $this->simple($sql);
     // return $sql;
   }

@@ -10,13 +10,18 @@ let perpage = 10;
 let resetBiblio = false;
 const userClass = parseInt($("[name=classe]").val());
 const utente = parseInt($("[name=utente]").val());
-statDashboard();
+
+if (userClass == 3) { schede({tipo:10, operatore:utente}) }
+
 biblio([]);
 initComunicazioni();
 mapInit();
-
 buildUserTable();
 if (userClass !== 3) { statoSchede(); }
+
+window.addEventListener("orientationchange", (event) => {
+  console.log(`the width of the device is now ${event.target.screen.width}`);
+});
 
 $("[name=searchBiblioBtn]").on('click', function(){
   let dati = {}
@@ -120,28 +125,18 @@ function schede(dati){
       content.html('<h6 class="text-center my-5">nessuna scheda trovata</h6>')
       return false;
     }
-    if(data.length <= 10){
-      data.forEach(function(item,i){
-        let li = $("<li/>",{class:'list-group-item colonne colonneSchede'}).appendTo(content)
-        $("<span/>").text(item.nctn).appendTo(li)
-        $("<span/>").text(item.inventario).appendTo(li)
-        $("<span/>").text(item.titolo).appendTo(li)
-        $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
-      });
-    }
-    if (data.length > 10) {
-      data.forEach(function(item,i){ schedeList.push(item); });
-      scrollSchede()
-      scrollDiv.addEventListener('scroll',function(e){
-        var lastDiv = document.querySelector(".colonneSchede:last-child");
-        var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
-        var pageOffset = scrollDiv.scrollTop + scrollDiv.clientHeight;
-        if (pageOffset > lastDivOffset - 10) {
-          pagenumber++;
-          scrollSchede();
-        }
-      })
-    }
+    data.forEach(function(item,i){ schedeList.push(item); });
+    scrollSchede()
+    scrollDiv.addEventListener('scroll',function(e){
+      var lastDiv = document.querySelector(".colonneSchede:last-child");
+      var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
+      var pageOffset = scrollDiv.scrollTop + scrollDiv.clientHeight;
+      if (pageOffset > lastDivOffset - 10) {
+        pagenumber++;
+        scrollSchede();
+      }
+    })
+    $("#numSchedeCard").text(data.length)
   })
 }
 
@@ -150,10 +145,23 @@ function scrollSchede(){
   if (currentDataset.length > 0){
     currentDataset.forEach(function(item){
       let li = $("<li/>",{class:'list-group-item colonne colonneSchede'}).appendTo(content)
+      let piano;
+      switch (item.piano) {
+        case -1: piano = 'Deposito'; break;
+        case 0: piano = 'Piano terra'; break;
+        case 1: piano = 'Primo piano'; break;
+        case 2: piano = 'Secondo piano'; break;
+        case 3: piano = 'Terzo piano'; break;
+      }
       $("<span/>").text(item.nctn).appendTo(li)
       $("<span/>").text(item.inventario).appendTo(li)
       $("<span/>").text(item.titolo).appendTo(li)
-      $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
+      $("<span/>").text(item.ogtd).appendTo(li)
+      $("<span/>").text(piano).appendTo(li)
+      $("<span/>").text(item.sala).appendTo(li)
+      $("<span/>").text(item.cassetta).appendTo(li)
+      let link = $("<span/>").appendTo(li)
+      $("<a/>",{href:href+item.scheda, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(link)
     });
   }
 }

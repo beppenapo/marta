@@ -10,7 +10,9 @@
   $checkRes = $checkSchede['biblio']['count'] + $checkSchede['geo']['count'] + $checkSchede['img']['count'];
   if ($checkRes > 0) {
     $checkBiblioBtn = $checkSchede['biblio']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2 checkBtn" name="checkBtn" value="1"><span>'.$checkSchede['biblio']['count'].'</span> senza bibliografia</button>' : "";
-    $checkImgBtn = $checkSchede['img']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2" name="checkBtn" value="2"><span>'.$checkSchede['img']['count'].'</span> senza immagini</button>' : "";
+    if ($_SESSION['classe'] < 3) {
+      $checkImgBtn = $checkSchede['img']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2" name="checkBtn" value="2"><span>'.$checkSchede['img']['count'].'</span> senza immagini</button>' : "";
+    }
     $checkGeoBtn = $checkSchede['geo']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2" name="checkBtn" value="3"><span>'.$checkSchede['geo']['count'].'</span> senza geolocalizzazione</button>' : "";
     $checkBtn = $checkBiblioBtn.$checkImgBtn.$checkGeoBtn;
   }
@@ -35,9 +37,8 @@
     <div id="loadingDiv" class="flexDiv"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main class="bg-light">
       <div class="container-fluid">
-        <?php require("assets/dashboard/statDashboard.html"); ?>
-        <?php if ($_SESSION['classe']!==3) {require($dirAssets.'dashboard_amministratore.php'); } ?>
-        <?php if ($_SESSION['classe'] ==3) {require($dirAssets.'dashboard_operatore.php'); } ?>
+        <?php if($_SESSION['classe']!==3){require($dirAssets.'dashboard_amministratore.php');}?>
+        <?php if($_SESSION['classe'] ==3){require($dirAssets.'dashboard_operatore.php'); } ?>
       </div>
     </main>
     <?php require($dirAssets.'card_comunicazioni_modifica.php'); ?>
