@@ -44,6 +44,7 @@ class Dashboard extends Conn{
 
   public function schede(array $dati){
     //1 = senza biblio | 2 = senza immagini | 3 = aperta | 4 = chiusa | 5 = verificata | 6 = inviata | 7 = accettata | 8 = nctn | 9 = inventario | 10 = operatore
+    $sql = "select scheda, nctn, inventario, titolo, ogtdid, ogtd, piano, sala, cassetta from schede";
     $filter=[];
     $tipo = $dati['tipo'];
     switch (true) {
@@ -64,10 +65,11 @@ class Dashboard extends Conn{
       case $tipo == 9: array_push($filter,"inventario::text ilike '".$dati['inv']."%'"); break;
       case $tipo == 10: array_push($filter,"cmpn = ".$dati['operatore']); break;
     }
+    if($tipo > 0){ $sql = $sql . " where " . join(' and ', $filter).";"; }
 
     // $sql = "select s.id, nctn.nctn, trim(concat(inv.inventario,' ',coalesce(inv.suffisso,''))) inventario, s.titolo from scheda s inner join nctn_scheda nctn on nctn.scheda = s.id left join inventario inv on inv.scheda = s.id where ". join(' and ', $filter)." ;";
 
-    $sql = "select scheda, nctn, inventario, titolo, ogtd, piano, sala, cassetta from schede where ". join(' and ', $filter)." ;";
+    // $sql = "select scheda, nctn, inventario, titolo, ogtdid, ogtd, piano, sala, cassetta from schede where ". join(' and ', $filter).";";
     return $this->simple($sql);
     // return $sql;
   }

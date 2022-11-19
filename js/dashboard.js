@@ -12,6 +12,7 @@ const userClass = parseInt($("[name=classe]").val());
 const utente = parseInt($("[name=utente]").val());
 
 if (userClass == 3) { schede({tipo:10, operatore:utente}) }
+if (userClass == 1) { schede({tipo:0}) }
 
 biblio([]);
 initComunicazioni();
@@ -113,6 +114,7 @@ $('body').on('click', 'a.schedatore', function(e) {
 function schede(dati){
   content.html('');
   schedeList=[];
+  ogtdList=[];
   pagenumber=0;
   $.ajax({
     type: "POST",
@@ -125,7 +127,12 @@ function schede(dati){
       content.html('<h6 class="text-center my-5">nessuna scheda trovata</h6>')
       return false;
     }
-    data.forEach(function(item,i){ schedeList.push(item); });
+
+    data.forEach(function(item,i){
+      schedeList.push(item);
+      ogtdList.push({id:item.ogtdid, ogtd:item.ogtd})
+    });
+    ogtdSel()
     scrollSchede()
     scrollDiv.addEventListener('scroll',function(e){
       var lastDiv = document.querySelector(".colonneSchede:last-child");
@@ -138,6 +145,20 @@ function schede(dati){
     })
     $("#numSchedeCard").text(data.length)
   })
+}
+
+function ogtdSel(){
+  const sel = $("[name=ogtdSelect]");
+  let lista = [...new Map(ogtdList.map(item => [item['id'], item])).values()];
+  lista.sort((a, b) => {
+    let fa = a.ogtd.toLowerCase(), fb = b.ogtd.toLowerCase();
+    if (fa < fb) { return -1; }
+    if (fa > fb) { return 1; }
+    return 0;
+  });
+  sel.html('');
+  $("<option/>").val('').text('seleziona ogtd').prop("selected", true).appendTo(sel)
+  lista.forEach((item, i) => { $("<option/>").val(item.id).text(item.ogtd).appendTo(sel) });
 }
 
 function scrollSchede(){
