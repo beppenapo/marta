@@ -9,14 +9,14 @@
   $checkSchede = $obj->checkSchede();
   $checkRes = $checkSchede['biblio']['count'] + $checkSchede['geo']['count'] + $checkSchede['img']['count'];
   if ($checkRes > 0) {
-    $checkBiblioBtn = $checkSchede['biblio']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2 checkBtn" name="checkBtn" value="1"><span>'.$checkSchede['biblio']['count'].'</span> senza bibliografia</button>' : "";
+    $checkBiblioBtn = $checkSchede['biblio']['count'] > 0 ? '<button type="button" class="btn btn-outline-danger m-2 checkBtn" name="checkBtn" value="1"><span>'.$checkSchede['biblio']['count'].'</span> senza bibliografia</button>' : "";
     if ($_SESSION['classe'] < 3) {
-      $checkImgBtn = $checkSchede['img']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2" name="checkBtn" value="2"><span>'.$checkSchede['img']['count'].'</span> senza immagini</button>' : "";
+      $checkImgBtn = $checkSchede['img']['count'] > 0 ? '<button type="button" class="btn btn-outline-danger m-2" name="checkBtn" value="2"><span>'.$checkSchede['img']['count'].'</span> senza immagini</button>' : "";
     }
-    $checkGeoBtn = $checkSchede['geo']['count'] > 0 ? '<button type="button" class="btn btn-danger m-2" name="checkBtn" value="3"><span>'.$checkSchede['geo']['count'].'</span> senza geolocalizzazione</button>' : "";
+    $checkGeoBtn = $checkSchede['geo']['count'] > 0 ? '<button type="button" class="btn btn-outline-danger m-2" name="checkBtn" value="3"><span>'.$checkSchede['geo']['count'].'</span> senza geolocalizzazione</button>' : "";
     $checkBtn = $checkBiblioBtn.$checkImgBtn.$checkGeoBtn;
   }
-  if ($_SESSION['classe']==3){ $tot = $obj->schede_operatore(); }
+  $tot = $obj->schede_operatore();
 ?>
 <!DOCTYPE html>
 <html lang="it" dir="ltr">

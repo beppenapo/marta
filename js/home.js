@@ -93,21 +93,62 @@ function miniGallery(foto){
 }
 
 function mapInit(){
-  var map = L.map('map');
+  var map = L.map('map')
   map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
+  let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
+  let gSat = L.tileLayer(gSatTile,{maxZoom: 20, subdomains:gSubDomains});
+  let gTerrain = L.tileLayer(gTerrainTile,{maxZoom: 20, subdomains:gSubDomains});
   osm.addTo(map)
+  var baseLayers = {
+    "OpenStreetMap": osm,
+    "Terrain":gTerrain,
+    "Satellite": gSat,
+    "Google Street": gStreets
+  };
+  var overlay = {};
   let comune = L.featureGroup().addTo(map);
+  var markers = L.markerClusterGroup();
 
   $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0})
     .done(function( json ) {
-      console.log(json.features);
       let l = L.geoJson(json).addTo(comune);
       map.fitBounds(l.getBounds());
     })
     .fail(function( jqxhr, textStatus, error ) {
       console.log("Request Failed: " + jqxhr+", "+textStatus + ", " + error );
     });
+  overlay["Comuni"]=comune;
+
+  $.ajax({
+    type: "GET",
+    url: "api/geom.php",
+    dataType: 'json',
+    data: {trigger: 'getMarker'}
+  })
+    .done(function(data){
+      data.forEach(function(m,i){
+        let marker = L.marker([m.gpdpy,m.gpdpx],{
+          ogtd:m.ogtd
+          ,classe:m.classe
+          ,via:m.via
+          ,href: 'schedaView.php?get='+m.id
+        });
+        let pop = "<div class='text-center mapPopUp'>";
+        pop += "<h5>"+m.ogtd+"</h5>";
+        pop += "<p class='font-weight-bold'>"+m.classe+"</p>";
+        if(m.comune != null){pop += "<p>"+m.comune+"</p>";}
+        if(m.via != null){pop += "<p>"+m.via+"</p>";}
+        pop += "<hr>";
+        pop += "<a href='schedaView.php?get="+m.scheda+"'>apri scheda</a>";
+        pop += "</div>";
+        marker.bindPopup(pop);
+        markers.addLayer(marker);
+      })
+    })
+    overlay["Reperti"]=markers;
+    markers.addTo(map);
+  L.control.layers(baseLayers, overlay, {position: 'bottomright'}).addTo(map);
 
   let resetMap = L.Control.extend({
     options: { position: 'topleft'},
@@ -133,4 +174,32 @@ function mapInit(){
   })
 
   map.addControl(new resetMap());
+}
+
+tagWrap()
+function tagWrap(){
+  let tagContainer = $("#tagWrap > .card-body");
+  let tagArr = [
+    "abbigliamento 1998",
+    "animali 2431",
+    "arredo 177",
+    "decoro_geometrico 516",
+    "divinità 486",
+    "edifici 64",
+    "figure 2621",
+    "floreali 763",
+    "frutta 683",
+    "mezzi_di_trasporto 175",
+    "oggetti 1437",
+    "pers_mitologici 636",
+    "persone 8016",
+    "scritte 306",
+    "strumenti 282",
+    "vegetali 1206"
+  ];
+  tagArr.forEach((item, i) => {
+    $("<button/>",{type:'button', class:'btn btn-outline-marta m-1', value:item}).text(item).appendTo(tagContainer);
+    console.log(item);
+  });
+
 }

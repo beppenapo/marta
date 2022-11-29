@@ -7,6 +7,7 @@ class Geom extends Conn{
   function __construct(){}
 
   public function getComune(int $id){
+    $checkReperti = $id == 0 ? ', gp where st_contains(comuni.geom, st_setsrid(st_point(gp.gpdpx, gp.gpdpy),4326)) group by id, comune ': '';
     $where = $id > 0 ? ' where comuni.id = '.$id : '';
     $sql = "
     SELECT row_to_json(json.*) AS geometrie FROM (
@@ -14,7 +15,7 @@ class Geom extends Conn{
       FROM (
         SELECT 'Feature'::text AS type, st_asgeojson(comuni.geom)::json AS geometry, row_to_json(prop.*) AS properties
         FROM comuni
-        JOIN ( SELECT comuni.id, comuni.comune FROM comuni, gp where st_contains(comuni.geom, st_setsrid(st_point(gp.gpdpx, gp.gpdpy),4326)) group by id, comune ) prop
+        JOIN ( SELECT comuni.id, comuni.comune FROM comuni ".$checkReperti.") prop
         ON comuni.id = prop.id ".$where.") features
     ) json;";
     $json = $this->simple($sql);

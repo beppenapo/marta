@@ -38,40 +38,39 @@ class Dashboard extends Conn{
   }
 
   function schedatori(){
-    $sql = "select u.id, concat(u.cognome,' ',u.nome) utente, count(s.*) schede from utenti u left join scheda s on s.cmpn = u.id group by u.id having (u.classe = 3 and u.id <> 36) or (u.classe <> 3 and count(s.*) > 0) order by 2 asc;";
+    $sql = "select u.id, concat(u.cognome,' ',u.nome) utente, count(s.*) schede from utenti u left join scheda s on s.cmpn = u.id group by u.id having (u.classe = 3) or (u.classe <> 3 and count(s.*) > 0) order by 2 asc;";
     return $this->simple($sql);
   }
 
   public function schede(array $dati){
     //1 = senza biblio | 2 = senza immagini | 3 = aperta | 4 = chiusa | 5 = verificata | 6 = inviata | 7 = accettata | 8 = nctn | 9 = inventario | 10 = operatore
-    $sql = "select scheda, nctn, inventario, titolo, ogtdid, ogtd, piano, sala, cassetta from schede";
+    $sql = "select scheda, nctn, inventario, titolo, ogtdid, ogtd, piano, sala, cassetta from schede_dashboard";
     $filter=[];
+    if($_SESSION['classe'] == 3){array_push($filter,'cmpn = '.$_SESSION['id']);}
     $tipo = $dati['tipo'];
     switch (true) {
       case $tipo == 1:
         array_push($filter,'scheda not in (select scheda from biblio_scheda)');
-        if($_SESSION['classe'] == 3){array_push($filter,'cmpn = '.$_SESSION['id']);}
       break;
       case $tipo == 2:
         array_push($filter,'scheda not in (select scheda from file where tipo = 3)');
-        if($_SESSION['classe'] == 3){array_push($filter,'s.cmpn = '.$_SESSION['id']);}
       break;
-      case $tipo == 3: array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = false)'); break;
-      case $tipo == 4: array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = true and verificata = false)'); break;
-      case $tipo == 5: array_push($filter,'scheda in (select scheda from stato_scheda where verificata = true and inviata = false)'); break;
-      case $tipo == 6: array_push($filter,'scheda in (select scheda from stato_scheda where inviata = true and accettata = false)'); break;
-      case $tipo == 7: array_push($filter,'scheda in (select scheda from stato_scheda where accettata = true)'); break;
-      case $tipo == 8: array_push($filter,"nctn::text ilike '".$dati['nctn']."%'"); break;
-      case $tipo == 9: array_push($filter,"inventario::text ilike '".$dati['inv']."%'"); break;
-      case $tipo == 10: array_push($filter,"cmpn = ".$dati['operatore']); break;
+      case $tipo == 3:
+        array_push($filter,'scheda not in (select scheda from geolocalizzazione) and scheda not in (select scheda from gp)');
+      break;
+      case $tipo == 4:
+        array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = false)');
+      break;
+      case $tipo == 5: array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = true and verificata = false)'); break;
+      case $tipo == 6: array_push($filter,'scheda in (select scheda from stato_scheda where verificata = true and inviata = false)'); break;
+      case $tipo == 7: array_push($filter,'scheda in (select scheda from stato_scheda where inviata = true and accettata = false)'); break;
+      case $tipo == 8: array_push($filter,'scheda in (select scheda from stato_scheda where accettata = true)'); break;
+      case $tipo == 9: array_push($filter,"nctn::text ilike '".$dati['nctn']."%'"); break;
+      case $tipo == 10: array_push($filter,"inventario::text ilike '".$dati['inv']."%'"); break;
+      case $tipo == 11: array_push($filter,"cmpn = ".$dati['operatore']); break;
     }
     if($tipo > 0){ $sql = $sql . " where " . join(' and ', $filter).";"; }
-
-    // $sql = "select s.id, nctn.nctn, trim(concat(inv.inventario,' ',coalesce(inv.suffisso,''))) inventario, s.titolo from scheda s inner join nctn_scheda nctn on nctn.scheda = s.id left join inventario inv on inv.scheda = s.id where ". join(' and ', $filter)." ;";
-
-    // $sql = "select scheda, nctn, inventario, titolo, ogtdid, ogtd, piano, sala, cassetta from schede where ". join(' and ', $filter).";";
     return $this->simple($sql);
-    // return $sql;
   }
 
   public function checkSchede(){
@@ -87,7 +86,8 @@ class Dashboard extends Conn{
   }
 
   public function schede_operatore(){
-    $sql = "select count(*) schede from scheda where cmpn = ".$_SESSION['id'];
+    $f = $_SESSION['classe'] == 3 ? "where cmpn = ".$_SESSION['id'] : '';
+    $sql = "select count(*) schede from scheda ".$f;
     $query = $this->simple($sql);
     return $query[0];
   }
