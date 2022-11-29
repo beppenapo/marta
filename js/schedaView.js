@@ -264,7 +264,7 @@ function mapInit(){
   if (checkComune > 0) {
     rank = 1;
     let idComune = $("[name=id_comune]").val();
-    $.getJSON( 'api/geom.php',{ trigger: 'getComune', dati:{id:idComune}})
+    $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:idComune})
     .done(function( json ) {
       console.log(json);
       let l = L.geoJson(json).addTo(comune);

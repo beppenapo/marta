@@ -421,7 +421,8 @@ function mapInit(){
   let comune = L.featureGroup().addTo(map);
   var markers = L.markerClusterGroup();
 
-  $.getJSON( 'api/geom.php',{ trigger: 'getComune', dati:{id:0,map:1}})
+  // $.getJSON( 'api/geom.php',{ trigger: 'getComune', dati:{id:0,map:1}})
+  $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0})
     .done(function( json ) {
       let l = L.geoJson(json).addTo(comune);
       map.fitBounds(l.getBounds());
