@@ -6,17 +6,38 @@ let scrollBiblioDiv =  document.getElementById("scrollBiblio");
 let href = 'schedaView.php?get=';
 let urlIco = '<i class="fas fa-link"></i>';
 let pagenumber = pageBiblio = 0;
-let perpage = 10;
+let perpage = 50;
 let resetBiblio = false;
 const userClass = parseInt($("[name=classe]").val());
 const utente = parseInt($("[name=utente]").val());
-statDashboard();
+
+if (userClass == 3) { schede({tipo:10, operatore:utente}) }
+if (userClass == 1) { schede({tipo:0}) }
+
 biblio([]);
 initComunicazioni();
 mapInit();
-
 buildUserTable();
 if (userClass !== 3) { statoSchede(); }
+
+$(".btn-toolbar [name=cerca]").on('click', function(){
+  let filter = {}
+  $("[name=checkBtn]").each(function(i,btn){
+    if ($(this).is('.active')) { filter['tipo'] = $(this).val() }
+  })
+  $("[name=filterBtn]").each(function(i,el){
+    if ($(this).val()) {
+      let key = $(this).prop('id').split('-').pop();
+      let val = $(this).val();
+      filter[key]=val;
+    }
+  })
+  if (Object.keys(filter).length === 0) {
+    alert('per effettuare una ricerca devi inserire almeno 1 parametro tra quelli disponibili');
+    return false;
+  }
+  console.log(filter);
+})
 
 $("[name=searchBiblioBtn]").on('click', function(){
   let dati = {}
@@ -46,7 +67,7 @@ $("[name=usrBtn]").on('click', function(){
   $("[name = searchNctn], [name = searchInv]").removeClass('is-invalid');
   $("[name=checkBtn],[name = usrBtn]").removeClass('active');
   $(this).addClass('active')
-  let dati = {tipo:10,operatore: $(this).val()}
+  let dati = {tipo:11,operatore: $(this).val()}
   schede(dati)
 })
 
@@ -108,6 +129,8 @@ $('body').on('click', 'a.schedatore', function(e) {
 function schede(dati){
   content.html('');
   schedeList=[];
+  ogtdList=[];
+  pianoList=[];
   pagenumber=0;
   $.ajax({
     type: "POST",
@@ -116,33 +139,49 @@ function schede(dati){
     data: {trigger: 'schede', dati:dati}
   })
   .done(function(data){
+    console.log(data);
     if(data.length == 0) {
       content.html('<h6 class="text-center my-5">nessuna scheda trovata</h6>')
       return false;
     }
-    if(data.length <= 10){
-      data.forEach(function(item,i){
-        let li = $("<li/>",{class:'list-group-item colonne colonneSchede'}).appendTo(content)
-        $("<span/>").text(item.nctn).appendTo(li)
-        $("<span/>").text(item.inventario).appendTo(li)
-        $("<span/>").text(item.titolo).appendTo(li)
-        $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
-      });
-    }
-    if (data.length > 10) {
-      data.forEach(function(item,i){ schedeList.push(item); });
-      scrollSchede()
-      scrollDiv.addEventListener('scroll',function(e){
-        var lastDiv = document.querySelector(".colonneSchede:last-child");
-        var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
-        var pageOffset = scrollDiv.scrollTop + scrollDiv.clientHeight;
-        if (pageOffset > lastDivOffset - 10) {
-          pagenumber++;
-          scrollSchede();
-        }
-      })
-    }
+
+    data.forEach(function(item,i){
+      schedeList.push(item);
+      ogtdList.push({id:item.ogtdid, ogtd:item.ogtd})
+      pianoList.push({piano:item.piano})
+    });
+    buildSelectFiltri()
+    scrollSchede()
+    scrollDiv.addEventListener('scroll',function(e){
+      var lastDiv = document.querySelector(".colonneSchede:last-child");
+      var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
+      var pageOffset = scrollDiv.scrollTop + scrollDiv.clientHeight;
+      if (pageOffset > lastDivOffset - 10) {
+        pagenumber++;
+        scrollSchede();
+      }
+    })
+    $("#numSchedeCard").text(data.length)
   })
+}
+
+function buildSelectFiltri(){
+  const ogtd = $("#filter-ogtd");
+  const piano = $("#filter-piano");
+
+  let ogtdArr = [...new Map(ogtdList.map(item => [item['id'], item])).values()];
+  ogtdArr.sort((a, b) => {let fa = a.ogtd.toLowerCase(), fb = b.ogtd.toLowerCase(); if (fa < fb) { return -1; } if (fa > fb) { return 1; } return 0;});
+
+  let pianoArr = [...new Map(pianoList.map(item => [item['piano'], item])).values()];
+  pianoArr.sort((a, b) => {let fa = a.piano, fb = b.piano; if (fa < fb) { return -1; } if (fa > fb) { return 1; } return 0;});
+
+  $("#filtra_schede select").html('');
+
+  $("<option/>").val('').text('ogtd').prop("selected", true).appendTo(ogtd)
+  $("<option/>").val('').text('piano').prop("selected", true).appendTo(piano)
+
+  ogtdArr.forEach((item, i) => { $("<option/>").val(item.id).text(item.ogtd).appendTo(ogtd) });
+  pianoArr.forEach((item, i) => { $("<option/>").val(item.piano).text(item.piano).appendTo(piano) });
 }
 
 function scrollSchede(){
@@ -150,10 +189,23 @@ function scrollSchede(){
   if (currentDataset.length > 0){
     currentDataset.forEach(function(item){
       let li = $("<li/>",{class:'list-group-item colonne colonneSchede'}).appendTo(content)
+      let piano;
+      switch (item.piano) {
+        case -1: piano = 'Deposito'; break;
+        case 0: piano = 'Piano terra'; break;
+        case 1: piano = 'Primo piano'; break;
+        case 2: piano = 'Secondo piano'; break;
+        case 3: piano = 'Terzo piano'; break;
+      }
       $("<span/>").text(item.nctn).appendTo(li)
       $("<span/>").text(item.inventario).appendTo(li)
       $("<span/>").text(item.titolo).appendTo(li)
-      $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
+      $("<span/>").text(item.ogtd).appendTo(li)
+      $("<span/>").text(piano).appendTo(li)
+      $("<span/>").text(item.sala).appendTo(li)
+      $("<span/>").text(item.cassetta).appendTo(li)
+      let link = $("<span/>").appendTo(li)
+      $("<a/>",{href:href+item.scheda, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(link)
     });
   }
 }
@@ -196,7 +248,8 @@ function scrollBiblio(){
       $("<span/>").text(item.tipo).appendTo(li)
       $("<span/>").text(item.autore).appendTo(li)
       $("<span/>").text(nl2br(item.titolo)).appendTo(li)
-      $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(li)
+      let link = $("<span/>").appendTo(li)
+      $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(link)
     });
   }
 }
@@ -351,7 +404,7 @@ function initDataTab(tab){ $(tab).DataTable(userDataOpt); }
 
 
 function mapInit(){
-  var map = L.map('map',{maxBounds:pugliaExt}).fitBounds(pugliaExt);
+  var map = L.map('map',{maxBounds:pugliaExt})
   map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
   let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });

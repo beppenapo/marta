@@ -58,16 +58,15 @@ body > main {padding-top:60px !important;}
 .chartWrap{margin:10px 20px;}
 #firstRow > .chart{ width:calc((100% / 3) - 4px ); }
 
-#mapWrap{width:calc(70% - 4px );}
+#miniGallery > .card-body{height:300px;}
 #map{height:500px;}
-
-#tagWrap{width:calc(30% - 4px );}
 
 .itemFotoContent{
   position:relative;
   margin:2px;
   width:calc((100% / 3) - 4px);
-  height: calc(28vw / 3);
+  /* height: calc(28vw / 3); */
+  height: 45%;
   overflow:hidden;
   cursor:pointer;
 }
@@ -104,7 +103,7 @@ body > main {padding-top:60px !important;}
   -o-transform: scale(1.2);
   transform: scale(1.2);
 }
-
+.mapPopUp > p {margin:1px !important; padding:0 !important;}
 @media (min-width: 576px){
   #statWrap{ flex-direction: row; }
   .stat{ width: 45%;}

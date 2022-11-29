@@ -47,8 +47,8 @@
     <?php } ?>
     <div class="container-fluid mt-5">
       <div class="row">
-        <div class="col">
-          <h3 class="border-bottom border-dark mb-3"><?php echo $scheda['scheda']['nctn']. " - ". $scheda['scheda']['titolo']; ?></h3>
+        <div class="col text-center text-uppercase">
+          <h3 class="border-bottom border-dark mb-3"><?php echo $titolo; ?></h3>
         </div>
       </div>
       <div class="row">
