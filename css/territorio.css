@@ -1,0 +1,26 @@
+@import "main.css";
+#map{position:relative;margin-top:60px;width:100%;height:calc(100vh - 120px); z-index:1;}
+#comuniList{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  /* width: 300px; */
+  z-index: 2000;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  /* #map{width:calc(100vw - 250px);} */
+}

@@ -487,7 +487,6 @@ function mapInit(){
 
   map.addControl(new resetMap());
 }
-
 function statDashboard(){
   $("#totSchede").text(TOTRA+TOTNU);
   $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
