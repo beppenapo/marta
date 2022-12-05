@@ -1,13 +1,10 @@
 @import "main.css";
-#map{position:relative;margin-top:60px;width:100%;height:calc(100vh - 120px); z-index:1;}
-#comuniList{
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  /* width: 300px; */
-  z-index: 2000;
-}
-
+body>main{padding-top:60px !important;padding-bottom:0 !important;}
+#map{position:relative;width:100% !important;height:calc(100vh - 120px); z-index:1;}
+#geocoder,#comuniList,#geocoderResult{ position: absolute; z-index: 2000;}
+#geocoder{top:20px;right:200px; width:300px;}
+#geocoderResult{top:60px;right:200px; width:300px;}
+#comuniList{top:20px; right: 20px;}
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 }

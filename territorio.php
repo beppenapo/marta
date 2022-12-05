@@ -14,15 +14,32 @@
   <body>
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
-    <!-- <main class="bg-light"></main> -->
-    <div id="map" style="<?php echo $widthMap; ?>">
-      <div class="card" id="comuniList">
-        <div class="card-header">
-          <p class="m-1">Elenco Comuni rappresentati in mappa</p>
+    <main>
+      <div id="map" style="<?php echo $widthMap; ?>">
+        <div class="card" id="geocoder">
+          <div class="card-body p-1">
+            <form name="geocoderForm">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" data-toggle="tooltip" title="per una ricerca più precisa, oltre alla via, indicare anche il Comune.<br />La ricerca sfrutta il servizio messo a disposizione da Open StreetMap"><i class="fa solid fa-question"></i></span>
+                </div>
+                <input type="text" class="form-control" name="geocoderInput" placeholder="Cerca indirizzo" required>
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" type="submit" name="geocoderBtn" data-toggle="tooltip"><i class="fa-solid fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+        <div id="geocoderResult" class="list-group"></div>
+        <div class="card" id="comuniList">
+          <div class="card-header">
+            <p class="m-1">Elenco Comuni</p>
+          </div>
           <div class="list-group list-group-flush"></div>
+        </div>
       </div>
-    </div>
+    </main>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>

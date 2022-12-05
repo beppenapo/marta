@@ -1,7 +1,16 @@
 let comuniList = [];
 mapInit()
+let geocoderList = $("#geocoderResult");
+geocoderList.hide();
+$("[name=geocoderBtn]").on('click', function(e){
+  if( $("[name=geocoderForm]")[0].checkValidity() ){
+    e.preventDefault();
+    cercaVia($("[name=geocoderInput]").val());
+  }
+})
+
 function mapInit(){
-  var map = L.map('map',{maxBounds:pugliaExt})
+  map = L.map('map',{maxBounds:pugliaExt})
   map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
   let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
@@ -24,7 +33,10 @@ function mapInit(){
       let wrap = ("#comuniList .list-group");
       let l = L.geoJson(json, {
         onEachFeature: function (feature, layer){
-          $("<button/>", {class:'list-group-item list-group-item-action', type:'button'}).text(feature.properties.comune).appendTo(wrap)
+          $("<button/>", {class:'list-group-item list-group-item-action', type:'button'})
+            .text(feature.properties.comune)
+            .appendTo(wrap)
+            .on('click', function(){ map.fitBounds(layer.getBounds()) })
         }
       }).addTo(comune);
       map.fitBounds(l.getBounds());
@@ -51,8 +63,8 @@ function mapInit(){
         let pop = "<div class='text-center mapPopUp'>";
         pop += "<h5>"+m.ogtd+"</h5>";
         pop += "<p class='font-weight-bold'>"+m.classe+"</p>";
-        pop += "<p>"+m.comune+"</p>";
-        pop += "<p>"+m.via+"</p>";
+        if(m.comune){pop += "<p>"+m.comune+"</p>";}
+        if(m.via){pop += "<p>"+m.via+"</p>";}
         pop += "<hr>";
         pop += "<a href='schedaView.php?get="+m.scheda+"'>apri scheda</a>";
         pop += "</div>";
@@ -88,4 +100,30 @@ function mapInit(){
   })
 
   map.addControl(new resetMap());
+  map.on('zoom', (e) => {
+    map.getZoom() >= 15 ? comune.remove() : comune.addTo(map)
+  })
+}
+
+function cercaVia(ind){
+  let string = geoApi+ind+'&format=json&addressdetails=1&bounded=1';
+  geocoderList.html('');
+  $.getJSON(string, function(json, textStatus) {
+    if(json.length == 0){
+      $("<button/>",{type:'button', class:"btn-sm list-group-item list-group-item-action disabled"}).text('nessun indirizzo trovato, riprova').appendTo(geocoderList);
+      geocoderList.fadeIn('fast');
+      return false;
+    }
+    json.forEach((item, i) => {
+      $("<button/>",{type:'button', class:"btn-sm list-group-item list-group-item-action"}).text(item.display_name).appendTo(geocoderList).on('click', function(){
+        geocoderList.fadeOut('fast', function() { geocoderList.html(''); });
+        $("[name=geocoderInput]").val(item.display_name);
+        map.fitBounds([
+          [item.boundingbox[0],item.boundingbox[2]],
+          [item.boundingbox[1],item.boundingbox[3]]
+        ])
+      });
+      geocoderList.fadeIn('fast');
+    });
+  });
 }
