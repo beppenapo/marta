@@ -20,7 +20,7 @@
       </div>
       <div class="col-md-3">
         <label for="stid" class="font-weight-bold obbligatorio <?php echo $ubLabelClass; ?>">STID - Anno stima</label>
-        <input type="number" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stid" name="stid" min="1945" max="<?php echo date('Y'); ?>" step="1" value="<?php echo $scheda['ub']['stid']; ?>"  <?php echo $ubRequired; ?>>
+        <input type="text" class="form-control form-control-sm tab obbligatorio" data-table="ub" id="stid" name="stid" value="<?php echo $scheda['ub']['stid']; ?>"  <?php echo $ubRequired; ?>>
       </div>
       <div class="col-md-3">
         <label for="stim">STIM - Motivo stima</label>
