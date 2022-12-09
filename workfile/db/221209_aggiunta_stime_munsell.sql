@@ -2,7 +2,7 @@ begin;
 drop table if exists stime;
 create table stime(
   nctn integer primary key,
-  scheda integer
+  scheda integer,
   stis character varying,
   stid character varying,
   invn character varying
