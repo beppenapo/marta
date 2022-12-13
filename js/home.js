@@ -138,8 +138,16 @@ function mapInit(){
         let pop = "<div class='text-center mapPopUp'>";
         pop += "<h5>"+m.ogtd+"</h5>";
         pop += "<p class='font-weight-bold'>"+m.classe+"</p>";
-        if(m.comune != null){pop += "<p>"+m.comune+"</p>";}
-        if(m.via != null){pop += "<p>"+m.via+"</p>";}
+        if(m.comune){pop += "<p>"+m.comune+"</p>";}
+        if(m.via){pop += "<p>"+m.via+"</p>";}
+        files = m.file.replace('{','').replace('}','').split(',');
+        pop += "<div>";
+        files.forEach(function(item,i){
+          if(item !== 'NULL'){
+            pop += "<img src='"+fotoPath+item+"' class='img-responsive'>";
+          }
+        })
+        pop += "</div>";
         pop += "<hr>";
         pop += "<a href='schedaView.php?get="+m.scheda+"'>apri scheda</a>";
         pop += "</div>";

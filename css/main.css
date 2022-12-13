@@ -90,6 +90,9 @@ body>footer .logo > img{height:40px;}
   background-size: cover;
 }
 
+.mapPopUp{width:300px;}
+.mapPopUp img{width:45%; height: auto;display: inline-block;margin:5px;}
+
 /* #mainTitle{
   color: #856404;
   background-color: #fff3cd;

@@ -5,8 +5,7 @@ body>main{padding-top:60px !important;padding-bottom:0 !important;}
 #geocoder{top:20px;right:200px; width:300px;}
 #geocoderResult{top:60px;right:200px; width:300px;}
 #comuniList{top:20px; right: 20px;}
-.mapPopUp{width:300px;}
-.mapPopUp img{width:45%; height: auto;display: inline-block;margin:5px;}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 }
