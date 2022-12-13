@@ -39,7 +39,7 @@ class Home extends Conn{
   }
 
   public function miniGallery(){
-    return $this->simple("select id, ogtd from gallery where piano > 0 order by random() limit 6;");
+    return $this->simple("select s.id, s.ogtd, f.file from gallery s inner join file f on s.id = f.scheda where s.piano > 0 and f.tipo = 3 order by random() limit 6;");
   }
 }
 ?>

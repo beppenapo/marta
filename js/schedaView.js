@@ -328,21 +328,19 @@ $("#fotoModal").hide();
 function getFoto(scheda){
   $('.fotoWrap').html('');
   let wrapWidth = $(".fotoWrap").innerWidth();
-  let w,folder;
+  let w;
   switch (true) {
-    case screen.width < 768:
-      w = '100%';
-      folder = 'file/foto/small/';
-    break;
-    case screen.width < 1200:
-      w = (wrapWidth / 2) - 5 +"px";
-      folder = 'file/foto/medium/';
-    break;
-    case screen.width >= 1200:
-      w = (wrapWidth / 3) - 5 +"px";
-      folder = 'file/foto/large/';
-    break;
-  }
+  case screen.width < 768:
+    w = '100%';
+  break;
+  case screen.width < 1200:
+    w = (wrapWidth / 2) - 5 +"px";
+  break;
+  case screen.width >= 1200:
+    w = (wrapWidth / 3) - 5 +"px";
+  break;
+}
+
   $.ajax({
     url: "api/scheda.php",
     type: 'POST',
@@ -355,17 +353,17 @@ function getFoto(scheda){
       return;
     }
     data.forEach((item, i) => {
-      let div = $("<div/>",{class:'fotoDiv'}).css({"width":w,"height":w,"background-image": "url("+folder+item.file+")"});
+      let div = $("<div/>",{class:'fotoDiv'}).css({"width":w,"height":w,"background-image": "url("+fotoPath+item.file+")"});
       let overlay = $("<div/>",{class:'fotoOverlay animated'}).html('<i class="bi bi-arrows-fullscreen text-white"></i>').appendTo(div);
       div.appendTo('.fotoWrap')
       div.on('click', () => {
-        $("#divImgOrig").css({"background-image":"url(file/foto/orig/"+item.file+")"});
+        $("#divImgOrig").css({"background-image":"url("+fotoPath+item.file+")"});
         $("#fotoModal").fadeIn('fast');
         $("#closeModal").on('click', (e) => {
           e.preventDefault();
           $("#fotoModal").fadeOut('fast');
         })
-        $("#downloadImg").attr("href","file/foto/orig/"+item.file);
+        $("#downloadImg").attr("href",fotoPath+item.file);
         $("#delImg").on('click', (e) => {
           e.preventDefault();
           dati={id:item.id, scheda:item.scheda, file:item.file}

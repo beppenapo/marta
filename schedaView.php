@@ -453,7 +453,9 @@
             <div class="nav modalMenu">
               <a href="#" class="animated nav-link" id="closeModal" title="chiudi immagine" data-toggle="tooltip" data-placement="bottom" data-modal="#fotoModal"><i class="bi bi-x-lg"></i></a>
               <a href="" class="animated nav-link" id="downloadImg" title="salva immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-cloud-arrow-down-fill"></i></a>
-              <a href="" class="animated nav-link" id="delImg" title="elimina immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-trash-fill"></i></a>
+              <?php if(isset($_SESSION['id']) && $_SESSION['classe'] == 1){ ?>
+                <a href="" class="animated nav-link" id="delImg" title="elimina immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-trash-fill"></i></a>
+              <?php } ?>
             </div>
             <div id="divImgOrig"></div>
           </div>

@@ -54,8 +54,8 @@ class Sala extends Conn{
 
     $andSala = $sala !== null ? 'and gallery.sala_id = '.$sala : '';
 
-    $query = "select distinct gallery.* from gallery, liste.".$lista." contenitore where
-    contenitore.sala = gallery.sala_id and contenitore.".$elemento." = gallery.contenitore".$cast." and gallery.piano = ".$piano." ".$andSala." ".$andContenitore." order by 6,7,9 asc;";
+    $query = "select distinct gallery.*, file.file from gallery, liste.".$lista." contenitore, file where
+    contenitore.sala = gallery.sala_id and contenitore.".$elemento." = gallery.contenitore".$cast." and gallery.piano = ".$piano." ".$andSala." ".$andContenitore." and file.scheda = gallery.id order by 6,7,9 asc;";
 
     $v = $this->simple($query);
     return $v;

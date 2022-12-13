@@ -1,1 +1,7 @@
-\COPY (select nctn.nctn, ub.stis, concat(m.gruppo,' ',m.code) munsell from nctn_scheda nctn inner join ub on ub.scheda = nctn.scheda inner join munsell on munsell.scheda = nctn.scheda inner join liste.munsell m on munsell.munsell = m.id order by 1 asc) TO 'stime_munsell.csv' (format CSV);
+select gp.scheda, array_agg(file.file) file, gp.gpdpx, gp.gpdpy,c.comune, geoloc.via, gallery.classe, gallery.ogtd
+from gp
+left join geolocalizzazione geoloc on geoloc.scheda = gp.scheda
+left join comuni c on geoloc.comune = c.id
+left join file on file.scheda = gp.scheda
+inner join gallery on gallery.id = gp.scheda
+group by gp.scheda, gp.gpdpx, gp.gpdpy,c.comune, geoloc.via, gallery.classe, gallery.ogtd

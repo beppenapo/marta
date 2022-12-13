@@ -23,11 +23,18 @@ class Geom extends Conn{
   }
 
   public function getMarker(int $id = null){
-    $sql = "select gp.scheda, gp.gpdpx, gp.gpdpy,c.comune, geoloc.via, gallery.classe, gallery.ogtd
+    // $sql = "select gp.scheda, gp.gpdpx, gp.gpdpy,c.comune, geoloc.via, gallery.classe, gallery.ogtd
+    // from gp
+    // left join geolocalizzazione geoloc on geoloc.scheda = gp.scheda
+    // left join comuni c on geoloc.comune = c.id
+    // inner join gallery on gallery.id = gp.scheda";
+    $sql = "select gp.scheda, array_agg(file.file) file, gp.gpdpx, gp.gpdpy,c.comune, geoloc.via, gallery.classe, gallery.ogtd
     from gp
     left join geolocalizzazione geoloc on geoloc.scheda = gp.scheda
     left join comuni c on geoloc.comune = c.id
-    inner join gallery on gallery.id = gp.scheda";
+    left join file on file.scheda = gp.scheda
+    inner join gallery on gallery.id = gp.scheda
+    group by gp.scheda, gp.gpdpx, gp.gpdpy,c.comune, geoloc.via, gallery.classe, gallery.ogtd";
     return $this->simple($sql);
   }
 }

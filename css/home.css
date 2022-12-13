@@ -88,8 +88,8 @@ body > main {padding-top:60px !important;}
   overflow:hidden;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 50%;
-  background-image: url('../img/icone/stat/img.png');
+  background-size: cover;
+  /* background-image: url('../img/icone/stat/img.png'); */
   cursor:pointer;
   -webkit-transition: all .5s;
   -moz-transition: all .5s;

@@ -23,7 +23,7 @@ let svgOpt = {
 }
 let wrap = $("#findWrap");
 let wrapWidth = wrap.width();
-let itemMeasure = parseInt((wrapWidth / 5)-4);
+let itemMeasure = parseInt((wrapWidth / 5)-10);
 let schede=[];
 let pagenumber = 0;
 let perpage = 20;
@@ -167,11 +167,12 @@ function loadGallery(){
   if (currentDataset.length > 0){
     currentDataset.forEach(function(item){
       let div = $("<div/>",{class:'item bg-white shadow', title:'visualizza scheda'})
-      .attr({"data-toggle":'tooltip'})
+      .attr({"data-toggle":'tooltip',"loading":"lazy"})
       .css({
         "width":itemMeasure
         , "height":itemMeasure
-        , "background-image": "url(img/icone/ogtd/"+item.classe_id+".png)"
+        // , "background-image": "url(img/icone/ogtd/"+item.classe_id+".png)"
+        , "background-image": "url("+fotoPath+item.file+")"
       })
       .on('click', function(){window.location.href = 'schedaView.php?get='+item.id})
       .appendTo(wrap)
