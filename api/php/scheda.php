@@ -40,7 +40,11 @@ if (isset($_POST['s'])) {
   $contenitoreList = $obj->getContenitore(array("sala"=>$scheda['lc']['id_sala'], "contenitore"=>$contenitore));
 
   // se la sala non ha scaffali o vetrine mostra l'avviso
-  if (count((array)$contenitoreList) == 0) {$lcNoVetrine = '';}
+  if (count((array)$contenitoreList) == 0) {
+    $lcNoVetrine = '';
+    $lcView = 'lcSel';
+    $lcViewCassetta = 'lcSel';
+  }
 
   // preparo l'array per le options della lista contenitore
   $selContenitore = [];
@@ -257,7 +261,7 @@ switch ($_POST['act']) {
 
 $ogtdDisabled = isset($_POST['s']) ? '' : 'disabled';
 $dtzgDisabled = isset($_POST['s']) ? '' : 'disabled';
-$lcView = isset($_POST['s']) ? '' : 'lcSel';
+// $lcView = isset($_POST['s']) ? '' : 'lcSel';
 
 
 function setCf4(){ return explode(',',"A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U");}

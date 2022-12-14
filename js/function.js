@@ -335,14 +335,15 @@ $("#comune").on('change', function(){
   extent.push([parseFloat(ext[3]),parseFloat(ext[2])]);
   map.fitBounds(extent);
 })
+let gp = $("#toggleGP").is(':checked');
+let mod = $("[name=scheda]").length;
+console.log([gp,mod]);
 $("[name=via]").on('input', function(){
   let via = $(this).val().length;
-  console.log($(this).val());
-  let gp = $("#toggleGP").is(':checked');
-  let mod = $("[name=scheda]").length;
   if (via == 0) {
-    if((!gp && mod > 0)||(gp && mod == 0)){ $("#toggleGP").trigger('click'); }
-    if (marker != undefined) { map.removeLayer(marker);};
+    // if((!gp && mod > 0)||(gp && mod == 0)){ $("#toggleGP").trigger('click'); }
+    // if((!gp && mod > 0)||(gp && mod == 0)){ $("#toggleGP").trigger('click'); }
+    // if (marker != undefined) { map.removeLayer(marker);};
     $("[name=via]").val('');
   }
 })
@@ -799,7 +800,7 @@ function geocoding(comune,via, viewbox){
             list.html('').hide()
             let gp = $("#toggleGP").is(':checked');
             let mod = $("[name=scheda]").length;
-            if ((!gp && mod > 0)||(!gp && mod == 0)) { $("#toggleGP").trigger('click');}
+            if ((gp && mod > 0)||(!gp && mod == 0)) { $("#toggleGP").trigger('click');}
             gpAutoCompile(v.lon, v.lat)
             marker = L.marker([v.lat,v.lon]).addTo(map);
             map.fitBounds([

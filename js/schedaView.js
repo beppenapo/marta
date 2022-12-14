@@ -198,8 +198,8 @@ function delScheda(dati){
   .done(function(data){
     console.log(data);
     obj={}
-    obj.res=data
-    obj.msg = data === true ? 'La scheda e tutti gli oggetti collegati sono stati eliminati.' : data.msg;
+    obj.res=data.res;
+    obj.msg = data.res === true ? 'La scheda e tutti gli oggetti collegati sono stati eliminati.' : data.msg;
     obj.classe = data === true ? 'bg-success' : 'bg-danger';
     obj.url='schede.php';
     obj.btn = [];
