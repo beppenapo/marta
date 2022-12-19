@@ -26,8 +26,10 @@ $lcViewColonna = $lcViewRipiano = $lcNoVetrine = 'lcSel';
 if (isset($_POST['s'])) {
   //recupero i dati della scheda e le liste fisse
   $scheda = $obj->getScheda($_POST['s']);
-  $l4List = $obj->ogtdSel(array("tab"=>'ra_cls_l4', "field"=>'l3', "val"=>$scheda['og']['cls3id']));
-  $l5List = $obj->ogtdSel(array("tab"=>'ra_cls_l5', "field"=>'l4', "val"=>$scheda['og']['cls4id']));
+  if ($scheda['scheda']['tskid'] == 1) {
+    $l4List = $obj->ogtdSel(array("tab"=>'ra_cls_l4', "field"=>'l3', "val"=>$scheda['og']['cls3id']));
+    $l5List = $obj->ogtdSel(array("tab"=>'ra_cls_l5', "field"=>'l4', "val"=>$scheda['og']['cls4id']));
+  }
   $salaList = $obj->getSale($scheda['lc']['piano']);
 
   //************* sezione LC *********************//
