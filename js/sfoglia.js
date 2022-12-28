@@ -130,8 +130,10 @@ function gallery(){
       $("<i/>",{class:'fa-solid fa-link text-white'}).appendTo(btnViewDiv)
       btnLikeDiv.on('click', function(){
         $(this).find('i').toggleClass('text-white text-danger');
+        $(this).tooltip('hide')
       })
       btnViewDiv.on('click', function(){
+        $(this).tooltip('hide')
         window.location.href = 'schedaView.php?get='+img.id
       })
     });
