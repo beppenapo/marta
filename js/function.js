@@ -24,11 +24,11 @@ const apiFoto = 'http://91.121.82.80/marta/file/';
 let fotoFolder;
 switch (true) {
   case screen.width < 400 : fotoFolder = 'foto_small/';  break;
-  case screen.width >= 400:fotoFolder = 'foto_medium/';  break;
+  case screen.width >= 400:
   case screen.width < 800 : fotoFolder = 'foto_medium/';  break;
   case screen.width >= 800 : fotoFolder = 'foto/';  break;
 }
-const fotoPath = apiFoto+'foto/';
+const fotoPath = apiFoto+fotoFolder;
 $(document)
 .ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
 .ajaxStop(function(){ $("#loadingDiv").addClass('invisible');})
@@ -337,7 +337,6 @@ $("#comune").on('change', function(){
 })
 let gp = $("#toggleGP").is(':checked');
 let mod = $("[name=scheda]").length;
-console.log([gp,mod]);
 $("[name=via]").on('input', function(){
   let via = $(this).val().length;
   if (via == 0) {
@@ -917,4 +916,9 @@ function createCarousel(){
   });
   $(".carousel-item").eq(0).addClass('active');
   $('#carousel').carousel({wrap:true})
+}
+
+function tagWrap(callback){
+  $.ajax({url:'api/scheda.php',type:'POST',dataType:'json',data:{trigger:'tagList'}})
+  .done(callback)
 }

@@ -56,9 +56,11 @@ body > main {padding-top:60px !important;}
 #dataTable{font-size:13px;}
 
 .chartWrap{margin:10px 20px;}
-#firstRow > .chart{ width:calc((100% / 3) - 4px ); }
+#firstRow > .chart, #mapWrap, #tagWrap{ width:100%; }
 
 #miniGallery > .card-body{height:300px;}
+
+
 #map{height:500px;}
 
 .itemFotoContent{
@@ -122,4 +124,6 @@ body > main {padding-top:60px !important;}
 @media (min-width: 1200px){
   #statWrap{flex-direction: row; flex-wrap: nowrap;}
   .stat{ width:calc(100% / 6); }
+  #firstRow > .chart, #tagWrap{ width:calc((100% / 3) - 4px ); }
+  #mapWrap{width:calc(((100% / 3) * 2) - 4px );}
 }

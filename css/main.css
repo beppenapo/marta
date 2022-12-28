@@ -141,6 +141,11 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 .text-marta{color: rgb(198,156,85);}
 .btn-marta:hover{background: rgb(172,122,38);}
 
+.btn-outline-marta:not(:disabled):not(.disabled).active, .btn-outline-marta:not(:disabled):not(.disabled):active, .show>.btn-outline-marta.dropdown-toggle {color: #fff; background-color: rgb(172,122,38); border-color: rgb(172,122,38);}
+
+
+
+
 .bg-gradient-info {
   background: #1ebccd;
   background: linear-gradient(45deg, #1ebccd, #3a55b1) !important;

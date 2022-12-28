@@ -9,9 +9,9 @@
     <?php require('assets/headerMenu.php'); ?>
     <?php if(isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <main class="bg-light">
-      <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
+      <!-- <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
         <div class="carousel-inner"></div>
-      </div>
+      </div> -->
       <div id="mainTitle" class="my-2 py-2 bg-marta text-white text-center">
         <h2>Esplora il museo!</h2>
       </div>

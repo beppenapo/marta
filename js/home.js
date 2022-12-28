@@ -83,7 +83,6 @@ function nuCronoStat(dataset){
 }
 
 function miniGallery(foto){
-
   let content = $("#miniGallery > .card-body");
   content.html('');
   foto.forEach(function(i){
@@ -185,30 +184,10 @@ function mapInit(){
   map.addControl(new resetMap());
 }
 
-tagWrap()
-function tagWrap(){
+tagWrap(tagHome)
+function tagHome(data){
   let tagContainer = $("#tagWrap > .card-body");
-  let tagArr = [
-    "abbigliamento 1998",
-    "animali 2431",
-    "arredo 177",
-    "decoro_geometrico 516",
-    "divinità 486",
-    "edifici 64",
-    "figure 2621",
-    "floreali 763",
-    "frutta 683",
-    "mezzi_di_trasporto 175",
-    "oggetti 1437",
-    "pers_mitologici 636",
-    "persone 8016",
-    "scritte 306",
-    "strumenti 282",
-    "vegetali 1206"
-  ];
-  tagArr.forEach((item, i) => {
-    $("<button/>",{type:'button', class:'btn btn-outline-marta m-1', value:item}).text(item).appendTo(tagContainer);
-    console.log(item);
+  data.forEach((item, i) => {
+    $("<a/>",{href:'#', class:'btn btn-outline-marta m-1'}).text(item.tag+' '+item.count).appendTo(tagContainer);
   });
-
 }

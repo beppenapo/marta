@@ -768,5 +768,70 @@ class Scheda extends Conn{
     $sql = "select distinct lower(unnest(string_to_array(tecnica,', '))) tecnica from mtc order by 1 asc;";
     return $this->simple($sql);
   }
+
+  public function tagList(){
+    $sql="select tag, count(*) from work.tags group by tag order by tag asc;";
+    return $this->simple($sql);
+  }
+
+  public function search(array $dati){
+    $field = ["s.id","f.file", "g.classe", "g.ogtd"];
+    $join = ["inner join file f on f.scheda = s.id", "inner join gallery g on g.id = s.id"];
+    $filter = ["f.tipo = 3"];
+    if (isset($dati['tsk'])) {
+      array_push($filter, "s.tsk = ".$dati['tsk']);
+      if ($dati['tsk']==1) {
+        array_push($join, "inner join og_ra on og_ra.scheda = s.id");
+        array_push($join, "inner join liste.ra_cls_l3 cls on og_ra.l3 = cls.id");
+        array_push($join, "inner join liste.ra_cls_l4 ogtd on og_ra.l4 = ogtd.id");
+        if (isset($dati['cls'])) { array_push($filter, "cls.id = ".$dati['cls']); }
+        if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
+      }
+      if ($dati['tsk']==2) {
+        array_push($join, "inner join og_nu ON og_nu.scheda = s.id JOIN liste.ogtd ON og_nu.ogtd = ogtd.id LEFT JOIN liste.ogto ON og_nu.ogto = ogto.id");
+        if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
+      }
+      if (isset($dati['materia'])) {
+        array_push($field, "m.value materia");
+        array_push($join, "inner join mtc on mtc.scheda = s.id inner join liste.materia m on mtc.materia = m.id");
+        array_push($filter, "m.id = ".$dati['materia']);
+      }
+    }
+    if (isset($dati['dtzgi']) || isset($dati['dtzgf']) || isset($dati['dtsi']) || isset($dati['dtsf'])) {
+      array_push($join, "inner join dt on dt.scheda = s.id");
+    }
+    if (isset($dati['dtzgi'])) {
+      array_push($field, "dtzgi.value dtzgi");
+      array_push($join, "inner join liste.cronologia dtzgi on dt.dtzgi = dtzgi.id");
+      array_push($filter, "dtzgi.id >= ".$dati['dtzgi']);
+    }
+    if (isset($dati['dtzgf'])) {
+      array_push($field, "dtzgf.value dtzgf");
+      array_push($join, "inner join liste.cronologia dtzgf on dt.dtzgf = dtzgf.id");
+      array_push($filter, "dtzgf.id <= ".$dati['dtzgf']);
+    }
+    if (isset($dati['dtsi'])) {
+      array_push($field, "dt.dtsi");
+      array_push($filter, "dt.dtsi >= ".$dati['dtsi']);
+    }
+    if (isset($dati['dtsf'])) {
+      array_push($field, "dt.dtsf");
+      array_push($filter, "dt.dtsf <= ".$dati['dtsf']);
+    }
+    if (isset($dati['fts'])) {
+      $tag = preg_replace('/[^A-Za-z0-9\-]/', ' ', $dati['fts']);
+      $tag = preg_replace("/\\s+/m",' | ', $tag);
+      array_push($join, "inner join da on da.scheda = s.id");
+      array_push($filter, "da.fts @@ to_tsquery('".$tag."') ");
+    }
+    if (isset($dati['tags'])) {
+      array_push($join, "inner join tag on tag.scheda = s.id");
+      array_push($filter, "'{".join(',',$dati['tags'])."}' <@ tag.tags ");
+    }
+
+    $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter);
+    return $this->simple($sql);
+    // return $sql;
+  }
 }
 ?>

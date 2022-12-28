@@ -81,6 +81,7 @@ function loadSvg(svg){
           let contenitore = $(this).prop('id').split('_').pop().slice(1);
           let dati = {piano:piano, sala:sala, contenitore:contenitore}
           getReperti('contenitore',dati);
+          console.log(dati);
         }
       });
     })

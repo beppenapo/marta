@@ -31,5 +31,6 @@ function setDtzgf($obj){return json_encode($obj->setDtzgf($_POST));}
 function uploadImage($obj){return json_encode($obj->uploadImage($_POST,$_FILES));}
 function getComuneFromPoint($obj){return json_encode($obj->getComuneFromPoint($_POST['dati']));}
 function munsellCode($obj){return json_encode($obj->munsellCode($_POST['gruppo']));}
-
+function tagList($obj){return json_encode($obj->tagList());}
+function search($obj){return json_encode($obj->search($_POST['dati']));}
 ?>
