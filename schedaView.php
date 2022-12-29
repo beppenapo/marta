@@ -5,6 +5,7 @@
     <?php require('assets/meta.html'); ?>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/3dhop/3dhop.css"/>
     <link rel="stylesheet" href="css/schedaView.css">
   </head>
   <body>
@@ -437,10 +438,19 @@
           <fieldset class="bg-light rounded border p-3 mb-3" id="3dFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Modello 3d</legend>
             <h5>Nessun modello 3d disponibile</h5>
+            <div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
+              <div id="toolbar" class="btn-group" role="group">
+                <button type="button" id="home" class="btn btn-light" data-toggle="tooltip" title="reset zoom"><i class="fa-sharp fa-solid fa-house"></i></button>
+                <button type="button" id="zoomin" class="btn btn-light" data-toggle="tooltip" title="zoom in"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                <button type="button" id="zoomout" class="btn btn-light" data-toggle="tooltip" title="zoom out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                <button type="button" id="light_on" class="btn btn-light" data-toggle="tooltip" title="enable light control"><i class="fa-solid fa-lightbulb"></i></button>
+                <button type="button" id="full_on" class="btn btn-light" data-toggle="tooltip" title="full screen"><i class="fa-solid fa-expand"></i></button>
+              </div>
+              <canvas id="draw-canvas" />
+            </div>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Audio e video</legend>
-            <h5>Nessun elemento multimediale disponibile</h5>
           </fieldset>
         </div>
       </div>
@@ -466,6 +476,17 @@
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!-- 3dhop start -->
+    <script type="text/javascript" src="js/3dhop/spidergl.js"></script>
+    <script type="text/javascript" src="js/3dhop/presenter.js"></script>
+    <script type="text/javascript" src="js/3dhop/nexus.js"></script>
+    <script type="text/javascript" src="js/3dhop/ply.js"></script>
+    <script type="text/javascript" src="js/3dhop/trackball_turntable.js"></script>
+    <script type="text/javascript" src="js/3dhop/trackball_turntable_pan.js"></script>
+    <script type="text/javascript" src="js/3dhop/trackball_pantilt.js"></script>
+    <script type="text/javascript" src="js/3dhop/trackball_sphere.js"></script>
+    <script type="text/javascript" src="js/3dhop/init.js"></script>
+    <!-- 3dhop end   -->
     <script src="js/wmsTile.js" charset="utf-8"></script>
     <script src="js/pureknob.js" charset="utf-8"></script>
     <script src="js/function.js" charset="utf-8"></script>

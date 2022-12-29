@@ -1,10 +1,12 @@
+const modelFolder = "file/3d/";
 $(document).ready(function() {
   const scheda = parseInt($("[name=schedaId]").val());
   const nctn = parseInt($("[name=nctnId]").val());
   const tsk = parseInt($("[name=tsk]").val());
   let urlMod = tsk == 1 ? 'scheda-ra-mod.php' : 'scheda-nu-mod.php';
   let cloneMod = tsk == 1 ? 'scheda-ra-clone.php' : 'scheda-nu-clone.php';
-
+  let presenter = null;
+  $("#3dFieldset > h5, #3dhop").hide();
   $("[name=modificaScheda]").on('click', function(){ $.redirectPost(urlMod,{s:scheda,act:'mod'}); })
   $("[name=duplicaScheda]").on('click', function(){ $.redirectPost(cloneMod,{s:scheda,act:'clone'}); })
 
@@ -59,8 +61,62 @@ $(document).ready(function() {
     if (window.confirm(confMsg)) { cambiaStatoScheda(scheda, stato, val); }
   });
   getFoto(scheda);
+  getModel(scheda);
   mapInit();
 });
+function getModel(scheda){
+  $.ajax({
+    url: "api/scheda.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger:'getModel', id:scheda}
+  }).done(function(data){
+    if (data.length == 0) {
+      $("#3dhop").remove();
+      $("#3dFieldset > h5").show()
+      return false;
+    }
+    $("#3dhop").show();
+    $("#3dFieldset > h5").remove()
+    let nxz = data[0];
+    init3dhop();
+    setup3dhop(nxz);
+  })
+}
+function setup3dhop(nxz){
+  presenter = new Presenter("draw-canvas");
+  presenter.setScene({
+    meshes: {"mesh_1" : { url: modelFolder+nxz.file }},
+    modelInstances : {"model_1" : { mesh : "mesh_1" }},
+    trackball: {
+      type : TurnTableTrackball,
+      trackOptions : {
+        startPhi: 35.0,
+        startTheta: 15.0,
+        startDistance: 2.5,
+        minMaxPhi: [-180, 180],
+        minMaxTheta: [-30.0, 70.0],
+        minMaxDist: [0.5, 3.0]
+      }
+    }
+  });
+}
+function actionsToolbar(action) {
+  switch (action) {
+    case "home": presenter.resetTrackball(); break;
+    case "zoomin": presenter.zoomIn(); break;
+    case "zoomout": presenter.zoomOut(); break;
+    case "light":
+    case "light_on":
+      presenter.enableLightTrackball(!presenter.isLightTrackballEnabled());
+    break;
+    case "full":
+    case "full_on":
+      fullscreenSwitch(action)
+    break;
+
+  }
+}
 function getStatoMsg(scheda, stato, valore){
   let msg;
   if(stato == 'chiusa' && valore == true){msg = 'Ok la scheda risulta chiusa';}
@@ -330,16 +386,10 @@ function getFoto(scheda){
   let wrapWidth = $(".fotoWrap").innerWidth();
   let w;
   switch (true) {
-  case screen.width < 768:
-    w = '100%';
-  break;
-  case screen.width < 1200:
-    w = (wrapWidth / 2) - 5 +"px";
-  break;
-  case screen.width >= 1200:
-    w = (wrapWidth / 3) - 5 +"px";
-  break;
-}
+    case screen.width < 768: w = '100%'; break;
+    case screen.width < 1200: w = (wrapWidth / 2) - 5 +"px"; break;
+    case screen.width >= 1200: w = (wrapWidth / 3) - 5 +"px"; break;
+  }
 
   $.ajax({
     url: "api/scheda.php",

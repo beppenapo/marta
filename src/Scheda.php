@@ -6,6 +6,12 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function getModel(int $id = null){
+    $filter = $id !== null ? ' and scheda = '.$id : '';
+    $sql = "select * from file where tipo = 1".$filter.";";
+    return $this->simple($sql);
+  }
+
   public function comuniPuglia(){
     $sql = "select id, comune,round(st_xmin(geom)::numeric,4) xmin, round(st_ymin(geom)::numeric,4) ymin, round(st_xmax(geom)::numeric,4) xmax, round(st_ymax(geom)::numeric,4) ymax from comuni order by 2 asc;";
     return $this->simple($sql);

@@ -33,4 +33,5 @@ function getComuneFromPoint($obj){return json_encode($obj->getComuneFromPoint($_
 function munsellCode($obj){return json_encode($obj->munsellCode($_POST['gruppo']));}
 function tagList($obj){return json_encode($obj->tagList());}
 function search($obj){return json_encode($obj->search($_POST['dati']));}
+function getModel($obj){return json_encode($obj->getModel($_POST['id']));}
 ?>

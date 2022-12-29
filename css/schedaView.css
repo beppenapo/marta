@@ -42,6 +42,17 @@ body>main{padding-top: 60px !important;}
 .modalMenu a{color:#fff;font-weight: bold;font-size:22px;opacity:0.5;}
 .modalMenu a:hover{opacity:1;}
 .list-group-item > span:last-child {font-weight: bold;}
+
+.tdhop{height:80vh;}
+.tdhop > canvas{
+  background: rgb(136,136,136);
+  background: -webkit-linear-gradient(rgba(136,136,136,1) 0%, rgba(62,62,62,1) 50%, rgba(52,58,64,1) 100%);
+  background: -o-linear-gradient(rgba(136,136,136,1) 0%, rgba(62,62,62,1) 50%, rgba(52,58,64,1) 100%);
+  background: linear-gradient(rgba(136,136,136,1) 0%, rgba(62,62,62,1) 50%, rgba(52,58,64,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#888888",endColorstr="#343a40",GradientType=1);
+}
+
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .list-group-item > span{display: block; vertical-align: top;}
