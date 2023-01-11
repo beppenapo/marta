@@ -54,7 +54,6 @@ function mapInit(){
   })
     .done(function(data){
       data.forEach(function(m,i){
-        console.log(m.file);
         let marker = L.marker([m.gpdpy,m.gpdpx],{
           ogtd:m.ogtd
           ,classe:m.classe
