@@ -7,7 +7,6 @@ CREATE TABLE work.contursi_schede(
   id INTEGER PRIMARY KEY,
   scheda integer REFERENCES scheda(id) on DELETE CASCADE,
   cmpd date,
-  cmpn integer references utenti(id) on delete CASCADE default 30,
   nctn integer,
   inventario integer,
   suffisso CHARACTER VARYING,
@@ -32,8 +31,6 @@ CREATE TABLE work.contursi_schede(
   misp numeric(5,2),
   deso CHARACTER VARYING,
   stcc integer REFERENCES liste.stcc(id) ON DELETE CASCADE,
-  adsp integer REFERENCES liste.adsp(id) ON DELETE CASCADE default 1,
-  adsm integer REFERENCES liste.adsm(id) ON DELETE CASCADE default 1,
   oss CHARACTER VARYING,
   stima CHARACTER VARYING
 );
