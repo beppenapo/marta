@@ -1,0 +1,13 @@
+1. esporta la lista dei file in un csv
+    find . -type f  > file.csv
+2. ripulisci il file csv e suddividi il testo in colonne per isolare il numero di catalogo (nctn)
+3. esporta il file e caricalo nel db con il comando "copy" nella tabella import (devi essere amministratore del db)
+    copy import (file,nctn) from 'file.csv' delimiter ',' csv header;
+4. aggiorna la tabella "import" con il numero di scheda preso dalla tabella "nctn_scheda" o da una tabella di lavoro di uno schedatore (normalizzazione da excel) confrontando il campo nctn
+    update import i set scheda = w.scheda from work.contursi_schede w where i.nctn = w.nctn and i.imported = false;
+    oppure
+    update import i set scheda = nctn.scheda from nctn_scheda nctn w where i.nctn = nctn.nctn and i.imported = false;
+5. aggiungi i record alla tabella "file"
+    insert into file(file, scheda, tipo ) select file, scheda, 3 from import where scheda is not null and imported = false
+6. aggiorna la lista dei file importati
+    update import set imported = true where scheda is not null and imported = false
