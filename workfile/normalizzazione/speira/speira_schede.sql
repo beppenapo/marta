@@ -36,25 +36,33 @@ CREATE TABLE work.speira_schede(
   oss CHARACTER VARYING
 );
 alter table work.speira_schede owner to marta;
--- copy work.speira_schede from '/var/www/marta/workfile/normalizzazione/speira/speira_schede.csv' delimiter ',' csv header;
--- update nctn set libero = false where nctn in (select nctn from work.speira_schede);
---
--- insert into scheda(id_temp, titolo, tsk,lir,cmpn,cmpd,fur) select id, titolo, 1, 2, 81, cmpd, 45 from work.speira_schede;
--- update work.speira_schede t set scheda = s.id from scheda s where t.id = s.id_temp and s.id_temp is not null;
--- insert into stato_scheda(scheda) select scheda from work.speira_schede;
--- insert into nctn_scheda(nctn, scheda) select nctn, scheda from work.speira_schede;
--- insert into inventario(inventario,suffisso,scheda) select inventario,suffisso,scheda from work.speira_schede where inventario is not null;
--- INSERT INTO og_ra(scheda, l3, l4) select scheda, l3, l4 from work.speira_schede;
--- INSERT INTO lc(scheda, piano, sala, contenitore) select scheda, piano, sala, contenitore from work.speira_schede;
--- INSERT INTO geolocalizzazione(scheda,comune,via, geonote) select scheda, comune, via, geonote from work.speira_schede;
--- INSERT INTO dt select scheda, dtzs, dtsi, dtsf, dtzgi, dtzgf from work.speira_schede;
--- INSERT INTO dtm select scheda, dtm from work.speira_schede;
--- INSERT INTO mtc select scheda, materia, tecnica from work.speira_schede;
--- INSERT INTO mis(scheda,misa, misl, mislu, misp, misd) select scheda,misa, misl, mislu, misp, misd from work.speira_schede;
--- INSERT INTO da(scheda, deso) select scheda, deso from work.speira_schede;
--- INSERT INTO co select scheda, stcc, 3 from work.speira_schede;
--- INSERT INTO an SELECT scheda, oss from work.speira_schede where oss is not null;
--- INSERT INTO ad(scheda, adsp, adsm) select scheda, 1, 1 from work.speira_schede;
--- INSERT INTO tu(scheda,cdgg) select scheda, 1 from work.speira_schede;
+copy work.speira_schede from '/var/www/marta/workfile/normalizzazione/speira/speira_schede.csv' delimiter ',' csv header;
+update nctn set libero = false where nctn in (select nctn from work.speira_schede);
 
+insert into scheda(id_temp, titolo, tsk,lir,cmpn,cmpd,fur) select id, titolo, 1, 2, 81, cmpd, 45 from work.speira_schede;
+update work.speira_schede t set scheda = s.id from scheda s where t.id = s.id_temp and s.id_temp is not null;
+insert into stato_scheda(scheda) select scheda from work.speira_schede;
+insert into nctn_scheda(nctn, scheda) select nctn, scheda from work.speira_schede;
+insert into inventario(inventario,suffisso,scheda) select inventario,suffisso,scheda from work.speira_schede where inventario is not null;
+INSERT INTO og_ra(scheda, l3, l4) select scheda, l3, l4 from work.speira_schede;
+INSERT INTO lc(scheda, piano, sala, contenitore) select scheda, piano, sala, contenitore from work.speira_schede;
+INSERT INTO geolocalizzazione(scheda,comune,via, geonote) select scheda, comune, via, geonote from work.speira_schede;
+INSERT INTO dt select scheda, dtzs, dtsi, dtsf, dtzgi, dtzgf from work.speira_schede;
+INSERT INTO dtm select scheda, dtm from work.speira_schede;
+INSERT INTO mtc select scheda, materia, tecnica from work.speira_schede;
+INSERT INTO mis(scheda,misa, misl, misp, misd) select scheda,misa, misl, misp, misd from work.speira_schede;
+INSERT INTO da(scheda, deso) select scheda, deso from work.speira_schede;
+INSERT INTO co select scheda, stcc, 3 from work.speira_schede;
+INSERT INTO an SELECT scheda, oss from work.speira_schede where oss is not null;
+INSERT INTO ad(scheda, adsp, adsm) select scheda, 1, 1 from work.speira_schede;
+INSERT INTO tu(scheda,cdgg) select scheda, 1 from work.speira_schede;
+
+/* aggiorno le foto */
+update import i set scheda = w.scheda from work.speira_schede w where i.nctn = w.nctn and i.imported = false;
+insert into file(file, scheda, tipo ) select file, scheda, 3 from import where scheda is not null and imported = false;
+update import set imported = true where scheda is not null and imported = false;
+/* aggiorno i 3d */
+update work.nxz nxz set scheda = w.scheda from work.speira_schede w where nxz.inv = w.inventario and nxz.imported = false;
+insert into file(file, scheda, tipo ) select file, scheda, 1 from work.nxz where scheda is not null and imported = false;
+update work.nxz set imported = true where scheda is not null and imported = false;
 COMMIT;
