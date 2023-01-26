@@ -45,9 +45,9 @@ CREATE TABLE work.cecconi_dtm(
 alter table work.cecconi_schede owner to marta;
 alter table work.cecconi_mis owner to marta;
 alter table work.cecconi_dtm owner to marta;
-copy work.cecconi_schede from '/var/www/html/marta/workfile/normalizzazione/cecconi/cecconi_schede.csv' delimiter ',' csv header;
-copy work.cecconi_mis from '/var/www/html/marta/workfile/normalizzazione/cecconi/cecconi_mis.csv' delimiter ',' csv header;
-copy work.cecconi_dtm from '/var/www/html/marta/workfile/normalizzazione/cecconi/cecconi_dtm.csv' delimiter ',' csv header;
+copy work.cecconi_schede from '/var/www/marta/workfile/normalizzazione/cecconi/cecconi_schede.csv' delimiter ',' csv header;
+copy work.cecconi_mis from '/var/www/marta/workfile/normalizzazione/cecconi/cecconi_mis.csv' delimiter ',' csv header;
+copy work.cecconi_dtm from '/var/www/marta/workfile/normalizzazione/cecconi/cecconi_dtm.csv' delimiter ',' csv header;
 
 update nctn set libero = false where nctn in (select nctn from work.cecconi_schede);
 insert into scheda(id_temp, titolo, tsk,lir,cmpn,cmpd,fur) select id, titolo, 1, 2, 37, cmpd, 45 from work.cecconi_schede;
