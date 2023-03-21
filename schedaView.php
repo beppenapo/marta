@@ -52,6 +52,7 @@
           <h3 class="border-bottom border-dark mb-3"><?php echo $titolo; ?></h3>
         </div>
       </div>
+      <?php if(isset($_SESSION['id'])){?>
       <div class="row mt-3 mb-5">
         <div class="col text-center">
           <h5>Stato avanzamento scheda</h5>
@@ -62,6 +63,7 @@
           <p id="msgStato" class="font-weight-bold mt-2"></p>
         </div>
       </div>
+      <?php } ?>
       <div class="row">
         <div class="col-md-6">
           <fieldset class="bg-light rounded border p-3 mb-3" id="cdFieldset">
@@ -393,15 +395,17 @@
         <?php } ?>
           <fieldset class="bg-light rounded border p-3 mb-3" id="biblioFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Bibliografia correlata</legend>
-            <?php if(count((array)$biblioFake) > 0){
+            <?php
+            if(count((array)$biblioFake) > 0){
               echo '<ul class="list-group list-group-flush" id="biblioList">';
               foreach ($biblioFake as $fake) {
                 echo "<li class='list-group-item biblioList'>".$fake['riferimento']."</li>";
               }
               echo '</ul>';
-            }else { ?>
-              <h5>Nessuna bibliografia disponibile</h5>
-            <?php } ?>
+            }else {
+              echo "<h5>Nessuna bibliografia disponibile</h5>";
+            }
+            ?>
             <!-- <?php if(count((array)$bibScheda) > 0){ ?>
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
