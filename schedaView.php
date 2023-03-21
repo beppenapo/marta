@@ -52,6 +52,16 @@
           <h3 class="border-bottom border-dark mb-3"><?php echo $titolo; ?></h3>
         </div>
       </div>
+      <div class="row mt-3 mb-5">
+        <div class="col text-center">
+          <h5>Stato avanzamento scheda</h5>
+          <small class="text-muted">Per chiudere la scheda devi inserire almeno 1 riferimento bibliografico, 2 immagini e 1 riferimento geografico</small>
+          <div class="progress">
+            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <p id="msgStato" class="font-weight-bold mt-2"></p>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-6">
           <fieldset class="bg-light rounded border p-3 mb-3" id="cdFieldset">
@@ -67,7 +77,7 @@
               </li>
               <li class="list-group-item">
                 <span>TSK - Tipo scheda:</span>
-                <span><?php echo $scheda['scheda']['tsk']; ?></span>
+                <span class="font-weight-bold"><?php echo $scheda['scheda']['tsk']; ?></span>
                 <input type="hidden" name="tsk" value="<?php echo $scheda['scheda']['tskid'] ?>">
               </li>
               <li class="list-group-item">
@@ -375,15 +385,24 @@
         </div>
         <div class="col-md-6">
           <?php if(isset($_SESSION['id'])){ ?>
-          <fieldset class="text-center mb-5" id="checkStatoScheda">
+          <!-- <fieldset class="text-center mb-5" id="checkStatoScheda">
             <h3 class="">Check stato scheda</h3>
             <div id="knob" class="text-center"></div>
             <h5 id="labelStato" class="font-italic"></h5>
-          </fieldset>
+          </fieldset> -->
         <?php } ?>
           <fieldset class="bg-light rounded border p-3 mb-3" id="biblioFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Bibliografia correlata</legend>
-            <?php if(count((array)$bibScheda) > 0){ ?>
+            <?php if(count((array)$biblioFake) > 0){
+              echo '<ul class="list-group list-group-flush" id="biblioList">';
+              foreach ($biblioFake as $fake) {
+                echo "<li class='list-group-item biblioList'>".$fake['riferimento']."</li>";
+              }
+              echo '</ul>';
+            }else { ?>
+              <h5>Nessuna bibliografia disponibile</h5>
+            <?php } ?>
+            <!-- <?php if(count((array)$bibScheda) > 0){ ?>
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
                 $anno = $i['anno'] ? $i['anno'].", ": '';
@@ -408,7 +427,7 @@
             </ul>
           <?php }else { ?>
             <h5>Nessuna bibliografia disponibile</h5>
-          <?php } ?>
+          <?php } ?> -->
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="imageFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Foto e immagini</legend>
@@ -449,9 +468,9 @@
               <canvas id="draw-canvas" />
             </div>
           </fieldset>
-          <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
+          <!-- <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Audio e video</legend>
-          </fieldset>
+          </fieldset> -->
         </div>
       </div>
     </div>

@@ -6,6 +6,15 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function progress(int $id){
+    // $biblio = $this->simple("select count(*) biblio from biblio_scheda where scheda = ".$id);
+    $biblio = $this->simple("select count(*) biblio from biblio_fake where scheda = ".$id);
+    $foto = $this->simple("select count(*) foto from file where tipo = 3 and scheda = ".$id);
+    $geo = $this->simple("select count(*) geo from geolocalizzazione where scheda = ".$id);
+    $gp = $this->simple("select count(*) gp from gp where scheda = ".$id);
+    return ["biblio"=>$biblio[0]['biblio'], "foto"=>$foto[0]['foto'], "geo"=>$geo[0]['geo'], "gp"=>$gp[0]['gp']];
+  }
+
   public function getModel(int $id = null){
     $filter = $id !== null ? ' and scheda = '.$id : '';
     $sql = "select * from file where tipo = 1".$filter.";";
@@ -45,7 +54,6 @@ class Scheda extends Conn{
     }
     $sql = $this->buildUpdate('stato_scheda',$filter,$dati);
     return $this->prepared($sql,$dati);
-    // return([$sql,$dati]);
   }
   public function getBiblioScheda(int $id){
     $sql = "select b.id, b.titolo, b.anno, b.autore,c.id as contrib_id, c.titolo as contrib_tit, c.autore as contrib_aut,bs.pagine, bs.figure
@@ -55,6 +63,25 @@ class Scheda extends Conn{
     WHERE bs.scheda = ".$id."
     ORDER BY anno, autore, titolo asc;";
     return $this->simple($sql);
+  }
+  public function getBiblioFake(int $scheda){
+    $sql = "select * from biblio_fake where scheda = ".$scheda." order by riferimento asc";
+    return $this->simple($sql);
+  }
+  public function addBiblioFake(array $dati){
+    try {
+      $this->begin();
+      foreach ($dati as $item) {
+        $sql = $this->buildInsert('biblio_fake',$item);
+        $this->prepared($sql,$item);
+      }
+      $this->commit();
+      return array("ok",1);
+    } catch (\Exception $e) {
+      $this->rollback();
+      return $e->getMessage();
+    }
+
   }
   public function getFoto(int $id = null){
     $filter = $id !== null ? "and scheda = ".$id : '';

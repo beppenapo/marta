@@ -63,6 +63,7 @@ $(document).ready(function() {
   getFoto(scheda);
   getModel(scheda);
   mapInit();
+  progress(scheda);
 });
 function getModel(scheda){
   $.ajax({
@@ -164,6 +165,60 @@ function checkScheda(scheda, callBack){
     data: {trigger:'getStatoScheda', id:scheda}
   })
   .done(callBack)
+  .fail(function (jqXHR, textStatus, error) {
+    console.log("Post error: " + error);
+  });
+}
+
+function progress(scheda){
+  $.ajax({
+    url: "api/scheda.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger:'progress', id:scheda}
+  })
+  .done(function(data){
+    let count = 0;
+    let msgStato='';
+    let colore;
+    if (data.biblio == 0) {
+      msgStato += 'Devi inserire almeno 1 riferimento bibliografico<br>';
+    }else {
+      count = count + 25;
+    }
+    if (data.foto == 0) {
+      msgStato += 'Devi inserire almeno 2 immagini<br>';
+    }else if (data.foto == 1) {
+      msgStato += "Devi inserire almeno un'altra immagine<br>";
+      count = count + 25;
+    }else {
+      count = count + 50;
+    }
+    if (data.geo + data.gp == 0) {
+      msgStato += "Devi inserire almeno un riferimento geografico a scelta tra Comune o coordinate assolute<br>";
+    }else {
+      count = count + 25;
+    }
+    if(count == 100){
+      colore = 'bg-success';
+      msgClass = 'text-success';
+      msgStato = 'Ok, puoi chiudere la scheda';
+    }
+    if(count == 75){
+      msgClass = 'text-info';
+      colore = 'bg-info';
+    }
+    if(count == 50){
+      msgClass = 'text-warning';
+      colore = 'bg-warning';
+    }
+    if(count == 25){
+      msgClass = 'text-danger';
+      colore = 'bg-danger';
+    }
+    $("#progressBar").addClass(colore).css({"width":count+"%"}).attr({"aria-valuenow":count})
+    $("#msgStato").html(msgStato).addClass(msgClass);
+  })
   .fail(function (jqXHR, textStatus, error) {
     console.log("Post error: " + error);
   });
@@ -426,7 +481,7 @@ function getFoto(scheda){
   })
   .fail(function (jqXHR, textStatus, error) { console.log("Post error: " + error); }
   );
-  if ($("[name=logged]").val()) { checkScheda(scheda,initChart) }
+  //if ($("[name=logged]").val()) { checkScheda(scheda,initChart) }
 }
 
 function delImg(dati){

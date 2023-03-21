@@ -52,6 +52,7 @@ body>main{padding-top: 60px !important;}
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#888888",endColorstr="#343a40",GradientType=1);
 }
 
+.progress{height:2rem; margin:0 auto;}
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
@@ -64,10 +65,12 @@ body>main{padding-top: 60px !important;}
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
+  .progress{width:75%;}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+  .progress{width:75%;}
   .list-group-item > span{display: inline-block; vertical-align: top;}
   .list-group-item > span:first-child {width: 35%;margin-right:1%;}
   .list-group-item > span:last-child {width: 63%;}

@@ -23,6 +23,7 @@ function listaSchede($obj){return json_encode($obj->listaSchede($_POST['dati']))
 function mtc($obj){return json_encode($obj->mtc($_POST));}
 function ogtdSel($obj){return json_encode($obj->ogtdSel($_POST['dati']));}
 function getStatoScheda($obj){return json_encode($obj->getStatoScheda($_POST['id']));}
+function progress($obj){return json_encode($obj->progress($_POST['id']));}
 function getSale($obj){return json_encode($obj->getSale($_POST['piano']));}
 function getFoto($obj){return json_encode($obj->getFoto($_POST['id']));}
 function getContenitore($obj){return json_encode($obj->getContenitore($_POST));}

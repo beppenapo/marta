@@ -75,7 +75,7 @@ class Biblio extends Conn{
   }
 
   public function elencoBiblio(){
-    $sql = "select b.id,l.id as tipo_id,l.value as tipo,b.titolo,b.autore,count(s.*) as schede,'biblioView.php?get=' as link from bibliografia b inner join liste.biblio_tipo l on b.tipo = l.id left join biblio_scheda bs on bs.biblio = b.id left join scheda s on bs.scheda = s.id group by b.id, l.id, l.value, b.autore, b.titolo UNION select c.id, 0,'contributo in raccolta' as tipo,c.titolo,c.autore,count(s.*) as schede,'contribView.php?get=' as link from contributo c left join biblio_scheda bs on bs.contributo = c.id left join scheda s on bs.scheda = s.id group by c.id, c.autore, c.titolo order by titolo, autore ASC";
+    $sql = "select b.id,l.id as tipo_id,l.value as tipo,b.titolo,b.autore,count(s.*) as schede,'biblioView.php?get=' as link from bibliografia b inner join liste.biblio_tipo l on b.tipo = l.id left join biblio_scheda bs on bs.biblio = b.id left join scheda s on bs.scheda = s.id group by b.id, l.id, l.value, b.autore, b.titolo UNION select c.id, 0,'contributo in raccolta' as tipo,c.titolo,c.autore,count(s.*) as schede,'contribView.php?get=' as link from contributo c left join biblio_scheda bs on bs.contributo = c.id left join scheda s on bs.scheda = s.id group by c.id, c.autore, c.titolo order by titolo, autore ASC;";
     return $this->simple($sql);
   }
 

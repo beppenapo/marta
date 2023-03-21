@@ -5,6 +5,7 @@ use \Marta\Scheda;
 $obj = new Scheda();
 $scheda = $obj->getScheda($_GET['get']);
 $bibScheda = $obj->getBiblioScheda($_GET['get']);
+$biblioFake = $obj->getBiblioFake($_GET['get']);
 $stato = $obj->getStatoScheda($_GET['get']);
 $titolo = $scheda['scheda']['tskid'] ==1 ? $scheda['og']['cls1']. ' <br /> '.$scheda['og']['cls3'].' <br /> ' . $scheda['og']['cls4'] : $scheda['og']['ogtd'];
 $noData = "<p class='text-secondary m-0'>La sezione non è stata compilata</p>";
