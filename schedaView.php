@@ -386,27 +386,9 @@
           </fieldset>
         </div>
         <div class="col-md-6">
-          <?php if(isset($_SESSION['id'])){ ?>
-          <!-- <fieldset class="text-center mb-5" id="checkStatoScheda">
-            <h3 class="">Check stato scheda</h3>
-            <div id="knob" class="text-center"></div>
-            <h5 id="labelStato" class="font-italic"></h5>
-          </fieldset> -->
-        <?php } ?>
           <fieldset class="bg-light rounded border p-3 mb-3" id="biblioFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Bibliografia correlata</legend>
-            <?php
-            if(count((array)$biblioFake) > 0){
-              echo '<ul class="list-group list-group-flush" id="biblioList">';
-              foreach ($biblioFake as $fake) {
-                echo "<li class='list-group-item biblioList'>".$fake['riferimento']."</li>";
-              }
-              echo '</ul>';
-            }else {
-              echo "<h5>Nessuna bibliografia disponibile</h5>";
-            }
-            ?>
-            <!-- <?php if(count((array)$bibScheda) > 0){ ?>
+            <?php if(count((array)$bibScheda) > 0){ ?>
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
                 $anno = $i['anno'] ? $i['anno'].", ": '';
@@ -430,8 +412,22 @@
               } ?>
             </ul>
           <?php }else { ?>
-            <h5>Nessuna bibliografia disponibile</h5>
-          <?php } ?> -->
+            <!-- <h5>Nessuna bibliografia disponibile</h5> -->
+          <?php } ?>
+          <?php
+          if(count((array)$biblioFake) > 0){
+            echo '<ul class="list-group list-group-flush" id="biblioList">';
+            foreach ($biblioFake as $fake) {
+              echo "<li class='list-group-item biblioList'>".$fake['riferimento']."</li>";
+            }
+            echo '</ul>';
+          }else {
+            // echo "<h5>Nessuna bibliografia disponibile</h5>";
+          }
+          ?>
+          <?php if (count((array)$biblioFake) == 0 && count((array)$bibScheda) == 0) {
+            echo "<h5>Nessuna bibliografia disponibile</h5>";
+          } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="imageFieldset">
             <legend class="w-auto bg-marta text-white border rounded p-1">Foto e immagini</legend>

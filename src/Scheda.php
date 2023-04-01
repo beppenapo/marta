@@ -65,7 +65,7 @@ class Scheda extends Conn{
     return $this->simple($sql);
   }
   public function getBiblioFake(int $scheda){
-    $sql = "select * from biblio_fake where scheda = ".$scheda." order by riferimento asc";
+    $sql = "select * from biblio_fake where scheda not in(select scheda from biblio_scheda) and scheda = ".$scheda." order by riferimento asc";
     return $this->simple($sql);
   }
   public function addBiblioFake(array $dati){
