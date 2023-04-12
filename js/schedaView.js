@@ -179,6 +179,7 @@ function progress(scheda){
   })
   .done(function(data){
     let count = 0;
+    let msgClass = 'text-danger';
     let msgStato='';
     let colore;
     if (data.biblio == 0) {
