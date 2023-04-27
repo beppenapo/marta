@@ -442,9 +442,9 @@ function getFoto(scheda){
   let wrapWidth = $(".fotoWrap").innerWidth();
   let w;
   switch (true) {
-    case screen.width < 768: w = '100%'; break;
+    case screen.width < 768: w = "150px"; break;
     case screen.width < 1200: w = (wrapWidth / 2) - 5 +"px"; break;
-    case screen.width >= 1200: w = (wrapWidth / 3) - 5 +"px"; break;
+    case screen.width >= 1200: w = (wrapWidth / 4) - 5 +"px"; break;
   }
 
   $.ajax({
@@ -463,13 +463,13 @@ function getFoto(scheda){
       let overlay = $("<div/>",{class:'fotoOverlay animated'}).html('<i class="bi bi-arrows-fullscreen text-white"></i>').appendTo(div);
       div.appendTo('.fotoWrap')
       div.on('click', () => {
-        $("#divImgOrig").css({"background-image":"url("+fotoPath+item.file+")"});
+        $("#divImgOrig").css({"background-image":"url("+fotoPathOrig+item.file+")"});
         $("#fotoModal").fadeIn('fast');
         $("#closeModal").on('click', (e) => {
           e.preventDefault();
           $("#fotoModal").fadeOut('fast');
         })
-        $("#downloadImg").attr("href",fotoPath+item.file);
+        $("#downloadImg").attr("href",fotoPathOrig+item.file);
         $("#delImg").on('click', (e) => {
           e.preventDefault();
           dati={id:item.id, scheda:item.scheda, file:item.file}

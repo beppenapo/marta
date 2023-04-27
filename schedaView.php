@@ -411,8 +411,6 @@
                 echo "</span></li>";
               } ?>
             </ul>
-          <?php }else { ?>
-            <!-- <h5>Nessuna bibliografia disponibile</h5> -->
           <?php } ?>
           <?php
           if(count((array)$biblioFake) > 0){
@@ -421,8 +419,6 @@
               echo "<li class='list-group-item biblioList'>".$fake['riferimento']."</li>";
             }
             echo '</ul>';
-          }else {
-            // echo "<h5>Nessuna bibliografia disponibile</h5>";
           }
           ?>
           <?php if (count((array)$biblioFake) == 0 && count((array)$bibScheda) == 0) {
@@ -478,7 +474,7 @@
     <div id="fotoModal">
       <div id="fotoOrigDiv" class="container-fluid">
         <div class="row">
-          <div class="col p-5">
+          <div class="col p-2">
             <div class="nav modalMenu">
               <a href="#" class="animated nav-link" id="closeModal" title="chiudi immagine" data-toggle="tooltip" data-placement="bottom" data-modal="#fotoModal"><i class="bi bi-x-lg"></i></a>
               <a href="" class="animated nav-link" id="downloadImg" title="salva immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-cloud-arrow-down-fill"></i></a>

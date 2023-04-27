@@ -15,7 +15,7 @@ class Home extends Conn{
     $ra = $this->simple("select count(*) from scheda where tsk = 1;");
     $nu = $this->simple("select count(*) from scheda where tsk = 2;");
     $foto = $this->simple("select count(*) from file where tipo = 3;");
-    $stereo = $this->simple("select count(*) from file where tipo = 2;");
+    $stereo = $this->simple("select count(*) from file where tipo = 7;");
     $modelli = $this->simple("select count(*) from file where tipo = 1;");
     $arr = array( "ra"=>$ra[0]['count'], "nu"=>$nu[0]['count'], "foto"=>$foto[0]['count'], "stereo"=>$stereo[0]['count'], "modelli"=>$modelli[0]['count']);
     return $arr;
