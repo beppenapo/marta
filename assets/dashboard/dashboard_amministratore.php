@@ -1,4 +1,4 @@
-<?php if($_SESSION['id'] == 1){require($dirAssets.'check_schede_alert.php');} ?>
+<?php if($_SESSION['classe']!==3){require($dirAssets.'check_schede_alert.php');} ?>
 <div class="row">
   <div class="col-md-9"><?php require($dirAssets.'card_filtra_schede.php'); ?></div>
   <div class="col-md-3"><?php require($dirAssets.'card_schedatori.php'); ?></div>
