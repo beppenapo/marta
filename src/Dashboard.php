@@ -76,7 +76,7 @@ class Dashboard extends Conn{
   public function checkSchede(){
     $out=[];
     $schedatore = $_SESSION['classe'] == 3 ? ' and cmpn = '.$_SESSION['id'] : '';
-    $noBiblio = $this->simple("select count(*) from scheda where id not in(select scheda from biblio_fake)".$schedatore.";");
+    $noBiblio = $this->simple("select count(*) from scheda where id not in(select scheda from biblio_fake) and id not in (select scheda from biblio_scheda)".$schedatore.";");
     $noImg = $this->simple("select count(*) from scheda where id not in(select scheda from file where tipo = 3)".$schedatore.";");
     $noGeo = $this->simple("select count(*) from scheda where id not in (select scheda from geolocalizzazione) and id not in (select scheda from gp)".$schedatore.";");
     $out['biblio'] = $noBiblio[0];
