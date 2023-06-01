@@ -50,7 +50,7 @@ class Dashboard extends Conn{
     $tipo = $dati['tipo'];
     switch (true) {
       case $tipo == 1:
-        array_push($filter,'scheda not in (select scheda from biblio_scheda)');
+        array_push($filter,'scheda not in (select scheda from biblio_scheda) and scheda not in (select scheda from biblio_fake) ');
       break;
       case $tipo == 2:
         array_push($filter,'scheda not in (select scheda from file where tipo = 3)');

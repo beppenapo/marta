@@ -139,7 +139,7 @@ function schede(dati){
     data: {trigger: 'schede', dati:dati}
   })
   .done(function(data){
-    console.log(data);
+    // console.log(data);
     if(data.length == 0) {
       content.html('<h6 class="text-center my-5">nessuna scheda trovata</h6>')
       return false;
