@@ -54,9 +54,12 @@ body>main{padding-top: 60px !important;}
 
 .progress{height:2rem; margin:0 auto;}
 
+.col-md-6 > fieldset > legend{color:#fff; background-color: rgb(198,156,85);}
+.col-md-6 > fieldset > fieldset > legend{color:rgb(198,156,85);}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-  .list-group-item > span{display: block; vertical-align: top;}
+  .list-group-item > span{display: block;}
 }
 
 /* Medium devices (tablets, 768px and up) */

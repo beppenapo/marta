@@ -1,0 +1,59 @@
+.noPrint{display: none;}
+body {
+  font: 13pt Georgia, "Times New Roman", Times, serif;
+  line-height: 1.3;
+  background: #fff !important;
+  color: #000;
+  width:100%;
+}
+
+a, a:hover{color:#000;text-decoration: none !important;}
+
+.titlePrint { font-size: 20pt; margin-bottom: 15px;}
+body>main{ width: 100%; padding:0 !important; margin: 0; background: none;}
+.col-md-6{flex-basis: 100%; max-width: 100% !important;}
+
+.col-md-6:first-child{
+  display: flex;
+  justify-content: left;
+  align-items: stretch;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.col-md-6:first-child > fieldset{
+  width:45%;
+  margin:1%;  
+}
+
+.col-md-6 fieldset{background-color: #fff !important;}
+
+.col-md-6>fieldset>legend{font-size: 15pt;color:#000 !important;}
+.col-md-6>fieldset>fieldset>legend{font-size: 13pt;color:#000 !important;}
+.list-group-item>span:last-child{font-weight: bold; margin-left: 10px;}
+#spanDescrizione{display: block;}
+#spanDescrizioneTxt{display: block; margin: 5px 0 0 0;}
+.fotoWrap > img{
+  display: inline-block;
+  width:20%;
+  margin:0.3cm;
+}
+
+.page-break{
+  break-before: auto;
+  /* for firefox */
+  page-break-before: auto;
+  /* for webkit */
+  -webkit-column-break-before: auto;
+}
+div.pagebreak {
+  break-before: auto;
+  page-break-after: always;
+  page-break-inside: avoid; 
+  -webkit-column-break-before: auto;
+}
+
+.pagebreakparent {
+  break-before: auto;
+  page-break-after: always;
+  -webkit-column-break-before: always;
+}

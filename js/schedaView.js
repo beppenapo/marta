@@ -24,6 +24,12 @@ $(document).ready(function() {
       delBiblioScheda(dati);
     }
   });
+
+  $("[name=stampaScheda").on('click', () => {
+    window.print();
+    return false;
+  })
+
   $("[name=eliminaScheda]").on('click', function(event) {
     dati = {}
     dati.id = parseInt(scheda);
@@ -459,8 +465,8 @@ function getFoto(scheda){
       return;
     }
     data.forEach((item, i) => {
-      let div = $("<div/>",{class:'fotoDiv'}).css({"width":w,"height":w,"background-image": "url("+fotoPath+item.file+")"});
-      let overlay = $("<div/>",{class:'fotoOverlay animated'}).html('<i class="bi bi-arrows-fullscreen text-white"></i>').appendTo(div);
+      let div = $("<div/>",{class:'fotoDiv noPrint'}).css({"width":w,"height":w,"background-image": "url("+fotoPath+item.file+")"});
+      let overlay = $("<div/>",{class:'fotoOverlay animated noPrint'}).html('<i class="bi bi-arrows-fullscreen text-white"></i>').appendTo(div);
       div.appendTo('.fotoWrap')
       div.on('click', () => {
         $("#divImgOrig").css({"background-image":"url("+fotoPathOrig+item.file+")"});
@@ -478,6 +484,8 @@ function getFoto(scheda){
           }
         })
       })
+      // blocco di codice per la stampa
+      let printImg = $("<img/>",{src:fotoPath+item.file, class:'nascondi'}).appendTo('.fotoWrap');
     });
   })
   .fail(function (jqXHR, textStatus, error) { console.log("Post error: " + error); }

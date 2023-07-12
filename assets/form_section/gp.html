@@ -11,7 +11,7 @@
             <?php
             foreach($comuniPuglia as $c){
               $selected = isset($_POST['s']) && isset($scheda['geoloc']) && $scheda['geoloc']['id_comune'] == $c['id'] ? 'selected' : '';
-              $extent = $c['xmin'].','.$c['ymin'].','.$c['xmax'].','.$c[ymax];
+              $extent = $c['xmin'].','.$c['ymin'].','.$c['xmax'].','.$c['ymax'];
               echo "<option value='".$c['id']."' data-extent='".$extent."' ".$selected.">".$c['comune']."</option>";
             }
             ?>

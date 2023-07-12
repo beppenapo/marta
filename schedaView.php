@@ -3,10 +3,11 @@
 <html lang="it" dir="ltr">
   <head>
     <?php require('assets/meta.html'); ?>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/3dhop/3dhop.css"/>
-    <link rel="stylesheet" href="css/schedaView.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" media="screen"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" >
+    <link rel="stylesheet" href="css/3dhop/3dhop.css" media="screen"/>
+    <link rel="stylesheet" href="css/schedaView.css" media="screen">
+    <link rel="stylesheet" href="css/stampaScheda.css" media="print">
   </head>
   <body>
     <?php
@@ -17,11 +18,11 @@
     <input type="hidden" name="nctnId" value="<?php echo $scheda['scheda']['nctn']; ?>">
     <?php require('assets/headerMenu.php'); ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
-    <div id="loadingDiv" class="flexDiv invisible"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
+    <div id="loadingDiv" class="flexDiv invisible noPrint"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
 
       <?php if (isset($_SESSION['id']) && ($_SESSION['id'] == $scheda['scheda']['cmpid'] || $_SESSION['classe'] < 3)) { ?>
-      <div id="menuScheda" class="bg-dark px-3">
+      <div id="menuScheda" class="bg-dark px-3 noPrint">
         <div class="btn-group" role="group">
           <div class="btn-group <?php echo $modifica; ?>" role="group">
             <button id="aggiungi" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> aggiungi</button>
@@ -42,18 +43,24 @@
           <button name="cambiaStato" value="verificata" type="button" class="btn btn-dark <?php echo $verifica; ?>"><i class="fas fa-clipboard-check"></i> verificata</button>
           <button name="cambiaStato" value="inviata" type="button" class="btn btn-dark <?php echo $invia; ?>"><i class="fas fa-clipboard-check"></i> inviata</button>
           <button name="cambiaStato" value="accettata" type="button" class="btn btn-dark <?php echo $accettata; ?>"><i class="fas fa-clipboard-check"></i> accettata</button>
+          <button id="stampaScheda" name="stampaScheda" type="button" class="btn btn-dark"><i class="fas fa-print"></i> stampa</button>
           <button id="eliminaScheda" name="eliminaScheda" type="button" class="btn btn-dark <?php echo $modifica; ?>"><i class="fas fa-times"></i> elimina</button>
         </div>
       </div>
     <?php } ?>
     <div class="container-fluid mt-5">
-      <div class="row">
+      <div class="row noPrint">
         <div class="col text-center text-uppercase">
           <h3 class="border-bottom border-dark mb-3"><?php echo $titolo; ?></h3>
         </div>
       </div>
+       <div class="row nascondi">
+        <div class="col">
+          <h3 class="border-bottom border-dark mb-3 titlePrint"><span class="text-uppercase"><?php echo $titolo; ?></span><br>(Inv. num: <?php echo $inventario; ?>, NCTN: <?php echo $scheda['scheda']['nctn']; ?>)</h3>
+        </div>
+      </div>
       <?php if(isset($_SESSION['id'])){?>
-      <div class="row mt-3 mb-5">
+      <div class="row mt-3 mb-5 noPrint">
         <div class="col text-center">
           <h5>Stato avanzamento scheda</h5>
           <small class="text-muted">Per chiudere la scheda devi inserire almeno 1 riferimento bibliografico, 2 immagini e 1 riferimento geografico</small>
@@ -67,15 +74,15 @@
       <div class="row">
         <div class="col-md-6">
           <fieldset class="bg-light rounded border p-3 mb-3" id="cdFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">cd - codici</legend>
+            <legend class="w-auto border rounded p-1">CD - CODICI</legend>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
                 <span>NCTN - Numero catalogo:</span>
-                <span><?php echo $scheda['scheda']['nctn']; ?></span>
+                <span class="font-weight-bold"><?php echo $scheda['scheda']['nctn']; ?></span>
               </li>
               <li class="list-group-item">
                 <span>Num.Inv. MarTA:</span>
-                <span><?php echo $inventario; ?></span>
+                <span class="font-weight-bold"><?php echo $inventario; ?></span>
               </li>
               <li class="list-group-item">
                 <span>TSK - Tipo scheda:</span>
@@ -104,7 +111,7 @@
             </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ogFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">og - oggetto</legend>
+            <legend class="w-auto border rounded p-1">OG - OGGETTO</legend>
             <ul class="list-group list-group-flush">
             <?php if ($scheda['scheda']['tskid']==1) { ?>
               <li class="list-group-item"><span>CLS - Categoria liv.1:</span><span class="font-weight-bold"><?php echo $scheda['og']['cls1']; ?></span></li>
@@ -126,7 +133,7 @@
             </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="geolocFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">geolocalizzazione generica</legend>
+            <legend class="w-auto border rounded p-1">GEOLOCALIZZAZIONE GENERICA</legend>
             <?php if(count((array)$scheda['geoloc'])==0){echo $noData;}else{ ?>
             <input type="hidden" name="id_comune" value="<?php echo $scheda['geoloc']['id_comune']; ?>">
             <ul class="list-group list-group-flush">
@@ -136,8 +143,9 @@
             </ul>
             <?php } ?>
           </fieldset>
+          
           <fieldset class="bg-light rounded border p-3 mb-3" id="gpFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">GP - GEOREFERENZIAZIONE TRAMITE PUNTO</legend>
+            <legend class="w-auto border rounded p-1">GP - GEOREFERENZIAZIONE TRAMITE PUNTO</legend>
             <?php if(count((array)$scheda['gp'])==0){echo $noData;}else{ ?>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>GPL - Tipo di localizzazione:</span><span class="font-weight-bold"><?php echo $scheda['gp']['gpl']; ?></span></li>
@@ -154,8 +162,11 @@
             <input type="hidden" name="epsg" value="<?php echo $scheda['gp']['epsg'] ?>">
           <?php } ?>
           </fieldset>
+          
+          <div class="pagebreakparent"><div class="pagebreak"></div></div>
+          
           <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
+            <legend class="w-auto border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
             <?php if(count((array)$scheda['lc'])==0){echo $noData;}else{ ?>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>PVCC - Comune:</span><span class="font-weight-bold"><?php echo $scheda['lc']['pvcc']; ?></span></li>
@@ -174,7 +185,7 @@
           <?php } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">UB - DATI PATRIMONIALI</legend>
+            <legend class="w-auto border rounded p-1">UB - DATI PATRIMONIALI</legend>
             <?php if(count((array)$scheda['ub'])==0){echo $noData;}else{ ?>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>INVN - Inventario:</span><span class="font-weight-bold"><?php echo $scheda['ub']['invn']; ?></span></li>
@@ -184,10 +195,11 @@
               </ul>
             <?php } ?>
           </fieldset>
+          
           <fieldset class="bg-light rounded border p-3 mb-3" id="reFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">RE- MODALITÀ DI REPERIMENTO</legend>
+            <legend class="w-auto border rounded p-1">RE- MODALITÀ DI REPERIMENTO</legend>
             <fieldset id="rcgFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">rcg - ricognizioni</legend>
+              <legend class="font-weight-bold border-bottom">rcg - ricognizioni</legend>
               <?php if(count((array)$scheda['re']['rcg'])==0){echo $noData;}else{ ?>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>NUCN - Codice ICCD:</span><span class="font-weight-bold"><?php echo $scheda['re']['rcg']['nucn']; ?></span></li>
@@ -198,7 +210,7 @@
               <?php } ?>
             </fieldset>
             <fieldset id="dscFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">dsc - dati scavo</legend>
+              <legend class="font-weight-bold border-bottom">dsc - dati scavo</legend>
               <?php if(count((array)$scheda['re']['dsc'])==0){echo $noData;}else{ ?>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>NUCN - Codice ICCD:</span><span class="font-weight-bold"><?php echo $scheda['re']['dsc']['nucn']; ?></span></li>
@@ -210,7 +222,7 @@
               <?php } ?>
             </fieldset>
             <fieldset id="ainFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">ain - altre indagini</legend>
+              <legend class="font-weight-bold border-bottom">ain - altre indagini</legend>
               <?php if(count((array)$scheda['re']['ain'])==0){echo $noData;}else{ ?>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>AINT - Tipo:</span><span class="font-weight-bold"><?php echo $scheda['re']['ain']['aint']; ?></span></li>
@@ -221,9 +233,9 @@
             </fieldset>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="dtFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">DT - CRONOLOGIA</legend>
+            <legend class="w-auto border rounded p-1">DT - CRONOLOGIA</legend>
             <fieldset id="dtzFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">DTZ - Cronologia generica</legend>
+              <legend class="font-weight-bold border-bottom">DTZ - Cronologia generica</legend>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>DTZG - Fascia cronologica:</span><span class="font-weight-bold">
                   <?php
@@ -234,14 +246,14 @@
               </ul>
             </fieldset>
             <fieldset id="dtsFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">DTS - Cronologia specifica</legend>
+              <legend class="font-weight-bold border-bottom">DTS - Cronologia specifica</legend>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>DTSI - Da:</span><span class=""><?php echo $scheda['dt']['dt']['dtsi'] ? $scheda['dt']['dt']['dtsi'] : ''; ?></span></li>
                 <li class="list-group-item"><span>DTSF - A:</span><span class=""><?php echo $scheda['dt']['dt']['dtsf'] ? $scheda['dt']['dt']['dtsf'] : ''; ?></span></li>
               </ul>
             </fieldset>
             <fieldset id="dtmFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">DTM - Motivazione cronologia</legend>
+              <legend class="font-weight-bold border-bottom">DTM - Motivazione cronologia</legend>
               <ul class="list-group list-group-flush">
                 <?php foreach ($scheda['dt']['dtm'] as $dtm) {
                   echo '<li class="list-group-item"><span>Motivazione:</span><span class="font-weight-bold">'.$dtm['dtm'].'</span></li>';
@@ -249,10 +261,13 @@
               </ul>
             </fieldset>
           </fieldset>
+          
+          <div class="pagebreakparent"><div class="pagebreak"></div></div>
+
           <fieldset class="bg-light rounded border p-3 mb-3" id="mtFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">MT - DATI TECNICI</legend>
+            <legend class="w-auto border rounded p-1">MT - DATI TECNICI</legend>
             <fieldset id="mtcFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">mtc - materia e tecnica</legend>
+              <legend class="font-weight-bold border-bottom">mtc - materia e tecnica</legend>
               <ul class="list-group list-group-flush">
                 <?php foreach ($scheda['mt']['mtc'] as $mtc) {
                   echo '<li class="list-group-item"><span>Materia/Tecnica:</span><span class="font-weight-bold">'.$mtc['materia'].'/'.$mtc['tecnica'].'</span></li>';
@@ -260,7 +275,7 @@
               </ul>
             </fieldset>
             <fieldset id="misFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">mis - misure</legend>
+              <legend class="font-weight-bold border-bottom">mis - misure</legend>
               <?php if($scheda['mt']['mis']['misr']){ echo $noData;}else{ $m = $scheda['mt']['mis']; ?>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item"><span>misa - altezza:</span><span class="font-weight-bold">
@@ -291,7 +306,7 @@
               <?php } ?>
             </fieldset>
             <fieldset id="munsellFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">Munsell</legend>
+              <legend class="font-weight-bold border-bottom">Munsell</legend>
               <?php if ($scheda['mt']['munsell'] !== null){ ?>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item"><span>Munsell:</span><span class="font-weight-bold">
@@ -303,13 +318,13 @@
             </fieldset>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="daFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">DA - DATI ANALITICI</legend>
+            <legend class="w-auto border rounded p-1">DA - DATI ANALITICI</legend>
             <fieldset id="desFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">DES - DESCRIZIONE</legend>
+              <legend class="font-weight-bold border-bottom">DES - DESCRIZIONE</legend>
               <ul class="list-group list-group-flush">
                 <?php
                 if($scheda['scheda']['tskid']==1){
-                  echo '<li class="list-group-item"><span>DESO - Indicazioni sull\'oggetto:</span><span class="font-weight-bold">'.$scheda['da']['deso'].'</span></li>';
+                  echo '<li class="list-group-item"><span id="spanDescrizione">DESO - Indicazioni sull\'oggetto:</span><span class="font-weight-bold" id="spanDescrizioneTxt">'.$scheda['da']['deso'].'</span></li>';
                 }else{
                   ?>
                   <li class="list-group-item"><span>DESA - Dritto:</span><span class="font-weight-bold"><?php echo $scheda['da']['desa']; ?></span></li>
@@ -329,7 +344,7 @@
             </fieldset>
             <?php if($scheda['scheda']['tskid']==2){ ?>
             <fieldset id="zecFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">ZEC - ZECCA</legend>
+              <legend class="font-weight-bold border-bottom">ZEC - ZECCA</legend>
               <ul class="list-group list-group-flush">
                   <li class="list-group-item"><span>ZEC - Zecca:</span><span class="font-weight-bold"><?php echo $scheda['da']['zec']; ?></span></li>
               </ul>
@@ -337,17 +352,17 @@
           <?php } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="coFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">CO - CONSERVAZIONE</legend>
+            <legend class="w-auto border rounded p-1">CO - CONSERVAZIONE</legend>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>STCC - Stato di conservazione:</span><span class="font-weight-bold"><?php echo $scheda['co']['stcc']; ?></span></li>
               <li class="list-group-item"><span>STCL - Leggibilità:</span><span class="font-weight-bold"><?php echo $scheda['co']['stcl']; ?></span></li>
             </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="tuFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">TU - CONDIZIONE GIURIDICA E VINCOLI</legend>
+            <legend class="w-auto border rounded p-1">TU - CONDIZIONE GIURIDICA E VINCOLI</legend>
             <?php if(count((array)$scheda['tu']['acq'])==0){echo $noData;}else{ ?>
             <fieldset id="acqFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">ACQ - ACQUISIZIONE</legend>
+              <legend class="font-weight-bold border-bottom">ACQ - ACQUISIZIONE</legend>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>ACQT - Tipo acquisizione:</span><span class="font-weight-bold"><?php echo $scheda['tu']['acq']['acqt']; ?></span></li>
                 <li class="list-group-item"><span>ACQN - Nome:</span><span class="font-weight-bold"><?php echo $scheda['tu']['acq']['acqn']; ?></span></li>
@@ -357,13 +372,13 @@
             </fieldset>
             <?php } ?>
             <fieldset id="cdgFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">CDG - CONDIZIONE GIURIDICA</legend>
+              <legend class="font-weight-bold border-bottom">CDG - CONDIZIONE GIURIDICA</legend>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span>CDGG - Indicazione giuridica: </span><span class="font-weight-bold"><?php echo $scheda['tu']['cdg']['cdgg']; ?></span></li>
               </ul>
             </fieldset>
             <fieldset id="nvcFieldset" class="mb-3">
-              <legend class="text-marta font-weight-bold border-bottom">NVC - PROVVEDIMENTI DI TUTELA</legend>
+              <legend class="font-weight-bold border-bottom">NVC - PROVVEDIMENTI DI TUTELA</legend>
               <?php if(count((array)$scheda['tu']['nvc'])==0){echo $noData;}else{ ?>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span></span><span class="font-weight-bold"><?php echo $scheda['tu']['cdg']['cdgg']; ?></span></li>
@@ -372,22 +387,24 @@
             </fieldset>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="adFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">AD - ACCESSO AI DATI</legend>
+            <legend class="w-auto border rounded p-1">AD - ACCESSO AI DATI</legend>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>ADSP - Profilo di accesso: </span><span class="font-weight-bold"><?php echo $scheda['ad']['adsp']; ?></span></li>
               <li class="list-group-item"><span>ADSM - Motivazione: </span><span class="font-weight-bold"><?php echo $scheda['ad']['adsm']; ?></span></li>
             </ul>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="anFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">AN - ANNOTAZIONI</legend>
+            <legend class="w-auto border rounded p-1">AN - ANNOTAZIONI</legend>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>OSS - Osservazioni: </span><span class="font-weight-bold"><?php echo $scheda['an']['oss'] ? $scheda['an']['oss'] : 'dato non inserito'; ?></span></li>
             </ul>
           </fieldset>
         </div>
+        <div class="pagebreakparent"><div class="pagebreak"></div></div>
+
         <div class="col-md-6">
           <fieldset class="bg-light rounded border p-3 mb-3" id="biblioFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">Bibliografia correlata</legend>
+            <legend class="w-auto border rounded p-1">Bibliografia correlata</legend>
             <?php if(count((array)$bibScheda) > 0){ ?>
             <ul class="list-group list-group-flush" id="biblioList">
               <?php foreach ($bibScheda as $i) {
@@ -398,7 +415,7 @@
                 $pag = count((array)$pagArr) == 0 ? '' : "(".implode(', ', $pagArr).")";
                 echo "<li class='list-group-item biblioList'>";
                 if(isset($_SESSION['id'])){
-                  echo "<button type='button' class='btn btn-sm btn-danger mr-3' name='delBiblioScheda' data-scheda='".$_GET['get']."' data-biblio='".$i['id']."'>
+                  echo "<button type='button' class='btn btn-sm btn-danger mr-3 noPrint' name='delBiblioScheda' data-scheda='".$_GET['get']."' data-biblio='".$i['id']."'>
                   <i class='fas fa-times'></i>
                   </button>";
                 }
@@ -426,11 +443,11 @@
           } ?>
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="imageFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">Foto e immagini</legend>
+            <legend class="w-auto border rounded p-1">Foto e immagini</legend>
             <div class="fotoWrap elContainer"></div>
           </fieldset>
-          <fieldset class="bg-light rounded border p-3 mb-3" id="mappaFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">Mappa</legend>
+          <fieldset class="bg-light rounded border p-3 mb-3 noPrint" id="mappaFieldset">
+            <legend class="w-auto border rounded p-1">Mappa</legend>
             <div class="map" id="map">
               <div id="cardInfoMappa">
                 <div class="card" style="width: 18rem;">
@@ -450,8 +467,8 @@
               </div>
             </div>
           </fieldset>
-          <fieldset class="bg-light rounded border p-3 mb-3" id="3dFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">Modello 3d</legend>
+          <fieldset class="bg-light rounded border p-3 mb-3 noPrint" id="3dFieldset">
+            <legend class="w-auto border rounded p-1">Modello 3d</legend>
             <h5>Nessun modello 3d disponibile</h5>
             <div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
               <div id="toolbar" class="btn-group" role="group">
@@ -465,14 +482,14 @@
             </div>
           </fieldset>
           <!-- <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
-            <legend class="w-auto bg-marta text-white border rounded p-1">Audio e video</legend>
+            <legend class="w-auto border rounded p-1">Audio e video</legend>
           </fieldset> -->
         </div>
       </div>
     </div>
     </main>
-    <div id="fotoModal">
-      <div id="fotoOrigDiv" class="container-fluid">
+    <div id="fotoModal" class="noPrint">
+      <div id="fotoOrigDiv" class="container-fluid noPrint">
         <div class="row">
           <div class="col p-2">
             <div class="nav modalMenu">

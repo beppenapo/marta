@@ -1,4 +1,4 @@
-<nav id="mainMenu">
+<nav id="mainMenu" class="noPrint">
   <ul>
     <li>
       <a href="dashboard.php" class='d-block m-0 mainLink animated' title="dashboard" data-toggle='tooltip' data-placement='left'><i class="fas fa-home fa-fw"></i> dashboard</a>
@@ -17,12 +17,12 @@
     <li>
       <p class='text-info'><i class="fas fa-folder-open fa-fw"></i> aggiungi authority file</p>
       <ul class="subMenu">
-        <li>
+        <!-- <li>
           <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova ricognizione"><i class="fas fa-chevron-right fa-fw"></i> ricognizione</a>
-        </li>
-        <li>
+        </li> -->
+        <!-- <li>
           <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova scheda sito"><i class="fas fa-chevron-right fa-fw"></i> scheda sito</a>
-        </li>
+        </li> -->
         <li>
           <a href="bibliografia_add.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci un nuovo record bibliografico"><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
         </li>
@@ -46,9 +46,9 @@
     <li>
       <p class='text-warning'><i class="fas fa-cogs fa-fw"></i> gestione sistema</p>
       <ul class="subMenu">
-        <li>
+        <!-- <li>
           <a href="usr.php" class="animated" data-toggle='tooltip' data-placement='left' title="gestisci utenti di sistema"><i class="fas fa-chevron-right fa-fw"></i> utenti</a>
-        </li>
+        </li> -->
         <li>
           <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="modifica le liste valori"><i class="fas fa-chevron-right fa-fw"></i> liste valori</a>
         </li>
