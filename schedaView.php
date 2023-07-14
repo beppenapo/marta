@@ -21,9 +21,9 @@
     <div id="loadingDiv" class="flexDiv invisible noPrint"><i class='fas fa-circle-notch fa-spin fa-5x'></i></div>
     <main>
 
-      <?php if (isset($_SESSION['id']) && ($_SESSION['id'] == $scheda['scheda']['cmpid'] || $_SESSION['classe'] < 3)) { ?>
       <div id="menuScheda" class="bg-dark px-3 noPrint">
         <div class="btn-group" role="group">
+          <?php if (isset($_SESSION['id']) && ($_SESSION['id'] == $scheda['scheda']['cmpid'] || $_SESSION['classe'] < 3)) { ?>
           <div class="btn-group <?php echo $modifica; ?>" role="group">
             <button id="aggiungi" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> aggiungi</button>
             <div class="dropdown-menu" aria-labelledby="aggiungi">
@@ -43,11 +43,11 @@
           <button name="cambiaStato" value="verificata" type="button" class="btn btn-dark <?php echo $verifica; ?>"><i class="fas fa-clipboard-check"></i> verificata</button>
           <button name="cambiaStato" value="inviata" type="button" class="btn btn-dark <?php echo $invia; ?>"><i class="fas fa-clipboard-check"></i> inviata</button>
           <button name="cambiaStato" value="accettata" type="button" class="btn btn-dark <?php echo $accettata; ?>"><i class="fas fa-clipboard-check"></i> accettata</button>
-          <button id="stampaScheda" name="stampaScheda" type="button" class="btn btn-dark"><i class="fas fa-print"></i> stampa</button>
           <button id="eliminaScheda" name="eliminaScheda" type="button" class="btn btn-dark <?php echo $modifica; ?>"><i class="fas fa-times"></i> elimina</button>
+          <?php } ?>
+          <button id="stampaScheda" name="stampaScheda" type="button" class="btn btn-dark"><i class="fas fa-print"></i> stampa</button>
         </div>
       </div>
-    <?php } ?>
     <div class="container-fluid mt-5">
       <div class="row noPrint">
         <div class="col text-center text-uppercase">

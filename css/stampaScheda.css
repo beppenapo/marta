@@ -20,40 +20,25 @@ body>main{ width: 100%; padding:0 !important; margin: 0; background: none;}
   flex-direction: row;
   flex-wrap: wrap;
 }
-.col-md-6:first-child > fieldset{
-  width:45%;
-  margin:1%;  
-}
+.col-md-6:first-child > fieldset{ width:45%; margin:1%;}
 
 .col-md-6 fieldset{background-color: #fff !important;}
-
-.col-md-6>fieldset>legend{font-size: 15pt;color:#000 !important;}
-.col-md-6>fieldset>fieldset>legend{font-size: 13pt;color:#000 !important;}
+.col-md-6>fieldset{border:1px solid #000 !important;}
+.col-md-6>fieldset>legend{font-size: 15pt;color:#000 !important; border:1px solid #000 !important;}
+.col-md-6>fieldset>fieldset>legend{font-size: 13pt;color:#000 !important;border-bottom:1px solid #000 !important;}
+.list-group-item{border:1px solid #000;}
 .list-group-item>span:last-child{font-weight: bold; margin-left: 10px;}
 #spanDescrizione{display: block;}
 #spanDescrizioneTxt{display: block; margin: 5px 0 0 0;}
-.fotoWrap > img{
-  display: inline-block;
-  width:20%;
-  margin:0.3cm;
-}
-
-.page-break{
-  break-before: auto;
-  /* for firefox */
-  page-break-before: auto;
-  /* for webkit */
-  -webkit-column-break-before: auto;
-}
+.fotoWrap > img{ display: inline-block; width:20%; margin:0.3cm;}
 div.pagebreak {
-  break-before: auto;
+  break-before: always;
   page-break-after: always;
   page-break-inside: avoid; 
   -webkit-column-break-before: auto;
 }
-
 .pagebreakparent {
-  break-before: auto;
+  break-before: always;
   page-break-after: always;
   -webkit-column-break-before: always;
 }
