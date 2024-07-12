@@ -9,5 +9,6 @@ if(isset($funzione) && function_exists($funzione)) {
   echo $trigger;
 }
 function getReperti($obj){return json_encode($obj->getReperti($_POST['dati']));}
+function getSchedeByLocation($obj){return json_encode($obj->getSchedeByLocation($_POST['filter']));}
 // function getRepertiSala($obj){return json_encode($obj->getRepertiSala($_POST['dati']));}
 ?>

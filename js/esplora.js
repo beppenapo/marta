@@ -28,15 +28,19 @@ let schede=[];
 let pagenumber = 0;
 let perpage = 20;
 $(document).ready(function() {
-  createCarousel()
   loadSvg('img/piante/piano1.svg');
-  getReperti('piano',{piano:1});
+  getSchedeByLocation('piano', {piano:1})
+
   $("[name=piani]").on('click', function(){
     let title;
     let p = $(this).val()
     $("#fuoriVetrinaTxt").hide();
-    loadSvg('img/piante/piano'+p+'.svg');
-    getReperti('piano',{piano:p});
+    if(p == 0){
+      $("#svgWrap").html('<div class="alert alert-danger w-75 mx-auto"><h3>La pianta di questo piano non è disponibile</h3></div>');
+    }else{
+      loadSvg('img/piante/piano'+p+'.svg');
+    }
+    getSchedeByLocation('piano',{piano:p})
   })
   $("#fuoriVetrinaTxt").hide();
 });
@@ -45,7 +49,7 @@ $(document).ready(function() {
 /* www.flaticon.com */
 
 function loadSvg(svg){
-  $("#svgWrap").load(svg,{},function(){
+  $("#svgWrap").html('').load(svg,{},function(){
     let svgEl = svgPanZoom('#pianta', svgOpt);
     $("#pianta #sale>g").each(function(i,v){
       $(this).on({
@@ -60,7 +64,7 @@ function loadSvg(svg){
           $(this).find('path, rect').addClass('salaActive');
           let piano = $("[name=piani]:checked").val()
           let dati = {piano:piano,sala:$(this).prop('id').slice(1)};
-          getReperti('sala',dati);
+          getSchedeByLocation('sala', dati)
         }
       });
     })
@@ -80,91 +84,88 @@ function loadSvg(svg){
           let sala = $(this).prop('id').split('_')[0].slice(1);
           let contenitore = $(this).prop('id').split('_').pop().slice(1);
           let dati = {piano:piano, sala:sala, contenitore:contenitore}
-          getReperti('contenitore',dati);
-          console.log(dati);
+          getSchedeByLocation('contenitore', dati)
         }
       });
     })
   });
 }
 
-function getReperti(el,v){
-  window.scrollTo(500,500);
-  wrap.html('');
-  schede=[];
-  pagenumber = 0;
-  $.ajax({
-    type: "POST",
-    url: "api/sale.php",
-    dataType: 'json',
-    data: {trigger: 'getReperti', dati:v}
-  })
-  .done(function(data){
-    info = {sale:data.sale.count, contenitori:data.contenitori.count, reperti:data.schede.length}
-    if(data.schede.length > 0){
-      if(el == 'sala'){info.sala=data.schede[0].sala;}
-      if(el == 'contenitore'){
-        info.sala=data.schede[0].sala;
-        info.contenitore=data.schede[0].contenitore;
+function getSchedeByLocation(el, filter){
+  if(filter && typeof filter === 'object' && !Array.isArray(filter) && Object.keys(filter).length>0){
+    // window.scrollTo(500,500);
+    wrap.html('');
+    schede=[];
+    pagenumber = 0;
+    $.ajax({
+      type: "POST",
+      url: "api/sale.php",
+      dataType: 'json',
+      data: {trigger: 'getSchedeByLocation', filter:filter}
+    })
+    .done(function(data){
+      console.log(data);
+      info = {sale:data.sale.count, contenitori:data.contenitori.count}
+      if(data.schede){
+        if(el == 'sala'){info.sala=data.schede[0].sala;}
+        if(el == 'contenitore'){
+          info.sala=data.schede[0].sala;
+          info.contenitore=data.schede[0].contenitore;
+        }
+        data.schede.forEach(function(item,i){ schede.push(item); });
+        info.reperti = data.schede.length
       }
-    }
-    data.schede.forEach(function(item,i){ schede.push(item); });
-    setInfo(el,v,info)
-    // loadGallery()
-  })
+      setInfo(el,info)
+      loadGallery()
+    })
+  }else{
+    console.error('devi passare un array o non deve essere vuota');
+  }
 }
 
-function setInfo(el,v,info){
-  console.log({el,v,info});
+function setInfo(el,info){
+  let pianoInt = $("[name=piani]:checked").val()
+  let pianoText = $("[name=piani]:checked").next('span').text()
+  let title = pianoText; 
+  let text, tipoContenitore, reperti;
   $("#resTitle, #resSubTitle").html('')
-  let title, text, tipo, contenitori, reperti;
-  if (info.reperti == 0) {
+  console.log(info);
+  if (!info.reperti) {
     $("<div/>",{class:'alert alert-warning mx-auto text-center'}).text('Non sono presenti reperti schedati per la sala o il contenitore selezionati.').appendTo(wrap);
     return false;
   }
-  switch (true) {
-    case v.piano == -1: title = 'deposito'; break ;
-    case v.piano == 0: title = 'piano terra'; break ;
-    case v.piano == 1: title = 'primo piano'; break ;
-    case v.piano == 2: title = 'secondo piano'; break ;
-  }
-  if (v.piano == -1) {
-    contenitori = parseInt(info.contenitori);
-    tipo = contenitori == 1 ? 'scaffale' : 'scaffali';
+  if (pianoInt == -1) {
+    tipoContenitore = info.contenitori == 1 ? 'scaffale' : 'scaffali';
   }else {
-    contenitori = parseInt(info.contenitori - 1);
-    //escludo i fuori vetrina
-    tipo = contenitori == 1 ? 'vetrina' : 'vetrine';
+    tipoContenitore = info.contenitori == 1 ? 'vetrina' : 'vetrine';
   }
 
-  reperti = parseInt(info.reperti) == 1 ? parseInt(info.reperti) + ' reperto' : parseInt(info.reperti) + ' reperti'
-
-  if (contenitori == 0) {reperti += ' fuori vetrina';}
+  reperti = info.reperti == 1 ? info.reperti + ' reperto' : info.reperti + ' reperti';
+  if (info.contenitori == 0) {reperti += ' fuori vetrina';}
 
   if (el == 'piano') {
-    text = "Il piano selezionato è suddiviso in <span class='font-weight-bold'>" + info.sale + " stanze</span> nelle quali sono presenti <span class='font-weight-bold'>"+ contenitori +" "+ tipo +"</span> per un totale di <span class='font-weight-bold'>"+ reperti + '</span>';
+    text = "Il "+pianoText+" è suddiviso in <span class='font-weight-bold'>" + info.sale + " sale</span> nelle quali sono presenti <span class='font-weight-bold'>"+ info.contenitori +" "+ tipoContenitore +"</span> per un totale di <span class='font-weight-bold'>"+ reperti + '</span>';
   }
 
   if (el == 'sala') {
     title += ', sala '+info.sala;
-    text = "Nella sala selezionata sono presenti <span class='font-weight-bold'>"+ contenitori +" "+ tipo +"</span> per un totale di <span class='font-weight-bold'>"+ reperti + '</span>';
+    text = "Nella sala selezionata sono presenti <span class='font-weight-bold'>"+ info.contenitori +" "+ tipoContenitore +"</span> per un totale di <span class='font-weight-bold'>"+ reperti + '</span>';
   }
   if (el == 'contenitore') {
-    let el = v.piano == -1 ? 'scaffale' : 'vetrina';
-    let incipit = v.piano == -1 ? 'Nello scaffale selezionato' : 'Nella vetrina selezionata';
+    let el = pianoInt == -1 ? 'scaffale' : 'vetrina';
+    let incipit = pianoInt == -1 ? 'Nello scaffale selezionato' : 'Nella vetrina selezionata';
     title += ', sala '+info.sala+', '+el+' '+info.contenitore;
     text = incipit + " sono presenti <span class='font-weight-bold'>"+ reperti + '</span>';
   }
   $("#resTitle").html(title);
   $("#resSubTitle").html(text)
-  setTimeout(loadGallery(),500)
-
 }
 
 
 
 function loadGallery(){
   let currentDataset = schede.slice(pagenumber * perpage, (pagenumber * perpage) + perpage);
+  console.log(currentDataset);
   if (currentDataset.length > 0){
     currentDataset.forEach(function(item){
       let div = $("<div/>",{class:'item bg-white shadow', title:'visualizza scheda'})
@@ -172,7 +173,6 @@ function loadGallery(){
       .css({
         "width":itemMeasure
         , "height":itemMeasure
-        // , "background-image": "url(img/icone/ogtd/"+item.classe_id+".png)"
         , "background-image": "url("+fotoPath+item.file+")"
       })
       .on('click', function(){window.location.href = 'schedaView.php?get='+item.id})
@@ -184,6 +184,7 @@ function loadGallery(){
     });
   }
 }
+
 window.addEventListener('scroll',()=>{
   if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight){
     pagenumber++;
