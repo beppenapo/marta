@@ -1,4 +1,5 @@
-const BASE = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + "/marta/";
+const SERVER = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+const BASE = SERVER + "/marta/";
 document.head.innerHTML = document.head.innerHTML + "<base href='" +  BASE + "' />";
 
 const TOTRA = 20000;
@@ -19,6 +20,8 @@ let marker = {};
 let map;
 
 const BGIMG = 34;
+
+console.log(BASE);
 
 const apiFoto = 'http://91.121.82.80/marta/file/';
 let fotoFolder;

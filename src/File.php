@@ -7,7 +7,9 @@ class File extends Scheda{
   public $dirLarge = "../file/foto/large/";
   public $dirMedium = "../file/foto/medium/";
   public $dirSmall = "../file/foto/small/";
-  function __construct(){}
+  function __construct(){
+    
+  }
   public function uploadImage($dati, $file){
     try {
       if (!isset($file["file"])) { throw new \Exception("Non hai caricato nessun tipo di file", 1);}
@@ -64,7 +66,7 @@ class File extends Scheda{
   }
   private function modifyImage($img,$dim){
     try {
-      $image = new \Imagick(realpath($img));
+      $image = new Imagick(realpath($img));
       $w = $image->getImageWidth();
       $h = $image->getImageHeight();
       if ($w > $h) {
