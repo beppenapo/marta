@@ -124,14 +124,14 @@ function gallery(){
       .appendTo(div);
 
       let itemBtn = $("<div/>",{class:'itemBtn'}).appendTo(div);
-      let btnLikeDiv = $("<div/>",{class:'btnDiv btnLike', title:'aggiungi alla tua gallery'}).attr({"data-toggle":'tooltip'}).appendTo(itemBtn);
-      let btnViewDiv = $("<div/>",{class:'btnDiv btnView', title:'visualizza scheda'}).attr({"data-toggle":'tooltip'}).appendTo(itemBtn);
-      $("<i/>",{class:'fa-solid fa-heart text-white'}).appendTo(btnLikeDiv)
-      $("<i/>",{class:'fa-solid fa-link text-white'}).appendTo(btnViewDiv)
-      btnLikeDiv.on('click', function(){
-        $(this).find('i').toggleClass('text-white text-danger');
-        $(this).tooltip('hide')
-      })
+      // let btnLikeDiv = $("<div/>",{class:'btnDiv btnLike', title:'aggiungi alla tua gallery'}).attr({"data-toggle":'tooltip'}).appendTo(itemBtn);
+      // $("<i/>",{class:'fa-solid fa-heart text-white'}).appendTo(btnLikeDiv)
+      // btnLikeDiv.on('click', function(){
+      //   $(this).find('i').toggleClass('text-white text-danger');
+      //   $(this).tooltip('hide')
+      // })
+      let btnViewDiv = $("<div/>",{class:'btnDiv btnView', title:'visualizza scheda'}).text('visualizza scheda').attr({"data-toggle":'tooltip'}).appendTo(itemBtn);
+      $("<i/>",{class:'fa-solid fa-link text-white'}).prependTo(btnViewDiv)
       btnViewDiv.on('click', function(){
         $(this).tooltip('hide')
         window.location.href = 'schedaView.php?get='+img.id

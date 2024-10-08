@@ -21,14 +21,13 @@ let map;
 
 const BGIMG = 34;
 
-console.log(BASE);
-
 const apiFoto = 'http://91.121.82.80/marta/file/';
 let fotoFolder;
 switch (true) {
-  case screen.width < 400 : fotoFolder = 'foto_small/';  break;
-  case screen.width < 800 : fotoFolder = 'foto_medium/';  break;
-  case screen.width >= 800 : fotoFolder = 'foto/';  break;
+  case screen.width <= 400 : fotoFolder = 'foto_small/';  break;
+  case screen.width > 400 : fotoFolder = 'foto_medium/';  break;
+  // case screen.width < 800 : fotoFolder = 'foto_medium/';  break;
+  // case screen.width >= 800 : fotoFolder = 'foto/';  break;
 }
 const fotoPath = apiFoto+fotoFolder;
 const fotoPathOrig = apiFoto+'foto/';

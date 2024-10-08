@@ -28,16 +28,17 @@ body > main {padding-top:60px !important;}
 
 .stat{
   position: relative;
-  height:100px;
+  height:125px;
   width: 95%;
   margin:10px auto;
-  background-position: 10px;
+  background-position: 10px 25px;
   background-repeat: no-repeat;
   background-size: 50px;
 }
+.stat > a {position: absolute; bottom: 0; width:100%;border-radius: 0 !important; -webkit-border-radius:0}
 .innerStat{
   position: absolute;
-  top: 20px;
+  top: 10px;
   right: 10px;
   width: 60%;
   text-align: center;
