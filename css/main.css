@@ -93,47 +93,6 @@ body>footer .logo > img{height:40px;}
 .mapPopUp{width:300px;}
 .mapPopUp img{width:45%; height: auto;display: inline-block;margin:5px;}
 
-/* #mainTitle{
-  color: #856404;
-  background-color: #fff3cd;
-  border:1px solid #ffeeba;
-  text-align: center;
-} */
-/*Extra small devices (portrait phones, less than 576px)
-No media query since this is the default in Bootstrap because it is "mobile first"
-*/
-/* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) {
-  .toast{width: 80vw;}
-}
-
-/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
-@media (min-width: 768px) {
-  header .logo{display:block;}
-  footer .logo{display:none;}
-  header .headerMenu{margin: 0;}
-  .ui-autocomplete { max-height: 300px; overflow-y: auto; overflow-x: hidden;}
-  .toast{width: 60vw;}
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-  /* body>main{padding-right:250px;} */
-  #toggleMenu{display: none;}
-  .ui-autocomplete { max-height: 400px; overflow-y: auto; overflow-x: hidden;}
-  .toast{width: 50vw;}
-  .headerMenu > ul > li > a {font-size: 14px;}
-}
-
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
-  /* body>main{padding-right:250px;} */
-  #toggleMenu{display: none;}
-  .ui-autocomplete { max-height: 500px; overflow-y: auto; overflow-x: hidden;}
-  .toast{width: 50vw;}
-  .headerMenu > ul > li > a {font-size: 15px;}
-}
-
 /* pantone progetto */
 .bg-marta,.btn-marta{background: rgb(198,156,85);}
 .btn-outline-marta{color: rgb(198,156,85); border-color:rgb(198,156,85);}
@@ -190,3 +149,37 @@ table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>td:first-child:before,
 table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>th:first-child:before {
   top: 15px;
 }
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .toast{width: 80vw;}
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+  header .logo{display:block;}
+  footer .logo{display:none;}
+  header .headerMenu{margin: 0;}
+  .ui-autocomplete { max-height: 300px; overflow-y: auto; overflow-x: hidden;}
+  .toast{width: 60vw;}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  /* body>main{padding-right:250px;} */
+  #toggleMenu{display: none;}
+  .ui-autocomplete { max-height: 400px; overflow-y: auto; overflow-x: hidden;}
+  .toast{width: 50vw;}
+  .headerMenu > ul > li > a {font-size: 14px;}
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  /* body>main{padding-right:250px;} */
+  #toggleMenu{display: none;}
+  .ui-autocomplete { max-height: 500px; overflow-y: auto; overflow-x: hidden;}
+  .toast{width: 50vw;}
+  .headerMenu > ul > li > a {font-size: 15px;}
+}
+

@@ -84,10 +84,11 @@ form h6{font-weight: bold;}
 }
 .btnDiv{
   display: inline-block;
-  width: 50%;
+  /* width: 50%; */
   margin: 0;
   padding: 5px;
   text-align: center;
+  color:#fff;
 }
 @media (min-width: 768px) {
   #mainTitle > div{

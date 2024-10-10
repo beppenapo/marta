@@ -759,7 +759,6 @@ class Scheda extends Conn{
     $where = '';
     $filter = [];
     if($dati && !empty($dati)){
-      // if(isset($dati['stato'])){array_push($filter, $dati['stato']['field']." = '".$dati['stato']['value']."'");}
       if(isset($dati['tipo'])){array_push($filter, "tsk = ".$dati['tipo']);}
       if(isset($dati['operatore'])){array_push($filter,' cmpn = '.$dati['operatore']);}
       if(isset($dati['catalogo'])){array_push($filter," nctn::text ilike '%".$dati['catalogo']."%'");}
@@ -810,8 +809,16 @@ class Scheda extends Conn{
   public function search(array $dati){
     $field = ["s.id","f.file", "g.classe", "g.ogtd"];
     $join = ["inner join file f on f.scheda = s.id", "inner join gallery g on g.id = s.id"];
-    $filter = ["f.tipo = 3"];
-    if (isset($dati['tsk'])) {
+    $tipo = $dati['tipo'] ?? 3;
+    $filter = ["f.tipo = ".$tipo];
+
+    if(isset($dati['ids']) && is_array($dati['ids'])){
+      array_push($filter, "s.id in (".implode(',',$dati['ids']).")");
+    }
+    if(isset($dati['principale'])){
+      array_push($filter, "f.foto_principale = true");
+    }
+    if(isset($dati['tsk'])) {
       array_push($filter, "s.tsk = ".$dati['tsk']);
       if ($dati['tsk']==1) {
         array_push($join, "inner join og_ra on og_ra.scheda = s.id");
@@ -862,9 +869,18 @@ class Scheda extends Conn{
       array_push($filter, "'{".join(',',$dati['tags'])."}' <@ tag.tags ");
     }
 
-    $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter);
-    return $this->simple($sql);
-    // return $sql;
+    
+    $limit='';
+    $offset='';
+    if(isset($dati['page']) && isset($dati['limit'])){    
+      $limit = " LIMIT " . $dati['limit'];
+      $offset = " OFFSET " . ($dati['page'] - 1) * $dati['limit'];
+    }
+
+    $sqlTotalItems = "select count(*) from scheda s ". join(' ', $join)." where ". join(' and ', $filter).";";
+    $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter) . $limit . $offset . ";";
+    file_put_contents('/var/www/html/marta/workfile/db/query.log', $sqlTotalItems . PHP_EOL, FILE_APPEND);
+    return ["totalItems" => $this->simple($sqlTotalItems)[0], "items" => $this->simple($sql)];
   }
 }
 ?>

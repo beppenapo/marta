@@ -2,6 +2,7 @@ const SERVER = window.location.protocol + '//' + window.location.hostname + (win
 const BASE = SERVER + "/marta/";
 document.head.innerHTML = document.head.innerHTML + "<base href='" +  BASE + "' />";
 
+const LOADING = document.getElementById("loadingDiv");
 const TOTRA = 20000;
 const TOTNU = 20000;
 const TOTFOTO = 80000;
@@ -26,14 +27,9 @@ let fotoFolder;
 switch (true) {
   case screen.width <= 400 : fotoFolder = 'foto_small/';  break;
   case screen.width > 400 : fotoFolder = 'foto_medium/';  break;
-  // case screen.width < 800 : fotoFolder = 'foto_medium/';  break;
-  // case screen.width >= 800 : fotoFolder = 'foto/';  break;
 }
 const fotoPath = apiFoto+fotoFolder;
 const fotoPathOrig = apiFoto+'foto/';
-$(document)
-.ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
-.ajaxStop(function(){ $("#loadingDiv").addClass('invisible');})
 
 //NOTE: creazione meta base
 
@@ -924,3 +920,6 @@ function tagWrap(callback){
   $.ajax({url:'api/scheda.php',type:'POST',dataType:'json',data:{trigger:'tagList'}})
   .done(callback)
 }
+
+function showLoading() {LOADING.classList.remove("invisible");}
+function hideLoading() {LOADING.classList.add("invisible");}

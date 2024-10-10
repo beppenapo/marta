@@ -47,51 +47,11 @@ class Conn {
     $pdo = $this->pdo();
     $exec = $pdo->prepare($sql);
     $res = $exec->execute($dati);
-    if (!$res) { throw new \Exception("Error Processing Request: ".$execute, 1); }
+    if (!$res) { throw new \Exception("Error Processing Request: ".$exec, 1); }
     $returning = $exec->fetchAll();
     return array('res' => true, 'id'=>$returning[0][0] );
   }
 
-  // public function simple($sql){
-  //   try {
-  //     $pdo = $this->pdo();
-  //     $exec = $pdo->prepare($sql);
-  //     $exec->execute();
-  //     return $exec->fetchAll(PDO::FETCH_ASSOC);
-  //   } catch (\PDOException $e) {
-  //     return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-  //   } catch (\Exception $e) {
-  //     return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-  //   }
-  // }
-  //
-  // public function prepared(string $sql, array $dati){
-  //   try {
-  //     $pdo = $this->pdo();
-  //     $exec = $pdo->prepare($sql);
-  //     $exec->execute($dati);
-  //     return true;
-  //   } catch (\PDOException $e) {
-  //     return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-  //   } catch (\Exception $e) {
-  //     return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-  //   }
-  //   // return [$sql, $dati];
-  // }
-  //
-  // public function returning(string $sql, array $dati){
-  //   try {
-  //     $pdo = $this->pdo();
-  //     $exec = $pdo->prepare($sql);
-  //     $exec->execute($dati);
-  //     $returning = $exec->fetchAll();
-  //     return array('res' => true, 'field'=>$returning[0][0] );
-  //   } catch (\PDOException $e) {
-  //     return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-  //   } catch (\Exception $e) {
-  //     return array("res"=>false, "msg"=>'La query riporta il seguente errore:<br/>'.$e->getMessage());
-  //   }
-  // }
   public function buildInsert(string $tab, array $dati){
     $field = [];
     $value = [];
