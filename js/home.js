@@ -1,6 +1,4 @@
-$(document)
-.ajaxStart(function(){console.log('...loading');})
-.ajaxStop(function(){$("#loadingDiv").remove();});
+$(document).ajaxStart(showLoading).ajaxStop(hideLoading);
 createCarousel()
 statHome();
 initMiniGallery();
@@ -180,7 +178,6 @@ function mapInit(){
       return container;
     }
   })
-
   map.addControl(new resetMap());
 }
 
@@ -188,6 +185,15 @@ tagWrap(tagHome)
 function tagHome(data){
   let tagContainer = $("#tagWrap > .card-body");
   data.forEach((item, i) => {
-    $("<a/>",{href:'#', class:'btn btn-outline-marta m-1'}).text(item.tag+' '+item.count).appendTo(tagContainer);
+    $("<a/>",{href:'#', class:'btn btn-outline-marta m-1'})
+      .text(item.tag+' '+item.count)
+      .appendTo(tagContainer)
+      .on('click', (el)=>{
+        el.preventDefault();
+        localStorage.removeItem('filters');
+        setFilters('principale', 'true', 'update');
+        setFilters('tags',item.tag,'update')
+        window.location.href = 'sfoglia.php'
+      })
   });
 }

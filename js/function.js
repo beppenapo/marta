@@ -903,7 +903,6 @@ function createCarousel(){
   let bgArr = [];
   const content = $(".carousel-inner");
   for (let i=1, j=BGIMG; i<j; i++) {
-    // let i = Math.random()*(BGIMG-1) + 1;
     let i = Math.random()*BGIMG;
     i = Math.ceil(i);
     if (!bgArr.includes(i)) {bgArr.push(i);}
@@ -916,10 +915,97 @@ function createCarousel(){
   $('#carousel').carousel({wrap:true})
 }
 
-function tagWrap(callback){
-  $.ajax({url:'api/scheda.php',type:'POST',dataType:'json',data:{trigger:'tagList'}})
-  .done(callback)
+function tagWrap(callback) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: 'api/scheda.php',
+      type:'POST',
+      dataType:'json',
+      data:{trigger:'tagList'},
+      success: function(data) {
+        callback(data);
+        resolve(data);
+      },
+      error: function(error) {
+        reject(error);
+      }
+    });
+  });
 }
 
 function showLoading() {LOADING.classList.remove("invisible");}
 function hideLoading() {LOADING.classList.add("invisible");}
+
+function checkFilters() {
+  let filters = localStorage.getItem("filters");
+  return filters ? Object.keys(JSON.parse(filters)).length : 0;
+}
+function getFilters() {
+  let filters = localStorage.getItem("filters");
+  return filters ? JSON.parse(filters) : {};
+}
+
+function setFilters(key, value, action) {
+  let filters = getFilters();
+  if (key === 'tags' && !Array.isArray(filters['tags'])) {
+    filters['tags'] = [];
+  }
+
+  if (action === 'update') {
+    if (key === 'tags') {
+      if (!filters['tags'].includes(value)) {
+        filters['tags'].push(value);
+      }
+    } else {
+      filters[key] = value;
+    }
+  } else if (action === 'remove') {
+    if(key == 'tags'){
+      const index = filters['tags'].indexOf(value);
+      if (index > -1) { 
+        filters['tags'].splice(index, 1);
+        if (filters['tags'].length === 0) { 
+          delete filters['tags'];
+        }
+      }
+    } else {
+      delete filters[key];
+    }
+  }
+  localStorage.setItem("filters", JSON.stringify(filters));
+}
+async function setActiveFilters() {
+  let filters = getFilters();
+  if (filters && Object.keys(filters).length > 0) {
+    const listRequests = [
+      {campo: 'tsk', val: 1},
+      {campo: 'tsk', val: 2},
+      {campo: 'dtzgi'},
+      {campo: 'dtzgf'}
+    ];
+    for (const params of listRequests) { await getList(params); }
+    await tagWrap(tagCerca)
+    await gallery(filters)
+
+    Object.keys(filters).forEach(key => {
+      let value = filters[key];
+      if ($(`select[data-filter="${key}"]`).length) {
+        $(`select[data-filter="${key}"]`).val(value).prop('selected', true);
+      }
+      if ($(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).length) {
+        $(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).val(value);
+      }
+      if (Array.isArray(value)) {
+        value.forEach(val => {
+          $(`input[type="checkbox"][data-filter="${key}"][value="${val}"]`).prop('checked', true);
+          $(`label:has(input[type="checkbox"][data-filter="${key}"][value="${val}"])`).addClass('active');
+        });
+      }
+    });
+    $("[name=clean]").removeClass('invisible');
+  }else{
+    await tagWrap(tagCerca)
+    await getList({campo: 'dtzgi'})
+    await getList({campo: 'dtzgf'})
+  }
+}

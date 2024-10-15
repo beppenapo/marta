@@ -2,11 +2,22 @@
 require '../vendor/autoload.php';
 use \Marta\Scheda;
 $obj = new Scheda();
-$funzione = $_POST['trigger'];
+
+$funzione = $_POST['trigger'] ?? null;
 unset($_POST['trigger']);
-if(isset($funzione) && function_exists($funzione)) {
-  $trigger = $funzione($obj);
-  echo $trigger;
+if ($funzione && function_exists($funzione)) {
+  if($funzione == 'search' && isset($_POST['page'])){
+    $_POST['dati']['page'] = $_POST['page'];
+    $_POST['dati']['limit'] = $_POST['limit'];
+  }
+  try {
+      $trigger = $funzione($obj);
+      echo $trigger;
+  } catch (Exception $e) {
+      echo json_encode(['error' => $e->getMessage()]);
+  }
+} else {
+  echo json_encode(['error' => 'Funzione non valida']);
 }
 function addScheda($obj){return json_encode($obj->addScheda($_POST['dati']));}
 function editScheda($obj){return json_encode($obj->editScheda($_POST['dati']));}

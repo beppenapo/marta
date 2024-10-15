@@ -1,10 +1,8 @@
 <?php
 require '../vendor/autoload.php';
 
-// $data = json_decode(file_get_contents('php://input'), true);
-
 if (!isset($_POST['filter'])) {
-  http_response_code(400); // Bad request
+  http_response_code(400);
   echo json_encode(["error" => "Nessun item selezionato"]);
   exit;
 }

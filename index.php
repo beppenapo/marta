@@ -11,7 +11,10 @@ require("api/php/home.php");
     <link rel="stylesheet" href="css/home.css">
   </head>
   <body>
-    <?php require('assets/headerMenu.php'); ?>
+    <?php
+      require('assets/loading.html');  
+      require('assets/headerMenu.php'); 
+    ?>
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <main class="bg-light">
       <div id="carousel" class="carousel slide carousel-fade mb-3" data-ride="carousel">

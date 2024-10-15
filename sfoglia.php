@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="css/sfoglia.css">
   </head>
   <body>
-    <?php require('assets/headerMenu.php'); ?>
+    <?php
+      require('assets/loading.html'); 
+      require('assets/headerMenu.php'); 
+    ?>
     <?php if(isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <main class="bg-light">
       <div id="mainTitle" class="my-2 py-2 bg-marta text-white">
@@ -187,7 +190,7 @@
             <div class="form-row">
               <div class="col-auto">
                 <button type="submit" class="btn btn-sm btn-marta" name="search"><i class="fa-solid fa-magnifying-glass"></i> avvia ricerca</button>
-                <button type="button" class="btn btn-sm btn-marta" name="clean"><i class="fa-solid fa-rotate"></i> pulisci filtri</button>
+                <button type="button" class="btn btn-sm btn-marta invisible" name="clean"><i class="fa-solid fa-rotate"></i> pulisci filtri</button>
               </div>
               <div class="col-auto">
                 <div id="searchMsg">
@@ -197,14 +200,8 @@
           </form>
         </div>
       </div>
-      <!-- <div class="container-fluid">
-        <div class="row">
-          <div class="col">
-            <div id="findWrap"></div>
-          </div>
-        </div>
-      </div> -->
-      <div id="findWrap"></div>
+      <div id="totalItems"><h2></h2></div>
+      <div id="wrapItems"></div>
     </main>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>
