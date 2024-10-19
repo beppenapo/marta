@@ -39,7 +39,7 @@ $("select").on('change', function(){
     $("#classe").prop('disabled',disabled);
   }
   let dati = {campo: campo, val:val}
-  if (val) { getList(dati)}
+  if (val) { getList2(dati)}
 })
 
 $("body").on('change', '#dtzgi', function(){
@@ -60,9 +60,15 @@ $("body").on('change', '#dtzgf', function(){
 })
 
 $("[name=clean]").on('click', function(){
-  $(this).addClass('invisible');
+  localStorage.removeItem("filters");
+  totalPagesKnown = false;
+  totalPages = 0;
+  currentPage = 1;
+  itemsLoaded = 0;
   WRAP.innerHTML='';
+  $(this).addClass('invisible');
   $("#totalItems > h2").text('');
+  $("#tagWrap label, #modelloLabel").removeClass('active')
   $("[data-filter]").each(function(){
     if ($(this).is("input[type=number], input[type=search], select")) {
       $(this).val("");
@@ -70,14 +76,11 @@ $("[name=clean]").on('click', function(){
       $(this).prop("checked", false);
     }
   });
-  $("#tagWrap label").removeClass('active')
-  localStorage.removeItem("filters");
 });
 
 $("[name=search]").on('click', function(e){
   e.preventDefault();
   localStorage.removeItem('filters');
-  $("[name=clean]").removeClass('invisible');
   $("#searchMsg").removeClass('alert alert-danger alert-success').text('');
   if ($("#dtsi").val() && $("#dtsf").val() && parseInt($("#dtsf").val()) < parseInt($("#dtsi").val())) {
     $("#searchMsg").addClass('alert alert-danger').text("L'anno finale non può essere minore di quello iniziale");
@@ -101,6 +104,8 @@ $("[name=search]").on('click', function(e){
   }
   WRAP.innerHTML=''
   currentPage = 1;
+  itemsLoaded = 0;
+  $("[name=clean]").removeClass('invisible');
   setFilters('principale', 'true', 'update');
   let filters = getFilters();
   gallery(filters);
@@ -163,20 +168,18 @@ const divInitialOffset = totalItems.offsetTop;
 window.addEventListener('scroll', () => {  
   // infinite scroll
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 60) {
-    if (!totalPagesKnown || currentPage < totalPages) {
+    if (totalPagesKnown && currentPage < totalPages) {
       let filters = getFilters();
       gallery(filters)
     }
   }
 
   // Controllo per il comportamento del div fisso
-  
   if (window.scrollY >= divInitialOffset - 60) {
     totalItems.classList.add('fixed');
   } else {
     totalItems.classList.remove('fixed');
   }
-  console.log("scrollY:", window.scrollY, "divInitialOffset:", divInitialOffset);
 });
 
 
@@ -191,7 +194,7 @@ function tagCerca(data){
 
 
 
-function getList(dati){
+function getList2(dati){
   return new Promise((resolve, reject) => {
     $.ajax({
       url:'api/getList.php',

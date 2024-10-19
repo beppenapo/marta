@@ -32,7 +32,6 @@ const fotoPath = apiFoto+fotoFolder;
 const fotoPathOrig = apiFoto+'foto/';
 
 //NOTE: creazione meta base
-
 ///////////////////////////
 let log = $("body>header").data('log');
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
@@ -976,14 +975,17 @@ function setFilters(key, value, action) {
 }
 async function setActiveFilters() {
   let filters = getFilters();
-  if (filters && Object.keys(filters).length > 0) {
+  if (filters && Object.keys(filters).length > 0) {    
     const listRequests = [
-      {campo: 'tsk', val: 1},
-      {campo: 'tsk', val: 2},
+      // {campo: 'tsk', val: 1},
+      // {campo: 'tsk', val: 2},
       {campo: 'dtzgi'},
       {campo: 'dtzgf'}
     ];
-    for (const params of listRequests) { await getList(params); }
+    Object.keys(filters).forEach(key => { 
+      if(key == 'tsk'){listRequests.push({campo: 'tsk', val: filters[key]})} 
+    })
+    for (const params of listRequests) { await getList2(params); }
     await tagWrap(tagCerca)
     await gallery(filters)
 
@@ -995,6 +997,10 @@ async function setActiveFilters() {
       if ($(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).length) {
         $(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).val(value);
       }
+      if(key == 'modello'){
+        $("#modelloLabel").addClass('active')
+        $("#modello").prop('checked', true)
+      }
       if (Array.isArray(value)) {
         value.forEach(val => {
           $(`input[type="checkbox"][data-filter="${key}"][value="${val}"]`).prop('checked', true);
@@ -1005,7 +1011,7 @@ async function setActiveFilters() {
     $("[name=clean]").removeClass('invisible');
   }else{
     await tagWrap(tagCerca)
-    await getList({campo: 'dtzgi'})
-    await getList({campo: 'dtzgf'})
+    await getList2({campo: 'dtzgi'})
+    await getList2({campo: 'dtzgf'})
   }
 }

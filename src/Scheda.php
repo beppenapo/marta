@@ -807,11 +807,24 @@ class Scheda extends Conn{
   }
 
   public function search(array $dati){
-    $field = ["s.id","f.file", "g.ogtd"];
+    $field = ["s.id","f.file", "g.classe", "g.ogtd"];
     $join = ["inner join file f on f.scheda = s.id", "inner join gallery g on g.id = s.id"];
     $tipo = $dati['tipo'] ?? 3;
     $filter = ["f.tipo = ".$tipo];
 
+    if(isset($dati['nctn'])){
+      array_push($join, "inner join nctn_scheda nctn on nctn.scheda = s.id");
+      array_push($filter, "nctn.nctn = ".$dati['nctn']);
+    }
+    if(isset($dati['inventario'])){
+      array_push($join, "inner join inventario on inventario.scheda = s.id");
+      array_push($filter, "inventario.inventario = ".$dati['inventario']);
+    }
+    if(isset($dati['modello'])){
+      $schede = $this->simple("select scheda from file where tipo = 1;");
+      $schede = array_column($schede, 'scheda');
+      array_push($filter, "s.id in (".implode(',',$schede).")");
+    }
     if(isset($dati['ids']) && is_array($dati['ids'])){
       array_push($filter, "s.id in (".implode(',',$dati['ids']).")");
     }
@@ -821,7 +834,6 @@ class Scheda extends Conn{
     if(isset($dati['tsk'])) {
       array_push($filter, "s.tsk = ".$dati['tsk']);
       if ($dati['tsk']==1) {
-        array_push($field, "cls.value classe");
         array_push($join, "inner join og_ra on og_ra.scheda = s.id");
         array_push($join, "inner join liste.ra_cls_l3 cls on og_ra.l3 = cls.id");
         array_push($join, "inner join liste.ra_cls_l4 ogtd on og_ra.l4 = ogtd.id");
@@ -829,7 +841,6 @@ class Scheda extends Conn{
         if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
       }
       if ($dati['tsk']==2) {
-        array_push($field, "g.classe");
         array_push($join, "inner join og_nu ON og_nu.scheda = s.id JOIN liste.ogtd ON og_nu.ogtd = ogtd.id LEFT JOIN liste.ogto ON og_nu.ogto = ogto.id");
         if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
       }
@@ -881,7 +892,7 @@ class Scheda extends Conn{
 
     $sqlTotalItems = "select count(*) from scheda s ". join(' ', $join)." where ". join(' and ', $filter).";";
     $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter) . $limit . $offset . ";";
-    file_put_contents('/var/www/html/marta/workfile/db/query.log', $sqlTotalItems . PHP_EOL, FILE_APPEND);
+    // file_put_contents('/var/www/html/marta/workfile/db/query.log', $sqlTotalItems . PHP_EOL, FILE_APPEND);
     return ["totalItems" => $this->simple($sqlTotalItems)[0], "items" => $this->simple($sql), "sql" => $sql, "dati"=>$dati];
     // return $sql;
   }
