@@ -1,18 +1,18 @@
-let svgOpt = {
+const svgOpt = {
   // viewportSelector: '.svg-pan-zoom_viewport'
   // , panEnabled: true
   controlIconsEnabled: true
   // , zoomEnabled: true
   // , dblClickZoomEnabled: true
   // , mouseWheelZoomEnabled: true
-  // , preventMouseEventsDefault: true
+  , preventMouseEventsDefault: true
   // , zoomScaleSensitivity: 0.2
   // , minZoom: 0.5
   // , maxZoom: 10
   , fit: true
   // , contain: false
-  // , center: true
-  // , refreshRate: 'auto'
+  , center: true
+  , refreshRate: 'auto'
   // , beforeZoom: function(){}
   // , onZoom: function(){}
   // , beforePan: function(){}
@@ -21,12 +21,13 @@ let svgOpt = {
   // , customEventsHandler: {}
   // , eventsListenerElement: null
 }
-let wrap = $("#findWrap");
-let wrapWidth = wrap.width();
-let itemMeasure = parseInt((wrapWidth / 5)-10);
-let schede=[];
+const wrap = $("#findWrap");
+const wrapWidth = wrap.width();
+const itemMeasure = parseInt((wrapWidth / 5)-10);
+const perpage = 20;
 let pagenumber = 0;
-let perpage = 20;
+let schede=[];
+
 $(document).ready(function() {
   loadSvg('img/piante/piano1.svg');
   getSchedeByLocation('piano', {piano:1})

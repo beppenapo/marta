@@ -106,8 +106,9 @@ class User{
   protected function checkPwd(array $dati){
     $sql = "SELECT id FROM utenti where id = ".$dati['id']." and pwd = crypt('".$dati['pwd']."',pwd) ;";
     $out = $this->db->simple($sql);
-    $x = count((array)$out[0]);
-    if ($x == 0) { throw new \Exception("La password inserita non è corretta, riprova o richiedi una nuova password", 0); }
+    if (empty($out) || !is_array($out)) {
+      throw new \Exception("La password inserita non è corretta, riprova o richiedi una nuova password", 0);
+    }
     return true;
   }
 

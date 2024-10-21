@@ -2,7 +2,7 @@
 html, body{ position:relative; font-family: 'GothamRounded-Book', sans-serif;}
 ul {list-style-type: none; margin: 0; padding: 0; overflow: hidden;}
 body>header{position:fixed; left:0; top:0; height:60px; background: #fff; z-index:1000;}
-body>header, body > footer{width:100%; display: flex; flex-direction: row; align-items:center; justify-content: space-between;}
+body>header, body > footer{width:100%; display: flex; flex-direction: row; align-items:center; justify-content: flex-end;}
 body>main{position:relative; padding: 80px 0 20px; min-height:calc(100vh - 60px); z-index:1;}
 body>nav#mainMenu{
   position:fixed;
@@ -56,7 +56,7 @@ body>footer{position: relative;background:#343a40; color:#fff; min-height: 60px;
 .headerMenu > ul > li > a:hover {background: rgb(198,156,85); color:#fff;}
 header .logo{ display:none; padding: 10px;}
 header .logo>img{ height:40px;}
-header .headerMenu{margin: 0 auto;}
+header .headerMenu{margin: 0;}
 body>footer .copyright{padding:0 10px;font-size:.7rem;}
 body>footer .logo > img{height:40px;}
 
@@ -161,6 +161,7 @@ table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>th:first-child:before {
   header .logo{display:block;}
   footer .logo{display:none;}
   header .headerMenu{margin: 0;}
+  body>header, body > footer{justify-content: space-between;}
   .ui-autocomplete { max-height: 300px; overflow-y: auto; overflow-x: hidden;}
   .toast{width: 60vw;}
 }
@@ -172,6 +173,7 @@ table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>th:first-child:before {
   .ui-autocomplete { max-height: 400px; overflow-y: auto; overflow-x: hidden;}
   .toast{width: 50vw;}
   .headerMenu > ul > li > a {font-size: 14px;}
+  body>header, body > footer{justify-content: space-between;}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -181,5 +183,6 @@ table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>th:first-child:before {
   .ui-autocomplete { max-height: 500px; overflow-y: auto; overflow-x: hidden;}
   .toast{width: 50vw;}
   .headerMenu > ul > li > a {font-size: 15px;}
+  body>header, body > footer{justify-content: space-between;}
 }
 

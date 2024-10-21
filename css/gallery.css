@@ -28,9 +28,9 @@
   justify-content: flex-start;
   align-items: flex-start;
   z-index:1;
+
   .card{
-    width:calc(100% / 2 - 10px);
-    margin:0 5px 5px;
+    width:calc(100% / 2);
     text-align: center;
 
     .img{
@@ -45,26 +45,31 @@
       padding:10px;
       height:100px;
     }
-    .card-footer{background-color: rgb(198,156,85);}
+    .card-footer{
+      background-color: rgb(198,156,85);
+      padding:0;
+
+      a{width:100%;}
+    }
   }
 }
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-  #wrapItems .card{ width:calc(100% / 3 - 10px); }
+  #wrapItems .card{ width:calc(100% / 3); }
 }
 
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {
-  #wrapItems .card{ width:calc(100% / 3 - 10px); }
+  #wrapItems .card{ width:calc(100% / 3); }
 }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  #wrapItems .card{ width:calc(100% / 4 - 10px); }
+  #wrapItems .card{ width:calc(100% / 4); }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  #wrapItems .card{ width:calc(100% / 6 - 10px); }
+  #wrapItems .card{ width:calc(100% / 6); }
 }

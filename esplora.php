@@ -23,9 +23,11 @@
             <div class="form-group">
               <label class="d-block">Seleziona il piano da visualizzare</label>
               <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <?php if(isset($_SESSION['id'])){ ?>
                 <label class="btn btn-outline-secondary">
                   <input type="radio" name="piani" id="deposito" value="-1"> <span>deposito</span>
                 </label>
+                <?php } ?>
                 <label class="btn btn-outline-secondary">
                   <input type="radio" name="piani" id="terra" value="0"> <span>piano terra</span>
                 </label>

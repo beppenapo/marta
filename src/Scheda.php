@@ -894,7 +894,6 @@ class Scheda extends Conn{
     $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter) . $limit . $offset . ";";
     // file_put_contents('/var/www/html/marta/workfile/db/query.log', $sqlTotalItems . PHP_EOL, FILE_APPEND);
     return ["totalItems" => $this->simple($sqlTotalItems)[0], "items" => $this->simple($sql), "sql" => $sql, "dati"=>$dati];
-    // return $sql;
   }
 }
 ?>
