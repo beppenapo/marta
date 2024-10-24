@@ -807,11 +807,30 @@ class Scheda extends Conn{
   }
 
   public function search(array $dati){
-    $field = ["s.id","f.file", "g.classe", "g.ogtd"];
-    $join = ["inner join file f on f.scheda = s.id", "inner join gallery g on g.id = s.id"];
+    $field = [
+      "s.id",
+      "f.file",
+      "g.classe",
+      "g.ogtd",
+      "lc.piano",
+      "lc.sala",
+      "sale.descrizione nome_sala",
+      "lc.contenitore"
+    ];
+    $join = [
+      "inner join lc on lc.scheda = s.id",
+      "inner join liste.sale sale on lc.sala = sale.id",
+      "inner join file f on f.scheda = s.id",
+      "inner join gallery g on g.id = s.id"
+    ];
     $tipo = $dati['tipo'] ?? 3;
     $filter = ["f.tipo = ".$tipo];
-
+    if(isset($dati['piano'])){
+      array_push($filter, "lc.piano = ".$dati['piano']);
+    }
+    if(isset($dati['sala'])){
+      array_push($filter, "lc.sala = ".$dati['sala']);
+    }
     if(isset($dati['nctn'])){
       array_push($join, "inner join nctn_scheda nctn on nctn.scheda = s.id");
       array_push($filter, "nctn.nctn = ".$dati['nctn']);

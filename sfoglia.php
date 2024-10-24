@@ -52,6 +52,14 @@
               </div>
             </div>
           </div>
+          <?php if(!isset($_SESSION['id'])){?>
+            <div class="alert alert-danger p-3 text-center">
+              <p class="mb-0"><strong>I reperti presenti nei depositi non verranno mostrati nei risultati delle ricerche.</strong></p>
+              <p>Per poter effettuare ricerche anche nei depositi è necessario possedere un account da ricercatore. Per ottenere un account da ricercatore, scrivere ad una delle seguenti mail motivando la richiesta:</p>
+              <a href="mailto:sara.airo@cultura.gov.it" class="alert-link">sara.airo@cultura.gov.it</a><br>
+              <a href="mailto:antonio.donnici@cultura.gov.it" class="alert-link">antonio.donnici@cultura.gov.it</a> 
+            </div>
+          <?php } ?>
           <form>
             <div class="form-row">
               <div class="col-md-8 mb-3">

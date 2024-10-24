@@ -54,6 +54,20 @@
   }
 }
 
+#totalItems{
+  position: relative;
+  width:100%;
+  padding:20px 0;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+  z-index: 200;
+  text-align: center;
+}
+.fixed {
+  position: fixed !important;
+  top: 60px;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   #wrapItems .card{ width:calc(100% / 3); }

@@ -1,10 +1,10 @@
 $(document).ajaxStart(showLoading).ajaxStop(hideLoading);
-$(document).ready(function() {setActiveFilters();});
+const localStorageItem = 'sfoglia';
+$(document).ready(function() {setActiveFilters(localStorageItem);});
 
 const ITEMS_PER_PAGE = 24;
 const FOTO = "http://91.121.82.80/marta/file/foto/";
 const WRAP = document.getElementById('wrapItems');
-const cardTemplate = document.createElement('template');
 
 let maxCrono = [];
 let totalPagesKnown = false;
@@ -13,23 +13,6 @@ let currentPage = 1;
 let itemsLoaded = 0;
 
 let isLoading = false;
-
-cardTemplate.innerHTML = `
-  <div class="card">
-    <div class="card-body p-0">
-      <div class="img"></div>
-      <div class="text">
-        <h6 class="card-title"></h6>
-        <p class="card-text"></p>
-      </div>
-    </div>
-    <div class="card-footer">
-      <a href="" class="btn btn-sm btn-marta text-white card-url">
-        <i class="fa-solid fa-link"></i> scheda
-      </a>
-    </div>
-  </div>
-`;
 
 $("select").on('change', function(){
   let campo = $(this).data('filter')
@@ -60,7 +43,7 @@ $("body").on('change', '#dtzgf', function(){
 })
 
 $("[name=clean]").on('click', function(){
-  localStorage.removeItem("filters");
+  sessionStorage.removeItem(localStorageItem);
   totalPagesKnown = false;
   totalPages = 0;
   currentPage = 1;
@@ -80,7 +63,7 @@ $("[name=clean]").on('click', function(){
 
 $("[name=search]").on('click', function(e){
   e.preventDefault();
-  localStorage.removeItem('filters');
+  sessionStorage.removeItem(localStorageItem);
   $("#searchMsg").removeClass('alert alert-danger alert-success').text('');
   if ($("#dtsi").val() && $("#dtsf").val() && parseInt($("#dtsf").val()) < parseInt($("#dtsi").val())) {
     $("#searchMsg").addClass('alert alert-danger').text("L'anno finale non può essere minore di quello iniziale");
@@ -94,11 +77,11 @@ $("[name=search]").on('click', function(e){
     let key = $(this).data('filter');
     if ($(this).is("input[type=number], input[type=search], select, :checkbox:checked")) {
       if (!$(this).is(':disabled') && $(this).val()) {
-        setFilters(key,$(this).val(),'update')
+        setFilters(localStorageItem,key,$(this).val(),'update')
       }
     }
   })
-  if(checkFilters() == 0){
+  if(checkFilters(localStorageItem) == 0){
     $("#searchMsg").addClass('alert alert-danger').text('devi impostare almeno un filtro di ricerca!');
     return false;
   }
@@ -106,70 +89,18 @@ $("[name=search]").on('click', function(e){
   currentPage = 1;
   itemsLoaded = 0;
   $("[name=clean]").removeClass('invisible');
-  setFilters('principale', 'true', 'update');
-  let filters = getFilters();
+  setFilters(localStorageItem, 'principale', 'true', 'update');
+  let filters = getFilters(localStorageItem);
   gallery(filters);
 })
 
-function search(filters){
-  return new Promise((resolve,reject) => {
-    const data = {
-      trigger: 'search',
-      dati:filters,
-      page: currentPage,
-      limit: ITEMS_PER_PAGE
-    }
-    $.ajax({
-      url: 'api/scheda.php',
-      type: 'POST', 
-      dataType: 'json', 
-      data: data,
-      success: function(response) {
-        if (response.error){reject(response.error);}else{resolve(response);}
-      },
-      error: function(xhr, status, error) {
-        reject(`Errore AJAX: ${error}`);
-      }
-    })
-  })
-}
-
-async function gallery(filters){
-  if (isLoading) return;
-  isLoading = true;
-  try {
-    const json = await search(filters);
-    console.log(json);
-    totalPages = Math.ceil(json.totalItems.count / ITEMS_PER_PAGE + 1);
-    totalPagesKnown = true;
-    itemsLoaded += json.items.length;
-    let text = json.items == 0 ? 'nessun reperto corrispondente ai tuoi criteri di ricerca' : itemsLoaded + " reperti caricati su "+json.totalItems.count+ " reperti totali trovati";
-    $("#totalItems > h2").text(text);
-    json.items.forEach(item => {
-      const newCard = cardTemplate.content.cloneNode(true);
-      const cardImage = newCard.querySelector('.img');
-      const cardTitle = newCard.querySelector('.card-title');
-      const cardText = newCard.querySelector('.card-text');
-      const cardUrl = newCard.querySelector('.card-url');
-      cardImage.style.backgroundImage = 'url("'+FOTO+item.file+'")';
-      cardTitle.textContent = item.classe;
-      cardText.textContent = item.ogtd;
-      cardUrl.href = "schedaView.php?get="+item.id
-      WRAP.appendChild(newCard);
-    });
-    isLoading = false;
-    currentPage++;
-  } catch (error) {
-    console.error('Errore:', error);
-  }
-}
 const totalItems = document.getElementById('totalItems');
 const divInitialOffset = totalItems.offsetTop;
 window.addEventListener('scroll', () => {  
   // infinite scroll
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 60) {
     if (totalPagesKnown && currentPage < totalPages) {
-      let filters = getFilters();
+      let filters = getFilters(localStorageItem);
       gallery(filters)
     }
   }
@@ -224,4 +155,48 @@ function getList2(dati){
 
 function minMax(campo){
   console.log(campo);
+}
+
+
+async function setActiveFilters(item) {
+  let filters = getFilters(item);
+  if (filters && Object.keys(filters).length > 0) {    
+    const listRequests = [
+      // {campo: 'tsk', val: 1},
+      // {campo: 'tsk', val: 2},
+      {campo: 'dtzgi'},
+      {campo: 'dtzgf'}
+    ];
+    Object.keys(filters).forEach(key => { 
+      if(key == 'tsk'){listRequests.push({campo: 'tsk', val: filters[key]})} 
+    })
+    for (const params of listRequests) { await getList2(params); }
+    await tagWrap(tagCerca)
+    await gallery(filters)
+
+    Object.keys(filters).forEach(key => {
+      let value = filters[key];
+      if ($(`select[data-filter="${key}"]`).length) {
+        $(`select[data-filter="${key}"]`).val(value).prop('selected', true);
+      }
+      if ($(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).length) {
+        $(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).val(value);
+      }
+      if(key == 'modello'){
+        $("#modelloLabel").addClass('active')
+        $("#modello").prop('checked', true)
+      }
+      if (Array.isArray(value)) {
+        value.forEach(val => {
+          $(`input[type="checkbox"][data-filter="${key}"][value="${val}"]`).prop('checked', true);
+          $(`label:has(input[type="checkbox"][data-filter="${key}"][value="${val}"])`).addClass('active');
+        });
+      }
+    });
+    $("[name=clean]").removeClass('invisible');
+  }else{
+    await tagWrap(tagCerca)
+    await getList2({campo: 'dtzgi'})
+    await getList2({campo: 'dtzgf'})
+  }
 }

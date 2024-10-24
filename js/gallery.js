@@ -4,7 +4,6 @@ const ENDPOINT = "api/gallery.php";
 const ITEMS_PER_PAGE = 24;
 const FOTO = ITEM == 'stereo' ? "http://91.121.82.80/marta/file/stereo/" : "http://91.121.82.80/marta/file/foto/";
 const WRAP = document.getElementById('wrapItems');
-const cardTemplate = document.createElement('template');
 
 let totalPagesKnown = false;
 let totalPages = 0;
@@ -13,23 +12,6 @@ let currentPage = 1;
 let isLoading = false;
 
 WRAP.innerHTML=''
-cardTemplate.innerHTML = `
-  <div class="card">
-    <div class="card-body p-0">
-      <div class="img"></div>
-      <div class="text">
-        <h6 class="card-title"></h6>
-        <p class="card-text"></p>
-      </div>
-    </div>
-    <div class="card-footer">
-      <a href="" class="btn btn-sm btn-marta text-white card-url">
-        <i class="fa-solid fa-link"></i>
-        scheda
-      </a>
-    </div>
-  </div>
-`;
 
 getData()
 

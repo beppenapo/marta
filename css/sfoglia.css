@@ -27,20 +27,6 @@ form h6{font-weight: bold;}
 #searchTip p.tipBody{margin-bottom:10px;}
 #searchMsg{padding:0.2rem 1.25rem}
 
-#totalItems{
-  position: relative;
-  width:100%;
-  padding:20px 0;
-  background-color: #fff;
-  transition: all 0.3s ease-in-out;
-  z-index: 200;
-  text-align: center;
-}
-.fixed {
-  position: fixed !important;
-  top: 60px;
-}
-
 @media (min-width: 768px) {
   #mainTitle > div{
     width:60%;

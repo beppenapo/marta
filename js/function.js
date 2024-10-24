@@ -31,6 +31,24 @@ switch (true) {
 const fotoPath = apiFoto+fotoFolder;
 const fotoPathOrig = apiFoto+'foto/';
 
+const cardTemplate = document.createElement('template');
+cardTemplate.innerHTML = `
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="img"></div>
+      <div class="text">
+        <h6 class="card-title"></h6>
+        <p class="card-text"></p>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="" class="btn btn-sm btn-marta text-white card-url">
+        <i class="fa-solid fa-link"></i> scheda
+      </a>
+    </div>
+  </div>
+`;
+
 //NOTE: creazione meta base
 ///////////////////////////
 let log = $("body>header").data('log');
@@ -305,7 +323,7 @@ $("body").tooltip(toolTipOpt);
 
 $("[name=logOutBtn]").on('click', function(e){
   e.preventDefault();
-  localStorage.removeItem("sex");
+  sessionStorage.removeItem("sex");
   $.redirectPost('logout.php');
 })
 //NOTE: copyright footer
@@ -935,17 +953,17 @@ function tagWrap(callback) {
 function showLoading() {LOADING.classList.remove("invisible");}
 function hideLoading() {LOADING.classList.add("invisible");}
 
-function checkFilters() {
-  let filters = localStorage.getItem("filters");
+function checkFilters(item) {
+  let filters = sessionStorage.getItem(item);
   return filters ? Object.keys(JSON.parse(filters)).length : 0;
 }
-function getFilters() {
-  let filters = localStorage.getItem("filters");
+function getFilters(item) {
+  let filters = sessionStorage.getItem(item);
   return filters ? JSON.parse(filters) : {};
 }
 
-function setFilters(key, value, action) {
-  let filters = getFilters();
+function setFilters(item, key, value, action) {
+  let filters = getFilters(item);
   if (key === 'tags' && !Array.isArray(filters['tags'])) {
     filters['tags'] = [];
   }
@@ -971,47 +989,58 @@ function setFilters(key, value, action) {
       delete filters[key];
     }
   }
-  localStorage.setItem("filters", JSON.stringify(filters));
+  sessionStorage.setItem(item, JSON.stringify(filters));
 }
-async function setActiveFilters() {
-  let filters = getFilters();
-  if (filters && Object.keys(filters).length > 0) {    
-    const listRequests = [
-      // {campo: 'tsk', val: 1},
-      // {campo: 'tsk', val: 2},
-      {campo: 'dtzgi'},
-      {campo: 'dtzgf'}
-    ];
-    Object.keys(filters).forEach(key => { 
-      if(key == 'tsk'){listRequests.push({campo: 'tsk', val: filters[key]})} 
-    })
-    for (const params of listRequests) { await getList2(params); }
-    await tagWrap(tagCerca)
-    await gallery(filters)
 
-    Object.keys(filters).forEach(key => {
-      let value = filters[key];
-      if ($(`select[data-filter="${key}"]`).length) {
-        $(`select[data-filter="${key}"]`).val(value).prop('selected', true);
-      }
-      if ($(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).length) {
-        $(`input[type="text"][data-filter="${key}"], input[type="search"][data-filter="${key}"], input[type="number"][data-filter="${key}"]`).val(value);
-      }
-      if(key == 'modello'){
-        $("#modelloLabel").addClass('active')
-        $("#modello").prop('checked', true)
-      }
-      if (Array.isArray(value)) {
-        value.forEach(val => {
-          $(`input[type="checkbox"][data-filter="${key}"][value="${val}"]`).prop('checked', true);
-          $(`label:has(input[type="checkbox"][data-filter="${key}"][value="${val}"])`).addClass('active');
-        });
-      }
+async function gallery(filters){
+  if (isLoading) return;
+  isLoading = true;
+  try {
+    const json = await search(filters);
+    console.log(json);
+    totalPages = Math.ceil(json.totalItems.count / ITEMS_PER_PAGE + 1);
+    totalPagesKnown = true;
+    itemsLoaded += json.items.length;
+    let text = json.items == 0 ? 'nessun reperto corrispondente ai tuoi criteri di ricerca' : itemsLoaded + " reperti caricati su "+json.totalItems.count+ " reperti totali trovati";
+    $("#totalItems > h2").text(text);
+    json.items.forEach(item => {
+      const newCard = cardTemplate.content.cloneNode(true);
+      const cardImage = newCard.querySelector('.img');
+      const cardTitle = newCard.querySelector('.card-title');
+      const cardText = newCard.querySelector('.card-text');
+      const cardUrl = newCard.querySelector('.card-url');
+      cardImage.style.backgroundImage = 'url("'+FOTO+item.file+'")';
+      cardTitle.textContent = item.classe;
+      cardText.textContent = item.ogtd;
+      cardUrl.href = "schedaView.php?get="+item.id
+      WRAP.appendChild(newCard);
     });
-    $("[name=clean]").removeClass('invisible');
-  }else{
-    await tagWrap(tagCerca)
-    await getList2({campo: 'dtzgi'})
-    await getList2({campo: 'dtzgf'})
+    isLoading = false;
+    currentPage++;
+  } catch (error) {
+    console.error('Errore:', error);
   }
+}
+
+function search(filters){
+  return new Promise((resolve,reject) => {
+    const data = {
+      trigger: 'search',
+      dati:filters,
+      page: currentPage,
+      limit: ITEMS_PER_PAGE
+    }
+    $.ajax({
+      url: 'api/scheda.php',
+      type: 'POST', 
+      dataType: 'json', 
+      data: data,
+      success: function(response) {
+        if (response.error){reject(response.error);}else{resolve(response);}
+      },
+      error: function(xhr, status, error) {
+        reject(`Errore AJAX: ${error}`);
+      }
+    })
+  })
 }
