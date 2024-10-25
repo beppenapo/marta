@@ -1,10 +1,10 @@
 const localStorageItem = 'esplora';
 const svgOpt = {
-  controlIconsEnabled: true
-  , preventMouseEventsDefault: true
-  , fit: true
+  // controlIconsEnabled: true
+  // , preventMouseEventsDefault: true,
+  fit: true
   , center: true
-  , refreshRate: 'auto'
+  // , refreshRate: 'auto'
 }
 
 const ITEMS_PER_PAGE = 24;
@@ -21,16 +21,23 @@ const totalItems = document.getElementById('totalItems');
 const divInitialOffset = totalItems.offsetTop;
 
 $(document).ready(function() {
+  if(checkFilters(localStorageItem) > 0){
+    let checkPiano = getFilters(localStorageItem);
+    if(checkPiano['piano']){
+      loadSvg('img/piante/piano'+checkPiano['piano']+'.svg');
+    }
+    
+  }
   setActiveFilters(localStorageItem);
   introMuseo()
 
   $("[name=piani]").on('click', function(){
-    let title;
     let p = $(this).val()
     $("#fuoriVetrinaTxt").hide();
     loadSvg('img/piante/piano'+p+'.svg');
     setFilters(localStorageItem,"piano",p,"update")
     setFilters(localStorageItem,"sala",true,"remove")
+    setFilters(localStorageItem,"contenitore",true,"remove")
     setActiveFilters(localStorageItem);
   })
   $("#fuoriVetrinaTxt").hide();
@@ -95,6 +102,7 @@ async function loadSvg(svg){
           $(this).find('path, rect').addClass('salaActive');
           let piano = $("[name=piani]:checked").val()
           let sala = $(this).prop('id').slice(1)
+          setFilters(localStorageItem,'contenitore',true,'remove')
           setFilters(localStorageItem,'piano',piano,"update")
           setFilters(localStorageItem,'sala',sala,"update")
           setActiveFilters(localStorageItem);
@@ -116,7 +124,10 @@ async function loadSvg(svg){
           let piano = $("[name=piani]:checked").val()
           let sala = $(this).prop('id').split('_')[0].slice(1);
           let contenitore = $(this).prop('id').split('_').pop().slice(1);
-          let dati = {piano:piano, sala:sala, contenitore:contenitore}
+          setFilters(localStorageItem,'piano',piano,"update")
+          setFilters(localStorageItem,'sala',sala,"update")
+          setFilters(localStorageItem,'contenitore',contenitore,"update")
+          setActiveFilters(localStorageItem);
         }
       });
     })
@@ -205,7 +216,7 @@ async function setActiveFilters(item) {
   if (filters && Object.keys(filters).length > 0) {
     $('[name=piani]').prop('checked', false);
     $('[name=piani][value="'+filters['piano']+'"]').prop('checked', true);
-    loadSvg('img/piante/piano'+filters['piano']+'.svg');
+    // loadSvg('img/piante/piano'+filters['piano']+'.svg');
     WRAP.innerHTML=''
     currentPage = 1;
     itemsLoaded = 0;

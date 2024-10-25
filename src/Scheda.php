@@ -831,6 +831,12 @@ class Scheda extends Conn{
     if(isset($dati['sala'])){
       array_push($filter, "lc.sala = ".$dati['sala']);
     }
+    if(isset($dati['contenitore'])){
+      if($dati['piano'] > -1){
+        $vetrina = $this->simple("select vetrina from liste.vetrine where id = ".$dati['contenitore'].";")[0];
+      }
+      array_push($filter, "lc.contenitore= '".$vetrina['vetrina']."'");
+    }
     if(isset($dati['nctn'])){
       array_push($join, "inner join nctn_scheda nctn on nctn.scheda = s.id");
       array_push($filter, "nctn.nctn = ".$dati['nctn']);
