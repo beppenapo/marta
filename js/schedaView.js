@@ -384,7 +384,6 @@ function mapInit(){
     let idComune = $("[name=id_comune]").val();
     $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:idComune})
     .done(function( json ) {
-      console.log(json);
       let l = L.geoJson(json).addTo(comune);
       if (checkPoint.length == 0) { map.fitBounds(l.getBounds()); }
     })
@@ -443,6 +442,9 @@ function mapInit(){
 }
 
 $("#fotoModal").hide();
+
+let defaultImg;
+
 function getFoto(scheda){
   $('.fotoWrap').html('');
   let wrapWidth = $(".fotoWrap").innerWidth();
@@ -464,20 +466,27 @@ function getFoto(scheda){
       $(".fotoWrap").html("<h5>Nessuna immagine caricata</h5>");
       return;
     }
+
+    console.log(data);
+    defaultImg = data.find(item => item.foto_principale == true);
+    
     data.forEach((item, i) => {
       let div = $("<div/>",{class:'fotoDiv noPrint'}).css({"width":w,"height":w,"background-image": "url("+fotoPath+item.file+")"});
-      let overlay = $("<div/>",{class:'fotoOverlay animated noPrint'}).html('<i class="bi bi-arrows-fullscreen text-white"></i>').appendTo(div);
+      let stackIcon = '<span class="fa-stack fa-2x text-white"><i class="fa-solid fa-expand fa-stack-2x"></i><i class="fa-solid fa-check-double fa-stack-1x"></i></span>';
+      let singleIcon = '<i class="fa-solid fa-expand text-white"></i>';
+      $("<div/>",{class:'fotoOverlay animated noPrint'}).html(item.foto_principale ? stackIcon : singleIcon).appendTo(div);
       div.appendTo('.fotoWrap')
       div.on('click', () => {
         $("#divImgOrig").css({"background-image":"url("+fotoPathOrig+item.file+")"});
         $("#fotoModal").fadeIn('fast');
-        $("#closeModal").on('click', (e) => {
-          e.preventDefault();
-          $("#fotoModal").fadeOut('fast');
-        })
+        $("#closeModal").on('click', (e) => {$("#fotoModal").fadeOut('fast');})
         $("#downloadImg").attr("href",fotoPathOrig+item.file);
+        if(item.foto_principale){
+          $("#defaultImg").hide()
+        }else{
+          $("#defaultImg").show().on('click', () => {setDefaultImg(item)});
+        }  
         $("#delImg").on('click', (e) => {
-          e.preventDefault();
           dati={id:item.id, scheda:item.scheda, file:item.file}
           if (window.confirm("Sei sicuro di voler eliminare l'immagine? Se confermi l'immagine verrà definitivamente eliminata dal server e non sarà più possibile recuperarla.")) {
             delImg(dati);
@@ -490,7 +499,34 @@ function getFoto(scheda){
   })
   .fail(function (jqXHR, textStatus, error) { console.log("Post error: " + error); }
   );
-  //if ($("[name=logged]").val()) { checkScheda(scheda,initChart) }
+}
+
+function setDefaultImg(newDefault){
+  let dati = {trigger:'setDefaultImg', scheda: newDefault.scheda, old:defaultImg.id,new:newDefault.id}
+  $.ajax({
+    url: "api/scheda.php",
+    type: 'POST',
+    dataType: 'json',
+    data: dati
+  })
+  .done(function(result){
+    $("#fotoModal").fadeOut('fast')
+    let btnDiv = $("#toastBtnDiv");
+    btnDiv.html("<button type='button' class='btn btn-sm btn-light' name='dismiss' data-dismiss='toast'>ok, chiudi alert</button>");
+    $(".toast").removeClass('[class^="bg-"]');
+    $(".toast>.toast-body").removeClass("text-white")
+    $(".toast>.toast-body>.toast-body-msg>h5").html(result.msg);
+    $(".toast").toast({delay:3000});
+    $(".toast").show();
+    $(".toast").toast('show');
+    $('.toast').on('hidden.bs.toast', function () {
+      $(".toast").hide();
+      location.reload()
+    })
+  })
+  .fail(function (jqXHR, textStatus, error) {
+    console.log("Post error: " + error);
+  });
 }
 
 function delImg(dati){

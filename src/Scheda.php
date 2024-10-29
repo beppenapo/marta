@@ -6,6 +6,26 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function setDefaultImg(array $dati){
+    if(is_array($dati) && !empty($dati)){
+      try {
+        $old = ["default" => 'false',"id"=>(int) $dati['old'], "scheda"=>(int) $dati['scheda']];
+        $new = ["default" => 'true',"id"=>(int) $dati['new'], "scheda"=>(int) $dati['scheda']];
+        $query = "update file set foto_principale = :default where id = :id and scheda = :scheda ";
+        $this->begin();
+        $this->prepared($query,$old);
+        $this->prepared($query,$new);
+        $this->commit();
+        return ["msg"=>"La foto principale è stata settata correttamente", "error"=>0];
+      } catch (\Throwable $e) {
+        $this->rollback();
+        return ["msg"=>$e->getMessage(), "error"=>$e->getCode()];
+      }
+
+      return $dati;
+    }
+  }
+
   public function progress(int $id){
     // $biblio = $this->simple("select count(*) biblio from biblio_scheda where scheda = ".$id);
     $biblio = $this->simple("select count(*) biblio from biblio_fake where scheda = ".$id);

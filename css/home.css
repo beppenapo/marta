@@ -107,6 +107,48 @@ body > main {padding-top:60px !important;}
   transform: scale(1.2);
 }
 .mapPopUp > p {margin:1px !important; padding:0 !important;}
+
+#geocoder{
+  position: absolute;
+  top:10px;
+  left:50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+#legenda{
+  position:absolute;
+  bottom: 20px;
+  right: 10px;
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: .25rem;
+  padding: .25rem !important;
+  z-index: 1000;
+
+  #scaleDiv > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .colorLegend{width:20px;height:20px;}
+    .textLegend{width:60px;text-align: start; padding:0 10px;}
+  }
+}
+
+#countReperti{
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 50dvw;
+  margin: 0;
+  text-align: center;
+  transform: translate(-50%);
+  z-index: 2000;
+  opacity: 1;
+}
+
+
 @media (min-width: 576px){
   #statWrap{ flex-direction: row; }
   .stat{ width: 45%;}

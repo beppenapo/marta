@@ -8,37 +8,16 @@ const WRAP = document.getElementById('totalItems');
 
 const input = document.getElementById('geocoderInput');
 const resultsContainer = document.getElementById('geocoderResult');
-const legenda = document.getElementById('scaleDiv');
-legenda.innerHTML = '';
 
-const grades = [0, 10, 50, 100, 500, 1000, 1000000];
-const colors = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026','#800026'];
+legenda.innerHTML = '';
+const colori = chroma.scale(colors).colors(grades.length-1);
 
 let totalPagesKnown = false;
 let totalPages = 0;
 let currentPage = 1;
 let itemsLoaded = 0;
 let isLoading = false;
-let comuniList = [];
-let countReperti = [];
-let filters = {"principale":true}
 
-
-const geoCardTemplate = document.createElement('template');
-geoCardTemplate.innerHTML = `
-<div class="geoCard">
-  <div class="img"></div>
-  <div class="text">
-    <h6 class="card-title"></h6>
-    <p class="card-text"></p>
-  </div>
-  <div class="card-footer">
-    <a href="" class="btn btn-sm btn-marta text-white card-url">
-      <i class="fa-solid fa-link"></i> scheda
-    </a>
-  </div>
-</div>
-`;
 mapInit()
 
 $("#closeGallery").on('click', function(){
@@ -49,7 +28,7 @@ $("#closeGallery").on('click', function(){
 
 
 function mapInit(){
-  map = L.map('map',{/*maxBounds:pugliaExt,*/zoomControl: false})
+  map = L.map('map',{zoomControl: false})
   map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
   let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
@@ -68,7 +47,7 @@ function mapInit(){
   
   $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0}).done(function( json ) {
     json.features.forEach(function(feature) { countReperti.push(feature.properties.count) });
-    const colori = chroma.scale(colors).colors(grades.length-1);
+    
     for (let i = 0; i < colori.length; i++) {
       const colorDiv = document.createElement('div');
       colorDiv.classList.add('colorLegend');
@@ -136,11 +115,11 @@ function mapInit(){
         });
         let pop = "<div class='text-center mapPopUp'>";
         pop += "<h5>"+m.ogtd+"</h5>";
-        pop += "<p class='font-weight-bold'>"+m.classe+"</p>";
+        pop += "<p class='font-weight-bold m-0'>"+m.classe+"</p>";
         if(m.comune){pop += "<p>"+m.comune+"</p>";}
         if(m.via){pop += "<p>"+m.via+"</p>";}
         files = m.file.replace('{','').replace('}','').split(',');
-        pop += "<div>";
+        pop += "<div class='popUpImgContainer'>";
         files.forEach(function(item,i){
           if(item !== 'NULL'){
             pop += "<img src='"+fotoPath+item+"' class='img-responsive'>";
@@ -192,25 +171,6 @@ function zoomToPoly(poly){
   map.addLayer(poly)
   poly.setStyle({ opacity: 1, fillOpacity: 0.2});
   map.fitBounds(poly.getBounds());
-}
-
-function styleComuni(feature) {
-  return {
-    fillColor: getColor(feature.properties.count),
-    weight: 1,
-    opacity: 1,
-    color: getColor(feature.properties.count),
-    fillOpacity: 0.4
-  };
-}
-
-function getColor(count) {
-  if (count < 10) return colors[0];
-  else if (count < 50) return colors[1];
-  else if (count < 100) return colors[2];
-  else if (count < 500) return colors[3];
-  else if (count < 1000) return colors[4];
-  else return colors[5]; 
 }
 
 function resetGallery(){

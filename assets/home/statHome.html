@@ -78,8 +78,25 @@
     <div class="card-header bg-white font-weight-bold">
       <p class="card-title m-0">Il territorio del MArTA</p>
     </div>
-    <div id="map"></div>
+    <div id="map">
+      <div class="card" id="geocoder">
+        <div class="card-body p-1">
+          <div class="btn-group  btn-group-sm">
+            <button type="button" class="btn btn-light" id="myZoomIn" data-toggle="tooltip" title="zoom in"><i class="fa-solid fa-plus"></i></button>
+            <button type="button" class="btn btn-light" id="myZoomOut" data-toggle="tooltip" title="zoom out"><i class="fa-solid fa-minus"></i></button>
+            <button type="button" class="btn btn-light" id="myZoomReset" data-toggle="tooltip" title="zoom reset"><i class="fa-solid fa-crosshairs"></i></button>
+          </div>
+        </div>
+      </div>
+      <div id="legenda" class="bg-white">
+        <header class="bg-light p-1 mb-2 border-bottom">Totale reperti</header>
+        <div id="scaleDiv"></div>
+      </div>
+      <div id="countReperti" class="alert alert-info"></div>
+    </div>
+    <div class="card-footer">Visita la pagina dedicata al <a href="territorio.php">territorio</a> per visualizzare la mappa dettagliata, completa di gallerie fotografiche</div>
   </div>
+  
   <div class="card" id="tagWrap">
     <div class="card-header bg-white font-weight-bold">
       <p class="card-title m-0">Le parole chiave più utilizzate</p>

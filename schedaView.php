@@ -4,7 +4,6 @@
   <head>
     <?php require('assets/meta.html'); ?>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" media="screen"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" >
     <link rel="stylesheet" href="css/3dhop/3dhop.css" media="screen"/>
     <link rel="stylesheet" href="css/schedaView.css" media="screen">
     <link rel="stylesheet" href="css/stampaScheda.css" media="print">
@@ -481,29 +480,23 @@
               <canvas id="draw-canvas" />
             </div>
           </fieldset>
-          <!-- <fieldset class="bg-light rounded border p-3 mb-3" id="multimediaFieldset">
-            <legend class="w-auto border rounded p-1">Audio e video</legend>
-          </fieldset> -->
         </div>
       </div>
     </div>
     </main>
     <div id="fotoModal" class="noPrint">
-      <div id="fotoOrigDiv" class="container-fluid noPrint">
-        <div class="row">
-          <div class="col p-2">
-            <div class="nav modalMenu">
-              <a href="#" class="animated nav-link" id="closeModal" title="chiudi immagine" data-toggle="tooltip" data-placement="bottom" data-modal="#fotoModal"><i class="bi bi-x-lg"></i></a>
-              <a href="" class="animated nav-link" id="downloadImg" title="salva immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-cloud-arrow-down-fill"></i></a>
-              <?php if(isset($_SESSION['id']) && $_SESSION['classe'] == 1){ ?>
-                <a href="" class="animated nav-link" id="delImg" title="elimina immagine" data-toggle="tooltip" data-placement="bottom" download><i class="bi bi-trash-fill"></i></a>
-              <?php } ?>
-            </div>
-            <div id="divImgOrig"></div>
-          </div>
-        </div>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" id="closeModal" title="chiudi immagine" data-toggle="tooltip" data-placement="bottom" data-modal="#fotoModal"><i class="fa-solid fa-xmark"></i> chiudi</button>
+        <a href="" class="btn btn-secondary" id="downloadImg" title="salva immagine" data-toggle="tooltip" data-placement="bottom" download><i class="fa-solid fa-cloud-arrow-down"></i> scarica</a>
+        <button type="button" class="btn btn-secondary" id="defaultImg" title="setta come immagine predefinita per le gallery" data-toggle="tooltip" data-placement="bottom"><i class="fa-solid fa-check-double"></i> default</button>
+        <?php if(isset($_SESSION['id']) && $_SESSION['classe'] == 1){ ?>
+        <button type="button" class="btn btn-danger" id="delImg" title="elimina immagine" data-toggle="tooltip" data-placement="bottom"><i class="fa-solid fa-trash-can"></i> elimina</button>
+        <?php } ?>
       </div>
+      <div id="divImgOrig"></div>
     </div>
+
+
     <?php require('assets/toast.html'); ?>
     <?php require('assets/footer.html'); ?>
     <?php require('assets/lib.html'); ?>

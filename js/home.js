@@ -1,4 +1,10 @@
 $(document).ajaxStart(showLoading).ajaxStop(hideLoading);
+let comuni;
+let countRepertiMsg = 'clicca su un Comune per visualizzare il numeri di reperti presenti sul territorio comunale';
+const countRepertiDiv = document.getElementById('countReperti')
+legenda.innerHTML = '';
+const colori = chroma.scale(colors).colors(grades.length-1);
+
 createCarousel()
 statHome();
 initMiniGallery();
@@ -8,6 +14,8 @@ $.ajax({ url: 'api/home.php', type: 'POST', dataType: 'json', data: {trigger: 'o
 $.ajax({ url: 'api/home.php', type: 'POST', dataType: 'json', data: {trigger: 'nuCronoStat'}}).done(nuCronoStat);
 
 $("[name=updateMiniGallery]").on('click', initMiniGallery)
+
+
 
 function statHome(){
   $.ajax({url:'api/home.php',type:'POST',dataType:'json',data:{trigger:'statHome'}})
@@ -91,7 +99,8 @@ function miniGallery(foto){
 }
 
 function mapInit(){
-  var map = L.map('map')
+  countRepertiDiv.innerHTML=countRepertiMsg;
+  var map = L.map('map',{zoomControl:false})
   map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
   let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
@@ -105,80 +114,77 @@ function mapInit(){
     "Google Street": gStreets
   };
   var overlay = {};
-  let comune = L.featureGroup().addTo(map);
-  var markers = L.markerClusterGroup();
+  comuni = L.featureGroup().addTo(map);
+  // var markers = L.markerClusterGroup();
 
-  $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0})
-    .done(function( json ) {
-      let l = L.geoJson(json).addTo(comune);
-      map.fitBounds(l.getBounds());
-    })
-    .fail(function( jqxhr, textStatus, error ) {
-      console.log("Request Failed: " + jqxhr+", "+textStatus + ", " + error );
-    });
-  overlay["Comuni"]=comune;
+  $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0}).done(function( json ) {
+    json.features.forEach(function(feature) { countReperti.push(feature.properties.count) });
 
-  $.ajax({
-    type: "GET",
-    url: "api/geom.php",
-    dataType: 'json',
-    data: {trigger: 'getMarker'}
-  })
-    .done(function(data){
-      data.forEach(function(m,i){
-        let marker = L.marker([m.gpdpy,m.gpdpx],{
-          ogtd:m.ogtd
-          ,classe:m.classe
-          ,via:m.via
-          ,href: 'schedaView.php?get='+m.id
-        });
-        let pop = "<div class='text-center mapPopUp'>";
-        pop += "<h5>"+m.ogtd+"</h5>";
-        pop += "<p class='font-weight-bold'>"+m.classe+"</p>";
-        if(m.comune){pop += "<p>"+m.comune+"</p>";}
-        if(m.via){pop += "<p>"+m.via+"</p>";}
-        files = m.file.replace('{','').replace('}','').split(',');
-        pop += "<div>";
-        files.forEach(function(item,i){
-          if(item !== 'NULL'){
-            pop += "<img src='"+fotoPath+item+"' class='img-responsive'>";
-          }
-        })
-        pop += "</div>";
-        pop += "<hr>";
-        pop += "<a href='schedaView.php?get="+m.scheda+"'>apri scheda</a>";
-        pop += "</div>";
-        marker.bindPopup(pop);
-        markers.addLayer(marker);
-      })
-    })
-    overlay["Reperti"]=markers;
-    markers.addTo(map);
-  L.control.layers(baseLayers, overlay, {position: 'bottomright'}).addTo(map);
-
-  let resetMap = L.Control.extend({
-    options: { position: 'topleft'},
-    onAdd: function (map) {
-      var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
-
-      btn1=$("<a/>",{href:'#', title:'zoom massimo'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
-      $("<i/>",{class:'fa-solid fa-crosshairs'}).appendTo(btn1)
-      btn1.on('click', function (e) {
-        e.preventDefault()
-        map.fitBounds(pugliaExt);
-      });
-
-      btn2=$("<a/>",{href:'#', title:'zoom al comune'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
-      $("<i/>",{class:'fa-solid fa-map-location-dot'}).appendTo(btn2)
-      btn2.on('click', function (e) {
-        e.preventDefault()
-        map.addLayer(comune)
-        map.fitBounds(comune.getBounds());
-      });
-      return container;
+    for (let i = 0; i < colori.length; i++) {
+      const colorDiv = document.createElement('div');
+      colorDiv.classList.add('colorLegend');
+      colorDiv.style.backgroundColor = colori[i];
+      const textDiv = document.createElement('div');
+      textDiv.classList.add('textLegend');
+      const rangeLabel = document.createElement('span');
+      rangeLabel.textContent = '> '+grades[i];
+      textDiv.appendChild(rangeLabel);
+      const container = document.createElement('div');
+      container.appendChild(colorDiv);
+      container.appendChild(textDiv);
+      legenda.appendChild(container);
     }
+
+    let l = L.geoJson(json,{style:styleComuni,onEachFeature: onEachComune}).addTo(comuni);
+    map.fitBounds(l.getBounds());
   })
-  map.addControl(new resetMap());
+  .fail(function( jqxhr, textStatus, error ) {
+    console.log("Request Failed: " + jqxhr+", "+textStatus + ", " + error );
+  });
+  // overlay["Comuni"]=comuni;
+
+  // $.ajax({type: "GET", url: "api/geom.php", dataType: 'json', data: {trigger: 'getMarker'}})
+  // .done(function(data){
+  //   data.forEach(function(m,i){
+  //     let marker = L.marker([m.gpdpy,m.gpdpx],{
+  //       ogtd:m.ogtd
+  //       ,classe:m.classe
+  //       ,via:m.via
+  //       ,href: 'schedaView.php?get='+m.id
+  //     });
+      // let pop = "<div class='text-center mapPopUp'>";
+      // pop += "<h5>"+m.ogtd+"</h5>";
+      // pop += "<p class='font-weight-bold m-0'>"+m.classe+"</p>";
+      // if(m.comune){pop += "<p>"+m.comune+"</p>";}
+      // if(m.via){pop += "<p>"+m.via+"</p>";}
+      // files = m.file.replace('{','').replace('}','').split(',');
+      // pop += "<div class='popUpImgContainer'>";
+      // files.forEach(function(item,i){
+      //   if(item !== 'NULL'){
+      //     pop += "<img src='"+fotoPath+item+"' class='img-responsive'>";
+      //   }
+      // })
+      // pop += "</div>";
+      // pop += "<hr>";
+      // pop += "<a href='schedaView.php?get="+m.scheda+"'>apri scheda</a>";
+      // pop += "</div>";
+      // marker.bindPopup(pop);
+  //     markers.addLayer(marker);
+  //   })
+  // })
+  
+  // overlay["Reperti"]=markers;
+  // markers.addTo(map);
+  L.control.layers(baseLayers, overlay, {position: 'topright'}).addTo(map);
+
+  map.on('zoom', (e) => { map.getZoom() >= 15 ? comuni.remove() : comuni.addTo(map) })
+
+  $("#myZoomIn").on('click', function(){map.zoomIn()})
+  $("#myZoomOut").on('click', function(){map.zoomOut()})
+  $("#myZoomReset").on('click', function(){ 
+    map.fitBounds(comuni.getBounds());
+    countRepertiDiv.innerHTML=countRepertiMsg; 
+  })  
 }
 
 tagWrap(tagHome)
@@ -197,3 +203,17 @@ function tagHome(data){
       })
   });
 }
+
+function onEachComune (feature, layer){
+  layer.on('click', function(){
+    console.log(feature.properties);
+    const item = feature.properties;
+    let txt = `Comune di <strong>${item.comune}</strong>: <strong>${item.count}</strong> `;
+    txt += parseInt(item.count) == 1 ? "reperto ritrovato" : "reperti ritrovati";
+    countRepertiDiv.innerHTML=txt;
+
+    comuni.eachLayer(function(layer) { layer.setStyle({ fillOpacity: 0.4 }); });
+    layer.setStyle({ fillOpacity: 1});
+  });
+}
+
