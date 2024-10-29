@@ -19,11 +19,6 @@
     <?php if (isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
     <main>
       <div id="map" style="<?php echo $widthMap; ?>">
-        <!-- <div class="card invisible" id="mapGallery">
-          <div class="card-header"><h6 class="m-0"></h6></div>
-          <div class="card-body"><div id="wrapItems"></div></div>
-          <div class="card-footer"><button type="button" id="closeGallery" class="btn btn-sm btn-marta w-100">chiudi</button></div>
-        </div> -->
         <div id="mapGallery" class="invisible">
           <div id="galleryHeader" class="bg-light">
             <h3 class="d-inline-block"></h3>

@@ -49,7 +49,7 @@ $("#closeGallery").on('click', function(){
 
 
 function mapInit(){
-  map = L.map('map',{maxBounds:pugliaExt,zoomControl: false})
+  map = L.map('map',{/*maxBounds:pugliaExt,*/zoomControl: false})
   map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
   let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
@@ -68,7 +68,6 @@ function mapInit(){
   
   $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0}).done(function( json ) {
     json.features.forEach(function(feature) { countReperti.push(feature.properties.count) });
-    
     const colori = chroma.scale(colors).colors(grades.length-1);
     for (let i = 0; i < colori.length; i++) {
       const colorDiv = document.createElement('div');
@@ -94,9 +93,7 @@ function mapInit(){
     input.addEventListener('input', function() {
       const query = input.value.toLowerCase();
       // Filtra i Comuni per la query
-      const results = comuniList.filter(comune =>
-        comune.comune.toLowerCase().includes(query)
-      );
+      const results = comuniList.filter(comune => comune.comune.toLowerCase().includes(query));
       
       // Mostra i risultati sotto l'input
       resultsContainer.innerHTML = '';
@@ -107,8 +104,9 @@ function mapInit(){
 
         // Evento click per zoomare e selezionare il poligono
         resultItem.addEventListener('click', function() {
+          filters['comune']=comune.id;
           zoomToPoly(comune.layer)
-          mapGallery(comune)
+          mapGallery()
           input.value =  comune.comune+" ("+comune.count+ ")";
           resultsContainer.innerHTML = '';
         });
@@ -164,7 +162,10 @@ function mapInit(){
 
   $("#myZoomIn").on('click', function(){map.zoomIn()})
   $("#myZoomOut").on('click', function(){map.zoomOut()})
-  $("#myZoomReset,#closeGallery").on('click', resetGallery)  
+  $("#myZoomReset").on('click', function(){
+    resetGallery()
+    map.fitBounds(comuni.getBounds());
+  })  
 }
 
 function onEachPolygon (feature, layer){
@@ -214,7 +215,6 @@ function getColor(count) {
 
 function resetGallery(){
   input.value='';
-  map.fitBounds(comuni.getBounds());
   comuni.eachLayer(function(layer) {
     map.addLayer(layer)
     layer.setStyle({ opacity: 1, fillOpacity: 0.2});
