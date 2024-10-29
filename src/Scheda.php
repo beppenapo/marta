@@ -825,6 +825,10 @@ class Scheda extends Conn{
     ];
     $tipo = $dati['tipo'] ?? 3;
     $filter = ["f.tipo = ".$tipo];
+    if(isset($dati['comune'])){
+      array_push($join, "inner join geolocalizzazione geo on geo.scheda = s.id");
+      array_push($filter, "geo.comune = ".$dati['comune']);
+    }
     if(isset($dati['piano'])){
       array_push($filter, "lc.piano = ".$dati['piano']);
     }

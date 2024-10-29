@@ -1,16 +1,55 @@
+$(document).ajaxStart(showLoading).ajaxStop(hideLoading);
+let comuni, markers;
+const ITEMS_PER_PAGE = 24;
+const FOTO = "http://91.121.82.80/marta/file/foto/";
+
+const galleryDiv = document.getElementById('mapGallery');
+const WRAP = document.getElementById('totalItems');
+
+const input = document.getElementById('geocoderInput');
+const resultsContainer = document.getElementById('geocoderResult');
+const legenda = document.getElementById('scaleDiv');
+legenda.innerHTML = '';
+
+const grades = [0, 10, 50, 100, 500, 1000, 1000000];
+const colors = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026','#800026'];
+
+let totalPagesKnown = false;
+let totalPages = 0;
+let currentPage = 1;
+let itemsLoaded = 0;
+let isLoading = false;
 let comuniList = [];
+let countReperti = [];
+let filters = {"principale":true}
+
+
+const geoCardTemplate = document.createElement('template');
+geoCardTemplate.innerHTML = `
+<div class="geoCard">
+  <div class="img"></div>
+  <div class="text">
+    <h6 class="card-title"></h6>
+    <p class="card-text"></p>
+  </div>
+  <div class="card-footer">
+    <a href="" class="btn btn-sm btn-marta text-white card-url">
+      <i class="fa-solid fa-link"></i> scheda
+    </a>
+  </div>
+</div>
+`;
 mapInit()
-let geocoderList = $("#geocoderResult");
-geocoderList.hide();
-$("[name=geocoderBtn]").on('click', function(e){
-  if( $("[name=geocoderForm]")[0].checkValidity() ){
-    e.preventDefault();
-    cercaVia($("[name=geocoderInput]").val());
-  }
+
+$("#closeGallery").on('click', function(){
+  $("#mapGallery").addClass('invisible')
+  WRAP.innerHTML='';
+  resetGallery()
 })
 
+
 function mapInit(){
-  map = L.map('map',{maxBounds:pugliaExt})
+  map = L.map('map',{maxBounds:pugliaExt,zoomControl: false})
   map.setMinZoom(map.getZoom());
   let osm = L.tileLayer(osmTile, {attribution: osmAttrib});
   let gStreets = L.tileLayer(gStreetTile,{maxZoom: 20, subdomains:gSubDomains });
@@ -24,27 +63,64 @@ function mapInit(){
     "Google Street": gStreets
   };
   var overlay = {};
-  let comune = L.featureGroup().addTo(map);
-  var markers = L.markerClusterGroup();
+  comuni = L.featureGroup().addTo(map);
+  markers = L.markerClusterGroup();
+  
+  $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0}).done(function( json ) {
+    json.features.forEach(function(feature) { countReperti.push(feature.properties.count) });
+    
+    const colori = chroma.scale(colors).colors(grades.length-1);
+    for (let i = 0; i < colori.length; i++) {
+      const colorDiv = document.createElement('div');
+      colorDiv.classList.add('colorLegend');
+      colorDiv.style.backgroundColor = colori[i];
+      const textDiv = document.createElement('div');
+      textDiv.classList.add('textLegend');
+      const rangeLabel = document.createElement('span');
+      rangeLabel.textContent = '> '+grades[i];
+      textDiv.appendChild(rangeLabel);
+      const container = document.createElement('div');
+      container.appendChild(colorDiv);
+      container.appendChild(textDiv);
+      legenda.appendChild(container);
+    }
 
-  // $.getJSON( 'api/geom.php',{ trigger: 'getComune', dati:{id:0,map:1}})
-  $.getJSON( 'api/geom.php',{ trigger: 'getComune', id:0})
-    .done(function( json ) {
-      let wrap = ("#comuniList .list-group");
-      let l = L.geoJson(json, {
-        onEachFeature: function (feature, layer){
-          $("<button/>", {class:'list-group-item list-group-item-action', type:'button'})
-            .text(feature.properties.comune)
-            .appendTo(wrap)
-            .on('click', function(){ map.fitBounds(layer.getBounds()) })
-        }
-      }).addTo(comune);
-      map.fitBounds(l.getBounds());
-    })
-    .fail(function( jqxhr, textStatus, error ) {
-      console.log("Request Failed: " + jqxhr+", "+textStatus + ", " + error );
+    let poligoni = L.geoJson(json, {
+      style: styleComuni,
+      onEachFeature: onEachPolygon
+    }).addTo(comuni);
+    map.fitBounds(poligoni.getBounds());
+
+    input.addEventListener('input', function() {
+      const query = input.value.toLowerCase();
+      // Filtra i Comuni per la query
+      const results = comuniList.filter(comune =>
+        comune.comune.toLowerCase().includes(query)
+      );
+      
+      // Mostra i risultati sotto l'input
+      resultsContainer.innerHTML = '';
+      results.forEach(comune => {
+        const resultItem = document.createElement('button');
+        resultItem.classList.add('list-group-item','result-item');
+        resultItem.textContent = comune.comune+" ("+comune.count+ ")";
+
+        // Evento click per zoomare e selezionare il poligono
+        resultItem.addEventListener('click', function() {
+          zoomToPoly(comune.layer)
+          mapGallery(comune)
+          input.value =  comune.comune+" ("+comune.count+ ")";
+          resultsContainer.innerHTML = '';
+        });
+
+        resultsContainer.appendChild(resultItem);
+      });
     });
-  overlay["Comuni"]=comune;
+  })
+  .fail(function( jqxhr, textStatus, error ) {
+    console.log("Request Failed: " + jqxhr+", "+textStatus + ", " + error );
+  });
+  overlay["Comuni"]=comuni;
 
   $.ajax({
     type: "GET",
@@ -82,56 +158,111 @@ function mapInit(){
     })
     overlay["Reperti"]=markers;
     markers.addTo(map);
-  L.control.layers(baseLayers, overlay, {position: 'bottomright'}).addTo(map);
+  L.control.layers(baseLayers, overlay, {position: 'topright'}).addTo(map);
 
-  let resetMap = L.Control.extend({
-    options: { position: 'topleft'},
-    onAdd: function (map) {
-      var container = L.DomUtil.create('div', 'extentControl leaflet-bar leaflet-control leaflet-touch');
+  map.on('zoom', (e) => { map.getZoom() >= 15 ? comuni.remove() : comuni.addTo(map) })
 
-      btn1=$("<a/>",{href:'#', title:'zoom massimo'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
-      $("<i/>",{class:'fa-solid fa-crosshairs'}).appendTo(btn1)
-      btn1.on('click', function (e) {
-        e.preventDefault()
-        map.fitBounds(pugliaExt);
-      });
-
-      btn2=$("<a/>",{href:'#', title:'zoom al comune'}).attr({"data-toggle":"tooltip","data-placement":"right"}).appendTo(container);
-      $("<i/>",{class:'fa-solid fa-map-location-dot'}).appendTo(btn2)
-      btn2.on('click', function (e) {
-        e.preventDefault()
-        map.addLayer(comune)
-        map.fitBounds(comune.getBounds());
-      });
-      return container;
-    }
-  })
-
-  map.addControl(new resetMap());
-  map.on('zoom', (e) => {
-    map.getZoom() >= 15 ? comune.remove() : comune.addTo(map)
-  })
+  $("#myZoomIn").on('click', function(){map.zoomIn()})
+  $("#myZoomOut").on('click', function(){map.zoomOut()})
+  $("#myZoomReset,#closeGallery").on('click', resetGallery)  
 }
 
-function cercaVia(ind){
-  let string = geoApi+ind+'&format=json&addressdetails=1&bounded=1';
-  geocoderList.html('');
-  $.getJSON(string, function(json, textStatus) {
-    if(json.length == 0){
-      $("<button/>",{type:'button', class:"btn-sm list-group-item list-group-item-action disabled"}).text('nessun indirizzo trovato, riprova').appendTo(geocoderList);
-      geocoderList.fadeIn('fast');
-      return false;
-    }
-    json.forEach((item, i) => {
-      $("<button/>",{type:'button', class:"btn-sm list-group-item list-group-item-action"}).text(item.display_name).appendTo(geocoderList).on('click', function(){
-        geocoderList.fadeOut('fast', function() { geocoderList.html(''); });
-        $("[name=geocoderInput]").val(item.display_name);
-        map.fitBounds([
-          [item.boundingbox[0],item.boundingbox[2]],
-          [item.boundingbox[1],item.boundingbox[3]]
-        ])
-      });
-      geocoderList.fadeIn('fast');
-    });
+function onEachPolygon (feature, layer){
+  comuniList.push({
+    id: feature.properties.id,
+    comune: feature.properties.comune,
+    count: feature.properties.count,
+    layer: layer
+  });
+    
+  layer.on('click', function(){
+    input.value = feature.properties.comune + " ("+feature.properties.count+")";
+    filters['comune'] = feature.properties.id
+    zoomToPoly(layer)
+    mapGallery()
   });
 }
+
+function zoomToPoly(poly){
+  comuni.eachLayer(function(layer) {
+    map.removeLayer(layer)
+    layer.setStyle({ opacity: 0, fillOpacity: 0});
+  });
+  map.addLayer(poly)
+  poly.setStyle({ opacity: 1, fillOpacity: 0.2});
+  map.fitBounds(poly.getBounds());
+}
+
+function styleComuni(feature) {
+  return {
+    fillColor: getColor(feature.properties.count),
+    weight: 1,
+    opacity: 1,
+    color: getColor(feature.properties.count),
+    fillOpacity: 0.4
+  };
+}
+
+function getColor(count) {
+  if (count < 10) return colors[0];
+  else if (count < 50) return colors[1];
+  else if (count < 100) return colors[2];
+  else if (count < 500) return colors[3];
+  else if (count < 1000) return colors[4];
+  else return colors[5]; 
+}
+
+function resetGallery(){
+  input.value='';
+  map.fitBounds(comuni.getBounds());
+  comuni.eachLayer(function(layer) {
+    map.addLayer(layer)
+    layer.setStyle({ opacity: 1, fillOpacity: 0.2});
+  });
+}
+
+async function mapGallery(){
+  try {
+    WRAP.innerHTML=''
+    currentPage = 1;
+    itemsLoaded = 0;
+    await gallery({"comune":filters.comune, "principale":true});
+    $("#mapGallery").removeClass('invisible');
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+}
+
+// Nascondi la lista risultati al clic esterno
+document.addEventListener('click', function(event) {
+  const isClickInside = resultsContainer.contains(event.target) || input.contains(event.target);
+  if (!isClickInside) { resultsContainer.innerHTML = ''; }
+});
+
+["wheel", "mousedown", "mouseup"].forEach(eventType => {
+  galleryDiv.addEventListener(eventType, (event) => {
+    if (eventType === "wheel") {
+      event.stopPropagation();
+    } else if (eventType === "mousedown") {
+      if (map.dragging) {
+        map.dragging.disable();
+      } else {
+        map.setOptions({ draggable: false }); // Per Google Maps
+      }
+    } else if (eventType === "mouseup") {
+      if (map.dragging) {
+        map.dragging.enable();
+      } else {
+        map.setOptions({ draggable: true });
+      }
+    }
+  });
+});
+
+WRAP.addEventListener('scroll',()=>{
+  if (WRAP.scrollTop + WRAP.clientHeight >= WRAP.scrollHeight - 100) {
+    if (totalPagesKnown && currentPage < totalPages) {
+      gallery(filters)
+    }
+  }
+})

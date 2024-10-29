@@ -1,11 +1,7 @@
+$(document).ajaxStart(showLoading).ajaxStop(hideLoading);
+
 const localStorageItem = 'esplora';
-const svgOpt = {
-  // controlIconsEnabled: true
-  // , preventMouseEventsDefault: true,
-  fit: true
-  , center: true
-  // , refreshRate: 'auto'
-}
+const svgOpt = {fit: true, center: true}
 
 const ITEMS_PER_PAGE = 24;
 const FOTO = "http://91.121.82.80/marta/file/foto/";

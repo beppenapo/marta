@@ -97,7 +97,6 @@ $("[name=search]").on('click', function(e){
 const totalItems = document.getElementById('totalItems');
 const divInitialOffset = totalItems.offsetTop;
 window.addEventListener('scroll', () => {  
-  // infinite scroll
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 60) {
     if (totalPagesKnown && currentPage < totalPages) {
       let filters = getFilters(localStorageItem);
@@ -122,8 +121,6 @@ function tagCerca(data){
     $("<input/>",{type:'checkbox', value:item.tag, name:'tagBtn', class:'filtro'}).attr('data-filter','tags').appendTo(label);
   });
 }
-
-
 
 function getList2(dati){
   return new Promise((resolve, reject) => {
@@ -153,17 +150,10 @@ function getList2(dati){
   })
 }
 
-function minMax(campo){
-  console.log(campo);
-}
-
-
 async function setActiveFilters(item) {
   let filters = getFilters(item);
   if (filters && Object.keys(filters).length > 0) {    
     const listRequests = [
-      // {campo: 'tsk', val: 1},
-      // {campo: 'tsk', val: 2},
       {campo: 'dtzgi'},
       {campo: 'dtzgf'}
     ];

@@ -6,8 +6,11 @@
     <link rel="stylesheet" href="css/piante.css">
   </head>
   <body>
-    <?php require('assets/headerMenu.php'); ?>
-    <?php if(isset($_SESSION['id'])) {require('assets/mainMenu.php');} ?>
+    <?php 
+      require('assets/headerMenu.php'); 
+      require('assets/loading.html');
+      if(isset($_SESSION['id'])) {require('assets/mainMenu.php');} 
+    ?>
     <main class="bg-light">
       <div id="mainTitle" class="my-2 py-2 bg-marta text-white">
         <div>

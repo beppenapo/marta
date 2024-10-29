@@ -1002,7 +1002,7 @@ async function gallery(filters){
     totalPagesKnown = true;
     itemsLoaded += json.items.length;
     let text = json.items == 0 ? 'nessun reperto corrispondente ai tuoi criteri di ricerca' : itemsLoaded + " reperti caricati su "+json.totalItems.count+ " reperti totali trovati";
-    $("#totalItems > h2").text(text);
+    $("#totalItems > h2, #galleryHeader > h3").text(text);
     json.items.forEach(item => {
       const newCard = cardTemplate.content.cloneNode(true);
       const cardImage = newCard.querySelector('.img');
