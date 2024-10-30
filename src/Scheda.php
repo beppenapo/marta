@@ -843,8 +843,21 @@ class Scheda extends Conn{
       "inner join file f on f.scheda = s.id",
       "inner join gallery g on g.id = s.id"
     ];
-    $tipo = $dati['tipo'] ?? 3;
-    $filter = ["f.tipo = ".$tipo];
+    // $tipo = $dati['tipo'] ?? 3;
+    // $filter = ["f.tipo = ".$tipo];
+    $filter = [];
+    if(isset($dati['tipo'])){
+      if($dati['tipo'] == 1){
+        $schede = $this->simple("select scheda from file where tipo = ".$dati['tipo'].";");
+        $schede = array_column($schede, 'scheda');
+        array_push($filter, "s.id in (".implode(',',$schede).")");
+        array_push($filter, "f.tipo = 3");
+      }else{
+        array_push($filter, "f.tipo = ".$dati['tipo']);
+      }
+    }else{
+      array_push($filter, "f.tipo = 3");
+    }
     if(isset($dati['comune'])){
       array_push($join, "inner join geolocalizzazione geo on geo.scheda = s.id");
       array_push($filter, "geo.comune = ".$dati['comune']);
@@ -869,11 +882,7 @@ class Scheda extends Conn{
       array_push($join, "inner join inventario on inventario.scheda = s.id");
       array_push($filter, "inventario.inventario = ".$dati['inventario']);
     }
-    if(isset($dati['modello'])){
-      $schede = $this->simple("select scheda from file where tipo = 1;");
-      $schede = array_column($schede, 'scheda');
-      array_push($filter, "s.id in (".implode(',',$schede).")");
-    }
+
     if(isset($dati['ids']) && is_array($dati['ids'])){
       array_push($filter, "s.id in (".implode(',',$dati['ids']).")");
     }
@@ -893,11 +902,11 @@ class Scheda extends Conn{
         array_push($join, "inner join og_nu ON og_nu.scheda = s.id JOIN liste.ogtd ON og_nu.ogtd = ogtd.id LEFT JOIN liste.ogto ON og_nu.ogto = ogto.id");
         if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
       }
-      if (isset($dati['materia'])) {
-        array_push($field, "m.value materia");
-        array_push($join, "inner join mtc on mtc.scheda = s.id inner join liste.materia m on mtc.materia = m.id");
-        array_push($filter, "m.id = ".$dati['materia']);
-      }
+    }
+    if (isset($dati['materia'])) {
+      array_push($field, "m.value materia");
+      array_push($join, "inner join mtc on mtc.scheda = s.id inner join liste.materia m on mtc.materia = m.id");
+      array_push($filter, "m.id = ".$dati['materia']);
     }
     if (isset($dati['dtzgi']) || isset($dati['dtzgf']) || isset($dati['dtsi']) || isset($dati['dtsf'])) {
       array_push($join, "inner join dt on dt.scheda = s.id");

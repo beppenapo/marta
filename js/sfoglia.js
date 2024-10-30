@@ -1,9 +1,8 @@
 $(document).ajaxStart(showLoading).ajaxStop(hideLoading);
 const localStorageItem = 'sfoglia';
 $(document).ready(function() {setActiveFilters(localStorageItem);});
-
+let FOTO='';
 const ITEMS_PER_PAGE = 24;
-const FOTO = "http://91.121.82.80/marta/file/foto/";
 const WRAP = document.getElementById('wrapItems');
 
 let maxCrono = [];
@@ -80,16 +79,25 @@ $("[name=search]").on('click', function(e){
         setFilters(localStorageItem,key,$(this).val(),'update')
       }
     }
+    
   })
+  if($("#tipo").val() && $("#tipo").val() == 7){
+    setFilters(localStorageItem, 'principale', 'true', 'remove');
+    FOTO = "http://91.121.82.80/marta/file/stereo/" ;
+  }else{
+    FOTO = "http://91.121.82.80/marta/file/foto/";
+    setFilters(localStorageItem, 'principale', 'true', 'update');
+  }
+
   if(checkFilters(localStorageItem) == 0){
     $("#searchMsg").addClass('alert alert-danger').text('devi impostare almeno un filtro di ricerca!');
     return false;
   }
+
   WRAP.innerHTML=''
   currentPage = 1;
   itemsLoaded = 0;
   $("[name=clean]").removeClass('invisible');
-  setFilters(localStorageItem, 'principale', 'true', 'update');
   let filters = getFilters(localStorageItem);
   gallery(filters);
 })

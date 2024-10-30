@@ -40,6 +40,9 @@
         <li>
           <a href="scheda-nu.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova scheda NU"><i class="fas fa-chevron-right fa-fw"></i> scheda NU</a>
         </li>
+        <li>
+          <a href="userAdd.php" class="animated" data-toggle='tooltip' data-placement='left' title="crea un nuovo utente"><i class="fas fa-chevron-right fa-fw"></i> utente</a>
+        </li>
       </ul>
     </li>
     <?php if ($_SESSION['classe'] == 1) {?>

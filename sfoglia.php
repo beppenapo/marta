@@ -88,13 +88,18 @@
                 </div>
               </div>
               <div class="col-md-4 mb-3">
-                <h6>Filtra reperti con modello 3d</h6>
-                <label class="m-0">Modello</label>
-                <div class="btn-group-toggle" data-toggle="buttons">
+                <h6>Filtra per tipo di dato</h6>
+                <label class="m-0">Tipo di dato</label>
+                <select name="tipo" data-filter="tipo" id="tipo" class="form-control form-control-sm filtro">
+                  <option value="" selected>--seleziona valore--</option>
+                  <option value="1">modello 3d</option>
+                  <option value="7">foto stereoscopica</option>
+                </select>
+                <!-- <div class="btn-group-toggle" data-toggle="buttons">
                   <label class="btn btn-sm btn-outline-marta m-1" id="modelloLabel">modello presente
                     <input type="checkbox" class="filtro" data-filter="modello" id="modello">
                   </label>
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="form-row">
