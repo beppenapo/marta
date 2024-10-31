@@ -15,7 +15,7 @@ class Info{
     $vetrine = $this->totContenitori(tipoContenitore: 'vetrine', groupBy: 'piano');
     $scaffali = $this->totContenitori(tipoContenitore: 'scaffali', groupBy: 'piano');
     $tipoScaffale = $this->totContenitori(tipoContenitore: 'scaffali', groupBy: 'v.note');
-    $repertiCassefortiMonetieri = $this->totReperti(piano: -1, sala: 4, groupBy: 'contenitore', altriFiltri: ["(contenitore = '40' or contenitore = '41')"]);
+    $repertiCassefortiMonetieri = $this->totReperti(piano: -1, sala: 4, groupBy: 'contenitore', altriFiltri: ["(contenitore = '1' or contenitore = '2')"]);
     $fuoriVetrina = $this->totReperti(groupBy: 'piano', altriFiltri: ["contenitore = 'fuori vetrina'","piano > 0"]);
     return [
       "totReperti" => $totReperti['count'], 

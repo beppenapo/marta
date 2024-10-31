@@ -843,8 +843,7 @@ class Scheda extends Conn{
       "inner join file f on f.scheda = s.id",
       "inner join gallery g on g.id = s.id"
     ];
-    // $tipo = $dati['tipo'] ?? 3;
-    // $filter = ["f.tipo = ".$tipo];
+
     $filter = [];
     if(isset($dati['tipo'])){
       if($dati['tipo'] == 1){
@@ -871,8 +870,10 @@ class Scheda extends Conn{
     if(isset($dati['contenitore'])){
       if($dati['piano'] > -1){
         $vetrina = $this->simple("select vetrina from liste.vetrine where id = ".$dati['contenitore'].";")[0];
+        array_push($filter, "lc.contenitore= '".$vetrina['vetrina']."'");
+      }else{
+        array_push($filter, "lc.contenitore= '".$dati['contenitore']."'");
       }
-      array_push($filter, "lc.contenitore= '".$vetrina['vetrina']."'");
     }
     if(isset($dati['nctn'])){
       array_push($join, "inner join nctn_scheda nctn on nctn.scheda = s.id");
