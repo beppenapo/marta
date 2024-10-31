@@ -66,8 +66,8 @@ function introMuseo(){
           $("#scaffali").text(response.scaffali.find(item => item.piano === -1).count)
           $("#casseforti").text(response.tipoScaffale.find(item => item.note === 'cassaforte').count)
           $("#monetieri").text(response.tipoScaffale.find(item => item.note === 'monetiere').count)
-          $("#repertiMonetieri").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '40').count)
-          $("#repertiCasseforti").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '41').count)
+          $("#repertiMonetieri").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '2').count)
+          $("#repertiCasseforti").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '1').count)
           $("#fvP1").text(response.fuoriVetrina.find(item => item.piano === 1).count)
           $("#fvP2").text(response.fuoriVetrina.find(item => item.piano === 2).count)
 
