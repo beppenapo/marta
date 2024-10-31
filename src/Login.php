@@ -44,8 +44,9 @@ class Login extends User{
   private function checkMail(string $email){
     $sql = "select * from utenti where email = '".$email."' and attivo = 't';";
     $out = $this->db->simple($sql);
-    $x = count($out[0]);
-    if ($x == 0) { throw new \Exception("La mail indicata non è presente nel database o il tuo account è disabilitato. Prova a reinserire la mail, se il problema persiste contatta il responsabile del progetto", 0); }
+    if (empty($out) || !is_array($out)) {
+      throw new \Exception("La mail indicata non è presente nel database o il tuo account è disabilitato. Prova a reinserire la mail, se il problema persiste contatta il responsabile del progetto", 0);
+  }
     return $out[0];
   }
 

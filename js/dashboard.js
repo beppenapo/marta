@@ -1,3 +1,4 @@
+$(document).ajaxStart(showLoading).ajaxStop(hideLoading);
 let biblioList = schedeList=[];
 let content =  $("#scrollSchede");
 let contentBiblio =  $("#scrollBiblio");

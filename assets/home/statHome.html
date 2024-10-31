@@ -4,30 +4,35 @@
       <small class="text-secondary">reperti</small>
       <p id="numRa"></p>
     </div>
+    <a href="gallery.php?item=reperti" class="btn btn-sm btn-marta text-white">view gallery</a>
   </div>
   <div id="nuStat" class="bg-white rounded shadow stat">
     <div class="innerStat">
       <small class="text-secondary">monete</small>
       <p id="numNu"></p>
     </div>
+    <a href="gallery.php?item=monete" class="btn btn-sm btn-marta text-white">view gallery</a>
   </div>
   <div id="imgStat" class="bg-white rounded shadow stat">
     <div class="innerStat">
       <small class="text-secondary">fotografie</small>
       <p id="numImg"></p>
     </div>
+    <a href="gallery.php?item=immagini" class="btn btn-sm btn-marta text-white">view gallery</a>
   </div>
   <div id="stereoStat" class="bg-white rounded shadow stat">
     <div class="innerStat">
       <small class="text-secondary">foto stereo</small>
       <p id="numStereo"></p>
     </div>
+    <a href="gallery.php?item=stereo" class="btn btn-sm btn-marta text-white">view gallery</a>
   </div>
   <div id="modelStat" class="bg-white rounded shadow stat">
     <div class="innerStat">
       <small class="text-secondary">modelli 3d</small>
       <p id="num3d"></p>
     </div>
+    <a href="gallery.php?item=modelli" class="btn btn-sm btn-marta text-white">view gallery</a>
   </div>
 </div>
 
@@ -73,8 +78,25 @@
     <div class="card-header bg-white font-weight-bold">
       <p class="card-title m-0">Il territorio del MArTA</p>
     </div>
-    <div id="map"></div>
+    <div id="map">
+      <div class="card" id="geocoder">
+        <div class="card-body p-1">
+          <div class="btn-group  btn-group-sm">
+            <button type="button" class="btn btn-light" id="myZoomIn" data-toggle="tooltip" title="zoom in"><i class="fa-solid fa-plus"></i></button>
+            <button type="button" class="btn btn-light" id="myZoomOut" data-toggle="tooltip" title="zoom out"><i class="fa-solid fa-minus"></i></button>
+            <button type="button" class="btn btn-light" id="myZoomReset" data-toggle="tooltip" title="zoom reset"><i class="fa-solid fa-crosshairs"></i></button>
+          </div>
+        </div>
+      </div>
+      <div id="legenda" class="bg-white">
+        <header class="bg-light p-1 mb-2 border-bottom">Totale reperti</header>
+        <div id="scaleDiv"></div>
+      </div>
+      <div id="countReperti" class="alert alert-info"></div>
+    </div>
+    <div class="card-footer">Visita la pagina dedicata al <a href="territorio.php">territorio</a> per visualizzare la mappa dettagliata, completa di gallerie fotografiche</div>
   </div>
+  
   <div class="card" id="tagWrap">
     <div class="card-header bg-white font-weight-bold">
       <p class="card-title m-0">Le parole chiave più utilizzate</p>

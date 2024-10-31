@@ -2,6 +2,7 @@ const SERVER = window.location.protocol + '//' + window.location.hostname + (win
 const BASE = SERVER + "/marta/";
 document.head.innerHTML = document.head.innerHTML + "<base href='" +  BASE + "' />";
 
+const LOADING = document.getElementById("loadingDiv");
 const TOTRA = 20000;
 const TOTNU = 20000;
 const TOTFOTO = 80000;
@@ -21,23 +22,34 @@ let map;
 
 const BGIMG = 34;
 
-console.log(BASE);
-
 const apiFoto = 'http://91.121.82.80/marta/file/';
 let fotoFolder;
 switch (true) {
-  case screen.width < 400 : fotoFolder = 'foto_small/';  break;
-  case screen.width < 800 : fotoFolder = 'foto_medium/';  break;
-  case screen.width >= 800 : fotoFolder = 'foto/';  break;
+  case screen.width <= 400 : fotoFolder = 'foto_small/';  break;
+  case screen.width > 400 : fotoFolder = 'foto_medium/';  break;
 }
 const fotoPath = apiFoto+fotoFolder;
 const fotoPathOrig = apiFoto+'foto/';
-$(document)
-.ajaxStart(function(){ $("#loadingDiv").removeClass('invisible');})
-.ajaxStop(function(){ $("#loadingDiv").addClass('invisible');})
+
+const cardTemplate = document.createElement('template');
+cardTemplate.innerHTML = `
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="img"></div>
+      <div class="text">
+        <h6 class="card-title"></h6>
+        <p class="card-text"></p>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="" class="btn btn-sm btn-marta text-white card-url">
+        <i class="fa-solid fa-link"></i> scheda
+      </a>
+    </div>
+  </div>
+`;
 
 //NOTE: creazione meta base
-
 ///////////////////////////
 let log = $("body>header").data('log');
 const spinner = "<i class='fas fa-circle-notch fa-spin fa-3x'></i>";
@@ -311,7 +323,7 @@ $("body").tooltip(toolTipOpt);
 
 $("[name=logOutBtn]").on('click', function(e){
   e.preventDefault();
-  localStorage.removeItem("sex");
+  sessionStorage.removeItem("sex");
   $.redirectPost('logout.php');
 })
 //NOTE: copyright footer
@@ -908,7 +920,6 @@ function createCarousel(){
   let bgArr = [];
   const content = $(".carousel-inner");
   for (let i=1, j=BGIMG; i<j; i++) {
-    // let i = Math.random()*(BGIMG-1) + 1;
     let i = Math.random()*BGIMG;
     i = Math.ceil(i);
     if (!bgArr.includes(i)) {bgArr.push(i);}
@@ -921,7 +932,115 @@ function createCarousel(){
   $('#carousel').carousel({wrap:true})
 }
 
-function tagWrap(callback){
-  $.ajax({url:'api/scheda.php',type:'POST',dataType:'json',data:{trigger:'tagList'}})
-  .done(callback)
+function tagWrap(callback) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: 'api/scheda.php',
+      type:'POST',
+      dataType:'json',
+      data:{trigger:'tagList'},
+      success: function(data) {
+        callback(data);
+        resolve(data);
+      },
+      error: function(error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+function showLoading() {LOADING.classList.remove("invisible");}
+function hideLoading() {LOADING.classList.add("invisible");}
+
+function checkFilters(item) {
+  let filters = sessionStorage.getItem(item);
+  return filters ? Object.keys(JSON.parse(filters)).length : 0;
+}
+function getFilters(item) {
+  let filters = sessionStorage.getItem(item);
+  return filters ? JSON.parse(filters) : {};
+}
+
+function setFilters(item, key, value, action) {
+  let filters = getFilters(item);
+  if (key === 'tags' && !Array.isArray(filters['tags'])) {
+    filters['tags'] = [];
+  }
+
+  if (action === 'update') {
+    if (key === 'tags') {
+      if (!filters['tags'].includes(value)) {
+        filters['tags'].push(value);
+      }
+    } else {
+      filters[key] = value;
+    }
+  } else if (action === 'remove') {
+    if(key == 'tags'){
+      const index = filters['tags'].indexOf(value);
+      if (index > -1) { 
+        filters['tags'].splice(index, 1);
+        if (filters['tags'].length === 0) { 
+          delete filters['tags'];
+        }
+      }
+    } else {
+      delete filters[key];
+    }
+  }
+  sessionStorage.setItem(item, JSON.stringify(filters));
+}
+
+async function gallery(filters){
+  if (isLoading) return;
+  isLoading = true;
+  try {
+    const json = await search(filters);
+    console.log(json);
+    totalPages = Math.ceil(json.totalItems.count / ITEMS_PER_PAGE + 1);
+    totalPagesKnown = true;
+    itemsLoaded += json.items.length;
+    let text = json.items == 0 ? 'nessun reperto corrispondente ai tuoi criteri di ricerca' : itemsLoaded + " reperti caricati su "+json.totalItems.count+ " reperti totali trovati";
+    $("#totalItems > h2, #galleryHeader > h3").text(text);
+    json.items.forEach(item => {
+      const newCard = cardTemplate.content.cloneNode(true);
+      const cardImage = newCard.querySelector('.img');
+      const cardTitle = newCard.querySelector('.card-title');
+      const cardText = newCard.querySelector('.card-text');
+      const cardUrl = newCard.querySelector('.card-url');
+      cardImage.style.backgroundImage = 'url("'+FOTO+item.file+'")';
+      cardTitle.textContent = item.classe;
+      cardText.textContent = item.ogtd;
+      cardUrl.href = "schedaView.php?get="+item.id
+      WRAP.appendChild(newCard);
+    });
+    isLoading = false;
+    currentPage++;
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+}
+
+function search(filters){
+  return new Promise((resolve,reject) => {
+    const data = {
+      trigger: 'search',
+      dati:filters,
+      page: currentPage,
+      limit: ITEMS_PER_PAGE
+    }
+    $.ajax({
+      url: 'api/scheda.php',
+      type: 'POST', 
+      dataType: 'json', 
+      data: data,
+      success: function(response) {
+        if (response.error){reject(response.error);}else{resolve(response);}
+      },
+      error: function(xhr, status, error) {
+        reject(`Errore AJAX: ${error}`);
+      }
+    })
+  })
 }

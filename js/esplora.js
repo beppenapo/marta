@@ -1,54 +1,88 @@
-let svgOpt = {
-  // viewportSelector: '.svg-pan-zoom_viewport'
-  // , panEnabled: true
-  controlIconsEnabled: true
-  // , zoomEnabled: true
-  // , dblClickZoomEnabled: true
-  // , mouseWheelZoomEnabled: true
-  // , preventMouseEventsDefault: true
-  // , zoomScaleSensitivity: 0.2
-  // , minZoom: 0.5
-  // , maxZoom: 10
-  , fit: true
-  // , contain: false
-  // , center: true
-  // , refreshRate: 'auto'
-  // , beforeZoom: function(){}
-  // , onZoom: function(){}
-  // , beforePan: function(){}
-  // , onPan: function(){}
-  // , onUpdatedCTM: function(){}
-  // , customEventsHandler: {}
-  // , eventsListenerElement: null
-}
-let wrap = $("#findWrap");
-let wrapWidth = wrap.width();
-let itemMeasure = parseInt((wrapWidth / 5)-10);
-let schede=[];
-let pagenumber = 0;
-let perpage = 20;
+$(document).ajaxStart(showLoading).ajaxStop(hideLoading);
+
+const localStorageItem = 'esplora';
+const svgOpt = {fit: true, center: true}
+
+const ITEMS_PER_PAGE = 24;
+const FOTO = "http://91.121.82.80/marta/file/foto/";
+const WRAP = document.getElementById('wrapItems');
+
+let totalPagesKnown = false;
+let totalPages = 0;
+let currentPage = 1;
+let itemsLoaded = 0;
+let isLoading = false;
+
+const totalItems = document.getElementById('totalItems');
+const divInitialOffset = totalItems.offsetTop;
+
 $(document).ready(function() {
-  loadSvg('img/piante/piano1.svg');
-  getSchedeByLocation('piano', {piano:1})
+  if(checkFilters(localStorageItem) > 0){
+    let checkPiano = getFilters(localStorageItem);
+    if(checkPiano['piano']){
+      loadSvg('img/piante/piano'+checkPiano['piano']+'.svg');
+    }
+    
+  }
+  setActiveFilters(localStorageItem);
+  introMuseo()
 
   $("[name=piani]").on('click', function(){
-    let title;
     let p = $(this).val()
     $("#fuoriVetrinaTxt").hide();
-    if(p == 0){
-      $("#svgWrap").html('<div class="alert alert-danger w-75 mx-auto"><h3>La pianta di questo piano non è disponibile</h3></div>');
-    }else{
-      loadSvg('img/piante/piano'+p+'.svg');
-    }
-    getSchedeByLocation('piano',{piano:p})
+    loadSvg('img/piante/piano'+p+'.svg');
+    setFilters(localStorageItem,"piano",p,"update")
+    setFilters(localStorageItem,"sala",true,"remove")
+    setFilters(localStorageItem,"contenitore",true,"remove")
+    setActiveFilters(localStorageItem);
   })
   $("#fuoriVetrinaTxt").hide();
 });
 
+function introMuseo(){
+  return new Promise((resolve,reject) => {
+    $.ajax({
+      url: 'api/info.php',
+      type: 'POST', 
+      dataType: 'json', 
+      data: {trigger: 'introMuseo'},
+      success: function(response) {
+        if (response.error){
+          reject(response.error);
+        }else{
+          console.log(response);
+          $("#totEsposto").text(response.totEsposto)
+          $("#totDeposito").text(response.totDeposito)
+          $("#saleP0").text(response.totSale.find(item => item.piano === 0).count)
+          $("#saleP1").text(response.totSale.find(item => item.piano === 1).count)
+          $("#saleP2").text(response.totSale.find(item => item.piano === 2).count)
+          $("#stanze").text(response.totSale.find(item => item.piano === -1).count)
+          $("#repertiP0").text(response.repertiPiano.find(item => item.piano === 0).count)
+          $("#repertiP1").text(response.repertiPiano.find(item => item.piano === 1).count)
+          $("#repertiP2").text(response.repertiPiano.find(item => item.piano === 2).count)
+          $("#repertiP-1").text(response.repertiPiano.find(item => item.piano === -1).count)
+          $("#vetrineP1").text(response.vetrine.find(item => item.piano === 1).count)
+          $("#vetrineP2").text(response.vetrine.find(item => item.piano === 2).count)
+          $("#scaffali").text(response.scaffali.find(item => item.piano === -1).count)
+          $("#casseforti").text(response.tipoScaffale.find(item => item.note === 'cassaforte').count)
+          $("#monetieri").text(response.tipoScaffale.find(item => item.note === 'monetiere').count)
+          $("#repertiMonetieri").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '40').count)
+          $("#repertiCasseforti").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '41').count)
+          $("#fvP1").text(response.fuoriVetrina.find(item => item.piano === 1).count)
+          $("#fvP2").text(response.fuoriVetrina.find(item => item.piano === 2).count)
 
-/* www.flaticon.com */
+          resolve(response);
+        }
+      },
+      error: function(xhr, status, error) {
+        reject(`Errore AJAX: ${error}`);
+      }
+    })
+  })
+}
 
-function loadSvg(svg){
+
+async function loadSvg(svg){
   $("#svgWrap").html('').load(svg,{},function(){
     let svgEl = svgPanZoom('#pianta', svgOpt);
     $("#pianta #sale>g").each(function(i,v){
@@ -63,8 +97,11 @@ function loadSvg(svg){
           $("#pianta *").removeClass('salaActive').removeClass('contenitoreActive')
           $(this).find('path, rect').addClass('salaActive');
           let piano = $("[name=piani]:checked").val()
-          let dati = {piano:piano,sala:$(this).prop('id').slice(1)};
-          getSchedeByLocation('sala', dati)
+          let sala = $(this).prop('id').slice(1)
+          setFilters(localStorageItem,'contenitore',true,'remove')
+          setFilters(localStorageItem,'piano',piano,"update")
+          setFilters(localStorageItem,'sala',sala,"update")
+          setActiveFilters(localStorageItem);
         }
       });
     })
@@ -83,44 +120,14 @@ function loadSvg(svg){
           let piano = $("[name=piani]:checked").val()
           let sala = $(this).prop('id').split('_')[0].slice(1);
           let contenitore = $(this).prop('id').split('_').pop().slice(1);
-          let dati = {piano:piano, sala:sala, contenitore:contenitore}
-          getSchedeByLocation('contenitore', dati)
+          setFilters(localStorageItem,'piano',piano,"update")
+          setFilters(localStorageItem,'sala',sala,"update")
+          setFilters(localStorageItem,'contenitore',contenitore,"update")
+          setActiveFilters(localStorageItem);
         }
       });
     })
   });
-}
-
-function getSchedeByLocation(el, filter){
-  if(filter && typeof filter === 'object' && !Array.isArray(filter) && Object.keys(filter).length>0){
-    // window.scrollTo(500,500);
-    wrap.html('');
-    schede=[];
-    pagenumber = 0;
-    $.ajax({
-      type: "POST",
-      url: "api/sale.php",
-      dataType: 'json',
-      data: {trigger: 'getSchedeByLocation', filter:filter}
-    })
-    .done(function(data){
-      console.log(data);
-      info = {sale:data.sale.count, contenitori:data.contenitori.count}
-      if(data.schede){
-        if(el == 'sala'){info.sala=data.schede[0].sala;}
-        if(el == 'contenitore'){
-          info.sala=data.schede[0].sala;
-          info.contenitore=data.schede[0].contenitore;
-        }
-        data.schede.forEach(function(item,i){ schede.push(item); });
-        info.reperti = data.schede.length
-      }
-      setInfo(el,info)
-      loadGallery()
-    })
-  }else{
-    console.error('devi passare un array o non deve essere vuota');
-  }
 }
 
 function setInfo(el,info){
@@ -129,7 +136,6 @@ function setInfo(el,info){
   let title = pianoText; 
   let text, tipoContenitore, reperti;
   $("#resTitle, #resSubTitle").html('')
-  console.log(info);
   if (!info.reperti) {
     $("<div/>",{class:'alert alert-warning mx-auto text-center'}).text('Non sono presenti reperti schedati per la sala o il contenitore selezionati.').appendTo(wrap);
     return false;
@@ -165,7 +171,7 @@ function setInfo(el,info){
 
 function loadGallery(){
   let currentDataset = schede.slice(pagenumber * perpage, (pagenumber * perpage) + perpage);
-  console.log(currentDataset);
+  // console.log(currentDataset);
   if (currentDataset.length > 0){
     currentDataset.forEach(function(item){
       let div = $("<div/>",{class:'item bg-white shadow', title:'visualizza scheda'})
@@ -186,8 +192,40 @@ function loadGallery(){
 }
 
 window.addEventListener('scroll',()=>{
-  if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight){
-    pagenumber++;
-    loadGallery();
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 60) {
+    if (totalPagesKnown && currentPage < totalPages) {
+      let filters = getFilters(localStorageItem);
+      gallery(filters)
+    }
+  }
+
+  // Controllo per il comportamento del div fisso
+  if (window.scrollY >= divInitialOffset - 60) {
+    totalItems.classList.add('fixed');
+  } else {
+    totalItems.classList.remove('fixed');
   }
 })
+
+async function setActiveFilters(item) {
+  let filters = getFilters(item);
+  if (filters && Object.keys(filters).length > 0) {
+    $('[name=piani]').prop('checked', false);
+    $('[name=piani][value="'+filters['piano']+'"]').prop('checked', true);
+    // loadSvg('img/piante/piano'+filters['piano']+'.svg');
+    WRAP.innerHTML=''
+    currentPage = 1;
+    itemsLoaded = 0;
+    await gallery(filters)
+  }else{
+    sessionStorage.removeItem(localStorageItem);
+    $("[name=piani][value=0]").prop('checked',true)
+    loadSvg('img/piante/piano0.svg');
+    setFilters(localStorageItem,"piano",0,"update")
+    setFilters(localStorageItem,"principale","true","update")
+    let filters = getFilters(localStorageItem);
+    gallery(filters);
+    // getSchedeByLocation('piano', {piano:init})
+  }
+}
+

@@ -6,6 +6,26 @@ class Scheda extends Conn{
   public $db;
   function __construct(){}
 
+  public function setDefaultImg(array $dati){
+    if(is_array($dati) && !empty($dati)){
+      try {
+        $old = ["default" => 'false',"id"=>(int) $dati['old'], "scheda"=>(int) $dati['scheda']];
+        $new = ["default" => 'true',"id"=>(int) $dati['new'], "scheda"=>(int) $dati['scheda']];
+        $query = "update file set foto_principale = :default where id = :id and scheda = :scheda ";
+        $this->begin();
+        $this->prepared($query,$old);
+        $this->prepared($query,$new);
+        $this->commit();
+        return ["msg"=>"La foto principale è stata settata correttamente", "error"=>0];
+      } catch (\Throwable $e) {
+        $this->rollback();
+        return ["msg"=>$e->getMessage(), "error"=>$e->getCode()];
+      }
+
+      return $dati;
+    }
+  }
+
   public function progress(int $id){
     // $biblio = $this->simple("select count(*) biblio from biblio_scheda where scheda = ".$id);
     $biblio = $this->simple("select count(*) biblio from biblio_fake where scheda = ".$id);
@@ -759,7 +779,6 @@ class Scheda extends Conn{
     $where = '';
     $filter = [];
     if($dati && !empty($dati)){
-      // if(isset($dati['stato'])){array_push($filter, $dati['stato']['field']." = '".$dati['stato']['value']."'");}
       if(isset($dati['tipo'])){array_push($filter, "tsk = ".$dati['tipo']);}
       if(isset($dati['operatore'])){array_push($filter,' cmpn = '.$dati['operatore']);}
       if(isset($dati['catalogo'])){array_push($filter," nctn::text ilike '%".$dati['catalogo']."%'");}
@@ -808,10 +827,69 @@ class Scheda extends Conn{
   }
 
   public function search(array $dati){
-    $field = ["s.id","f.file", "g.classe", "g.ogtd"];
-    $join = ["inner join file f on f.scheda = s.id", "inner join gallery g on g.id = s.id"];
-    $filter = ["f.tipo = 3"];
-    if (isset($dati['tsk'])) {
+    $field = [
+      "s.id",
+      "f.file",
+      "g.classe",
+      "g.ogtd",
+      "lc.piano",
+      "lc.sala",
+      "sale.descrizione nome_sala",
+      "lc.contenitore"
+    ];
+    $join = [
+      "inner join lc on lc.scheda = s.id",
+      "inner join liste.sale sale on lc.sala = sale.id",
+      "inner join file f on f.scheda = s.id",
+      "inner join gallery g on g.id = s.id"
+    ];
+    // $tipo = $dati['tipo'] ?? 3;
+    // $filter = ["f.tipo = ".$tipo];
+    $filter = [];
+    if(isset($dati['tipo'])){
+      if($dati['tipo'] == 1){
+        $schede = $this->simple("select scheda from file where tipo = ".$dati['tipo'].";");
+        $schede = array_column($schede, 'scheda');
+        array_push($filter, "s.id in (".implode(',',$schede).")");
+        array_push($filter, "f.tipo = 3");
+      }else{
+        array_push($filter, "f.tipo = ".$dati['tipo']);
+      }
+    }else{
+      array_push($filter, "f.tipo = 3");
+    }
+    if(isset($dati['comune'])){
+      array_push($join, "inner join geolocalizzazione geo on geo.scheda = s.id");
+      array_push($filter, "geo.comune = ".$dati['comune']);
+    }
+    if(isset($dati['piano'])){
+      array_push($filter, "lc.piano = ".$dati['piano']);
+    }
+    if(isset($dati['sala'])){
+      array_push($filter, "lc.sala = ".$dati['sala']);
+    }
+    if(isset($dati['contenitore'])){
+      if($dati['piano'] > -1){
+        $vetrina = $this->simple("select vetrina from liste.vetrine where id = ".$dati['contenitore'].";")[0];
+      }
+      array_push($filter, "lc.contenitore= '".$vetrina['vetrina']."'");
+    }
+    if(isset($dati['nctn'])){
+      array_push($join, "inner join nctn_scheda nctn on nctn.scheda = s.id");
+      array_push($filter, "nctn.nctn = ".$dati['nctn']);
+    }
+    if(isset($dati['inventario'])){
+      array_push($join, "inner join inventario on inventario.scheda = s.id");
+      array_push($filter, "inventario.inventario = ".$dati['inventario']);
+    }
+
+    if(isset($dati['ids']) && is_array($dati['ids'])){
+      array_push($filter, "s.id in (".implode(',',$dati['ids']).")");
+    }
+    if(isset($dati['principale'])){
+      array_push($filter, "f.foto_principale = true");
+    }
+    if(isset($dati['tsk'])) {
       array_push($filter, "s.tsk = ".$dati['tsk']);
       if ($dati['tsk']==1) {
         array_push($join, "inner join og_ra on og_ra.scheda = s.id");
@@ -824,11 +902,11 @@ class Scheda extends Conn{
         array_push($join, "inner join og_nu ON og_nu.scheda = s.id JOIN liste.ogtd ON og_nu.ogtd = ogtd.id LEFT JOIN liste.ogto ON og_nu.ogto = ogto.id");
         if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
       }
-      if (isset($dati['materia'])) {
-        array_push($field, "m.value materia");
-        array_push($join, "inner join mtc on mtc.scheda = s.id inner join liste.materia m on mtc.materia = m.id");
-        array_push($filter, "m.id = ".$dati['materia']);
-      }
+    }
+    if (isset($dati['materia'])) {
+      array_push($field, "m.value materia");
+      array_push($join, "inner join mtc on mtc.scheda = s.id inner join liste.materia m on mtc.materia = m.id");
+      array_push($filter, "m.id = ".$dati['materia']);
     }
     if (isset($dati['dtzgi']) || isset($dati['dtzgf']) || isset($dati['dtsi']) || isset($dati['dtsf'])) {
       array_push($join, "inner join dt on dt.scheda = s.id");
@@ -862,9 +940,18 @@ class Scheda extends Conn{
       array_push($filter, "'{".join(',',$dati['tags'])."}' <@ tag.tags ");
     }
 
-    $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter);
-    return $this->simple($sql);
-    // return $sql;
+    
+    $limit='';
+    $offset='';
+    if(isset($dati['page']) && isset($dati['limit'])){    
+      $limit = " LIMIT " . $dati['limit'];
+      $offset = " OFFSET " . ($dati['page'] - 1) * $dati['limit'];
+    }
+
+    $sqlTotalItems = "select count(*) from scheda s ". join(' ', $join)." where ". join(' and ', $filter).";";
+    $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter) . $limit . $offset . ";";
+    // file_put_contents('/var/www/html/marta/workfile/db/query.log', $sqlTotalItems . PHP_EOL, FILE_APPEND);
+    return ["totalItems" => $this->simple($sqlTotalItems)[0], "items" => $this->simple($sql), "sql" => $sql, "dati"=>$dati];
   }
 }
 ?>

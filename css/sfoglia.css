@@ -1,4 +1,5 @@
 @import "main.css";
+@import "gallery.css";
 #mainTitle > div{
   position:relative;
   width:90%;
@@ -25,70 +26,7 @@ form h6{font-weight: bold;}
 #searchTip p.tipTitle{font-weight: bold;}
 #searchTip p.tipBody{margin-bottom:10px;}
 #searchMsg{padding:0.2rem 1.25rem}
-#findWrap{
-  position:relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.item{
-  width:33%;
-  position:relative;
-  display:inline-block;
-  margin:0;
-  padding:0;
-  border: 2px solid #fff;
-  cursor:pointer;
-  overflow:hidden;
-  z-index:1;
-}
-.itemBg, .itemTxt{
-  position:absolute;
-  top:0;
-  left:0;
-  bottom:0;
-  width:100%;
-}
-.itemBg{
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  z-index:2;
-}
-.itemTxt{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color:#fff;
-  background-color: rgba(0,0,0,0);
-  opacity: 0;
-  z-index:3;
-}
-.itemTxt p{font-size:20px; margin:0; padding:0}
-.item:hover .itemBg, .item:focus .itemBg{ -ms-transform: scale(1.5); -moz-transform:scale(1.5); -webkit-transform: scale(1.5); -o-transform: scale(1.5); transform: scale(1.5); }
-.item:hover .itemTxt, .item:focus .itemTxt{background-color: rgba(0,0,0,.8); opacity: 1;}
 
-.itemBtn{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(0,0,0,.5);
-  margin: 0;
-  padding:0;
-  z-index:4;
-}
-.btnDiv{
-  display: inline-block;
-  width: 50%;
-  margin: 0;
-  padding: 5px;
-  text-align: center;
-}
 @media (min-width: 768px) {
   #mainTitle > div{
     width:60%;
@@ -98,9 +36,7 @@ form h6{font-weight: bold;}
     background-position: left;
   }
   #mainTitle > div > h2{text-align: left;}
-  .item{width:33%}
 }
 
 @media (min-width: 1200px){
-  .item{width:20%}
 }

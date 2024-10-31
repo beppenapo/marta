@@ -3,10 +3,9 @@ namespace Marta;
 use \Marta\Scheda;
 use Imagick;
 class File extends Scheda{
-  public $dirOrig = "../file/foto/orig/";
-  public $dirLarge = "../file/foto/large/";
-  public $dirMedium = "../file/foto/medium/";
-  public $dirSmall = "../file/foto/small/";
+  public $dirOrig = "/var/www/marta/file/foto";
+  public $dirMedium = "/var/www/marta/file/foto_medium/";
+  public $dirSmall = "/var/www/marta/file/foto_small/";
   function __construct(){
     
   }
@@ -26,13 +25,10 @@ class File extends Scheda{
       if (!move_uploaded_file($filename,$this->dirOrig.$name)) {throw new \Exception("Errore nel caricamento dell'immagine nella cartella large", 1);}
       chmod($this->dirOrig.$name,0777);
 
-      if (!copy($this->dirOrig.$name,$this->dirLarge.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella large", 1);}
-      chmod($this->dirLarge.$name,0777);
       if (!copy($this->dirOrig.$name,$this->dirMedium.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella medium", 1);}
       chmod($this->dirMedium.$name,0777);
       if (!copy($this->dirOrig.$name,$this->dirSmall.$name)) {throw new \Exception("Errore nel copiare l'immagine nella cartella small", 1);}
       chmod($this->dirSmall.$name,0777);
-      $this->modifyImage($this->dirLarge.$name,500);
       $this->modifyImage($this->dirMedium.$name,250);
       $this->modifyImage($this->dirSmall.$name,150);
       $dati = array("scheda"=>$dati['scheda'],"file"=>$name,"tipo"=>3);
@@ -64,6 +60,7 @@ class File extends Scheda{
     $res = $this->simple("select count(*) from file where tipo = 3 and scheda = ".$scheda.";");
     return $res[0]['count'];
   }
+  
   private function modifyImage($img,$dim){
     try {
       $image = new Imagick(realpath($img));
@@ -77,7 +74,7 @@ class File extends Scheda{
         $new_w = $dim;
         $new_h = $h * $dim / $w;
       }
-      $image->shaveImage(100, 100);
+      $image->shaveImage(30,30);
       $image->resizeImage($new_w, $new_h, Imagick::FILTER_LANCZOS, 0.9,false);
       $image->cropImage($dim, $dim, ($new_w - $dim) / 2, ($new_h - $dim) / 2);
       $image->setImageExtent($dim,$dim);
@@ -103,7 +100,6 @@ class File extends Scheda{
   public function delImg(array $dati){
     try {
       unlink($this->dirOrig.$dati['file']);
-      unlink($this->dirLarge.$dati['file']);
       unlink($this->dirMedium.$dati['file']);
       unlink($this->dirSmall.$dati['file']);
       $sql = "delete from file where id = :id and scheda = :scheda and file = :file;";
