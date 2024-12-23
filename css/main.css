@@ -39,7 +39,7 @@ body>nav#mainMenu ul.subMenu a{
 }
 body>nav#mainMenu ul.subMenu a:hover{padding-left:30px; color:#fff;}
 body>nav#mainMenu ul.subMenu li:last-child a{border-bottom: 1px solid #1f1f1f;}
-body>footer{position: relative;background:#343a40; color:#fff; min-height: 60px;}
+body>footer{position: relative;background:#343a40; color:#fff; min-height: 100px;}
 .headerMenu > ul {display:flex;}
 .headerMenu > ul > li{float: left;}
 .headerMenu > ul > li > a {
@@ -167,7 +167,7 @@ table.dataTable.dtr-inline.collapsed.table-sm>tbody>tr>th:first-child:before {
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {
   header .logo{display:block;}
-  footer .logo{display:none;}
+  /* footer .logo{display:none;} */
   header .headerMenu{margin: 0;}
   body>header, body > footer{justify-content: space-between;}
   .ui-autocomplete { max-height: 300px; overflow-y: auto; overflow-x: hidden;}
