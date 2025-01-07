@@ -22,7 +22,7 @@ let map;
 
 const BGIMG = 34;
 
-const apiFoto = 'http://91.121.82.80/marta/file/';
+const apiFoto = 'http://145.239.0.109/marta/file/';
 let fotoFolder;
 switch (true) {
   case screen.width <= 400 : fotoFolder = 'foto_small/';  break;
@@ -992,12 +992,56 @@ function setFilters(item, key, value, action) {
   sessionStorage.setItem(item, JSON.stringify(filters));
 }
 
+function fetchCassette(dati){
+  return new Promise((resolve,reject) => {
+    const data = {
+      trigger: 'fetchCassette',
+      dati:dati
+    }
+    $.ajax({
+      url: 'api/scheda.php',
+      type: 'POST', 
+      dataType: 'json', 
+      data: data,
+      success: function(response) {
+        if (response.error){
+          reject(response.error);
+        }else{
+          resolve(response);
+        }
+      },
+      error: function(xhr, status, error) {
+        reject(`Errore AJAX: ${error}`);
+      }
+    })
+  })
+}
+
 async function gallery(filters){
   if (isLoading) return;
   isLoading = true;
   try {
     const json = await search(filters);
     console.log(json);
+    if (json.breadcrumb && Object.keys(json.breadcrumb).length > 0) {
+      const breadcrumbList = document.getElementById('breadcrumb');
+      breadcrumbList.innerHTML = '';
+      console.log(json.breadcrumb);
+      
+      Object.entries(json.breadcrumb).forEach(([key, value]) => {
+        const li = document.createElement("li")
+        li.innerHTML = `${key} ${value}`;
+        li.classList.add("breadcrumb-item");
+        breadcrumbList.appendChild(li);
+      });
+
+      if(json.breadcrumb.piano == -1 && json.breadcrumb.scaffale){
+        const cassetteList = await fetchCassette(json.breadcrumb)
+        if(cassetteList.cassette.length > 0){
+          createCassetteList(cassetteList.cassette)
+        }
+      }
+    }
     totalPages = Math.ceil(json.totalItems.count / ITEMS_PER_PAGE + 1);
     totalPagesKnown = true;
     itemsLoaded += json.items.length;
@@ -1020,6 +1064,64 @@ async function gallery(filters){
   } catch (error) {
     console.error('Errore:', error);
   }
+}
+
+function createCassetteList(cassette){
+  // Seleziona il div con id "breadcrumb"
+  const breadcrumbDiv = document.getElementById("breadcrumb");
+
+  // Crea l'elemento <li>
+  const liElement = document.createElement("li");
+  liElement.classList.add("breadcrumb-item");
+
+  // Crea il <div> per il dropdown
+  const dropdownDiv = document.createElement("div");
+  dropdownDiv.classList.add("dropdown", "ms-5");
+
+  // Crea il pulsante per il dropdown
+  const button = document.createElement("button");
+  button.classList.add("btn", "btn-outline-secondary", "dropdown-toggle");
+  button.setAttribute("type", "button");
+  button.setAttribute("data-bs-toggle", "dropdown");
+  button.setAttribute("aria-expanded", "false");
+  button.textContent = "cassette";
+
+  // Crea il <ul> per la dropdown-menu
+  const dropdownMenu = document.createElement("ul");
+  dropdownMenu.setAttribute("id","listaCassette");
+  dropdownMenu.classList.add("dropdown-menu");
+
+  // Funzione da chiamare al click
+  function handleButtonClick(id) {
+    console.log(id);
+    setFilters(localStorageItem,'cassetta',id,"update")
+    setActiveFilters(localStorageItem);
+  }
+
+  // Aggiungi gli elementi <li> della dropdown-menu con i bottoni
+
+  cassette.forEach(item => {
+    const li = document.createElement("li");
+    const button = document.createElement("button");
+    button.classList.add("dropdown-item");
+    button.textContent = item.cassetta;
+
+    // Aggiungi il listener per il click
+    button.addEventListener("click", () => handleButtonClick(item.cassetta_id));
+
+    li.appendChild(button);
+    dropdownMenu.appendChild(li);
+  });
+
+  // Assembla il dropdown
+  dropdownDiv.appendChild(button);
+  dropdownDiv.appendChild(dropdownMenu);
+
+  // Assembla l'elemento <li>
+  liElement.appendChild(dropdownDiv);
+
+  // Aggiungi l'elemento <li> al div "breadcrumb"
+  breadcrumbDiv.appendChild(liElement);
 }
 
 function search(filters){

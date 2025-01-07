@@ -779,7 +779,7 @@ class Scheda extends Conn{
     $where = '';
     $filter = [];
     if($dati && !empty($dati)){
-      if(isset($dati['tipo'])){array_push($filter, "tsk = ".$dati['tipo']);}
+      if(isset($dati['tipo'])){$filters[] = "tsk = ".$dati['tipo'];}
       if(isset($dati['operatore'])){array_push($filter,' cmpn = '.$dati['operatore']);}
       if(isset($dati['catalogo'])){array_push($filter," nctn::text ilike '%".$dati['catalogo']."%'");}
       if(isset($dati['inventario'])){array_push($filter," inventario ilike '%".$dati['inventario']."%'");}
@@ -827,132 +827,215 @@ class Scheda extends Conn{
   }
 
   public function search(array $dati){
-    $field = [
-      "s.id",
-      "f.file",
-      "g.classe",
-      "g.ogtd",
-      "lc.piano",
-      "lc.sala",
-      "sale.descrizione nome_sala",
-      "lc.contenitore"
+    $fields = [
+      "s.id", 
+      "f.file", 
+      "g.classe", 
+      "g.ogtd", 
+      "localizzazione.piano", 
+      "localizzazione.sala", 
+      "localizzazione.sala_id", 
+      "localizzazione.descrizione nome_sala"
     ];
-    $join = [
-      "inner join lc on lc.scheda = s.id",
-      "inner join liste.sale sale on lc.sala = sale.id",
+    $joins = [
+      "inner join localizzazione on localizzazione.scheda = s.id",
       "inner join file f on f.scheda = s.id",
-      "inner join gallery g on g.id = s.id"
+      "inner join gallery g on g.scheda = s.id"
     ];
+    $filters = [];
 
-    $filter = [];
-    if(isset($dati['tipo'])){
+    if (!empty($dati['tipo'])) {
       if($dati['tipo'] == 1){
         $schede = $this->simple("select scheda from file where tipo = ".$dati['tipo'].";");
         $schede = array_column($schede, 'scheda');
-        array_push($filter, "s.id in (".implode(',',$schede).")");
-        array_push($filter, "f.tipo = 3");
+        $filters[] = "s.id in (" . implode(',',$schede) . ")";
+        $filters[] = "f.tipo = 3";
       }else{
-        array_push($filter, "f.tipo = ".$dati['tipo']);
+        $filters[] =  "f.tipo = ".$dati['tipo'];
       }
     }else{
-      array_push($filter, "f.tipo = 3");
-    }
-    if(isset($dati['comune'])){
-      array_push($join, "inner join geolocalizzazione geo on geo.scheda = s.id");
-      array_push($filter, "geo.comune = ".$dati['comune']);
-    }
-    if(isset($dati['piano'])){
-      array_push($filter, "lc.piano = ".$dati['piano']);
-    }
-    if(isset($dati['sala'])){
-      array_push($filter, "lc.sala = ".$dati['sala']);
-    }
-    if(isset($dati['contenitore'])){
-      if($dati['piano'] > -1){
-        $vetrina = $this->simple("select vetrina from liste.vetrine where id = ".$dati['contenitore'].";")[0];
-        array_push($filter, "lc.contenitore= '".$vetrina['vetrina']."'");
-      }else{
-        array_push($filter, "lc.contenitore= '".$dati['contenitore']."'");
-      }
-    }
-    if(isset($dati['nctn'])){
-      array_push($join, "inner join nctn_scheda nctn on nctn.scheda = s.id");
-      array_push($filter, "nctn.nctn = ".$dati['nctn']);
-    }
-    if(isset($dati['inventario'])){
-      array_push($join, "inner join inventario on inventario.scheda = s.id");
-      array_push($filter, "inventario.inventario = ".$dati['inventario']);
+      $filters[] = "f.tipo = 3";
     }
 
-    if(isset($dati['ids']) && is_array($dati['ids'])){
-      array_push($filter, "s.id in (".implode(',',$dati['ids']).")");
+    if(!empty($dati['principale'])){ $filters[] = "f.foto_principale = true"; }
+    if(!empty($dati['nctn'])){
+      $joins[] = "inner join nctn_scheda nctn on nctn.scheda = s.id";
+      $filters[] = "nctn.nctn = ".$dati['nctn'];
     }
-    if(isset($dati['principale'])){
-      array_push($filter, "f.foto_principale = true");
+    if(!empty($dati['inventario'])){
+      $joins[] = "inner join inventario on inventario.scheda = s.id";
+      $filters[] = "inventario.inventario = ".$dati['inventario'];
     }
-    if(isset($dati['tsk'])) {
-      array_push($filter, "s.tsk = ".$dati['tsk']);
+
+    if (!empty($dati['comune'])) {
+      $joins[] = "INNER JOIN geolocalizzazione geo ON geo.scheda = s.id";
+      $filters[] = "geo.comune = " . $dati['comune'];
+    }
+
+    // LOCALIZZAZIONE INTERNA
+    if (isset($dati['piano']) && $dati['piano'] !== '') {
+      $filters[] = "localizzazione.piano = " . intval($dati['piano']);
+
+      if (!empty($dati['sala'])) {
+        $filters[] = "localizzazione.sala_id =" . $dati['sala'];
+        
+        if($dati['piano'] > -1){
+          $joins[] = "inner join localizzazione_esposto esposto on esposto.scheda = s.id";
+        }else{
+          $joins[] = " inner join localizzazione_deposito deposito on deposito.scheda = s.id";
+        }
+        
+        if(!empty($dati['contenitore'])){
+          if($dati['piano'] > -1){
+            $fields[] = "esposto.vetrina_id";
+            $fields[] = "esposto.vetrina";
+            $filters[] = "esposto.vetrina_id = " . intval($dati['contenitore']);
+          }else{
+            $fileds[] = "scaffali_id";
+            $fileds[] = "scaffale";
+            $fileds[] = "scaffale_text";
+            $fileds[] = "colonne_id";
+            $fileds[] = "colonna";
+            $fileds[] = "ripiano_id";
+            $fileds[] = "ripiano";
+            $fileds[] = "cassetta_id";
+            $fileds[] = "cassetta"; 
+            $filters[] = "deposito.scaffali_id = " . intval($dati['contenitore']);
+            
+            if(!empty($dati['colonna'])){
+              $filters[] = "deposito.colonne_id = " . intval($dati['colonna']);
+            }
+            if(!empty($dati['cassetta'])){
+              $filters[] = "deposito.cassetta_id = " . intval($dati['cassetta']);
+            }
+          }
+        }else{
+          // se seleziono la sala ma non vetrine o scaffali allora mostro solo i reperti fuori vetrina/scaffale
+          if($dati['piano'] > -1){
+            $filters[] = "esposto.vetrina_id is null";
+          }else{
+            $filters[] = "deposito.cassetta_id is null";
+            $filters[] = "deposito.scaffali_id != 28";
+            $filters[] = "deposito.scaffali_id != 29";
+          }
+        }
+      }
+    }
+
+    if(!empty($dati['ids']) && is_array($dati['ids'])){
+      $filters[] = "s.id in (" . implode(',', array_map('intval', $dati['ids'])) . ")";
+    }
+    
+    if(!empty($dati['tsk'])) {
+      $filters[] = "s.tsk = ".$dati['tsk'];
       if ($dati['tsk']==1) {
-        array_push($join, "inner join og_ra on og_ra.scheda = s.id");
-        array_push($join, "inner join liste.ra_cls_l3 cls on og_ra.l3 = cls.id");
-        array_push($join, "inner join liste.ra_cls_l4 ogtd on og_ra.l4 = ogtd.id");
-        if (isset($dati['cls'])) { array_push($filter, "cls.id = ".$dati['cls']); }
-        if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
+        $joins[] = "inner join og_ra on og_ra.scheda = s.id";
+        $joins[] = "inner join liste.ra_cls_l3 cls on og_ra.l3 = cls.id";
+        $joins[] = "inner join liste.ra_cls_l4 ogtd on og_ra.l4 = ogtd.id";
+        if (!empty($dati['cls'])) { $filters[] = "cls.id = ".$dati['cls']; }
+        if (!empty($dati['ogtd'])) { $filters[] = "ogtd.id = ".$dati['ogtd']; }
       }
       if ($dati['tsk']==2) {
-        array_push($join, "inner join og_nu ON og_nu.scheda = s.id JOIN liste.ogtd ON og_nu.ogtd = ogtd.id LEFT JOIN liste.ogto ON og_nu.ogto = ogto.id");
-        if (isset($dati['ogtd'])) { array_push($filter, "ogtd.id = ".$dati['ogtd']); }
+        $joins[] = "inner join og_nu ON og_nu.scheda = s.id";
+        $joins[] = "JOIN liste.ogtd ON og_nu.ogtd = ogtd.id";
+        $joins[] = "LEFT JOIN liste.ogto ON og_nu.ogto = ogto.id";
+        if (!empty($dati['ogtd'])) { $filters[] = "ogtd.id = ".$dati['ogtd']; }
       }
     }
-    if (isset($dati['materia'])) {
-      array_push($field, "m.value materia");
-      array_push($join, "inner join mtc on mtc.scheda = s.id inner join liste.materia m on mtc.materia = m.id");
-      array_push($filter, "m.id = ".$dati['materia']);
+    if (!empty($dati['materia'])) {
+      $fields[] = "m.value materia";
+      $joins = "inner join mtc on mtc.scheda = s.id inner join liste.materia m on mtc.materia = m.id";
+      $filters[] = "m.id = ".$dati['materia'];
     }
-    if (isset($dati['dtzgi']) || isset($dati['dtzgf']) || isset($dati['dtsi']) || isset($dati['dtsf'])) {
-      array_push($join, "inner join dt on dt.scheda = s.id");
+    if (!empty($dati['dtzgi']) || !empty($dati['dtzgf']) || !empty($dati['dtsi']) || !empty($dati['dtsf'])) {
+      $joins[] = "inner join dt on dt.scheda = s.id";
     }
-    if (isset($dati['dtzgi'])) {
-      array_push($field, "dtzgi.value dtzgi");
-      array_push($join, "inner join liste.cronologia dtzgi on dt.dtzgi = dtzgi.id");
-      array_push($filter, "dtzgi.id >= ".$dati['dtzgi']);
+    if (!empty($dati['dtzgi'])) {
+      $fields[] = "dtzgi.value dtzgi";
+      $joins[] = "inner join liste.cronologia dtzgi on dt.dtzgi = dtzgi.id";
+      $filters[] = "dtzgi.id >= ".$dati['dtzgi'];
     }
-    if (isset($dati['dtzgf'])) {
-      array_push($field, "dtzgf.value dtzgf");
-      array_push($join, "inner join liste.cronologia dtzgf on dt.dtzgf = dtzgf.id");
-      array_push($filter, "dtzgf.id <= ".$dati['dtzgf']);
+    if (!empty($dati['dtzgf'])) {
+      $fields[] = "dtzgf.value dtzgf";
+      $joins[] = "inner join liste.cronologia dtzgf on dt.dtzgf = dtzgf.id";
+      $filters[] = "dtzgf.id <= ".$dati['dtzgf'];
     }
-    if (isset($dati['dtsi'])) {
-      array_push($field, "dt.dtsi");
-      array_push($filter, "dt.dtsi >= ".$dati['dtsi']);
+    if (!empty($dati['dtsi'])) {
+      $fields[] = "dt.dtsi";
+      $filters[] = "dt.dtsi >= ".$dati['dtsi'];
     }
-    if (isset($dati['dtsf'])) {
-      array_push($field, "dt.dtsf");
-      array_push($filter, "dt.dtsf <= ".$dati['dtsf']);
+    if (!empty($dati['dtsf'])) {
+      $fields[] = "dt.dtsf";
+      $filters[] = "dt.dtsf <= ".$dati['dtsf'];
     }
-    if (isset($dati['fts'])) {
+    if (!empty($dati['fts'])) {
       $tag = preg_replace('/[^A-Za-z0-9\-]/', ' ', $dati['fts']);
       $tag = preg_replace("/\\s+/m",' | ', $tag);
-      array_push($join, "inner join da on da.scheda = s.id");
-      array_push($filter, "da.fts @@ to_tsquery('".$tag."') ");
+      $joins[] = "inner join da on da.scheda = s.id";
+      $filters[] = "da.fts @@ to_tsquery('".$tag."') ";
     }
-    if (isset($dati['tags'])) {
-      array_push($join, "inner join tag on tag.scheda = s.id");
-      array_push($filter, "'{".join(',',$dati['tags'])."}' <@ tag.tags ");
+    if (!empty($dati['tags'])) {
+      $joins[] = "inner join tag on tag.scheda = s.id";
+      $filters[] = "'{".join(',',$dati['tags'])."}' <@ tag.tags ";
     }
 
     
     $limit='';
     $offset='';
-    if(isset($dati['page']) && isset($dati['limit'])){    
+    if(!empty($dati['page']) && !empty($dati['limit'])){    
       $limit = " LIMIT " . $dati['limit'];
       $offset = " OFFSET " . ($dati['page'] - 1) * $dati['limit'];
     }
 
-    $sqlTotalItems = "select count(*) from scheda s ". join(' ', $join)." where ". join(' and ', $filter).";";
-    $sql = "select ".join(',', $field)." from scheda s ". join(' ', $join)." where ". join(' and ', $filter) . $limit . $offset . ";";
-    // file_put_contents('/var/www/html/marta/workfile/db/query.log', $sqlTotalItems . PHP_EOL, FILE_APPEND);
-    return ["totalItems" => $this->simple($sqlTotalItems)[0], "items" => $this->simple($sql), "sql" => $sql, "dati"=>$dati];
+    $whereClause = $filters ? "WHERE " . implode(" AND ", $filters) : "";
+    $sqlTotalItems = "select count(*) from scheda s ". join(' ', $joins) . " $whereClause;";
+    $sql = "select ".join(',', $fields)." from scheda s ". join(' ', $joins)." $whereClause $limit $offset;";
+    return [
+      "totalItems" => $this->simple($sqlTotalItems)[0], 
+      "items" => $this->simple($sql), 
+      "sql" => $sql, 
+      "dati"=>$dati,
+      "breadcrumb" => $this->breadcrumb($dati)
+    ];
+  }
+
+  public function fetchCassette(array $dati):array{
+    if (empty($dati)) { throw new \InvalidArgumentException("L'array fornito è vuoto."); }
+    $filters = ["cassetta != 'fuori cassetta'"];
+    if(array_key_exists('sala',$dati)){ $filters[] = "sala_id = " . intval($dati['sala']); }
+    if(array_key_exists('scaffale',$dati)){ $filters[] = "scaffali_id = " . intval($dati['scaffale']); }
+    if(array_key_exists('colonna',$dati)){ $filters[] = "colonne_id = " . intval($dati['colonna']); }
+    $where = !empty($filters) ? ' where ' . implode(" and ", $filters) : "";
+    $sql = "select distinct cassetta_id, cassetta from localizzazione_deposito ". $where . " order by cassetta asc;";
+    return ["query"=>$sql, "cassette" => $this->simple($sql)];
+  }
+
+  private function breadcrumb(array $dati):array{
+    $out = ["piano" => $dati['piano']];
+    $sql='';
+    if(!empty($dati['sala'])){
+      $sql = "select descrizione from liste.sale where piano = " . intval($dati['piano']) . " and id = " . intval($dati['sala']) . ";";
+      $out['sala'] = $this->simple($sql)[0]['descrizione'];
+      
+      if(!empty($dati['contenitore'])){
+        if($dati['piano'] > -1){
+          $out['vetrina'] = $this->simple("select vetrina from liste.vetrine where sala = " . intval($dati['sala']) . " and id = " . intval($dati['contenitore']) . ";")[0]['vetrina'];
+        }else{
+          $out['scaffale'] = $this->simple("select note as scaffale from liste.scaffali where sala = " . intval($dati['sala']) . " and id = " . intval($dati['contenitore']) . ";")[0]['scaffale'];
+
+          if(!empty($dati['colonna'])){
+            $out['colonna'] = $this->simple("select colonna from liste.colonne where id = " . intval($dati['colonna']))[0]['colonna'];
+          }
+          if(!empty($dati['cassetta'])){
+            $out['ripiano'] = $this->simple("select r.ripiano from liste.cassette c inner join liste.ripiani r on c.ripiano = r.id where c.id = " . intval($dati['cassetta']) . ";")[0]['ripiano'];
+            $out['cassetta'] = $this->simple("select c.cassetta from liste.cassette c inner join liste.ripiani r on c.ripiano = r.id where c.id = " . intval($dati['cassetta']) . ";")[0]['cassetta'];
+          }
+        }
+      }else{
+        $out['fuori'] = $dati['piano'] > -1 ? 'vetrina' : 'cassetta';
+      }
+    }
+    return $out;
   }
 }
 ?>

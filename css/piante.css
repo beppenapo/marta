@@ -25,16 +25,24 @@ main{padding-top:60px !important;}
   height:70vh;
   overflow-y: auto;
   overflow-x: hidden;
-
-  h4, h6{font-weight: bold; color:rgb(198,156,85);}
-  h6{font-size: 1.2rem; margin-top:1.5rem;}
-  span{font-weight: bold;}
-  p{margin:0; font-size:.9rem;}
-  li{padding: .25rem 1.25rem; font-size: .8rem;}
 }
+#introMuseo h4, #introMuseo h6{font-weight: bold; color:rgb(198,156,85) !important;}
+/* #introMuseo h6{font-size: 1.2rem; margin-top:1.5rem;} */
+#introMuseo span{font-weight: bold;}
+#introMuseo p{margin:0; font-size:.9rem;}
+#introMuseo li{padding: .25rem 1.25rem; font-size: .8rem;}
+
 svg{width:98%;height:60vh; margin:0 1%; font-family: sans-serif;}
-#sale>g,#vetrine g > g,#scaffali g{cursor:pointer}
-#sale path, #sale rect, #vetrine path, #vetrine rect{fill:#ffffff;}
+
+#sale > g,
+#vetrine g > g,
+#scaffali g,
+#colonne g{cursor:pointer}
+
+#sale path, 
+#sale rect, 
+#vetrine path, 
+#vetrine rect{fill:#ffffff;}
 
 .contenitore, .sala{fill:rgb(255,255,255);}
 .contenitoreHover, .contenitoreActive{fill:rgb(198,156,85) !important;}
@@ -73,6 +81,32 @@ svg{width:98%;height:60vh; margin:0 1%; font-family: sans-serif;}
   padding:10px;
   color: rgb(255, 255, 255);
   background-color: rgba(0, 0, 0, 0.7);
+}
+
+#guidaNavigazione{
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  width: 400px;
+
+  #navTip{
+    margin-top: 15px;
+    li{ font-size:14px }
+  }
+}
+
+#listaCassette{ height:auto; max-height: 300px; overflow: auto; }
+
+.breadcrumb{font-size: 1.6rem;justify-content: center;}
+
+
+/* ACCORDION OVERWRITE CSS */
+.accordion-button:focus { box-shadow: none !important;}
+.accordion-button:not(.collapsed) {
+  /* color: var(--bs-accordion-active-color); */
+  color: #fff;
+  background-color: rgb(198, 156, 85) !important;
+  box-shadow: none !important;
 }
 
 @media (min-width: 768px) {

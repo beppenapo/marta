@@ -34,6 +34,9 @@ $(document).ready(function() {
     setFilters(localStorageItem,"piano",p,"update")
     setFilters(localStorageItem,"sala",true,"remove")
     setFilters(localStorageItem,"contenitore",true,"remove")
+    setFilters(localStorageItem,"colonna",true,"remove")
+    setFilters(localStorageItem,'cassetta',true,'remove')
+
     setActiveFilters(localStorageItem);
   })
   $("#fuoriVetrinaTxt").hide();
@@ -50,7 +53,8 @@ function introMuseo(){
         if (response.error){
           reject(response.error);
         }else{
-          console.log(response);
+          // console.log(response);
+          $("#totReperti").text(response.totReperti)
           $("#totEsposto").text(response.totEsposto)
           $("#totDeposito").text(response.totDeposito)
           $("#saleP0").text(response.totSale.find(item => item.piano === 0).count)
@@ -63,13 +67,15 @@ function introMuseo(){
           $("#repertiP-1").text(response.repertiPiano.find(item => item.piano === -1).count)
           $("#vetrineP1").text(response.vetrine.find(item => item.piano === 1).count)
           $("#vetrineP2").text(response.vetrine.find(item => item.piano === 2).count)
-          $("#scaffali").text(response.scaffali.find(item => item.piano === -1).count)
-          $("#casseforti").text(response.tipoScaffale.find(item => item.note === 'cassaforte').count)
-          $("#monetieri").text(response.tipoScaffale.find(item => item.note === 'monetiere').count)
-          $("#repertiMonetieri").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '2').count)
-          $("#repertiCasseforti").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === '1').count)
           $("#fvP1").text(response.fuoriVetrina.find(item => item.piano === 1).count)
           $("#fvP2").text(response.fuoriVetrina.find(item => item.piano === 2).count)
+          $("#scaffali").text(response.scaffali)
+          $("#casseforti").text(response.tipoScaffale.find(item => item.note === 'cassaforte').count)
+          $("#monetieri").text(response.tipoScaffale.find(item => item.note === 'monetiere').count)
+          $("#cassette").text(response.cassette)
+          $("#fuoriCassetta").text(response.fuoriCassetta)
+          $("#repertiMonetieri").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === 'monetiere').count)
+          $("#repertiCasseforti").text(response.repertiCassefortiMonetieri.find(item => item.contenitore === 'cassaforte').count)
 
           resolve(response);
         }
@@ -98,6 +104,8 @@ async function loadSvg(svg){
           $(this).find('path, rect').addClass('salaActive');
           let piano = $("[name=piani]:checked").val()
           let sala = $(this).prop('id').slice(1)
+          setFilters(localStorageItem,'cassetta',true,'remove')
+          setFilters(localStorageItem,'colonna',true,'remove')
           setFilters(localStorageItem,'contenitore',true,'remove')
           setFilters(localStorageItem,'piano',piano,"update")
           setFilters(localStorageItem,'sala',sala,"update")
@@ -120,12 +128,34 @@ async function loadSvg(svg){
           let piano = $("[name=piani]:checked").val()
           let sala = $(this).prop('id').split('_')[0].slice(1);
           let contenitore = $(this).prop('id').split('_').pop().slice(1);
+          setFilters(localStorageItem,'cassetta',true,'remove')
+          setFilters(localStorageItem,'colonna',true,'remove')
           setFilters(localStorageItem,'piano',piano,"update")
           setFilters(localStorageItem,'sala',sala,"update")
           setFilters(localStorageItem,'contenitore',contenitore,"update")
           setActiveFilters(localStorageItem);
         }
       });
+    })
+
+    $("#pianta  #colonne g").each(function(i,v){
+      $(this).on({
+        mouseenter : function(){$(this).find('rect, text').addClass('contenitoreHover');},
+        mouseleave : function(){$(this).find('rect, text').removeClass('contenitoreHover');},
+        click : function(){
+          $("#pianta *").removeClass('salaActive').removeClass('contenitoreActive')
+          $(this).find('path, rect').addClass('contenitoreActive');
+          let piano = $("[name=piani]:checked").val()
+          let sala = $(this).prop('id').split('_')[0].slice(1);
+          let contenitore = $(this).prop('id').split('_')[1].slice(1);
+          let colonna = $(this).prop('id').split('_')[2].slice(1);
+          setFilters(localStorageItem,'piano',piano,"update")
+          setFilters(localStorageItem,'sala',sala,"update")
+          setFilters(localStorageItem,'contenitore',contenitore,"update")
+          setFilters(localStorageItem,'colonna',colonna,"update")
+          setActiveFilters(localStorageItem);
+        }
+      })
     })
   });
 }
@@ -209,6 +239,8 @@ window.addEventListener('scroll',()=>{
 
 async function setActiveFilters(item) {
   let filters = getFilters(item);
+  console.log(filters);
+  
   if (filters && Object.keys(filters).length > 0) {
     $('[name=piani]').prop('checked', false);
     $('[name=piani][value="'+filters['piano']+'"]').prop('checked', true);

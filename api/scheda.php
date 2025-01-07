@@ -47,4 +47,5 @@ function tagList($obj){return json_encode($obj->tagList());}
 function search($obj){return json_encode($obj->search($_POST['dati']));}
 function getModel($obj){return json_encode($obj->getModel($_POST['id']));}
 function setDefaultImg($obj){return json_encode($obj->setDefaultImg($_POST));}
+function fetchCassette($obj){return json_encode($obj->fetchCassette($_POST['dati']));}
 ?>
