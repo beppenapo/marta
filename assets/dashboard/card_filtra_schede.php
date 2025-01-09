@@ -1,30 +1,50 @@
 <div class="card mb-3" id="filtra_schede">
   <div class="card-header bg-white font-weight-bold">
     <p class="card-title m-0 border-bottom">Elenco schede</p>
-    <div class="btn-toolbar my-3" role="toolbar">
-      <div class="input-group input-group-sm p-0 pr-1 pb-1 col-6 col-lg-1">
-        <input type="number" value="" name="filterBtn" id="filter-nctn" step="1" class="form-control" placeholder="nctn" data-toggle="tooltip" title="inserisci solo il numero di catalogo, anche non completo">
-      </div>
-      <div class="input-group input-group-sm p-0 pr-1 pb-1 col-6 col-lg-1">
-        <input type="number" value="" name="filterBtn" id="filter-inv" step="1" class="form-control" placeholder="invent." data-toggle="tooltip" title="inserisci solo il numero di inventario, anche non completo, senza prefisso, suffisso o altri caratteri alfanumerici">
-      </div>
-      <div class="input-group input-group-sm p-0 pr-1 pb-1 col-6 col-lg-3">
-        <input type="text" value="" name="filterBtn" id="filter-titolo" class="form-control" placeholder="titolo" data-toggle="tooltip" title="inserisci il titolo completo o anche solo qualche parola">
-      </div>
-      <div class="input-group input-group-sm p-0 pr-1 pb-1 col-6 col-lg-2">
-        <select class="custom-select" name="filterBtn" id="filter-ogtd"></select>
-      </div>
-      <div class="input-group input-group-sm p-0 pr-1 pb-1 col-6 col-lg-1">
-        <select class="custom-select" name="filterBtn" id="filter-piano"></select>
-      </div>
-      <div class="input-group input-group-sm p-0 pr-1 pb-1 col-6 col-lg-2">
-        <input type="text" value="" name="filterBtn" id="filter-cassetta" class="form-control" placeholder="contenitore" data-toggle="tooltip" title="inserisci il titolo completo o anche solo qualche parola">
-      </div>
-      <div class="input-group input-group-sm p-0 col-12 col-lg-1">
-        <button type="button" name="cerca" class="form-control btn btn-sm btn-marta"><i class="fa-solid fa-search"></i></button>
-        <!-- <button type="button" name="reset" class="form-control btn btn-sm btn-outline-secondary"><i class="fa-solid fa-reload"></i></button> -->
-      </div>
-    </div>
+    <!-- <div class="row">
+      <div class="col-12"> -->
+        <div class="btn-toolbar my-3" role="toolbar">
+          <div class="input-group input-group-sm mr-1 mt-1">
+            <select class="custom-select" name="filtroSchede" id="filter-tsk">
+              <option value="" selected>tipo</option>
+              <option value="1">Reperto</option>
+              <option value="2">Moneta</option>
+            </select>
+          </div>
+          <div class="input-group input-group-sm mr-1 mt-1">
+            <input type="number" value="" name="filtroSchede" id="filter-nctn" step="1" class="form-control" placeholder="nctn" data-toggle="tooltip" title="inserisci solo il numero di catalogo" style="width: 90px;">
+          </div>
+          <div class="input-group input-group-sm mr-1 mt-1">
+            <input type="number" value="" name="filtroSchede" id="filter-inventario" step="1" class="form-control" placeholder="invent." data-toggle="tooltip" title="inserisci solo il numero di inventario senza prefisso, suffisso o altri caratteri alfanumerici" style="width: 90px;">
+          </div>
+          <div class="input-group input-group-sm mr-1 mt-1">
+            <input type="text" value="" name="filtroSchede" id="filter-titolo" class="form-control" placeholder="titolo" data-toggle="tooltip" title="inserisci il titolo">
+          </div>
+          <div class="input-group input-group-sm mr-1 mt-1">
+            <select class="custom-select" name="filtroSchede" id="filter-ogtdid" style="width:300px">
+              <option value="" selected>ogtd</option>
+            </select>
+          </div>
+          <div class="input-group input-group-sm mr-1 mt-1">
+            <select class="custom-select" name="filtroSchede" id="filter-piano">
+              <option value="" selected>piano</option>
+              <option value="-1">Deposito</option>
+              <option value="0">Piano terra</option>
+              <option value="1">Primo piano</option>
+              <option value="2">Secondo piano</option>
+            </select>
+          </div>
+          <div class="input-group input-group-sm mr-1 mt-1">
+            <input type="text" value="" name="filtroSchede" id="filter-contenitore" class="form-control" placeholder="contenitore" data-toggle="tooltip" title="inserisci il numero o il nome del contenitore" style="width: 100px;">
+          </div>
+          <div id="searchSchedeToolbar" class="btn-group btn-group-sm mt-1 mr-1">
+            <button type="button" name="cercaSchede" class="btn btn-outline-secondary">
+              <i class="fa-solid fa-search"></i>
+            </button>
+          </div>
+        </div>
+      <!-- </div>
+    </div> -->
   </div>
   <div class="list-group list-group-flush" id="wrapSchede">
     <li class="list-group-item colonne colonneSchede">

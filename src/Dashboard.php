@@ -42,15 +42,42 @@ class Dashboard extends Conn{
     return $this->simple($sql);
   }
 
+  public function schedeDashboard(?array $filtri):array{
+    try {
+      if ($filtri !== null && empty($filtri)) {
+        throw new \Exception('I filtri non possono essere un array vuoto.');
+      }
+
+      $query = "select * from schede_dashboard";
+      if (!empty($filtri)) {
+        $query .= " WHERE ";
+        $conditions = [];
+        foreach ($filtri as $key => $value) {
+          if (is_numeric($value)) {
+            $conditions[] = "$key = $value";
+          } else {
+            $safeValue = addslashes($value); // Evitare SQL injection
+            $conditions[] = "$key ilike '%$safeValue%'";
+          }
+        }
+        $query .= implode(" AND ", $conditions);
+      }
+      return $this->simple($query);
+      // return ["filtri"=>$filtri,"item"=>$this->simple($query)];
+    } catch (\Throwable $th) {
+      return [$th->getMessage(), $th->getCode()]; 
+    }
+  }
+
   public function schede(array $dati){
     //1 = senza biblio | 2 = senza immagini | 3 = aperta | 4 = chiusa | 5 = verificata | 6 = inviata | 7 = accettata | 8 = nctn | 9 = inventario | 10 = operatore
-    $sql = "select scheda, nctn, inventario, titolo, ogtdid, ogtd, piano, sala, cassetta from schede_dashboard";
+    $sql = "select id as scheda, nctn, inventario, titolo, ogtd, piano, sala, contenitore from schede_dashboard";
     $filter=[];
     if($_SESSION['classe'] == 3){array_push($filter,'cmpn = '.$_SESSION['id']);}
     $tipo = $dati['tipo'];
     switch (true) {
       case $tipo == 1:
-        array_push($filter,'scheda not in (select scheda from biblio_scheda) and scheda not in (select scheda from biblio_fake) ');
+        array_push($filter,'scheda not in (select scheda from biblio_scheda) and scheda not in (select scheda from biblio_fake) '); 
       break;
       case $tipo == 2:
         array_push($filter,'scheda not in (select scheda from file where tipo = 3)');
@@ -61,13 +88,27 @@ class Dashboard extends Conn{
       case $tipo == 4:
         array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = false)');
       break;
-      case $tipo == 5: array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = true and verificata = false)'); break;
-      case $tipo == 6: array_push($filter,'scheda in (select scheda from stato_scheda where verificata = true and inviata = false)'); break;
-      case $tipo == 7: array_push($filter,'scheda in (select scheda from stato_scheda where inviata = true and accettata = false)'); break;
-      case $tipo == 8: array_push($filter,'scheda in (select scheda from stato_scheda where accettata = true)'); break;
-      case $tipo == 9: array_push($filter,"nctn::text ilike '".$dati['nctn']."%'"); break;
-      case $tipo == 10: array_push($filter,"inventario::text ilike '".$dati['inv']."%'"); break;
-      case $tipo == 11: array_push($filter,"cmpn = ".$dati['operatore']); break;
+      case $tipo == 5: 
+        array_push($filter,'scheda in (select scheda from stato_scheda where chiusa = true and verificata = false)'); 
+      break;
+      case $tipo == 6: 
+        array_push($filter,'scheda in (select scheda from stato_scheda where verificata = true and inviata = false)'); 
+      break;
+      case $tipo == 7: 
+        array_push($filter,'scheda in (select scheda from stato_scheda where inviata = true and accettata = false)'); 
+      break;
+      case $tipo == 8: 
+        array_push($filter,'scheda in (select scheda from stato_scheda where accettata = true)'); 
+      break;
+      case $tipo == 9: 
+        array_push($filter,"nctn::text ilike '".$dati['nctn']."%'"); 
+      break;
+      case $tipo == 10: 
+        array_push($filter,"inventario::text ilike '".$dati['inv']."%'"); 
+      break;
+      case $tipo == 11: 
+        array_push($filter,"cmpn = ".$dati['operatore']); 
+      break;
     }
     if($tipo > 0){ $sql = $sql . " where " . join(' and ', $filter).";"; }
     return $this->simple($sql);
@@ -109,6 +150,11 @@ class Dashboard extends Conn{
     return $this->simple($sql);
   }
 
+  public function getFiltri(){
+    return [
+      "ogtd" => $this->simple("select distinct lower(classe) classe, ogtdid, ogtd from gallery order by 2 asc")
+    ];
+  }
 
 }
 

@@ -35,7 +35,7 @@ class Geom extends Conn{
     left join geolocalizzazione geoloc on geoloc.scheda = gp.scheda
     left join comuni c on geoloc.comune = c.id
     left join file on file.scheda = gp.scheda
-    inner join gallery on gallery.id = gp.scheda
+    inner join gallery on gallery.scheda = gp.scheda
     group by gp.scheda, gp.gpdpx, gp.gpdpy,c.comune, geoloc.via, gallery.classe, gallery.ogtd";
     return $this->simple($sql);
   }

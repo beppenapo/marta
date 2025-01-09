@@ -18,7 +18,7 @@
               <option value="0">Contributo</option>
             </select>
           </div>
-          <div class="btn-group butto-group-sm mt-2 mr-2" id="searchBiblioToolbar" role="group">
+          <div class="btn-group btn-group-sm mt-2 mr-2" id="searchBiblioToolbar" role="group">
             <button class="btn btn-sm btn-outline-secondary" type="button" name="searchBiblioBtn" data-toggle="tooltip" title="avvia ricerca"><i class="fa-solid fa-search" aria-hidden="true"></i></button>
           </div>
         </div>

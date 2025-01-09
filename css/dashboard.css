@@ -1,8 +1,8 @@
 @import "main.css";
 .info{width:80vw;margin:0 auto;}
-.scroller{position: relative;overflow: auto;-ms-overflow-style: none; scrollbar-width: none;}
-.scroller{-ms-overflow-style: none; scrollbar-width: none;}
-.scroller::-webkit-scrollbar { display: none;}
+.scroller{position: relative;overflow: auto;/*-ms-overflow-style: none; scrollbar-width: none;*/}
+/* .scroller{-ms-overflow-style: none; scrollbar-width: none;} */
+/* .scroller::-webkit-scrollbar { display: none;} */
 
 #statoChart{width:100%;}
 #scrollSchede,#scrollBiblio{position:relative; width:100%;height: 330px;}

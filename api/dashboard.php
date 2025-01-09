@@ -17,4 +17,6 @@ function statoSchede($obj){ return json_encode($obj->statoSchede()); }
 function schedatori($obj){ return json_encode($obj->schedatori()); }
 function schede($obj){return json_encode($obj->schede($_POST['dati']));}
 function biblio($obj){return json_encode($obj->biblio($_POST['dati']));}
+function schedeDashboard($obj){return json_encode($obj->schedeDashboard($_POST['filtri']));}
+function getFiltri($obj){return json_encode($obj->getFiltri());}
 ?>

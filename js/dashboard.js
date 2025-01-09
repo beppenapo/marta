@@ -8,36 +8,43 @@ let href = 'schedaView.php?get=';
 let urlIco = '<i class="fas fa-link"></i>';
 let pagenumber = pageBiblio = 0;
 let perpage = 50;
+let resetSchede = false;
 let resetBiblio = false;
 const userClass = parseInt($("[name=classe]").val());
 const utente = parseInt($("[name=utente]").val());
 
-if (userClass == 3) { schede({tipo:10, operatore:utente}) }
-if (userClass == 1) { schede({tipo:0}) }
+const filtroIniziale = userClass == 3 ? {cmpn:utente} : null;
+schedeDashboard(filtroIniziale,scrollSchede)
+
 
 biblio([]);
 initComunicazioni();
 mapInit();
 buildUserTable();
+buildSelectFiltri();
+
 if (userClass !== 3) { statoSchede(); }
 
-$(".btn-toolbar [name=cerca]").on('click', function(){
-  let filter = {}
-  $("[name=checkBtn]").each(function(i,btn){
-    if ($(this).is('.active')) { filter['tipo'] = $(this).val() }
-  })
-  $("[name=filterBtn]").each(function(i,el){
+$("[name=cercaSchede]").on('click', function(){
+  let filtri = {}
+  $("[name=filtroSchede]").each(function(i,el){
     if ($(this).val()) {
       let key = $(this).prop('id').split('-').pop();
       let val = $(this).val();
-      filter[key]=val;
+      filtri[key]=val;
     }
   })
-  if (Object.keys(filter).length === 0) {
+  
+  $("[name=usrBtn").each(function(i,btn){
+    if ($(this).is('.active')) { filtri.cmpn = $(this).val()}
+  })
+
+  if (Object.keys(filtri).length === 0) {
     alert('per effettuare una ricerca devi inserire almeno 1 parametro tra quelli disponibili');
     return false;
   }
-  console.log(filter);
+  schedeDashboard(filtri,scrollSchede)
+  showResetSchedeBtn()
 })
 
 $("[name=searchBiblioBtn]").on('click', function(){
@@ -55,7 +62,7 @@ $("[name=searchBiblioBtn]").on('click', function(){
   biblio(dati);
   if (resetBiblio == false) {
     resetBiblio = true;
-    $("<button/>",{class:'btn btn-sm btn-outline-secondary', type:'button', name:'resetBiblioBtn'}).html('<i class="fas fa-repeat"></i>').appendTo('#searchBiblioToolbar').on('click',function(){
+    $("<button/>",{class:'btn btn-sm btn-outline-secondary', type:'button', name:'resetBiblioBtn'}).html('<i class="fas fa-xmark"></i>').appendTo('#searchBiblioToolbar').on('click',function(){
       biblio([]);
       $(".filtroBiblio").val('');
       $(this).remove();
@@ -65,39 +72,10 @@ $("[name=searchBiblioBtn]").on('click', function(){
 })
 
 $("[name=usrBtn]").on('click', function(){
-  $("[name = searchNctn], [name = searchInv]").removeClass('is-invalid');
   $("[name=checkBtn],[name = usrBtn]").removeClass('active');
   $(this).addClass('active')
-  let dati = {tipo:11,operatore: $(this).val()}
-  schede(dati)
-})
-
-$("[name=checkBtn]").on('click', function(){
-  $("[name = searchNctn], [name = searchInv]").removeClass('is-invalid');
-  $("[name=checkBtn],[name = usrBtn]").removeClass('active');
-  let tipo = $(this).val();
-  let dati = {tipo:tipo}
-  if(tipo == 8){
-    if (!$("[name = searchNctn]").val()) {
-      $("[name = searchNctn]").addClass('is-invalid')
-      return false;
-    }
-    $("[name = searchNctn]").removeClass('is-invalid')
-    dati.nctn = $("[name = searchNctn]").val()
-  }
-  if(tipo == 9){
-    if (!$("[name = searchInv]").val()) {
-      $("[name = searchInv]").addClass('is-invalid')
-      return false;
-    }
-    $("[name = searchInv]").removeClass('is-invalid')
-    dati.inv = $("[name = searchInv]").val()
-  }
-  if ($(this).is('.checkBtn')){$("[name = searchNctn], [name = searchInv]").val('')}
-  if ($(this).is('.searchNctnBtn')){$("[name = searchInv]").val('')}
-  if ($(this).is('.searchInvBtn')){$("[name = searchNctn]").val('')}
-  $(this).addClass('active')
-  schede(dati);
+  schedeDashboard({cmpn:$(this).val()},scrollSchede)
+  showResetSchedeBtn()
 })
 
 $("[name=addComunicazioneBtn]").on('click', function(){
@@ -119,7 +97,6 @@ $("[name=saveComunicazione]").on('click', function(e){
     .fail(function() {console.log("errore nel salvataggio della comunicazione"); });
   }
 })
-//CBAEURSKUZBYXE
 $('body').on('click', '[name=updateUser]', function() { $.redirectPost('usrAdd.php',{id:$(this).val()}); });
 $('body').on('click', 'a.schedatore', function(e) {
   e.preventDefault();
@@ -127,62 +104,88 @@ $('body').on('click', 'a.schedatore', function(e) {
   $.redirectPost('schede.php');
 });
 
-function schede(dati){
+function showResetSchedeBtn(){
+  if (resetSchede == false) {
+    resetSchede = true;
+    $("<button/>",{class:'btn btn-outline-secondary', type:'button', name:'resetSchedeBtn'}).html('<i class="fas fa-xmark"></i>').appendTo('#searchSchedeToolbar').on('click',function(){
+      schedeDashboard(filtroIniziale,scrollSchede)
+      $("[name=filtroSchede]").val('');
+      $("[name = usrBtn]").removeClass('active');
+      $(this).remove();
+      resetSchede = false;
+    })
+  }
+}
+
+
+function schedeDashboard(filtri, callback){
   content.html('');
   schedeList=[];
   ogtdList=[];
   pianoList=[];
   pagenumber=0;
+  dati = {trigger:"schedeDashboard"}
+  if(filtri){dati.filtri=filtri}
+  
   $.ajax({
     type: "POST",
     url: "api/dashboard.php",
     dataType: 'json',
-    data: {trigger: 'schede', dati:dati}
-  })
-  .done(function(data){
-    // console.log(data);
+    data: dati,
+  }).done(function(data){
+    console.log(data);
+    
     if(data.length == 0) {
       content.html('<h6 class="text-center my-5">nessuna scheda trovata</h6>')
       return false;
     }
-
     data.forEach(function(item,i){
       schedeList.push(item);
       ogtdList.push({id:item.ogtdid, ogtd:item.ogtd})
       pianoList.push({piano:item.piano})
     });
-    buildSelectFiltri()
-    scrollSchede()
+
+    $("#numSchedeCard").text(data.length)
     scrollDiv.addEventListener('scroll',function(e){
       var lastDiv = document.querySelector(".colonneSchede:last-child");
       var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
       var pageOffset = scrollDiv.scrollTop + scrollDiv.clientHeight;
       if (pageOffset > lastDivOffset - 10) {
         pagenumber++;
-        scrollSchede();
+        callback();
       }
     })
-    $("#numSchedeCard").text(data.length)
+    callback(); 
   })
 }
 
 function buildSelectFiltri(){
-  const ogtd = $("#filter-ogtd");
-  const piano = $("#filter-piano");
-
-  let ogtdArr = [...new Map(ogtdList.map(item => [item['id'], item])).values()];
-  ogtdArr.sort((a, b) => {let fa = a.ogtd.toLowerCase(), fb = b.ogtd.toLowerCase(); if (fa < fb) { return -1; } if (fa > fb) { return 1; } return 0;});
-
-  let pianoArr = [...new Map(pianoList.map(item => [item['piano'], item])).values()];
-  pianoArr.sort((a, b) => {let fa = a.piano, fb = b.piano; if (fa < fb) { return -1; } if (fa > fb) { return 1; } return 0;});
-
-  $("#filtra_schede select").html('');
-
-  $("<option/>").val('').text('ogtd').prop("selected", true).appendTo(ogtd)
-  $("<option/>").val('').text('piano').prop("selected", true).appendTo(piano)
-
-  ogtdArr.forEach((item, i) => { $("<option/>").val(item.id).text(item.ogtd).appendTo(ogtd) });
-  pianoArr.forEach((item, i) => { $("<option/>").val(item.piano).text(item.piano).appendTo(piano) });
+  const ogtd = document.getElementById("filter-ogtdid");
+  $.ajax({
+    type: "POST",
+    url: "api/dashboard.php",
+    dataType: 'json',
+    data: {trigger:"getFiltri"},
+  }).done(function(data){
+    const groupedData = data.ogtd.reduce((groups, item) => {
+      if (!groups[item.classe]) {
+        groups[item.classe] = [];
+      }
+      groups[item.classe].push(item);
+      return groups;
+    }, {});
+    Object.entries(groupedData).forEach(([classe, items]) => {
+      const optGroup = document.createElement('optgroup');
+      optGroup.label = classe;
+      items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.ogtdid;
+        option.textContent = item.ogtd;
+        optGroup.appendChild(option);
+      });
+      ogtd.appendChild(optGroup);
+    });
+  })
 }
 
 function scrollSchede(){
@@ -199,12 +202,12 @@ function scrollSchede(){
         case 3: piano = 'Terzo piano'; break;
       }
       $("<span/>").text(item.nctn).appendTo(li)
-      $("<span/>").text(item.inventario).appendTo(li)
+      $("<span/>").text(item.inventario_full).appendTo(li)
       $("<span/>").text(item.titolo).appendTo(li)
       $("<span/>").text(item.ogtd).appendTo(li)
       $("<span/>").text(piano).appendTo(li)
       $("<span/>").text(item.sala).appendTo(li)
-      $("<span/>").text(item.cassetta).appendTo(li)
+      $("<span/>").html(item.contenitore).appendTo(li)
       let link = $("<span/>").appendTo(li)
       $("<a/>",{href:href+item.scheda, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(link)
     });

@@ -1023,7 +1023,7 @@ async function gallery(filters){
   try {
     const json = await search(filters);
     console.log(json);
-    if (json.breadcrumb && Object.keys(json.breadcrumb).length > 0) {
+    if (json.breadcrumb && Object.keys(json.breadcrumb).length > 0 && json.breadcrumb.piano !== null) {
       const breadcrumbList = document.getElementById('breadcrumb');
       breadcrumbList.innerHTML = '';
       console.log(json.breadcrumb);
@@ -1125,6 +1125,8 @@ function createCassetteList(cassette){
 }
 
 function search(filters){
+  console.log(filters);
+  
   return new Promise((resolve,reject) => {
     const data = {
       trigger: 'search',

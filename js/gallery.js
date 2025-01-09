@@ -1,14 +1,14 @@
-const ITEM = $("[name=item").val();
+const ITEM = $("[name=item]").val() || 'reperti';
 const ENDPOINT = "api/gallery.php";
 
 const ITEMS_PER_PAGE = 24;
-const FOTO = ITEM == 'stereo' ? "http://91.121.82.80/marta/file/stereo/" : "http://91.121.82.80/marta/file/foto/";
+const FOTO = ITEM == 'stereo' ? "http://145.239.0.109/marta/file/stereo/" : "http://145.239.0.109/marta/file/foto/";
 const WRAP = document.getElementById('wrapItems');
 
 let totalPagesKnown = false;
 let totalPages = 0;
 let currentPage = 1;
-
+let itemsLoaded = 0;
 let isLoading = false;
 
 WRAP.innerHTML=''
@@ -16,7 +16,6 @@ WRAP.innerHTML=''
 getData()
 
 async function getData() {
-  console.log(isLoading);
   
   if (isLoading) return;
   isLoading = true;
@@ -36,6 +35,11 @@ async function getData() {
     console.log(json.items);
     totalPages = Math.ceil(json.totalItems.count / ITEMS_PER_PAGE + 1);
     totalPagesKnown = true;
+    itemsLoaded += json.items.length;
+    let text = ITEM + ": "+ itemsLoaded + " / "+json.totalItems.count;
+    $("#countItems>h3").text(text)
+
+
     json.items.forEach(item => {
       const newCard = cardTemplate.content.cloneNode(true);
       const cardImage = newCard.querySelector('.img');
