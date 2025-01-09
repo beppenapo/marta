@@ -1,3 +1,4 @@
+$(document).ajaxStart(showLoading).ajaxStop(hideLoading);
 // let sess = $("[name=sessId]").val() ? [$("[name=sessId]").val(),$("[name=sessUsr]").val()] : [];
 let dati = {};
 let filter = {};
@@ -113,6 +114,8 @@ function buildTable(){
     data: { trigger: 'listaSchede', dati}
   })
   .done(function(data) {
+    console.log(data);
+    return false;    
     data.forEach(function(v,i){
       let linkIco = $("<i/>", {class:'fas fa-link', title:'visualizza scheda completa'}).attr("data-toggle", 'tooltip').attr("data-placement", 'left');
       let link = $("<a/>",{href:'schedaView.php?get='+v.scheda, html:linkIco});

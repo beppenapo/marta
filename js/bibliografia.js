@@ -1,6 +1,5 @@
-$(document).ready(function() {
-  buildTable();
-});
+$(document).ajaxStart(showLoading).ajaxStop(hideLoading);
+$(document).ready(function() { buildTable(); });
 
 function buildTable(){
   $.ajax({ url: 'api/biblio.php', type: 'POST', dataType: 'json', data: {trigger: 'elencoBiblio'} })

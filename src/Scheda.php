@@ -3,8 +3,68 @@ namespace Marta;
 session_start();
 // use \Marta\Conn;
 class Scheda extends Conn{
-  public $db;
   function __construct(){}
+
+  public function getScheda(int $id){
+    $out=[];
+    $out['scheda'] = $this->sezScheda($id);
+    $out['og'] = $this->sezOg($id,$out['scheda']['tskid']);
+    $out['geoloc'] = $this->sezGeoloc($id);
+    $out['gp'] = $this->sezGp($id);
+    $out['lc'] = $this->sezLc($id,$out['scheda']['tskid']);
+
+    $sql ="select ub.invn, ub.stis, ub.stid, stim.value stim, ub.stim as idstim from ub left join liste.stim on ub.stim = stim.id where ub.scheda = ".$id.";";
+    $ub = $this->simple($sql);
+    $out['ub'] = $ub[0];
+
+    $sql ="select nucn, rcga, rcgd, rcgz from rcg where rcg.scheda = ".$id.";";
+    $rcg = $this->simple($sql);
+    $out['re']['rcg'] = $rcg[0];
+
+    $sql ="select nucn, scan, dscf, dsca, dscd, dscn from dsc where dsc.scheda = ".$id.";";
+    $dsc = $this->simple($sql);
+    $out['re']['dsc'] = $dsc[0];
+
+    $sql ="SELECT ain.aint aintid, aint.value aint, ain.aind, ain.ains from ain inner join liste.aint on ain.aint = aint.id where ain.scheda = ".$id.";";
+    $ain = $this->simple($sql);
+    $out['re']['ain'] = $ain[0];
+
+    $sql = "SELECT ci.id as ciid, ci.value as ci, cf.id as cfid, cf.value as cf, dt.dtzs dtzsid, dtzs.value dtzs, dt.dtsi, dt.dtsf from dt inner join liste.cronologia ci on dt.dtzgi = ci.id inner join liste.cronologia cf on dt.dtzgf = cf.id left join liste.dtzs on dt.dtzs = dtzs.id where dt.scheda = ".$id.";";
+    $dt = $this->simple($sql);
+    $out['dt']['dt'] = $dt[0];
+    $sql = "SELECT dtm.dtm dtmid, val.value dtm from dtm inner join liste.dtm val on dtm.dtm = val.id where dtm.scheda = ".$id." order by dtm asc;";
+    $out['dt']['dtm'] = $this->simple($sql);
+
+
+    $out['mt'] = $this->sezMt($id);
+
+    $sql ="select * from da where da.scheda = ".$id.";";
+    $da = $this->simple($sql);
+    $out['da'] = $da[0];
+
+    $sql ="SELECT stcc.id stccid, stcc.value stcc, stcl.id stclid, stcl.value stcl from co INNER JOIN liste.stcc on co.stcc = stcc.id INNER JOIN liste.stcl on co.stcl = stcl.id where co.scheda = ".$id.";";
+    $co = $this->simple($sql);
+    $out['co'] = $co[0];
+
+    $sql ="select acqt.id acqtid, acqt.value acqt, acqn, acqd, acql from tu inner join liste.acqt on tu.acqt = acqt.id where tu.scheda = ".$id.";";
+    $acq = $this->simple($sql);
+    $out['tu']['acq'] = $acq[0];
+    $sql ="select cdgg.id cdggid, cdgg.value cdgg from tu inner join liste.cdgg on tu.cdgg = cdgg.id where tu.scheda = ".$id.";";
+    $cdg = $this->simple($sql);
+    $out['tu']['cdg'] = $cdg[0];
+    $sql ="select nvct.id nvctid, nvct.value nvct, nvce from tu inner join liste.nvct on tu.nvct = nvct.id where tu.scheda = ".$id.";";
+    $nvc = $this->simple($sql);
+    $out['tu']['nvc'] = $nvc[0];
+
+    $sql ="select ad.adsp adspid, adsp.value adsp, ad.adsm adsmid, adsm.value adsm from ad inner join liste.adsp on ad.adsp = adsp.id inner join liste.adsm on ad.adsm = adsm.id where ad.scheda = ".$id.";";
+    $ad = $this->simple($sql);
+    $out['ad'] = $ad[0];
+
+    $sql ="select oss from an where an.scheda = ".$id.";";
+    $an = $this->simple($sql);
+    $out['an'] = $an[0];
+    return $out;
+  }
 
   public function setDefaultImg(array $dati){
     if(is_array($dati) && !empty($dati)){
@@ -170,71 +230,14 @@ class Scheda extends Conn{
     return $out;
   }
 
-  private function sezLc(int $id){
-    $sql ="select comune.pvcc, ldc.ldcn, lc.piano,lista.id id_sala, lista.sala, lc.contenitore, lc.colonna, lc.ripiano, lc.cassetta from lc INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN liste.sale lista on lc.sala = lista.id INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = ".$id.";";
-    $lc = $this->simple($sql);
-    return $lc[0];
-  }
+  private function sezLc(int $id, int $tsk){
+    if($tsk == 1){
+      $query = "select comune.pvcc, ldc.ldcn, esposto.piano, esposto.sala_id, esposto.sala, esposto.descrizione as sala_text, esposto.vetrina_id, esposto.vetrina from localizzazione_esposto esposto inner join lc on esposto.scheda = lc.scheda INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = " . $id . ";";
+    }else{
+      $query = "select comune.pvcc, ldc.ldcn, deposito.piano, deposito.sala_id, deposito.sala, deposito.descrizione as sala_text, deposito.scaffali_id, deposito.scaffale, deposito.scaffale_text, deposito.colonne_id, deposito.colonna, deposito.ripiano_id, deposito.ripiano, deposito.cassetta_id, deposito.cassetta from localizzazione_deposito deposito inner join lc on deposito.scheda = lc.scheda INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = " . $id . ";";
+    }
 
-  public function getScheda(int $id){
-    $out=[];
-    $out['scheda'] = $this->sezScheda($id);
-    $out['og'] = $this->sezOg($id,$out['scheda']['tskid']);
-    $out['geoloc'] = $this->sezGeoloc($id);
-    $out['gp'] = $this->sezGp($id);
-    $out['lc'] = $this->sezLc($id);
-
-    $sql ="select ub.invn, ub.stis, ub.stid, stim.value stim, ub.stim as idstim from ub left join liste.stim on ub.stim = stim.id where ub.scheda = ".$id.";";
-    $ub = $this->simple($sql);
-    $out['ub'] = $ub[0];
-
-    $sql ="select nucn, rcga, rcgd, rcgz from rcg where rcg.scheda = ".$id.";";
-    $rcg = $this->simple($sql);
-    $out['re']['rcg'] = $rcg[0];
-
-    $sql ="select nucn, scan, dscf, dsca, dscd, dscn from dsc where dsc.scheda = ".$id.";";
-    $dsc = $this->simple($sql);
-    $out['re']['dsc'] = $dsc[0];
-
-    $sql ="SELECT ain.aint aintid, aint.value aint, ain.aind, ain.ains from ain inner join liste.aint on ain.aint = aint.id where ain.scheda = ".$id.";";
-    $ain = $this->simple($sql);
-    $out['re']['ain'] = $ain[0];
-
-    $sql = "SELECT ci.id as ciid, ci.value as ci, cf.id as cfid, cf.value as cf, dt.dtzs dtzsid, dtzs.value dtzs, dt.dtsi, dt.dtsf from dt inner join liste.cronologia ci on dt.dtzgi = ci.id inner join liste.cronologia cf on dt.dtzgf = cf.id left join liste.dtzs on dt.dtzs = dtzs.id where dt.scheda = ".$id.";";
-    $dt = $this->simple($sql);
-    $out['dt']['dt'] = $dt[0];
-    $sql = "SELECT dtm.dtm dtmid, val.value dtm from dtm inner join liste.dtm val on dtm.dtm = val.id where dtm.scheda = ".$id." order by dtm asc;";
-    $out['dt']['dtm'] = $this->simple($sql);
-
-
-    $out['mt'] = $this->sezMt($id);
-
-    $sql ="select * from da where da.scheda = ".$id.";";
-    $da = $this->simple($sql);
-    $out['da'] = $da[0];
-
-    $sql ="SELECT stcc.id stccid, stcc.value stcc, stcl.id stclid, stcl.value stcl from co INNER JOIN liste.stcc on co.stcc = stcc.id INNER JOIN liste.stcl on co.stcl = stcl.id where co.scheda = ".$id.";";
-    $co = $this->simple($sql);
-    $out['co'] = $co[0];
-
-    $sql ="select acqt.id acqtid, acqt.value acqt, acqn, acqd, acql from tu inner join liste.acqt on tu.acqt = acqt.id where tu.scheda = ".$id.";";
-    $acq = $this->simple($sql);
-    $out['tu']['acq'] = $acq[0];
-    $sql ="select cdgg.id cdggid, cdgg.value cdgg from tu inner join liste.cdgg on tu.cdgg = cdgg.id where tu.scheda = ".$id.";";
-    $cdg = $this->simple($sql);
-    $out['tu']['cdg'] = $cdg[0];
-    $sql ="select nvct.id nvctid, nvct.value nvct, nvce from tu inner join liste.nvct on tu.nvct = nvct.id where tu.scheda = ".$id.";";
-    $nvc = $this->simple($sql);
-    $out['tu']['nvc'] = $nvc[0];
-
-    $sql ="select ad.adsp adspid, adsp.value adsp, ad.adsm adsmid, adsm.value adsm from ad inner join liste.adsp on ad.adsp = adsp.id inner join liste.adsm on ad.adsm = adsm.id where ad.scheda = ".$id.";";
-    $ad = $this->simple($sql);
-    $out['ad'] = $ad[0];
-
-    $sql ="select oss from an where an.scheda = ".$id.";";
-    $an = $this->simple($sql);
-    $out['an'] = $an[0];
-    return $out;
+    return $this->simple($query)[0];
   }
 
   public function cloneScheda(array $dati){

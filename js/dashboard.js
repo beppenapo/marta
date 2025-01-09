@@ -209,7 +209,7 @@ function scrollSchede(){
       $("<span/>").text(item.sala).appendTo(li)
       $("<span/>").html(item.contenitore).appendTo(li)
       let link = $("<span/>").appendTo(li)
-      $("<a/>",{href:href+item.scheda, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(link)
+      $("<a/>",{href:href+item.id, title:'apri scheda'}).attr("data-toggle","tooltip").html(urlIco).appendTo(link)
     });
   }
 }

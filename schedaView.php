@@ -166,19 +166,24 @@
           
           <fieldset class="bg-light rounded border p-3 mb-3" id="lcFieldset">
             <legend class="w-auto border rounded p-1">LC - LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA</legend>
-            <?php if(count((array)$scheda['lc'])==0){echo $noData;}else{ ?>
+            <?php 
+              if(count((array)$scheda['lc'])==0){
+                echo $noData;
+              }else{
+                var_dump($scheda['lc']);
+            ?>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>PVCC - Comune:</span><span class="font-weight-bold"><?php echo $scheda['lc']['pvcc']; ?></span></li>
               <li class="list-group-item"><span>LDCN - Collocazione specifica (Denominazione):</span><span class="font-weight-bold"><?php echo $scheda['lc']['ldcn']; ?></span></li>
               <li class="list-group-item"><span>PIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['piano'] == -1 ? 'Deposito': $scheda['lc']['piano']; ?></span></li>
-              <li class="list-group-item"><span>SALA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['sala']; ?></span></li>
+              <li class="list-group-item"><span>SALA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['sala_text']; ?></span></li>
               <?php if ($scheda['lc']['piano'] == -1) {?>
-                <li class="list-group-item"><span>SCAFFALE:</span><span class="font-weight-bold"><?php echo $scheda['lc']['contenitore']; ?></span></li>
+                <li class="list-group-item"><span>SCAFFALE:</span><span class="font-weight-bold"><?php echo $scheda['lc']['scaffale_text']." ".$scheda['lc']['scaffale']; ?></span></li>
                 <li class="list-group-item"><span>COLONNA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['colonna']; ?></span></li>
                 <li class="list-group-item"><span>RIPIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['ripiano']; ?></span></li>
                 <li class="list-group-item"><span>CASSETTA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['cassetta']; ?></span></li>
               <?php }else{ ?>
-                <li class="list-group-item"><span>VETRINA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['contenitore']; ?></span></li>
+                <li class="list-group-item"><span>VETRINA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['vetrina']; ?></span></li>
               <?php } ?>
             </ul>
           <?php } ?>

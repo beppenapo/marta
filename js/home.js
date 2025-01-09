@@ -92,7 +92,7 @@ function miniGallery(foto){
   let content = $("#miniGallery > .card-body");
   content.html('');
   foto.forEach(function(i){
-    let div = $("<div/>",{class:'itemFotoContent bg-light border rounded'}).appendTo(content).on('click', function(){window.location.href = 'schedaView.php?get='+i.id});
+    let div = $("<div/>",{class:'itemFotoContent bg-light border rounded'}).appendTo(content).on('click', function(){window.location.href = 'schedaView.php?get='+i.scheda});
     $("<span/>").text(i.ogtd).appendTo(div)
     $("<div/>",{class:'itemFoto'}).css("background-image", "url("+fotoPath+i.file+")").appendTo(div)
   })
