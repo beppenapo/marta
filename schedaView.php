@@ -170,7 +170,6 @@
               if(count((array)$scheda['lc'])==0){
                 echo $noData;
               }else{
-                var_dump($scheda['lc']);
             ?>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>PVCC - Comune:</span><span class="font-weight-bold"><?php echo $scheda['lc']['pvcc']; ?></span></li>

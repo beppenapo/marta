@@ -31,7 +31,7 @@
         </div>
 
         <div class="col-md-4 col-lg-2">
-          <div class="<?php echo $lcView; ?>" id="lcContenitoreDiv">
+          <div class="<?php echo $hideContenitore; ?>" id="lcContenitoreDiv">
             <label for="contenitore" id="contenitoreLabel" class="text-danger font-weight-bold">
               <?php if(isset($_POST['s'])){echo $labelContenitore;}?>
             </label>
@@ -40,17 +40,10 @@
             </select>
           </div>
         </div>
-
+        
         <div class="col-md-4 col-lg-2">
-          <div class="<?php echo $lcViewCassetta; ?>" id="lcCassettaDiv">
-            <label for="cassetta" id="cassettaLabel" class="text-danger font-weight-bold">Cassetta</label>
-            <input type="text" class="form-control form-control-sm" data-table="lc" name="cassetta" id="cassetta" value="<?php echo $scheda['lc']['cassetta']; ?>">
-          </div>
-        </div>
-
-        <div class="col-md-4 col-lg-2">
-          <div class="<?php echo $lcViewColonna; ?>" id="lcColonnaDiv">
-            <label for="colonna" id="colonnaLabel" class="">Colonna</label>
+          <div class="<?php echo $hideColonna; ?>" id="lcColonnaDiv">
+            <label for="colonna" id="colonnaLabel" class="text-danger font-weight-bold">Colonna</label>
             <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna">
               <?php echo implode("",(array)$selColonna); ?>
             </select>
@@ -58,11 +51,20 @@
         </div>
 
         <div class="col-md-4 col-lg-2">
-          <div class="<?php echo $lcViewRipiano; ?>" id="lcRipianoDiv">
-            <label for="ripiano" id="ripianoLabel" class=""><?php echo $labelRipiano; ?></label>
+          <div class="<?php echo $hideRipiano; ?>" id="lcRipianoDiv">
+            <label for="ripiano" id="ripianoLabel" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="" aria-hidden="true" data-original-title='in alcuni scaffali vengono chiamati "plateau" o "cassetto"'></i> Ripiano</label>
             <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"><?php echo implode("",(array)$selRipiano); ?></select>
           </div>
         </div>
+
+        <div class="col-md-4 col-lg-2">
+          <div class="<?php echo $hideCassetta; ?>" id="lcCassettaDiv">
+            <label for="cassetta" id="cassettaLabel" class="">Cassetta</label>
+            <select class="form-control form-control-sm" data-table="lc" id="cassetta" name="cassetta"><?php echo implode("",(array)$selCassetta); ?></select>
+            <!-- <input type="text" class="form-control form-control-sm" data-table="lc" name="cassetta" id="cassetta" value="<?php echo $scheda['lc']['cassetta']; ?>"> -->
+          </div>
+        </div>
+            <?php print_r($scheda['lc']); ?>
 
       </div>
 

@@ -723,13 +723,23 @@ class Scheda extends Conn{
 
   public function getContenitore(array $dati){
     $f = $dati['contenitore'] == 'vetrine' ? 'vetrina' : 'scaffale';
-    $id = $dati['contenitore'] == 'vetrine' ? 'a.id,' : '';
-    $sql = "select distinct ".$id." a.".$f." as c, a.note from liste.".$dati['contenitore']." a, liste.sale s where a.sala = s.id and s.id = ".$dati['sala']." order by 1 asc;";
+    // $id = $dati['contenitore'] == 'vetrine' ? 'a.id,' : '';
+    $sql = "select distinct a.id, a.".$f." as c, a.note from liste.".$dati['contenitore']." a, liste.sale s where a.sala = s.id and s.id = ".$dati['sala']." order by 1 asc;";
     return $this->simple($sql);
   }
 
-  public function getColonna(array $dati){
-    $sql = "select colonna as val, trim(concat(note,' ',colonna)) as colonna from liste.scaffali where sala = ".$dati['sala']." and scaffale = ".$dati['scaffale']." order by 1";
+  public function getColonna(int $scaffale){
+    $sql = "select * from liste.colonne where scaffale = " . $scaffale. " order by colonna asc;"; 
+    return $this->simple($sql);
+  }
+
+  public function getRipiano(int $colonna){
+    $sql = "select * from liste.ripiani where colonna = " . $colonna. " order by ripiano asc;"; 
+    return $this->simple($sql);
+  }
+
+  public function getCassetta(int $ripiano){
+    $sql = "select * from liste.cassette where ripiano = " . $ripiano. " order by cassetta asc;"; 
     return $this->simple($sql);
   }
 

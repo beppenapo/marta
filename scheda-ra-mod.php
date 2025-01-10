@@ -77,7 +77,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
           </div>
 
           <?php
-            require_once($formFolder.'lc.html');
+            require_once($formFolder.'lc.php');
             // require_once($formFolder.'la.html');
             require_once($formFolder.'ub.html');
             require_once($formFolder.'gp.html');

@@ -120,20 +120,18 @@ $("[name=checkTitolo]").on('click', checkTitolo);
 // funzioni per select dinamiche sezione LC
 $(".lcSel").hide();
 $("[name=piano]").on('change', function(){
-  let piano = $(this).val();
-  //piano == 0 ? $("[name=contenitore]").prop('required',false) : $("[name=contenitore]").prop('required',true)
-  // $("#lcSalaDiv").fadeIn('fast');
+  const piano = $(this).val();
   $("#lcContenitoreDiv, #noVetrine,#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
   $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('').prop('required',false);
   getSale(piano)
 })
+
 $("[name=sala]").on('change', function(){
-  $("#lcColonnaDiv,#lcRipianoDiv").fadeOut('fast');
-  $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
-  $("[name=cassetta]").prop('required',false);
-  let piano = parseInt($("[name=piano]").val());
-  let sala =  parseInt($(this).val());
+  const piano = parseInt($("[name=piano]").val());
+  const sala =  parseInt($(this).val());
   let label, contenitore;
+  $("#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
+  $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
   if (piano > 0) {
     label = 'Vetrina';
     contenitore = 'vetrine';
@@ -145,56 +143,23 @@ $("[name=sala]").on('change', function(){
 })
 
 $("[name=contenitore]").on('change', function(){
-  $("#lcRipianoDiv").fadeOut('fast');
   $("[name=colonna],[name=ripiano],[name=cassetta]").val('');
-  $("[name=cassetta]").prop('required',false);
-  let piano = parseInt($("[name=piano]").val());
-  let sala = parseInt($("[name=sala]").val());
-  let contenitore = parseInt($(this).val());
-  if (piano === -1) {
-    getColonna(sala, contenitore)
-    if(contenitore >= 40){
-      $("#lcCassettaDiv").hide()
-      $("[name=cassetta]").prop('required',false);
-    }else {
-      $("#lcCassettaDiv").show()
-      $("[name=cassetta]").prop('required',true);
-    }
+  $("[name=colonna],[name=ripiano]").prop('required',false);
+  const piano = parseInt($("[name=piano]").val());
+  if (piano === -1) { 
+    const scaffale = parseInt($(this).val());
+    getColonna(scaffale) 
   }
 })
 
 $("[name=colonna]").on('change', function(){
-  let scaffale = parseInt($("[name=contenitore]").val());
   let colonna = parseInt($(this).val());
-  let options = [];
+  getRipiano(colonna)
+})
 
-  switch (true) {
-    case scaffale == 40:
-      slot = setCassetti(104);
-      label = 'Plateau';
-    break;
-    case scaffale == 41 && colonna == 1:
-      slot = setCassetti(56);
-      label = 'Cassetto';
-    break;
-    case scaffale == 41 && (colonna >= 2 && colonna <= 3):
-      slot = setCassetti(4);
-      label = 'Ripiano';
-    break;
-    case scaffale == 41 && colonna == 4:
-      slot = setCf4();
-      label = 'Cassetto';
-    break;
-    default:
-      slot = setCassetti(10);
-      label = 'Ripiano'
-  }
-  options.push("<option disabled selected>-- "+label+" --</option>")
-  $.each(slot, function(index, val){options.push("<option value='"+val+"'>"+val+"</option>");});
-  $("#ripianoLabel").text(label);
-  $("[name=ripiano]").html(options.join());
-  $("#lcRipianoDiv").fadeIn('fast');
-  $("[name=ripiano]").val('');
+$("[name=ripiano]").on('change', function(){
+  let ripiano = parseInt($(this).val());
+  getCassetta(ripiano)
 })
 
 //Sblocca obbligatorietà di contesto
@@ -392,7 +357,6 @@ function checkTitolo(){
     data: {trigger: 'checkTitolo', val: v}
   })
   .done(function(data) {
-    console.log(data.count);
     data.count == 0
     ? out.addClass('text-success').text("Ok! Puoi utilizzare questo titolo")
     : out.addClass('text-danger').text("Attenzione! Esiste già una scheda con questo titolo")
@@ -462,7 +426,6 @@ function postData(url, dati, callback){
 
 $(".toast").hide();
 function toast(obj){
-  console.log(obj);
   let btnDiv = $("#toastBtnDiv");
   btnDiv.html('');
   classe = obj.res === true ? 'bg-success' : 'bg-danger';
@@ -485,18 +448,6 @@ function toast(obj){
 }
 
 // NOTE: funzioni gestione schede ///
-function setCf4(){
-  var cassetti = [];
-  for(let cassaforte4 of "ABCDEFGHIJKLMNOPQRSTU" ){cassetti.push(cassaforte4);}
-  return cassetti;
-}
-
-function setCassetti(n){
-  var cassetti = [];
-  for (var i = 1; i < n+1; i++) { cassetti.push(i) }
-  return cassetti;
-}
-
 function getSale(piano, value = null){
   postData("scheda.php",{trigger:'getSale', piano:piano}, function(data){
     let options = [];
@@ -515,49 +466,79 @@ function getSale(piano, value = null){
 // NOTE: vetrina o scaffale
 function getContenitore(contenitore, sala, label,piano, value = null){
   postData("scheda.php",{trigger:'getContenitore', contenitore:contenitore, sala:sala}, function(data){
-    let options = [];
-    let c = contenitore == 'vetrine' ? 'vetrina' : 'scaffale';
-    let selvoid = "";
-    if (value == null) { selvoid = " selected"; }
+    const options = [];
+    const c = contenitore == 'vetrine' ? 'vetrina' : 'scaffale';
+    const selvoid = value == null ? " selected" : '';
     options.push("<option value='' disabled"+selvoid+">-- "+c+" --</option>")
     if(data.length == 0){
-      $("#lcContenitoreDiv,#lcCassettaDiv").hide();
+      $("#lcContenitoreDiv,#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").hide();
       $("#noVetrine").fadeIn('fast');
       $("[name=contenitore]").prop('required', false);
       return;
     }
     $.each(data, function(index, el) {
-      note = !el.note ? '' : el.note;
-      if (el.c == value) { var selected = " selected"; }else{ var selected = ""; }
-      options.push("<option value='"+el.c+"'"+selected+">"+el.c+" "+note+"</option>");
+      const optLabel = piano == -1 ? el.note : el.c;
+      const selected = el.id == value ? " selected" : '';
+      options.push("<option value='"+el.id+"'"+selected+">"+optLabel+"</option>");
     });
     $("[name=contenitore]").html(options.join()).prop('required', true);
     $("#contenitoreLabel").text(label);
     $("#noVetrine").hide();
     $("#lcContenitoreDiv").fadeIn('fast');
-    piano === -1 ? $("#lcCassettaDiv").fadeIn('fast') : $("#lcCassettaDiv").fadeOut('fast')
-    piano === -1 ? $("[name=cassetta]").prop('required', true) : $("[name=cassetta]").prop('required', false)
+    $("#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast')
+    $("[name=colonna], [name=ripiano]").prop('required', false)
   })
 }
 
-function getColonna(sala, scaffale, value = null){
-  postData("scheda.php",{trigger:'getColonna', sala:sala, scaffale:scaffale}, function(data){
-    let options = [];
-    let selvoid = ""; if (value == null) { selvoid = " selected"; }
+function getColonna(scaffale, value = null){
+  postData("scheda.php",{trigger:'getColonna', scaffale:scaffale}, function(data){
+    const options = [];
+    const selvoid = value == null ? " selected" : ''; 
     options.push("<option disabled"+selvoid+">-- colonna --</option>")
     $.each(data, function(index, el) {
-    if (el.val == value) { var selected = " selected"; }else{ var selected = ""; }
-      options.push("<option value='"+el.val+"'"+selected+">"+el.colonna+"</option>");
+      const selected = el.id == value ? " selected" : '';
+      options.push("<option value='"+el.id+"'"+selected+">"+el.colonna+"</option>");
     });
     $("#lcColonnaDiv").fadeIn('fast');
-    $("[name=colonna]").html(options.join());
+    $("[name=colonna]").html(options.join()).prop("required", true);
+    $("#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast')
+    $("[name=ripiano], [name=cassetta]").prop('required', false)
   })
 }
 
-// NOTE: colonna, cassetto plateau, la funzione viene chiamata solo per le sale del deposito
-function getRipiano(s,c){
-  if(c==40){ t = setCassetti(10); return false;}
-  t = setCf4()
+function getRipiano(colonna, value = null){
+  console.log(colonna);
+  
+  postData("scheda.php",{trigger:'getRipiano', colonna:colonna}, function(data){
+    const options = [];
+    const selvoid = value == null ? " selected" : ''; 
+    options.push("<option disabled"+selvoid+">-- ripiano --</option>")
+    $.each(data, function(index, el) {
+      const selected = el.id == value ? " selected" : '';
+      options.push("<option value='"+el.id+"'"+selected+">"+el.ripiano+"</option>");
+    });
+    $("#lcRipianoDiv").fadeIn('fast');
+    $("[name=ripiano]").html(options.join()).prop("required", true);
+  })
+}
+
+function getCassetta(ripiano, value = null){
+  postData("scheda.php",{trigger:'getCassetta', ripiano:ripiano}, function(data){
+    console.log(data.length);
+    if(data.length == 0){
+      alert("Non sono presenti cassette per il ripiano selezionato");
+      return false;
+    }
+    const options = [];
+    const selvoid = value == null ? " selected" : ''; 
+    options.push("<option disabled"+selvoid+">-- cassetta --</option>")
+    $.each(data, function(index, el) {
+      const selected = el.id == value ? " selected" : '';
+      options.push("<option value='"+el.id+"'"+selected+">"+el.cassetta+"</option>");
+    });
+    $("[name=cassetta]").html(options.join()).prop("required", false);
+    $("#lcCassettaDiv").fadeIn('fast');
+  })
 }
 
 function delbiblioref(id_biblio){
@@ -773,7 +754,7 @@ function salvaScheda(e){
       });
       return false;
     }
-    console.log(dati);
+    // console.log(dati);
     // return false;
     $.ajax({
       url: 'api/scheda.php',
@@ -1022,11 +1003,9 @@ async function gallery(filters){
   isLoading = true;
   try {
     const json = await search(filters);
-    console.log(json);
     if (json.breadcrumb && Object.keys(json.breadcrumb).length > 0 && json.breadcrumb.piano !== null) {
       const breadcrumbList = document.getElementById('breadcrumb');
       breadcrumbList.innerHTML = '';
-      console.log(json.breadcrumb);
       
       Object.entries(json.breadcrumb).forEach(([key, value]) => {
         const li = document.createElement("li")
@@ -1093,7 +1072,6 @@ function createCassetteList(cassette){
 
   // Funzione da chiamare al click
   function handleButtonClick(id) {
-    console.log(id);
     setFilters(localStorageItem,'cassetta',id,"update")
     setActiveFilters(localStorageItem);
   }
@@ -1125,8 +1103,6 @@ function createCassetteList(cassette){
 }
 
 function search(filters){
-  console.log(filters);
-  
   return new Promise((resolve,reject) => {
     const data = {
       trigger: 'search',
