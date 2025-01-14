@@ -6,9 +6,6 @@
     <li>
       <p class='text-primary'><i class="fas fa-archive fa-fw"></i> archivi</p>
       <ul class="subMenu">
-        <!-- <li>
-          <a href="schede.php" class='d-block m-0 animated' title="archivio schede" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> schede</a>
-        </li> -->
         <li>
           <a href="bibliografia.php" class='d-block m-0 animated' title="archivio record bibliografici" data-toggle='tooltip' data-placement='left'><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
         </li>
@@ -17,12 +14,6 @@
     <li>
       <p class='text-info'><i class="fas fa-folder-open fa-fw"></i> aggiungi authority file</p>
       <ul class="subMenu">
-        <!-- <li>
-          <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova ricognizione"><i class="fas fa-chevron-right fa-fw"></i> ricognizione</a>
-        </li> -->
-        <!-- <li>
-          <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci una nuova scheda sito"><i class="fas fa-chevron-right fa-fw"></i> scheda sito</a>
-        </li> -->
         <li>
           <a href="bibliografia_add.php" class="animated" data-toggle='tooltip' data-placement='left' title="inserisci un nuovo record bibliografico"><i class="fas fa-chevron-right fa-fw"></i> bibliografia</a>
         </li>
@@ -49,14 +40,8 @@
     <li>
       <p class='text-warning'><i class="fas fa-cogs fa-fw"></i> gestione sistema</p>
       <ul class="subMenu">
-        <!-- <li>
-          <a href="usr.php" class="animated" data-toggle='tooltip' data-placement='left' title="gestisci utenti di sistema"><i class="fas fa-chevron-right fa-fw"></i> utenti</a>
-        </li> -->
         <li>
           <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="modifica le liste valori"><i class="fas fa-chevron-right fa-fw"></i> liste valori</a>
-        </li>
-        <li>
-          <a href="report.php" class="animated" data-toggle='tooltip' data-placement='left' title="gestisci report personali"><i class="fas fa-chevron-right fa-fw"></i> report</a>
         </li>
       </ul>
     </li>
