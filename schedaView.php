@@ -496,6 +496,17 @@
             <div class="elContainer" id="stereoWrap">
               <h5>Nessuna immagine stereo disponibile</h5>
             </div>
+            <div id="stereoGuida" class="mt-3 pt-3 border-top">
+              <h5>Cos'è una foto stereoscopica anaglifica?</h5>
+              <p>Le foto stereoscopiche anaglifiche sono immagini 3D speciali che creano un effetto tridimensionale (3D) grazie a due immagini sovrapposte, ciascuna filtrata tramite un colore diverso: rosso e ciano. Quando visualizzate con occhiali 3D anaglifici (con una lente rossa e una ciano), il cervello combina le due immagini per percepire profondità e tridimensionalità.</p>
+              <h5>Come si usano?</h5>
+              <p>Per vedere correttamente le foto stereoscopiche anaglifiche:</p>
+              <ol>
+                <li>Indossa occhiali 3D anaglifici: Gli occhiali devono avere una lente rossa per l'occhio sinistro e una lente ciano per l'occhio destro. Indossandoli, sarai in grado di vedere l'effetto 3D.</li>
+                <li>Visualizza le immagini sullo schermo: Assicurati di guardare le immagini direttamente dallo schermo, mantenendo una distanza adeguata, per un'esperienza ottimale.</li>
+              </ol>
+              <p>Goditi l'esperienza 3D immersiva che solo le immagini anaglifiche possono offrire!</p>
+            </div>
           </fieldset>
         </div>
       </div>
