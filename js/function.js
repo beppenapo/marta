@@ -768,8 +768,6 @@ function salvaScheda(e){
       data: {trigger : trigger,  dati}
     })
     .done(function(data){
-      console.log(data);
-      return false;
       let url = trigger == 'editScheda' ? dati.scheda.scheda : data.scheda;
       data.url='schedaView.php?get='+url;
       data.btn = [];
