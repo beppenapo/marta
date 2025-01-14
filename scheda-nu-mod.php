@@ -24,6 +24,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
           </div>
         </div>
         <form id="formScheda" data-action="editScheda" autocomplete="off">
+        <input type="hidden" name="scheda" data-table="scheda" value="<?php echo $_POST['s']; ?>">
           <?php
             require_once($formFolder.'cd.html');
             require_once($formFolder.'titolo_scheda.html');
@@ -104,8 +105,6 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
 
           <?php
             require_once($formFolder.'lc.php');
-            // require_once($formFolder.'lc.html');
-            // require_once($formFolder.'la.html');
             require_once($formFolder.'ub.html');
             require_once($formFolder.'gp.html');
             require_once($formFolder.'re.html');
@@ -209,7 +208,6 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
               </div>
             </div>
           </div>
-          <input type="hidden" name="scheda" data-table="scheda" value="<?php echo $_POST['s']; ?>">
         </form>
       </div>
     </main>

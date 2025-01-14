@@ -4,6 +4,9 @@ require 'vendor/autoload.php';
 use \Marta\Scheda;
 $obj = new Scheda();
 $scheda = $obj->getScheda($_GET['get']);
+
+// var_dump($scheda['lc']);
+
 $bibScheda = $obj->getBiblioScheda($_GET['get']);
 $biblioFake = $obj->getBiblioFake($_GET['get']);
 $stato = $obj->getStatoScheda($_GET['get']);

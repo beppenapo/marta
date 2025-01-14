@@ -170,14 +170,20 @@
               if(count((array)$scheda['lc'])==0){
                 echo $noData;
               }else{
+                switch ($scheda['lc']['piano']) {
+                  case -1: $piano = 'Deposito'; break;
+                  case 0: $piano = 'Piano terra'; break;
+                  case 1: $piano = 'Primo piano'; break;
+                  case 2: $piano = 'Secondo piano'; break;
+                }
             ?>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><span>PVCC - Comune:</span><span class="font-weight-bold"><?php echo $scheda['lc']['pvcc']; ?></span></li>
               <li class="list-group-item"><span>LDCN - Collocazione specifica (Denominazione):</span><span class="font-weight-bold"><?php echo $scheda['lc']['ldcn']; ?></span></li>
-              <li class="list-group-item"><span>PIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['piano'] == -1 ? 'Deposito': $scheda['lc']['piano']; ?></span></li>
+              <li class="list-group-item"><span>PIANO:</span><span class="font-weight-bold"><?php echo $piano; ?></span></li>
               <li class="list-group-item"><span>SALA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['sala_text']; ?></span></li>
               <?php if ($scheda['lc']['piano'] == -1) {?>
-                <li class="list-group-item"><span>SCAFFALE:</span><span class="font-weight-bold"><?php echo $scheda['lc']['scaffale_text']." ".$scheda['lc']['scaffale']; ?></span></li>
+                <li class="list-group-item"><span>SCAFFALE:</span><span class="font-weight-bold"><?php echo $scheda['lc']['scaffale_text']; ?></span></li>
                 <li class="list-group-item"><span>COLONNA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['colonna']; ?></span></li>
                 <li class="list-group-item"><span>RIPIANO:</span><span class="font-weight-bold"><?php echo $scheda['lc']['ripiano']; ?></span></li>
                 <li class="list-group-item"><span>CASSETTA:</span><span class="font-weight-bold"><?php echo $scheda['lc']['cassetta']; ?></span></li>
@@ -186,6 +192,7 @@
               <?php } ?>
             </ul>
           <?php } ?>
+          <!-- <?php var_dump($scheda['lc']); ?> -->
           </fieldset>
           <fieldset class="bg-light rounded border p-3 mb-3" id="ubFieldset">
             <legend class="w-auto border rounded p-1">UB - DATI PATRIMONIALI</legend>

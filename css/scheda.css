@@ -12,6 +12,8 @@ legend{text-transform: uppercase;}
   z-index: 2000; */
 }
 
+.lcSel{display: none;}
+
 #osmList{
   position: absolute;
   top: 130px;

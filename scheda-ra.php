@@ -24,6 +24,7 @@ if (!isset($_SESSION['id'])){ header("location:login.php");}
           </div>
         </div>
         <form id="formScheda" data-action="addScheda" autocomplete="off">
+          
           <?php
             require_once($formFolder.'cd.html');
             require_once($formFolder.'titolo_scheda.html');

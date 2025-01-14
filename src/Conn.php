@@ -71,6 +71,7 @@ class Conn {
       $v = $key == 'pwd' ? "crypt(:pwd, gen_salt('md5'))" : ":".$key;
       array_push($field,$key."=".$v);
     }
+    // foreach ($filter as $key => $val) { array_push($where,$key." = :".$key); }
     foreach ($filter as $key => $val) { array_push($where,$key." = ".$val); }
     $sql = "update ".$tab." set ".join(",",$field)." where ".join(" AND ", $where).";";
     return $sql;
@@ -78,7 +79,7 @@ class Conn {
 
   public function buildDelete(string $tab, array $filter){
     $where = [];
-    foreach ($filter as $key => $val) { array_push($where,$tab.".".$key." = ".$val); }
+    foreach ($filter as $key => $val) { $where[] = $tab.".".$key." = :".$key; }
     $sql = "delete from ".$tab." where ".join(" AND ", $where).";";
     return $sql;
   }

@@ -1,5 +1,4 @@
 $(document).ready(function() {
-  // $(".tab").each(function(){ console.log($(this).data('table')+": "+$(this).attr('name')); })
   const listCategorie = {tab:'liste.ra_cls_l1', sel:'cls1'};
   const listProvince ={tab:'liste.province', sel:'prvp'};
   const listTcl ={tab:'liste.la_tcl', sel:'tcl'};

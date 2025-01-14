@@ -6,12 +6,13 @@ class Scheda extends Conn{
   function __construct(){}
 
   public function getScheda(int $id){
+    
     $out=[];
     $out['scheda'] = $this->sezScheda($id);
     $out['og'] = $this->sezOg($id,$out['scheda']['tskid']);
     $out['geoloc'] = $this->sezGeoloc($id);
     $out['gp'] = $this->sezGp($id);
-    $out['lc'] = $this->sezLc($id,$out['scheda']['tskid']);
+    $out['lc'] = $this->sezLc($id);
 
     $sql ="select ub.invn, ub.stis, ub.stid, stim.value stim, ub.stim as idstim from ub left join liste.stim on ub.stim = stim.id where ub.scheda = ".$id.";";
     $ub = $this->simple($sql);
@@ -230,8 +231,9 @@ class Scheda extends Conn{
     return $out;
   }
 
-  private function sezLc(int $id, int $tsk){
-    if($tsk == 1){
+  private function sezLc(int $id){
+    $piano = $this->simple("select piano from localizzazione where scheda = " . $id . ";")[0]['piano'];
+    if($piano > -1){
       $query = "select comune.pvcc, ldc.ldcn, esposto.piano, esposto.sala_id, esposto.sala, esposto.descrizione as sala_text, esposto.vetrina_id, esposto.vetrina from localizzazione_esposto esposto inner join lc on esposto.scheda = lc.scheda INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = " . $id . ";";
     }else{
       $query = "select comune.pvcc, ldc.ldcn, deposito.piano, deposito.sala_id, deposito.sala, deposito.descrizione as sala_text, deposito.scaffali_id, deposito.scaffale, deposito.scaffale_text, deposito.colonne_id, deposito.colonna, deposito.ripiano_id, deposito.ripiano, deposito.cassetta_id, deposito.cassetta from localizzazione_deposito deposito inner join lc on deposito.scheda = lc.scheda INNER JOIN liste.pvcc comune on lc.pvcc = comune.codice INNER JOIN ldc on lc.ldc = ldc.id where lc.scheda = " . $id . ";";
@@ -369,6 +371,7 @@ class Scheda extends Conn{
   }
 
   public function editScheda(array $dati){
+    try {
       $this->begin();
       $scheda = $dati['scheda']['scheda'];
       unset($dati['scheda']['scheda']);
@@ -396,22 +399,43 @@ class Scheda extends Conn{
       if (!isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) > 0) {
         $dati['inventario']['scheda'] = $scheda;
         $invSql = $this->buildInsert('inventario',$dati['inventario']);
-        $x = $this->prepared($invSql,$dati['inventario']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
+        $this->prepared($invSql,$dati['inventario']);
       }
       if (isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) > 0){
         $filtro = array("id"=>$dati['inventario']['old_inventario']);
         unset($dati['inventario']['old_inventario']);
-        $dati['inventario']['prefisso'] = isset($dati['inventario']['prefisso']) ? $dati['inventario']['prefisso'] : null;
-        $dati['inventario']['suffisso'] = isset($dati['inventario']['suffisso']) ? $dati['inventario']['suffisso'] : null;
+        $dati['inventario']['prefisso'] = $dati['inventario']['prefisso'] ?? null;
+        $dati['inventario']['suffisso'] = $dati['inventario']['suffisso'] ?? null;
         $invSql = $this->buildUpdate("inventario", $filtro, $dati['inventario']);
-        $x = $this->prepared($invSql,$dati['inventario']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
+        $this->prepared($invSql,$dati['inventario']);
       }
       if (isset($dati['inventario']['old_inventario']) && strlen(trim($dati['inventario']['inventario'])) == 0){
         $invSql = "delete from inventario where id=:id;";
-        $x = $this->prepared($invSql,array("id"=>$dati['inventario']['old_inventario']));
-        if(!$x){throw new \Exception($x['msg'], 1);}
+        $this->prepared($invSql,array("id"=>$dati['inventario']['old_inventario']));
+      }
+
+      if(isset($dati['og_ra'])){
+        $dati['og_ra']['ogtt'] = strlen(trim($dati['og_ra']['ogtt'])) == 0 ? null : $dati['og_ra']['ogtt'];
+        $dati['og_ra']['l5'] = $dati['og_ra']['l5'] ?? null;
+        $ogRaSql = $this->buildUpdate("og_ra", $filtroScheda, $dati['og_ra']);
+        $this->prepared($ogRaSql,$dati['og_ra']);
+      }
+
+      if(isset($dati['og_nu'])){
+        $dati['og_nu']['ogtt'] = strlen(trim($dati['og_nu']['ogtt'])) == 0 ? null : $dati['og_nu']['ogtt'];
+        $dati['og_nu']['ogth'] = strlen(trim($dati['og_nu']['ogth'])) == 0 ? null : $dati['og_nu']['ogth'];
+        $dati['og_nu']['ogtl'] = strlen(trim($dati['og_nu']['ogtl'])) == 0 ? null : $dati['og_nu']['ogtl'];
+
+        $dati['og_nu']['ogto'] = $dati['og_nu']['ogto'] ?? null;
+        $dati['og_nu']['ogts'] = $dati['og_nu']['ogts'] ?? null;
+        $dati['og_nu']['ogtr'] = $dati['og_nu']['ogtr'] ?? null;
+
+        $ogNuSql = $this->buildUpdate("og_nu", $filtroScheda, $dati['og_nu']);
+        $this->prepared($ogNuSql,$dati['og_nu']);
+      }
+
+      if (isset($dati['lc'])) { 
+        $lcResult = $this->editLc($dati['lc'], $scheda); 
       }
 
       if(isset($dati['vie'])) {
@@ -421,38 +445,6 @@ class Scheda extends Conn{
       if(isset($dati['geolocalizzazione'])) {
         if(isset($dati['vie'])) {$dati['geolocalizzazione']['via'] = $dati['vie']['osm_id'];}
         $this->updateSection('geolocalizzazione', $scheda, $dati['geolocalizzazione']);
-      }
-
-
-      if(isset($dati['og_ra'])){
-        $dati['og_ra']['ogtt'] = strlen(trim($dati['og_ra']['ogtt'])) == 0 ? null : $dati['og_ra']['ogtt'];
-        $dati['og_ra']['l5'] = isset($dati['og_ra']['l5']) ? $dati['og_ra']['l5'] : null;
-        $sql = $this->buildUpdate("og_ra", $filtroScheda, $dati['og_ra']);
-        $x = $this->prepared($sql,$dati['og_ra']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
-      }
-      if(isset($dati['og_nu'])){
-        $dati['og_nu']['ogtt'] = strlen(trim($dati['og_nu']['ogtt'])) == 0 ? null : $dati['og_nu']['ogtt'];
-        $dati['og_nu']['ogth'] = strlen(trim($dati['og_nu']['ogth'])) == 0 ? null : $dati['og_nu']['ogth'];
-        $dati['og_nu']['ogtl'] = strlen(trim($dati['og_nu']['ogtl'])) == 0 ? null : $dati['og_nu']['ogtl'];
-
-        $dati['og_nu']['ogto'] = isset($dati['og_nu']['ogto']) ? $dati['og_nu']['ogto'] : null;
-        $dati['og_nu']['ogts'] = isset($dati['og_nu']['ogts']) ? $dati['og_nu']['ogts'] : null;
-        $dati['og_nu']['ogtr'] = isset($dati['og_nu']['ogtr']) ? $dati['og_nu']['ogtr'] : null;
-
-        $sql = $this->buildUpdate("og_nu", $filtroScheda, $dati['og_nu']);
-        $x = $this->prepared($sql,$dati['og_nu']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
-      }
-
-      if (isset($dati['lc'])) {
-        $dati['lc']['contenitore'] = isset($dati['lc']['contenitore']) ? $dati['lc']['contenitore'] : null;
-        $dati['lc']['colonna'] = isset($dati['lc']['colonna']) ? $dati['lc']['colonna'] : null;
-        $dati['lc']['ripiano'] = isset($dati['lc']['ripiano']) ? $dati['lc']['ripiano'] : null;
-        $dati['lc']['cassetta'] = isset($dati['lc']['cassetta']) ? $dati['lc']['cassetta'] : null;
-        $sql = $this->buildUpdate("lc", $filtroScheda, $dati['lc']);
-        $x = $this->prepared($sql,$dati['lc']);
-        if(!$x){throw new \Exception($x['msg'], 1);}
       }
 
       // UB
@@ -546,7 +538,12 @@ class Scheda extends Conn{
       if ($ossExists[0]['count'] > 0 && !isset($dati['an'])) { $this->delSection('an', $scheda); }
 
       $this->commit();
-      return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.', "pdo"=>$x['msg']);
+      return array("res"=>true,"msg"=>'La scheda è stata correttamente modificata.', "lc" => $lcResult);
+    } catch (\Throwable $th) {
+      $this->rollback();
+      return["msg"=>$th->getMessage(), "code"=>$th->getCode(), "lc" => $lcResult];
+    }
+      
   }
 
   public function delScheda(array $dati){
@@ -723,7 +720,6 @@ class Scheda extends Conn{
 
   public function getContenitore(array $dati){
     $f = $dati['contenitore'] == 'vetrine' ? 'vetrina' : 'scaffale';
-    // $id = $dati['contenitore'] == 'vetrine' ? 'a.id,' : '';
     $sql = "select distinct a.id, a.".$f." as c, a.note from liste.".$dati['contenitore']." a, liste.sale s where a.sala = s.id and s.id = ".$dati['sala']." order by 1 asc;";
     return $this->simple($sql);
   }
@@ -763,10 +759,57 @@ class Scheda extends Conn{
     return $res;
   }
 
+  protected function editLc(array $dati, int $scheda){
+    $values = ["scheda" => $scheda];
+    $filtroScheda = ["scheda"=>$scheda];
+    $result = $this->simple("select piano from localizzazione where scheda = " . $scheda . ";");
+    if (empty($result)) { throw new \Exception("Nessun record trovato per la scheda " . $scheda, 1);}
+    $piano = $result[0]['piano'];
+    
+    if(intval($dati['piano']) === -1){
+      $tab = 'deposito';
+      $values['ripiano'] = $dati['ripiano'];
+      $values['cassetta'] = $dati['cassetta'] ?? null;
+    }else{
+      $tab = 'esposto';
+      $values['sala'] = $dati['sala'];
+      $values['vetrina'] = $dati['contenitore'] ?? null;
+    }
+    
+    if(intval($dati['piano']) !== $piano){
+      $currentTab =  $piano == -1 ? 'deposito' : 'esposto';
+      $delSql = $this->buildDelete($currentTab,$filtroScheda);
+      $delQuery = $this->prepared($delSql,$filtroScheda);
+      // if(!$delQuery){throw new \Exception($delSql, 1);}
+      
+      $addSql = $this->buildInsert($tab,$values);
+      $addQuery = $this->prepared($addSql,$values);
+      // if(!$addQuery){throw new \Exception($addSql, 1);}
+    }else{
+      $editSql = $this->buildUpdate($tab, $filtroScheda, $values);
+      $editQuery = $this->prepared($editSql,$values);
+      // if(!$editQuery){throw new \Exception($editSql, 1);}
+    }
+    return [$addSql,$values];
+  }
+
   protected function addSection(string $tab, int $scheda, array $dati){
-    $dati['scheda'] = $scheda;
-    $sql = $this->buildInsert($tab,$dati);
-    $res = $this->prepared($sql,$dati);
+    $values=['scheda' => $scheda];
+    if($tab == 'lc'){
+      if($dati['piano'] === -1){
+        $tab = 'deposito';
+        $values['ripiano'] = $dati['ripiano'];
+        $values['cassetta'] = $dati['lc']['cassetta'] ?? null;
+      }else{
+        $tab = 'esposto';
+        $values['sala'] = $dati['sala'];
+        $values['vetrina'] = $dati['lc']['contenitore'] ?? null;
+      }
+    }else{
+      $values = array_merge($values, $dati);
+    }
+    $sql = $this->buildInsert($tab,$values);
+    $res = $this->prepared($sql,$values);
     if (!$res) { throw new \Exception($res, 1);}
     return $res;
   }

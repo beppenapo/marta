@@ -131,20 +131,24 @@ $("[name=sala]").on('change', function(){
   const sala =  parseInt($(this).val());
   let label, contenitore;
   $("#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast');
-  $("[name=contenitore],[name=colonna],[name=ripiano],[name=cassetta]").val('');
-  if (piano > 0) {
+  $("[name=colonna],[name=ripiano],[name=cassetta]").val('').prop('required',false);
+  if (piano > -1) {
     label = 'Vetrina';
     contenitore = 'vetrine';
+    $("[name=contenitore]").prop('required', false);
+    $("#contenitoreLabel").removeClass('text-danger font-weight-bold')
   }else {
     label = 'Scaffale';
     contenitore = 'scaffali';
+    $("[name=contenitore]").prop('required', true);
+    $("#contenitoreLabel").addClass('text-danger font-weight-bold')
   }
   getContenitore(contenitore,sala,label,piano)
 })
 
 $("[name=contenitore]").on('change', function(){
   $("[name=colonna],[name=ripiano],[name=cassetta]").val('');
-  $("[name=colonna],[name=ripiano]").prop('required',false);
+  $("[name=ripiano]").prop('required',false);
   const piano = parseInt($("[name=piano]").val());
   if (piano === -1) { 
     const scaffale = parseInt($(this).val());
@@ -153,6 +157,8 @@ $("[name=contenitore]").on('change', function(){
 })
 
 $("[name=colonna]").on('change', function(){
+  $("[name=ripiano],[name=cassetta]").val('');
+  $("[name=ripiano]").prop('required',true);
   let colonna = parseInt($(this).val());
   getRipiano(colonna)
 })
@@ -464,16 +470,16 @@ function getSale(piano, value = null){
 }
 
 // NOTE: vetrina o scaffale
-function getContenitore(contenitore, sala, label,piano, value = null){
+function getContenitore(contenitore, sala, label, piano, value = null){
   postData("scheda.php",{trigger:'getContenitore', contenitore:contenitore, sala:sala}, function(data){
+    console.log(data);
+    
     const options = [];
-    const c = contenitore == 'vetrine' ? 'vetrina' : 'scaffale';
+    const c = contenitore == 'vetrine' ? 'fuori vetrina' : 'scaffale';
     const selvoid = value == null ? " selected" : '';
-    options.push("<option value='' disabled"+selvoid+">-- "+c+" --</option>")
+    options.push("<option value='' "+selvoid+">-- "+c+" --</option>")
     if(data.length == 0){
-      $("#lcContenitoreDiv,#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").hide();
       $("#noVetrine").fadeIn('fast');
-      $("[name=contenitore]").prop('required', false);
       return;
     }
     $.each(data, function(index, el) {
@@ -481,12 +487,10 @@ function getContenitore(contenitore, sala, label,piano, value = null){
       const selected = el.id == value ? " selected" : '';
       options.push("<option value='"+el.id+"'"+selected+">"+optLabel+"</option>");
     });
-    $("[name=contenitore]").html(options.join()).prop('required', true);
+    $("[name=contenitore]").html(options.join());
     $("#contenitoreLabel").text(label);
     $("#noVetrine").hide();
     $("#lcContenitoreDiv").fadeIn('fast');
-    $("#lcColonnaDiv,#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast')
-    $("[name=colonna], [name=ripiano]").prop('required', false)
   })
 }
 
@@ -494,7 +498,7 @@ function getColonna(scaffale, value = null){
   postData("scheda.php",{trigger:'getColonna', scaffale:scaffale}, function(data){
     const options = [];
     const selvoid = value == null ? " selected" : ''; 
-    options.push("<option disabled"+selvoid+">-- colonna --</option>")
+    options.push("<option value='' disabled"+selvoid+">-- colonna --</option>")
     $.each(data, function(index, el) {
       const selected = el.id == value ? " selected" : '';
       options.push("<option value='"+el.id+"'"+selected+">"+el.colonna+"</option>");
@@ -502,7 +506,6 @@ function getColonna(scaffale, value = null){
     $("#lcColonnaDiv").fadeIn('fast');
     $("[name=colonna]").html(options.join()).prop("required", true);
     $("#lcRipianoDiv,#lcCassettaDiv").fadeOut('fast')
-    $("[name=ripiano], [name=cassetta]").prop('required', false)
   })
 }
 
@@ -512,7 +515,7 @@ function getRipiano(colonna, value = null){
   postData("scheda.php",{trigger:'getRipiano', colonna:colonna}, function(data){
     const options = [];
     const selvoid = value == null ? " selected" : ''; 
-    options.push("<option disabled"+selvoid+">-- ripiano --</option>")
+    options.push("<option value='' disabled"+selvoid+">-- ripiano --</option>")
     $.each(data, function(index, el) {
       const selected = el.id == value ? " selected" : '';
       options.push("<option value='"+el.id+"'"+selected+">"+el.ripiano+"</option>");
@@ -526,12 +529,13 @@ function getCassetta(ripiano, value = null){
   postData("scheda.php",{trigger:'getCassetta', ripiano:ripiano}, function(data){
     console.log(data.length);
     if(data.length == 0){
-      alert("Non sono presenti cassette per il ripiano selezionato");
+      $("#noCassette").show()
       return false;
     }
+    $("#noCassette").hide()
     const options = [];
     const selvoid = value == null ? " selected" : ''; 
-    options.push("<option disabled"+selvoid+">-- cassetta --</option>")
+    options.push("<option value='' "+selvoid+">-- fuori cassetta --</option>")
     $.each(data, function(index, el) {
       const selected = el.id == value ? " selected" : '';
       options.push("<option value='"+el.id+"'"+selected+">"+el.cassetta+"</option>");
@@ -686,6 +690,7 @@ function listaScheda(tiposcheda){
 
 ////////////////////////////////////////////
 $("#errorDiv").hide();
+
 function salvaScheda(e){
   $("#errorDiv").hide()
   $("#errorDiv>ul").html('');
@@ -763,6 +768,8 @@ function salvaScheda(e){
       data: {trigger : trigger,  dati}
     })
     .done(function(data){
+      console.log(data);
+      return false;
       let url = trigger == 'editScheda' ? dati.scheda.scheda : data.scheda;
       data.url='schedaView.php?get='+url;
       data.btn = [];

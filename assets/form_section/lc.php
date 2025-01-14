@@ -29,23 +29,24 @@
             ?>
           </select>
         </div>
-
+        
+        <!-- vetrine / scaffali -->
         <div class="col-md-4 col-lg-2">
-          <div class="<?php echo $hideContenitore; ?>" id="lcContenitoreDiv">
-            <label for="contenitore" id="contenitoreLabel" class="text-danger font-weight-bold">
+          <div class="" id="lcContenitoreDiv">
+            <label for="contenitore" id="contenitoreLabel" class="<?php echo $labelContenitoreClass; ?>">
               <?php if(isset($_POST['s'])){echo $labelContenitore;}?>
             </label>
             <select class="form-control form-control-sm" data-table="lc" id="contenitore" name="contenitore">
-              <?php echo implode("",(array)$selContenitore); ?>
+              <?php echo implode("",$selContenitore); ?>
             </select>
           </div>
         </div>
-        
+
         <div class="col-md-4 col-lg-2">
           <div class="<?php echo $hideColonna; ?>" id="lcColonnaDiv">
             <label for="colonna" id="colonnaLabel" class="text-danger font-weight-bold">Colonna</label>
             <select class="form-control form-control-sm" data-table="lc" id="colonna" name="colonna">
-              <?php echo implode("",(array)$selColonna); ?>
+              <?php if(!empty($selColonna)){echo implode("",$selColonna);} ?>
             </select>
           </div>
         </div>
@@ -53,25 +54,46 @@
         <div class="col-md-4 col-lg-2">
           <div class="<?php echo $hideRipiano; ?>" id="lcRipianoDiv">
             <label for="ripiano" id="ripianoLabel" class="text-danger font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="" aria-hidden="true" data-original-title='in alcuni scaffali vengono chiamati "plateau" o "cassetto"'></i> Ripiano</label>
-            <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano"><?php echo implode("",(array)$selRipiano); ?></select>
+            <select class="form-control form-control-sm" data-table="lc" id="ripiano" name="ripiano">
+              <?php if(!empty($selRipiano)){echo implode("",$selRipiano);} ?>
+            </select>
           </div>
         </div>
 
         <div class="col-md-4 col-lg-2">
           <div class="<?php echo $hideCassetta; ?>" id="lcCassettaDiv">
             <label for="cassetta" id="cassettaLabel" class="">Cassetta</label>
-            <select class="form-control form-control-sm" data-table="lc" id="cassetta" name="cassetta"><?php echo implode("",(array)$selCassetta); ?></select>
-            <!-- <input type="text" class="form-control form-control-sm" data-table="lc" name="cassetta" id="cassetta" value="<?php echo $scheda['lc']['cassetta']; ?>"> -->
+            <select class="form-control form-control-sm" data-table="lc" id="cassetta" name="cassetta">
+              <?php if(!empty($selCassette)){echo implode("",$selCassette);} ?>
+            </select>
           </div>
         </div>
-            <?php print_r($scheda['lc']); ?>
-
       </div>
-
       <div class="form-row <?php echo $lcNoVetrine; ?>" id="noVetrine">
         <div class="col-12">
           <div class="alert alert-warning mt-3 mb-0">
-            <label class="">Non ci sono vetrine per la sala selezionata</label>
+            <label class="">Non sono presenti vetrine per la sala selezionata, il reperto verrà considerato come "fuori vetrina"</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row <?php echo $lcNoCassette; ?>" id="noCassette">
+        <div class="col-12">
+          <div class="alert alert-warning mt-3 mb-0">
+            <label class="">Non sono presenti cassette per il ripiano selezionato, il reperto verrà considerato come "fuori cassetta"</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row <?php echo $lcFuoriVetrina; ?>" id="fuoriVetrina">
+        <div class="col-12">
+          <div class="alert alert-info mt-3 mb-0">
+            <label class="">Reperto fuori vetrina</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row <?php echo $lcFuoriCassetta; ?>" id="fuoriVetrina">
+        <div class="col-12">
+          <div class="alert alert-info mt-3 mb-0">
+            <label class="">Reperto fuori cassetta</label>
           </div>
         </div>
       </div>

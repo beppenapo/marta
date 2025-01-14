@@ -19,7 +19,7 @@ $adsmArr=$obj->vocabolari(array("tab"=>'liste.adsm', "order"=>1));
 
 $comuniPuglia = $obj->comuniPuglia();
 //Nel form di inserimento questi elementi partono nascosti
-$hideContenitore = $hideColonna = $hideRipiano = $hideCassetta = $lcNoVetrine = 'lcSel';
+$hideContenitore = $hideColonna = $hideRipiano = $hideCassetta = $lcNoVetrine = $lcNoCassette = $lcFuoriVetrina = $lcFuoriCassetta = 'lcSel';
 
 //********************************************//
 // Questa sezione gestisce il form di modifica
@@ -36,82 +36,79 @@ if (isset($_POST['s'])) {
   $salaList = $obj->getSale($scheda['lc']['piano']);
   // creo la label della lista in base al piano
   $labelContenitore = $scheda['lc']['piano'] > 0 ? 'Vetrina' : 'Scaffale';
-  $labelLista = $scheda['lc']['piano'] > 0 ? 'vetrina' : 'scaffale';
+  $labelLista = $scheda['lc']['piano'] > 0 ? 'fuori vetrina' : 'scaffale';
+  $labelContenitoreClass = $scheda['lc']['piano'] == -1 ? 'text-danger font-weight-bold' : '';
 
   // sempre in base al piano decido da quale tabella creare la lista precedente
-  $contenitore = $scheda['lc']['piano'] > 0 ? 'vetrine' : 'scaffali';
-  $contenitoreList = $obj->getContenitore(array("sala"=>$scheda['lc']['sala_id'], "contenitore"=>$contenitore));
+  $contenitore = $scheda['lc']['piano'] > -1 ? 'vetrine' : 'scaffali';
+  $contenitoreList = $obj->getContenitore(["sala"=>$scheda['lc']['sala_id'], "contenitore"=>$contenitore]);
 
-  // se la sala non ha scaffali o vetrine mostra l'avviso
-  if (count((array)$contenitoreList) == 0) {
-    $lcNoVetrine = '';
-    $lcView = 'lcSel';
-  }
+  // se la sala non ha vetrine mostra l'avviso
+  if (count($contenitoreList) == 0) { $lcNoVetrine = ''; }
 
   // preparo l'array per le options della lista contenitore
   $selContenitore = [];
 
   // se il contenitore è specificato aggiungo l'attributo 'selected' al contenitore salvato
-  $idContenitore = $scheda['scheda']['tskid'] == 1 ? $scheda['lc']['vetrina_id'] : $scheda['lc']['scaffali_id'];
+  $idContenitore = $scheda['lc']['piano'] > -1 ? $scheda['lc']['vetrina_id'] : $scheda['lc']['scaffali_id'];
+
   if ($idContenitore !== null && is_numeric($idContenitore)) {
     $hideContenitore = '';
     $selContenitore[] = "<option value='' selected>-- ".$labelLista." --</option>";
     foreach ($contenitoreList as $key => $val) {
       $sel = $val['id'] == $idContenitore ? 'selected' : '';
-      $optLabel = $scheda['scheda']['tskid'] == 1 ? $val['c'] : $val['note'];
+      $optLabel = $scheda['lc']['piano'] > -1 ? $val['c'] : $val['note'];
       $selContenitore[] = "<option value='".$val['id']."' ".$sel.">" . $optLabel . "</option>";
     }
 
-    if($scheda['scheda']['tskid'] == 2){
-      $hideColonna = '';
-      $selColonna = [];
-      $colonnaList = $obj->getColonna((int)$scheda['lc']['scaffali_id']);
-
-      // se nel db c'è una colonna specificata le aggiungo l'attributo 'selected'
-      if ($scheda['lc']['colonne_id'] !== null && is_numeric($scheda['lc']['colonne_id'])) {
+    // if($scheda['lc']['piano'] == -1){
+      // colonne
+      if(isset($scheda['lc']) && is_numeric($scheda['lc']['colonne_id'] ?? null)){
+        $hideColonna = '';
+        $selColonna = [];
+        $colonnaList = $obj->getColonna((int)$scheda['lc']['scaffali_id']);
         $selColonna[] = "<option value=''>--colonna--</option>";
+  
         foreach ($colonnaList as $key => $val) {
           $sel = $val['id'] == $scheda['lc']['colonne_id'] ? 'selected' : '';
           $selColonna[] = "<option value='".$val['id']."' ".$sel.">".$val['colonna']."</option>";
         }
 
-        $hideRipiano = '';
-        $selRipiano=[];
-        $ripianiList = $obj->getRipiano((int)$scheda['lc']['colonne_id']);
-        if ($scheda['lc']['ripiano'] !== 'dato non inserito o assente') {
-          $firstRipiano = "<option value=''>-- ripiano --</option>";
-          $selRipiano[] = $firstRipiano;
-          foreach ($ripianiList as $key => $val) {
-            $sel = $val['id'] == $scheda['lc']['ripiano_id'] ? 'selected' : '';
-            $selRipiano[] = "<option value='".$val['id']."' ".$sel.">".$val['ripiano']."</option>";
-          }
-        }else {
-          $firstRipiano = "<option value='' selected>--".$labelRipiano."--</option>";
-          array_push($selRipiano,$firstRipiano);
-          foreach ($slot as $key => $val) {
-            array_push($selRipiano,"<option value='".$val."'>".$val."</option>");
-          }
+        // ripiani
+        $ripianiList = $obj->getRipiano($scheda['lc']['colonne_id']);
+        $selRipiano=["<option value=''>-- ripiano --</option>"];
+        foreach ($ripianiList as $key => $val) {
+          $selectedRipiano = '';
+          if($scheda['lc']['ripiano_id'] !== null && is_numeric($scheda['lc']['ripiano_id']) && $scheda['lc']['ripiano_id'] === $val['id']){ $selectedRipiano = 'selected'; }
+          $selRipiano[] = "<option value='".$val['id']."' $selectedRipiano>".$val['ripiano']."</option>";
         }
+        $hideRipiano = '';
 
-        // aggiungi gestione iniziale cassette
-
-
-      }else {
-        $firstColonna = "<option value='' selected>--colonna--</option>";
-        array_push($selColonna,$firstColonna);
-        foreach ($colonnaList as $key => $val) {
-          array_push($selColonna,"<option value='".$val['val']."'>".$val['colonna']."</option>");
+        // cassette
+        if($scheda['lc']['cassetta_id'] == null){ $lcFuoriCassetta=''; }
+        $cassetteList = $obj->getCassetta($scheda['lc']['ripiano_id']);
+        if(count($cassetteList) == 0){
+          $lcNoCassette='';
+        }else{
+          $selCassette = ["<option value=''>-- fuori cassetta --</option>"];
+          foreach ($cassetteList as $key => $val) {
+            $selected = $val['id'] == $scheda['lc']['cassetta_id'] ? 'selected' : '';
+            $selCassette[] = "<option value='".$val['id']."' $selected>".$val['cassetta']."</option>";
+          }
+          $hideCassetta = '';
         }
       }
-    }
+    // }
+
   }else {
   // se non è stato inserito il contenitore, seleziono il primo valore della lista
     $selContenitore[] = "<option value='' selected>-- ".$labelLista." --</option>";
     foreach ($contenitoreList as $key => $val) {
       $optLabel = $scheda['scheda']['tskid'] == 1 ? $val['c'] : $val['note'];
-      $selContenitore[] = "<option value='" . $optLabel . "</option>";
+      $selContenitore[] = "<option value='".$val['id']."'>" . $optLabel . "</option>";
     }
   }
+
   //**********************************************//
   //************* sezione UB *********************//
   $ubCheckLabel = count((array)$scheda['ub']) == 0 ? 'Compila dati sezione' : 'Cancella dati sezione';
@@ -237,20 +234,19 @@ if (isset($_POST['s'])) {
   $nvctList = $listeComuni['nvct'];
   $acqtList = $listeComuni['acqt'];
 }
+
+
 $nctnCheck = isset($_POST['s']) && $_POST['act'] == 'mod' ? $checked : '';
 $nctnDisabled = isset($_POST['s']) && $_POST['act'] == 'mod' ? '' : 'disabled';
 $nctnSelected =isset($_POST['s']) && $_POST['act'] == 'mod' ? $scheda['scheda']['nctn'] : '';
 
 switch ($_POST['act']) {
   case 'mod': $titolo = $scheda['scheda']['titolo']; break;
-  //case 'clone': $titolo = date("ymdHis")."-".$scheda['scheda']['titolo']; break;
   default: ''; break;
 }
 
 $ogtdDisabled = isset($_POST['s']) ? '' : 'disabled';
 $dtzgDisabled = isset($_POST['s']) ? '' : 'disabled';
-// $lcView = isset($_POST['s']) ? '' : 'lcSel';
-
 
 function setCf4(){ return explode(',',"A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U");}
 
