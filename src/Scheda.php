@@ -168,6 +168,9 @@ class Scheda extends Conn{
     $filter = $id !== null ? "and scheda = ".$id : '';
     return $this->simple("select * from file where tipo = 3 ".$filter.";");
   }
+  public function getStereo(int $id){
+    return $this->simple("select id, file from file where tipo = 7 and scheda = ".$id.";");
+  }
 
   private function sezScheda(int $id){
     $sql = "select s.id,
@@ -1025,10 +1028,10 @@ class Scheda extends Conn{
       $filters[] = "dt.dtsf <= ".$dati['dtsf'];
     }
     if (!empty($dati['fts'])) {
-      $tag = preg_replace('/[^A-Za-z0-9\-]/', ' ', $dati['fts']);
-      $tag = preg_replace("/\\s+/m",' | ', $tag);
+      $fts = preg_replace('/[^A-Za-z0-9\-]/', ' ', $dati['fts']);
+      $fts = preg_replace("/\\s+/m",' | ', $fts);
       $joins[] = "inner join da on da.scheda = s.id";
-      $filters[] = "da.fts @@ to_tsquery('".$tag."') ";
+      $filters[] = "da.fts @@ to_tsquery('".$fts."') ";
     }
     if (!empty($dati['tags'])) {
       $joins[] = "inner join tag on tag.scheda = s.id";

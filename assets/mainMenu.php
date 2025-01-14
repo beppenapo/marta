@@ -41,8 +41,11 @@
       <p class='text-warning'><i class="fas fa-cogs fa-fw"></i> gestione sistema</p>
       <ul class="subMenu">
         <li>
-          <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="modifica le liste valori"><i class="fas fa-chevron-right fa-fw"></i> liste valori</a>
+          <a href="lc.php" class="animated" data-toggle='tooltip' data-placement='left' title="gestisci sale museo"><i class="fas fa-chevron-right fa-fw"></i> sale museo</a>
         </li>
+        <!-- <li>
+          <a href="#" class="animated" data-toggle='tooltip' data-placement='left' title="modifica le liste valori"><i class="fas fa-chevron-right fa-fw"></i> liste valori</a>
+        </li> -->
       </ul>
     </li>
   <?php } ?>

@@ -488,23 +488,41 @@
                 <button type="button" id="light_on" class="btn btn-light" data-toggle="tooltip" title="enable light control"><i class="fa-solid fa-lightbulb"></i></button>
                 <button type="button" id="full_on" class="btn btn-light" data-toggle="tooltip" title="full screen"><i class="fa-solid fa-expand"></i></button>
               </div>
-              <canvas id="draw-canvas" />
+              <canvas id="draw-canvas">
+            </div>
+          </fieldset>
+          <fieldset class="bg-light rounded border p-3 mb-3 noPrint" id="stereo">
+            <legend class="w-auto border rounded p-1">Immagini stereo</legend>
+            <div class="elContainer" id="stereoWrap">
+              <h5>Nessuna immagine stereo disponibile</h5>
             </div>
           </fieldset>
         </div>
       </div>
     </div>
     </main>
-    <div id="fotoModal" class="noPrint">
+    <div id="fotoModal" class="noPrint myModal">
       <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-secondary" id="closeModal" title="chiudi immagine" data-toggle="tooltip" data-placement="bottom" data-modal="#fotoModal"><i class="fa-solid fa-xmark"></i> chiudi</button>
         <a href="" class="btn btn-secondary" id="downloadImg" title="salva immagine" data-toggle="tooltip" data-placement="bottom" download><i class="fa-solid fa-cloud-arrow-down"></i> scarica</a>
+        <?php if(isset($_SESSION['id'])){ ?>
         <button type="button" class="btn btn-secondary" id="defaultImg" title="setta come immagine predefinita per le gallery" data-toggle="tooltip" data-placement="bottom"><i class="fa-solid fa-check-double"></i> default</button>
+        <?php } ?>
         <?php if(isset($_SESSION['id']) && $_SESSION['classe'] == 1){ ?>
         <button type="button" class="btn btn-danger" id="delImg" title="elimina immagine" data-toggle="tooltip" data-placement="bottom"><i class="fa-solid fa-trash-can"></i> elimina</button>
         <?php } ?>
       </div>
-      <div id="divImgOrig"></div>
+      <div id="divImgOrig" class="imgModal"></div>
+    </div>
+
+    <div id="stereoModal" class="noPrint myModal">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" id="closeStereoModal" title="chiudi immagine" data-toggle="tooltip" data-placement="bottom" data-modal="#stereoModal"><i class="fa-solid fa-xmark"></i> chiudi</button>
+        <?php if(isset($_SESSION['id']) && $_SESSION['classe'] == 1){ ?>
+        <button type="button" class="btn btn-danger" id="delStereo" title="elimina immagine" data-toggle="tooltip" data-placement="bottom"><i class="fa-solid fa-trash-can"></i> elimina</button>
+        <?php } ?>
+      </div>
+      <div id="divStereoOrig" class="imgModal"></div>
     </div>
 
 

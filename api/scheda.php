@@ -30,6 +30,7 @@ function checkTitolo($obj){return json_encode($obj->checkTitolo($_POST['val']));
 
 function getSale($obj){return json_encode($obj->getSale($_POST['piano']));}
 function getFoto($obj){return json_encode($obj->getFoto($_POST['id']));}
+function getStereo($obj){return json_encode($obj->getStereo($_POST['id']));}
 function getContenitore($obj){return json_encode($obj->getContenitore($_POST));}
 function getColonna($obj){return json_encode($obj->getColonna($_POST['scaffale']));}
 function getRipiano($obj){return json_encode($obj->getRipiano($_POST['colonna']));}

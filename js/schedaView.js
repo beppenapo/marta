@@ -6,6 +6,7 @@ $(document).ready(function() {
   let urlMod = tsk == 1 ? 'scheda-ra-mod.php' : 'scheda-nu-mod.php';
   let cloneMod = tsk == 1 ? 'scheda-ra-clone.php' : 'scheda-nu-clone.php';
   let presenter = null;
+  $(".myModal").hide();
   $("#3dFieldset > h5, #3dhop").hide();
   $("[name=modificaScheda]").on('click', function(){ $.redirectPost(urlMod,{s:scheda,act:'mod'}); })
   $("[name=duplicaScheda]").on('click', function(){ $.redirectPost(cloneMod,{s:scheda,act:'clone'}); })
@@ -67,10 +68,39 @@ $(document).ready(function() {
     if (window.confirm(confMsg)) { cambiaStatoScheda(scheda, stato, val); }
   });
   getFoto(scheda);
+  getStereo(scheda);
   getModel(scheda);
   mapInit();
   progress(scheda);
 });
+
+function getStereo(scheda){
+  $.ajax({
+    url: "api/scheda.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {trigger:'getStereo', id:scheda}
+  }).done(function(data){
+    if(data.length == 0){return false;}
+    $("#stereoWrap").html('');
+    const totalWidth = $("#stereoWrap").outerWidth();
+    const columns = 3; // Numero di colonne nella griglia
+    const gap = 3; 
+    const columnWidth = (totalWidth - (columns - 1) * gap) / columns;
+    data.forEach(item =>{
+      const div = $("<div/>",{class:'fotoDiv noPrint'}).css({
+        "background-image": "url(http://145.239.0.109/marta/file/stereo/"+item.file+")",
+        width: `${columnWidth}px`,
+        height: `${columnWidth}px`
+      });
+      div.appendTo("#stereoWrap").on('click',()=>{
+        $("#divStereoOrig").css({"background-image":"url(http://145.239.0.109/marta/file/stereo/"+item.file+")"});
+        $("#stereoModal").fadeIn('fast');
+        $("#closeStereoModal").on('click', (e) => {$("#stereoModal").fadeOut('fast');})
+      });
+    })
+  })
+}
 function getModel(scheda){
   $.ajax({
     url: "api/scheda.php",
@@ -314,7 +344,6 @@ function delScheda(dati){
     data: {trigger:'delScheda', dati:dati}
   })
   .done(function(data){
-    console.log(data);
     obj={}
     obj.res=data.res;
     obj.msg = data.res === true ? 'La scheda e tutti gli oggetti collegati sono stati eliminati.' : data.msg;
@@ -441,8 +470,6 @@ function mapInit(){
   map.addControl(new resetMap());
 }
 
-$("#fotoModal").hide();
-
 let defaultImg;
 
 function getFoto(scheda){
@@ -467,7 +494,6 @@ function getFoto(scheda){
       return;
     }
 
-    console.log(data);
     defaultImg = data.find(item => item.foto_principale == true);
     
     data.forEach((item, i) => {

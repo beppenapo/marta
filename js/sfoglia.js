@@ -1,7 +1,7 @@
 $(document).ajaxStart(showLoading).ajaxStop(hideLoading);
 const localStorageItem = 'sfoglia';
 $(document).ready(function() {setActiveFilters(localStorageItem);});
-let FOTO='';
+let FOTO = "http://145.239.0.109/marta/file/foto/";
 const ITEMS_PER_PAGE = 24;
 const WRAP = document.getElementById('wrapItems');
 
@@ -64,11 +64,17 @@ $("[name=search]").on('click', function(e){
   e.preventDefault();
   sessionStorage.removeItem(localStorageItem);
   $("#searchMsg").removeClass('alert alert-danger alert-success').text('');
-  if ($("#dtsi").val() && $("#dtsf").val() && parseInt($("#dtsf").val()) < parseInt($("#dtsi").val())) {
+
+  let dtsiVal = $("#dtsi").val();
+  let dtsfVal = $("#dtsf").val();
+  let fullTextVal = $("#fullText").val();
+  let tipoVal = $("#tipo").val();
+
+  if (dtsiVal && dtsfVal && parseInt(dtsfVal) < parseInt(dtsiVal)) {
     $("#searchMsg").addClass('alert alert-danger').text("L'anno finale non può essere minore di quello iniziale");
     return false;
   }
-  if ($("#fullText").val() && $.trim($("#fullText").val()).length < 2) {
+  if (fullTextVal && $.trim(fullTextVal).length < 2) {
     $("#searchMsg").addClass('alert alert-danger').text("Nella ricerca libera devi inserire parole di almeno 2 lettere");
     return false;
   }
@@ -79,20 +85,20 @@ $("[name=search]").on('click', function(e){
         setFilters(localStorageItem,key,$(this).val(),'update')
       }
     }
-    
   })
-  if($("#tipo").val() && $("#tipo").val() == 7){
-    setFilters(localStorageItem, 'principale', 'true', 'remove');
-    FOTO = "http://91.121.82.80/marta/file/stereo/" ;
-  }else{
-    FOTO = "http://91.121.82.80/marta/file/foto/";
-    setFilters(localStorageItem, 'principale', 'true', 'update');
-  }
 
   if(checkFilters(localStorageItem) == 0){
     $("#searchMsg").addClass('alert alert-danger').text('devi impostare almeno un filtro di ricerca!');
     return false;
   }
+
+  setFilters(localStorageItem, 'principale', 'true', 'update');
+  
+  if(tipoVal && parseInt(tipoVal) == 7){
+    FOTO = "http://145.239.0.109/marta/file/stereo/" ;
+    setFilters(localStorageItem, 'principale', 'true', 'remove');
+  }
+
 
   WRAP.innerHTML=''
   currentPage = 1;

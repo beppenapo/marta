@@ -1006,8 +1006,12 @@ function fetchCassette(dati){
 async function gallery(filters){
   if (isLoading) return;
   isLoading = true;
+  console.log(FOTO);
+  
   try {
     const json = await search(filters);
+    console.log(json.sql);
+    
     if (json.breadcrumb && Object.keys(json.breadcrumb).length > 0 && json.breadcrumb.piano !== null) {
       const breadcrumbList = document.getElementById('breadcrumb');
       breadcrumbList.innerHTML = '';
